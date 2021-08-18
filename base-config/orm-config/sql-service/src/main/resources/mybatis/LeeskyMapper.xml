@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leesky.ezframework.join.mapper.LeeskyMapper">
+
+	<select id="many2manyQuery" parameterType="String" resultType="java.util.HashMap">
+
+		select ${param.selectColumn} from ${param.targetTableName}
+		a left join
+		${param.shipTableName} b on a.${param.targetOnColumn} =
+		b.${param.shipOnColumn} where b.${param.shipWhereColumn} = '${value}'
+
+
+	</select>
+
+
+	<select id="one2oneQuery" parameterType="String" resultType="java.util.HashMap">
+	
+		select ${param.selectColumn} from ${param.tableName} where
+		${param.joinColumn} = '${value}'
+		
+	</select>
+
+
+	<select id="many2oneQuery" parameterType="String" resultType="java.util.HashMap">
+	
+		select ${param.selectColumn} from ${param.tableName} where
+		${param.joinColumn} = '${value}'
+		
+	</select>
+
+
+	<select id="one2manyQuery" parameterType="String" resultType="java.util.HashMap">
+	
+		select ${param.selectColumn} from ${param.tableName} where
+		${param.joinColumn} = '${value}'
+		
+	</select>
+	
+	<select id="findAll" parameterType="String" resultType="java.util.HashMap">
+	
+	       SELECT DISTINCT ${param}
+	
+	</select>
+	
+	<select id="count" parameterType="String" resultType="java.lang.Long">
+	
+	       SELECT count(*) ${param}
+	
+	</select>
+</mapper>
