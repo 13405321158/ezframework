@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="19b20961-6485-43a7-86a2-95c9cd91e253" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/base-config/backend-server/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/base-config/gateway-config/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/base-config/orm-config/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/base-config/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common-config/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugs-config/elasticsearch-server/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugs-config/log-server/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugs-config/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugs-config/tools-server/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugs-config/websocket-server/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugs-config/workflow-server/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web-config/pom.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1wsTEqPgzahEmyexJXlz2ZYFtuA" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.appearance" />
+  </component>
+  <component name="RebelAgentSelection">
+    <selection>jr</selection>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="19b20961-6485-43a7-86a2-95c9cd91e253" name="Changes" comment="" />
+      <created>1629246188673</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1629246188673</updated>
+      <workItem from="1629246190989" duration="711000" />
+      <workItem from="1629246975564" duration="531000" />
+      <workItem from="1629247517462" duration="62000" />
+      <workItem from="1629248944276" duration="255000" />
+      <workItem from="1629250604851" duration="1563000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+</project>
