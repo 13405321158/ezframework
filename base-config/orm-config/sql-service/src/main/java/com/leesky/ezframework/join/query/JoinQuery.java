@@ -90,7 +90,7 @@ public class JoinQuery<T, M> {
 
 			if (result.contains(fname)) {
 				OneToMany zj = f.getAnnotation(OneToMany.class);
-				String relationMainTable = Hump2underline.build(zj.oneClassProperty());// 主表：关联字段
+				String relationMainTable = Hump2underline.build(zj.joinField());// 主表：关联字段
 				String relationChildTable = zj.joinColumn();// 子表：关联字段
 				buf.append("LEFT JOIN ").append(zj.tableName()).append(" ").append(fname).append(" ON a.").append(relationMainTable);
 				buf.append(" = ").append(fname).append(".").append(relationChildTable).append(" ");

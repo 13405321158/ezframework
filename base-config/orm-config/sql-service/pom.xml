@@ -58,11 +58,6 @@
             <version>${poi.version}</version>
         </dependency>
 
-        <!-- 这个不用说了吧 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
 
         <!-- sql 日志输出插件 -->
         <dependency>

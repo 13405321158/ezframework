@@ -515,7 +515,7 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
 
 					OneToMany s = field.getAnnotation(OneToMany.class);
 
-					String joinColumName = s.oneClassProperty();
+					String joinColumName = s.joinField();
 					Field jField = ReflectionUtils.findField(entityClass, joinColumName);
 
 					List list = (List) getValue(field, entity);// 获取Many方(子表)的实体,并赋值

@@ -73,7 +73,7 @@ public class AutoMapper<T, M> {
 
 				OneToMany one2many = f.getAnnotation(OneToMany.class);// 查找当前字段注解= OneToMany ?
 				if (ObjectUtils.isNotEmpty(one2many)) {
-					foreignKeyPropertyValue = getFieldValue(one2many.oneClassProperty(), t);
+					foreignKeyPropertyValue = getFieldValue(one2many.joinField(), t);
 					handle_one2many(one2many, foreignKeyPropertyValue, t, f, selectFields);
 					continue;
 				}

@@ -44,7 +44,7 @@ public @interface OneToMany {
 	 * @Desc:
 	 *        <li>one方类的bean属性，依据此属性的值 去many方数据表查询
 	 */
-	String oneClassProperty();
+	String joinField();
 
 	/**
 	 * 

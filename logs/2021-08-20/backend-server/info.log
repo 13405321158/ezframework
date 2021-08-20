@@ -1,0 +1,100 @@
+2021-08-20 09:23:14.127 [main] INFO  com.leesky.ezframework.BackendServerApplication -
+                The following profiles are active: dev
+2021-08-20 09:23:14.493 [main] INFO  org.apache.catalina.core.StandardService -
+                Starting service [Tomcat]
+2021-08-20 09:23:14.494 [main] INFO  org.apache.catalina.core.StandardEngine -
+                Starting Servlet engine: [Apache Tomcat/9.0.52]
+2021-08-20 09:23:14.555 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -
+                Initializing Spring embedded WebApplicationContext
+2021-08-20 09:23:14.937 [main] INFO  com.leesky.ezframework.BackendServerApplication -
+                Started BackendServerApplication in 1.437 seconds (JVM running for 1.813)
+2021-08-20 09:23:35.681 [http-nio-20010-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -
+                Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-08-20 09:40:12.139 [main] INFO  com.leesky.ezframework.BackendServerApplication -
+                The following profiles are active: dev
+2021-08-20 09:40:12.457 [main] INFO  io.seata.spring.boot.autoconfigure.SeataAutoConfiguration -
+                Automatically configure Seata
+2021-08-20 09:40:12.476 [main] INFO  io.seata.config.ConfigurationFactory -
+                load Configuration:FileConfiguration$$EnhancerByCGLIB$$862af1eb
+2021-08-20 09:40:12.480 [main] INFO  io.seata.config.ConfigurationFactory -
+                load Configuration:FileConfiguration$$EnhancerByCGLIB$$862af1eb
+2021-08-20 09:40:12.504 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Initializing Global Transaction Clients ... 
+2021-08-20 09:40:12.528 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Transaction Manager Client is initialized. applicationId[backend-seata] txServiceGroup[leesky_seata_group]
+2021-08-20 09:40:12.532 [main] INFO  io.seata.rm.datasource.AsyncWorker -
+                Async Commit Buffer Limit: 10000
+2021-08-20 09:40:12.533 [main] INFO  io.seata.rm.datasource.xa.ResourceManagerXA -
+                ResourceManagerXA init ...
+2021-08-20 09:40:12.535 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Resource Manager is initialized. applicationId[backend-seata] txServiceGroup[leesky_seata_group]
+2021-08-20 09:40:12.535 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Global Transaction Clients are initialized. 
+2021-08-20 09:40:12.714 [main] INFO  org.apache.catalina.core.StandardService -
+                Starting service [Tomcat]
+2021-08-20 09:40:12.715 [main] INFO  org.apache.catalina.core.StandardEngine -
+                Starting Servlet engine: [Apache Tomcat/9.0.52]
+2021-08-20 09:40:12.765 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -
+                Initializing Spring embedded WebApplicationContext
+2021-08-20 09:40:13.228 [main] INFO  com.leesky.ezframework.BackendServerApplication -
+                Started BackendServerApplication in 1.633 seconds (JVM running for 1.973)
+2021-08-20 09:44:59.448 [main] INFO  com.leesky.ezframework.BackendServerApplication -
+                The following profiles are active: dev
+2021-08-20 09:44:59.765 [main] INFO  io.seata.spring.boot.autoconfigure.SeataAutoConfiguration -
+                Automatically configure Seata
+2021-08-20 09:44:59.782 [main] INFO  io.seata.config.ConfigurationFactory -
+                load Configuration:FileConfiguration$$EnhancerByCGLIB$$862af1eb
+2021-08-20 09:44:59.786 [main] INFO  io.seata.config.ConfigurationFactory -
+                load Configuration:FileConfiguration$$EnhancerByCGLIB$$862af1eb
+2021-08-20 09:44:59.810 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Initializing Global Transaction Clients ... 
+2021-08-20 09:44:59.834 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Transaction Manager Client is initialized. applicationId[backend-seata] txServiceGroup[leesky_seata_group]
+2021-08-20 09:44:59.838 [main] INFO  io.seata.rm.datasource.AsyncWorker -
+                Async Commit Buffer Limit: 10000
+2021-08-20 09:44:59.839 [main] INFO  io.seata.rm.datasource.xa.ResourceManagerXA -
+                ResourceManagerXA init ...
+2021-08-20 09:44:59.841 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Resource Manager is initialized. applicationId[backend-seata] txServiceGroup[leesky_seata_group]
+2021-08-20 09:44:59.841 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Global Transaction Clients are initialized. 
+2021-08-20 09:45:00.026 [main] INFO  org.apache.catalina.core.StandardService -
+                Starting service [Tomcat]
+2021-08-20 09:45:00.026 [main] INFO  org.apache.catalina.core.StandardEngine -
+                Starting Servlet engine: [Apache Tomcat/9.0.52]
+2021-08-20 09:45:00.077 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -
+                Initializing Spring embedded WebApplicationContext
+2021-08-20 09:45:00.551 [main] INFO  com.leesky.ezframework.BackendServerApplication -
+                Started BackendServerApplication in 1.742 seconds (JVM running for 2.091)
+2021-08-20 09:47:42.121 [main] INFO  com.leesky.ezframework.BackendServerApplication -
+                The following profiles are active: dev
+2021-08-20 09:47:42.434 [main] INFO  io.seata.spring.boot.autoconfigure.SeataAutoConfiguration -
+                Automatically configure Seata
+2021-08-20 09:47:42.451 [main] INFO  io.seata.config.ConfigurationFactory -
+                load Configuration:FileConfiguration$$EnhancerByCGLIB$$862af1eb
+2021-08-20 09:47:42.455 [main] INFO  io.seata.config.ConfigurationFactory -
+                load Configuration:FileConfiguration$$EnhancerByCGLIB$$862af1eb
+2021-08-20 09:47:42.481 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Initializing Global Transaction Clients ... 
+2021-08-20 09:47:42.518 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Transaction Manager Client is initialized. applicationId[backend-seata] txServiceGroup[leesky_seata_group]
+2021-08-20 09:47:42.522 [main] INFO  io.seata.rm.datasource.AsyncWorker -
+                Async Commit Buffer Limit: 10000
+2021-08-20 09:47:42.523 [main] INFO  io.seata.rm.datasource.xa.ResourceManagerXA -
+                ResourceManagerXA init ...
+2021-08-20 09:47:42.525 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Resource Manager is initialized. applicationId[backend-seata] txServiceGroup[leesky_seata_group]
+2021-08-20 09:47:42.525 [main] INFO  io.seata.spring.annotation.GlobalTransactionScanner -
+                Global Transaction Clients are initialized. 
+2021-08-20 09:47:42.703 [main] INFO  org.apache.coyote.http11.Http11NioProtocol -
+                Initializing ProtocolHandler ["http-nio-20010"]
+2021-08-20 09:47:42.703 [main] INFO  org.apache.catalina.core.StandardService -
+                Starting service [Tomcat]
+2021-08-20 09:47:42.703 [main] INFO  org.apache.catalina.core.StandardEngine -
+                Starting Servlet engine: [Apache Tomcat/9.0.52]
+2021-08-20 09:47:42.749 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] -
+                Initializing Spring embedded WebApplicationContext
+2021-08-20 09:47:43.182 [main] INFO  org.apache.coyote.http11.Http11NioProtocol -
+                Starting ProtocolHandler ["http-nio-20010"]
+2021-08-20 09:47:43.203 [main] INFO  com.leesky.ezframework.BackendServerApplication -
+                Started BackendServerApplication in 1.639 seconds (JVM running for 2.021)
