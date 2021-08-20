@@ -14,7 +14,7 @@
     <!-- 日志最大的历史 30天 -->
     <property name="maxHistory" value="30"/>
     <!-- 定义日志归宿哪个服务 -->
-    <property name="serverName" value="backend-server"/>
+    <property name="serverName" value="es-server"/>
 
 
     <!-- ConsoleAppender 控制台输出日志 -->
@@ -22,7 +22,6 @@
               class="ch.qos.logback.core.ConsoleAppender">
         <!-- 对日志进行格式化 -->
         <encoder>
-            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger -%msg%n
             </pattern>
         </encoder>
@@ -53,11 +52,9 @@
             <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/.log.zip</fileNamePattern> <minIndex>1</minIndex>
             <maxIndex>3</maxIndex> </rollingPolicy> -->
-        <!-- 查看当前活动文件的大小，如果超过指定大小会告知RollingFileAppender 触发当前活动文件滚动 -->
-        <triggeringPolicy
-                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>2MB</maxFileSize>
-        </triggeringPolicy>
+        <!-- 查看当前活动文件的大小，如果超过指定大小会告知RollingFileAppender 触发当前活动文件滚动 <triggeringPolicy
+            class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"> <maxFileSize>5MB</maxFileSize>
+            </triggeringPolicy> -->
 
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
@@ -168,14 +165,14 @@
 
     <!-- 配置特定class 日志级别，不受root配置影响 -->
 
-    <logger name="com.xxl.job" level="error"/>
     <logger name="org.redisson" level="error"/>
     <logger name="io.seata.core" level="error"/>
     <logger name="com.netflix.config" level="error"/>
     <logger name="org.springframework" level="error"/>
+    <logger name="com.alibaba.nacos.client" level="error"/>
     <logger name="com.github.dozermapper.core" level="error"/>
 
-
+    <!-- root级别 DEBUG -->
     <root level="info">
         <!-- 控制台输出 -->
         <appender-ref ref="STDOUT"/>

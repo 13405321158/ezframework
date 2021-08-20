@@ -5,7 +5,7 @@ spring:
    application:
       name: backend-server
    profiles:
-      active: dev   
+      active: dev
    cloud:
       nacos:
          discovery:
@@ -23,3 +23,10 @@ spring:
                refresh: true
             -  dataId: common-seata-dev.yaml
                refresh: true
+            - dataId: mybatis-dev.yaml
+              refresh: true
+
+logging:
+  level:
+    com.alibaba.*: warn
+    org.reflections.*: warn

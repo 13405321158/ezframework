@@ -1,0 +1,4 @@
+backend        后台服务：20010
+elasticsearch  缓存服务：20020
+gateway01      网关01： 20030
+gateway02      网关02： 20031

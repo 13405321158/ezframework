@@ -31,6 +31,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
+        <nacos.client.version>2.0.3</nacos.client.version>
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
 
@@ -53,6 +54,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- 强制更改 nacos-client版本 起步依赖 -->
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-client</artifactId>
+                <version>${nacos.client.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <dependencies>
