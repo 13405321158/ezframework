@@ -1,6 +1,0 @@
-2021-08-20 09:44:57.373 [NettyClientSelector_TMROLE_1_1] ERROR io.seata.core.rpc.netty.NettyClientChannelManager -
-                null
-2021-08-20 09:47:40.033 [NettyClientSelector_TMROLE_1_1] ERROR io.seata.core.rpc.netty.NettyClientChannelManager -
-                null
-2021-08-20 09:57:27.484 [NettyClientSelector_TMROLE_1_1] ERROR io.seata.core.rpc.netty.NettyClientChannelManager -
-                null
