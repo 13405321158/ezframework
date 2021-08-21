@@ -9,10 +9,9 @@
 package com.leesky.ezframework.join.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leesky.ezframework.join.interfaces.many2may.ManyToManyDto;
-import com.leesky.ezframework.join.interfaces.many2one.ManyToOne;
-import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
-import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
+import com.leesky.ezframework.join.interfaces.ManyToOne;
+import com.leesky.ezframework.join.interfaces.OneToMany;
+import com.leesky.ezframework.join.interfaces.OneToOne;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,7 @@ public interface LeeskyMapper<T> extends BaseMapper<T> {
 	 * @Desc:
 	 *        <li>ManyToMany 注解查询
 	 */
-	List<HashMap<String, Object>> many2manyQuery(ManyToManyDto param, String value);
+//	List<HashMap<String, Object>> many2manyQuery(ManyToManyDto param, String value);
 
 	/**
 	 * 

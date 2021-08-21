@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.google.common.collect.Lists;
-import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
+import com.leesky.ezframework.join.interfaces.OneToMany;
 import com.leesky.ezframework.join.mapper.AutoMapper;
 import com.leesky.ezframework.join.mapper.LeeskyMapper;
 import com.leesky.ezframework.join.query.JoinQuery;

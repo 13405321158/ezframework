@@ -16,8 +16,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.leesky.ezframework.join.interfaces.many2one.ManyToOne;
-import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
+import com.leesky.ezframework.join.interfaces.ManyToOne;
+import com.leesky.ezframework.join.interfaces.OneToMany;
 import com.leesky.ezframework.join.mapper.LeeskyMapper;
 import com.leesky.ezframework.query.QueryFilter;
 import com.leesky.ezframework.utils.Hump2underline;
@@ -84,7 +84,7 @@ public class JoinQuery<T, M> {
 		});
 		// 4、如果含有多个子表，本次参与查询筛选方法
 		List<String> result = selectChild(params);
-
+/*
 		for (Field f : one2manySet) {
 			String fname = f.getName();// 用为：sql语句中子表别名
 
@@ -106,7 +106,7 @@ public class JoinQuery<T, M> {
 			String relationChildTable = zj.joinColumn();// 子表：关联字段
 			buf.append("LEFT JOIN ").append(zj.tableName()).append(" ").append(fname).append(" ON a.").append(relationMainTable);
 			buf.append(" = ").append(fname).append(".").append(relationChildTable).append(" ");
-		}
+		}*/
 
 		/* 查询条件构造 */
 		String quaryCondition = StringUtils.join(analyzing(params), " and ");

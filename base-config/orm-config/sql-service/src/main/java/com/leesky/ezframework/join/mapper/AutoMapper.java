@@ -14,12 +14,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.leesky.ezframework.join.interfaces.many2may.ManyToMany;
-import com.leesky.ezframework.join.interfaces.many2may.ManyToManyDto;
-import com.leesky.ezframework.join.interfaces.many2one.ManyToOne;
-import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
-import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
+import com.leesky.ezframework.join.interfaces.ManyToMany;
+import com.leesky.ezframework.join.interfaces.ManyToOne;
+import com.leesky.ezframework.join.interfaces.OneToMany;
+import com.leesky.ezframework.join.interfaces.OneToOne;
 import com.leesky.ezframework.utils.Hump2underline;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -99,30 +97,30 @@ public class AutoMapper<T, M> {
 	 *        <li>处理ManyToMany
 	 */
 	private void handle_Many2Many(ManyToMany many2many, String value, T t, Field f) {
-		String foreignKey = getForeignKey(many2many, t);// 是否有指定的外键，如果没有则使用@TableId标定的字段值
-		value = StringUtils.isNotBlank(foreignKey) ? foreignKey : value;
-
-		try {
-			Set<Object> sets = Sets.newHashSet();
-
-			Type genericType = f.getGenericType();
-			if (genericType instanceof ParameterizedType) {
-				ParameterizedType pt = (ParameterizedType) genericType;
-				Class<?> actualTypeArgument = (Class<?>) pt.getActualTypeArguments()[0];
-
-				List<HashMap<String, Object>> result = baseMapper.many2manyQuery(new ManyToManyDto(many2many), value);
-				for (HashMap<String, Object> map : result) {
-					Object actualType = actualTypeArgument.getDeclaredConstructor().newInstance();
-					map2BeanUtil(actualType, map, t);
-					sets.add(actualType);
-				}
-				String methodForSet = "set" + StringUtils.capitalize(f.getName());// 向ManyToMany修饰的xxxSet集合赋值
-				Method method = ReflectionUtils.findMethod(t.getClass(), methodForSet, Set.class);
-				ReflectionUtils.invokeMethod(method, t, sets);
-			}
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-		}
+//		String foreignKey = getForeignKey(many2many, t);// 是否有指定的外键，如果没有则使用@TableId标定的字段值
+//		value = StringUtils.isNotBlank(foreignKey) ? foreignKey : value;
+//
+//		try {
+//			Set<Object> sets = Sets.newHashSet();
+//
+//			Type genericType = f.getGenericType();
+//			if (genericType instanceof ParameterizedType) {
+//				ParameterizedType pt = (ParameterizedType) genericType;
+//				Class<?> actualTypeArgument = (Class<?>) pt.getActualTypeArguments()[0];
+//
+//				List<HashMap<String, Object>> result = baseMapper.many2manyQuery(new ManyToManyDto(many2many), value);
+//				for (HashMap<String, Object> map : result) {
+//					Object actualType = actualTypeArgument.getDeclaredConstructor().newInstance();
+//					map2BeanUtil(actualType, map, t);
+//					sets.add(actualType);
+//				}
+//				String methodForSet = "set" + StringUtils.capitalize(f.getName());// 向ManyToMany修饰的xxxSet集合赋值
+//				Method method = ReflectionUtils.findMethod(t.getClass(), methodForSet, Set.class);
+//				ReflectionUtils.invokeMethod(method, t, sets);
+//			}
+//		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+//			e.printStackTrace();
+//		}
 
 	}
 
@@ -268,13 +266,13 @@ public class AutoMapper<T, M> {
 	 */
 	private String getForeignKey(ManyToMany key, T clazz) {
 		String value = null;
-		try {
-			String foreignKey = key.foreignKey();// 有值则根据此值去查询多对多关联表
-			if (StringUtils.isNotBlank(foreignKey))
-				value = BeanUtils.getProperty(clazz, foreignKey);
-		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			String foreignKey = key.foreignKey();// 有值则根据此值去查询多对多关联表
+//			if (StringUtils.isNotBlank(foreignKey))
+//				value = BeanUtils.getProperty(clazz, foreignKey);
+//		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+//			e.printStackTrace();
+//		}
 		return value;
 	}
 
@@ -354,35 +352,35 @@ public class AutoMapper<T, M> {
 	 */
 	private OneToMany getSelectFieldForChildTable(String str, OneToMany one2many) {
 
-		try {
-			List<String> result = Lists.newArrayList();
-
-			if (StringUtils.isNotBlank(str)) {
-				String[] arry = StringUtils.split(str, ",");
-				for (String s : arry) {
-					if (!StringUtils.startsWith(s, "a."))
-						result.add(StringUtils.substringAfterLast(s, "."));
-				}
-			}
-
-			String sl = result.size() > 0 ? StringUtils.join(result, ",") : "*";
-
-			InvocationHandler h = Proxy.getInvocationHandler(one2many);
-			Field hField = h.getClass().getDeclaredField("memberValues");
-			hField.setAccessible(true);
-			Map<String, String> memberValues = (Map<String, String>) hField.get(h);
-			if (!selectField.containsKey(one2many.joinColumn()) && StringUtils.isNotBlank(one2many.selectColumn()))
-				selectField.put(one2many.joinColumn(), one2many.selectColumn());
-
-			String defalut = selectField.get(one2many.joinColumn());
-			if (StringUtils.equals(sl, "*") && StringUtils.isNotBlank(defalut))
-				memberValues.put("selectColumn", defalut);
-			else
-				memberValues.put("selectColumn", sl);
-
-		} catch (IllegalAccessException | NoSuchFieldException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			List<String> result = Lists.newArrayList();
+//
+//			if (StringUtils.isNotBlank(str)) {
+//				String[] arry = StringUtils.split(str, ",");
+//				for (String s : arry) {
+//					if (!StringUtils.startsWith(s, "a."))
+//						result.add(StringUtils.substringAfterLast(s, "."));
+//				}
+//			}
+//
+//			String sl = result.size() > 0 ? StringUtils.join(result, ",") : "*";
+//
+//			InvocationHandler h = Proxy.getInvocationHandler(one2many);
+//			Field hField = h.getClass().getDeclaredField("memberValues");
+//			hField.setAccessible(true);
+//			Map<String, String> memberValues = (Map<String, String>) hField.get(h);
+//			if (!selectField.containsKey(one2many.joinColumn()) && StringUtils.isNotBlank(one2many.selectColumn()))
+//				selectField.put(one2many.joinColumn(), one2many.selectColumn());
+//
+//			String defalut = selectField.get(one2many.joinColumn());
+//			if (StringUtils.equals(sl, "*") && StringUtils.isNotBlank(defalut))
+//				memberValues.put("selectColumn", defalut);
+//			else
+//				memberValues.put("selectColumn", sl);
+//
+//		} catch (IllegalAccessException | NoSuchFieldException e) {
+//			e.printStackTrace();
+//		}
 
 		return one2many;
 	}
