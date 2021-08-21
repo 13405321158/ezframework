@@ -19,7 +19,6 @@ import com.leesky.ezframework.join.query.JoinQuery;
 import com.leesky.ezframework.model.SuperModel;
 import com.leesky.ezframework.query.QueryFilter;
 import com.leesky.ezframework.service.IbaseService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -33,14 +32,15 @@ import java.util.List;
 
 
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<LeeskyMapper<T>, T> implements IbaseService<T> {
 
-    private final M repo;
-
-    private final JoinQuery<T, M> joinQuery;
-
-    private final AutoMapper<T, M> autoMapper;
+    @Autowired
+    private  M repo;
+    @Autowired
+    private  JoinQuery<T, M> joinQuery;
+    @Autowired
+    private  AutoMapper<T, M> autoMapper;
 
     int DEFAULT_BATCH_SIZE = 1000;// 默认批次提交数量
     protected Class<T> entityClass = currentModelClass();

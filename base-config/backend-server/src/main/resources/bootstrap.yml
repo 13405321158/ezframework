@@ -5,7 +5,7 @@ spring:
    application:
       name: backend-server
    profiles:
-      active: dev
+      active: dev1
    cloud:
       nacos:
          discovery:

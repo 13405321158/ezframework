@@ -29,7 +29,7 @@ public @interface OneToOne {
      * @描述: 依据此属性指定的字段去 对方表中查询
      * @描述: 关联查询一般是主键，但也可以不是主键，所以用此属性指定
      **/
-    String joinColumn();
+    String joinColumn() default "id";
 
 
 }
