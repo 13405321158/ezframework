@@ -1,11 +1,9 @@
-/**
- * 
+/*
  * @author:weilai
  * @Data:2020-8-1819:12:10
  * @Org:Sentury Co.,ltd.
- * @Deparment:Domestic Sales,Tech Center
+ * @Department:Domestic Sales,Tech Center
  * @Desc:
- *        <li>
  */
 
 package com.leesky.ezframework.join.mapper;
@@ -25,7 +23,7 @@ public interface LeeskyMapper<T> extends BaseMapper<T> {
 	 * 
 	 * 
 	 * @author:weilai
-	 * @Data:2020-8-2011:25:59
+	 * @Data: 2020-8-2011:25:59
 	 * @Desc:
 	 *        <li>ManyToMany 注解查询
 	 */
@@ -35,7 +33,7 @@ public interface LeeskyMapper<T> extends BaseMapper<T> {
 	 * 
 	 * 
 	 * @author:weilai
-	 * @Data:2020-8-2011:27:28
+	 * @Data: 2020-8-2011:27:28
 	 * @Desc:
 	 *        <li>OneToOne 注解查询
 	 */
@@ -45,7 +43,7 @@ public interface LeeskyMapper<T> extends BaseMapper<T> {
 	 * 
 	 * 
 	 * @author:weilai
-	 * @Data:2020-8-2014:44:41
+	 * @Data: 2020-8-2014:44:41
 	 * @Desc:
 	 *        <li>ManyToOne 注解查询
 	 */
@@ -55,7 +53,7 @@ public interface LeeskyMapper<T> extends BaseMapper<T> {
 	 * 
 	 * 
 	 * @author:weilai
-	 * @Data:2020-8-2016:29:53
+	 * @Data: 2020-8-2016:29:53
 	 * @Desc:
 	 *        <li>OneToMany 注解查询
 	 */
@@ -64,7 +62,7 @@ public interface LeeskyMapper<T> extends BaseMapper<T> {
 	/**
 	 * 
 	 * @author: weilai
-	 * @Data:2021年1月8日上午9:00:10
+	 * @Data: 2021年1月8日上午9:00:10
 	 * @Desc:
 	 *        <li>
 	 */

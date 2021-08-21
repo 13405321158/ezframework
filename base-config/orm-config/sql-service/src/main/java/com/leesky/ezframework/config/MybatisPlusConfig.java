@@ -1,4 +1,4 @@
-/**
+/*
  * @author:weilai
  * @Data:2020年4月3日下午6:22:39
  * @Org:Sentury Co., ltd.
@@ -22,7 +22,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.leesky.ezframework.*.mapper")
 public class MybatisPlusConfig {
 
-
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  上午10:36
+     * @描述:  v3.4.3.1 配置
+     **/
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();

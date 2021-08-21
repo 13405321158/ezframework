@@ -1,9 +1,8 @@
-/**
- * 
+/*
  * @author:weilai
  * @Data:2020-8-198:04:21
  * @Org:Sentury Co.,ltd.
- * @Deparment:Domestic Sales,Tech Center
+ * @Department:Domestic Sales,Tech Center
  * @Desc:
  *        <li>所谓关系表，意思是 根据此表相关条件 ，关联查询目标数据表
  */
