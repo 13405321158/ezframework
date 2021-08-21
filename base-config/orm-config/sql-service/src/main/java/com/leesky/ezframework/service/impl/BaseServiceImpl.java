@@ -16,6 +16,8 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.leesky.ezframework.join.mapper.AutoMapper;
 import com.leesky.ezframework.join.mapper.LeeskyMapper;
 import com.leesky.ezframework.join.query.JoinQuery;
+import com.leesky.ezframework.model.BaseAutoModel;
+import com.leesky.ezframework.model.BaseUuidModel;
 import com.leesky.ezframework.model.SuperModel;
 import com.leesky.ezframework.query.QueryFilter;
 import com.leesky.ezframework.service.IbaseService;
@@ -34,13 +36,12 @@ import java.util.List;
 @Slf4j
 //@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<LeeskyMapper<T>, T> implements IbaseService<T> {
-
     @Autowired
-    private  M repo;
+    private M repo;
     @Autowired
-    private  JoinQuery<T, M> joinQuery;
+    private JoinQuery<T, M> joinQuery;
     @Autowired
-    private  AutoMapper<T, M> autoMapper;
+    private AutoMapper<T, M> autoMapper;
 
     int DEFAULT_BATCH_SIZE = 1000;// 默认批次提交数量
     protected Class<T> entityClass = currentModelClass();
@@ -85,6 +86,19 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
             e.setModifyDate(date);
         }
         this.repo.insert(entity);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void insert(T entity, Boolean relation) {
+        String id = null;
+        this.insert(entity);
+        if (entity instanceof BaseUuidModel)
+            id = ((BaseUuidModel) entity).getId();
+        if (entity instanceof BaseAutoModel)
+            id = ((BaseAutoModel) entity).getId();
+
+        System.out.println(id);
     }
 
 

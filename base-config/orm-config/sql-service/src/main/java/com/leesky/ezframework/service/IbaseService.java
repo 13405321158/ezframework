@@ -57,6 +57,13 @@ public interface IbaseService<T> extends IService<T> {
 
     /**
      * @作者: 魏来
+     * @日期: 2021/8/21  下午4:48
+     * @描述: 存储one2one、many2many，one2Many，many2one 关系
+     **/
+    void insert(T entity, Boolean relation);
+
+    /**
+     * @作者: 魏来
      * @日期: 2021/8/21  下午12:51
      * @描述: 披露插入数据
      **/

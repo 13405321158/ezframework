@@ -26,9 +26,9 @@ public class UserBaseExt02Model extends BaseUuidModel {
     private static final long serialVersionUID = -2812097282561425555L;
     @ApiModelProperty("登录名")
     @TableField(value = "wx_open_id")
-    private String wxOpenId;
+    private String wxOpenId="wx_isods23sadasdfasdf";
 
     @ApiModelProperty("登录名")
     @TableField(value = "ios_userid")
-    private String iosId;
+    private String iosId="ios-asdasdfasd";
 }

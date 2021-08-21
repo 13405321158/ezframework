@@ -24,17 +24,18 @@ import java.util.Date;
 @ApiModel(value = "基本用户信息")
 public class UserBaseModel extends BaseUuidModel {
 
+    private static final long serialVersionUID = 8547824568011487339L;
     @ApiModelProperty("登录名")
-    private String username;
+    private String username = "weilai";
 
     @ApiModelProperty("密码")
     private String password;
 
     @ApiModelProperty("随机数")
-    private String randomKey;
+    private String randomKey = "leesky09";
 
     @ApiModelProperty("修改密码时间")
-    private Date editPwdDate;
+    private Date editPwdDate = new Date();
 
     @ApiModelProperty("扩展表01主键")
     private String ext01Id;
@@ -49,4 +50,12 @@ public class UserBaseModel extends BaseUuidModel {
     @TableField(exist = false)
     @OneToOne(tableName = "cbm_mag_user1_ext02")
     private UserBaseExt02Model ext02;
+
+    public UserBaseModel() {
+    }
+
+    public UserBaseModel(UserBaseExt01Model ext01, UserBaseExt02Model ext02) {
+        this.ext01 = ext01;
+        this.ext02 = ext02;
+    }
 }

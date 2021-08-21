@@ -31,31 +31,22 @@
             <version>${baomidou.version}</version>
         </dependency>
 
-
         <!-- mysql 驱动 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <!-- aop 起步依赖 -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-        </dependency>
-        <!-- 引入反射工具起步依赖 -->
+<!--        &lt;!&ndash; aop 起步依赖 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.aspectj</groupId>-->
+<!--            <artifactId>aspectjweaver</artifactId>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; 引入反射工具起步依赖 &ndash;&gt;-->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>${beanutils.version}</version>
-        </dependency>
-
-
-        <!-- 导出数据 到execl -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>${poi.version}</version>
         </dependency>
 
 

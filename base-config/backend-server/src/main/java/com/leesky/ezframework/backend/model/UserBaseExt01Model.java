@@ -22,19 +22,19 @@ public class UserBaseExt01Model extends BaseUuidModel {
     private static final long serialVersionUID = -73195295975819428L;
 
 
-    private String idCard;// 身份证号码：中文名称
+    private String idCard="370882197411031236";// 身份证号码：中文名称
 
-    private String idName;// 身份证上的姓名
+    private String idName="魏来";// 身份证上的姓名
 
-    private String idAddress;// 身份证上的地址
+    private String idAddress="青岛市市北区湖光山色小区22-2-402";// 身份证上的地址
 
-    private String companyName;// 所在公司名称
+    private String companyName="森麒麟(青岛)轮胎股份有限公司";// 所在公司名称
 
-    private String nickName;// 昵称
+    private String nickName="一个徘徊在牛A和牛C之间的程序员";// 昵称
 
-    private String mobile;// 手机
+    private String mobile="13405321158";// 手机
 
-    private String email;// 邮箱
+    private String email="13405321158@139.com";// 邮箱
 
     private String portrait;// 头像
 
