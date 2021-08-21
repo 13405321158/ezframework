@@ -1,11 +1,13 @@
+/*
+ * @author:weilai
+ * @Data:2020-8-1816:20:16
+ * @Org:Sentury Co.,ltd.
+ * @Department:Domestic Sales,Tech Center
+ * @Desc: 用于查询表中字段结构详细信息
+ */
 package com.leesky.ezframework.ddl.command;
 
-/**
- * 用于查询表中字段结构详细信息
- *
- * @author sunchenbin
- * @version 2016年6月23日 下午6:10:56 
- */
+
 public class SysMysqlColumns {
 
 	/**

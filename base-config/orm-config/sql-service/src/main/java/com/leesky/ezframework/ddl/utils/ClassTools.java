@@ -1,3 +1,9 @@
+/*
+ * @author:weilai
+ * @Data:2020-8-1816:20:16
+ * @Org:Sentury Co.,ltd.
+ * @Department:Domestic Sales,Tech Center
+ */
 package com.leesky.ezframework.ddl.utils;
 
 import java.io.File;
@@ -15,13 +21,6 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-
-/**
- * 通过包名获取class
- *
- * @author sunchenbin
- * @version 2016年6月23日 下午5:55:18 
- */
 public class ClassTools{
 
 	/**

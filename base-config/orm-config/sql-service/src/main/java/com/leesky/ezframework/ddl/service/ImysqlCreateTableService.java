@@ -1,14 +1,12 @@
+/*
+ * @author:weilai
+ * @Data:2020-8-1816:20:16
+ * @Org:Sentury Co.,ltd.
+ * @Department:Domestic Sales,Tech Center
+ * @Desc:
+ */
 package com.leesky.ezframework.ddl.service;
 
-/**
- * 
- * @author: weilai
- * @Data:上午9:58:47,2020年2月2日
- * @Org:Sentury Co.,ltd.
- * @Deparment:Domestic Sales,Tech Center
- * @Desc:
- *        <li>
- */
 public interface ImysqlCreateTableService {
 
 	/**

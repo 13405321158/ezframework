@@ -3,8 +3,6 @@
  * @Data:2020-8-1816:20:16
  * @Org:Sentury Co.,ltd.
  * @Department:Domestic Sales,Tech Center
- * @Desc:
- *        <li>
  */
 
 package com.leesky.ezframework.join.interfaces;

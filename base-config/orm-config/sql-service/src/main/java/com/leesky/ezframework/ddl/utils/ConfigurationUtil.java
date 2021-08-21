@@ -1,3 +1,9 @@
+/*
+ * @author:weilai
+ * @Data:2020-8-1816:20:16
+ * @Org:Sentury Co.,ltd.
+ * @Department:Domestic Sales,Tech Center
+ */
 package com.leesky.ezframework.ddl.utils;
 
 import com.leesky.ezframework.ddl.constants.Constants;

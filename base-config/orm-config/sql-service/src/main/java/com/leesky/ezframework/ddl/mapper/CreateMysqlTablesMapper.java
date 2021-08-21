@@ -1,3 +1,10 @@
+/*
+ * @author:weilai
+ * @Data:2020-8-1816:20:16
+ * @Org:Sentury Co.,ltd.
+ * @Department:Domestic Sales,Tech Center
+ * @Desc: 创建更新表结构的Mapper
+ */
 package com.leesky.ezframework.ddl.mapper;
 
 import com.leesky.ezframework.ddl.command.SysMysqlColumns;
@@ -7,12 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
-/**
- * 创建更新表结构的Mapper
- *
- * @author sunchenbin
- */
 public interface CreateMysqlTablesMapper {
 
     /**

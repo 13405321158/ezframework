@@ -9,7 +9,6 @@ package com.leesky.ezframework.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leesky.ezframework.query.QueryFilter;
@@ -21,168 +20,102 @@ import java.util.List;
 
 public interface IbaseService<T> extends IService<T> {
 
-	/**
-	 * 插入一条记录（选择字段，策略插入）
-	 */
-	T insert(T entity);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午12:39
+     * @描述: 根据记录主键查询
+     **/
+    T getOne(String id);
 
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午12:39
+     * @描述: 自定义查询条件，返回一条记录
+     **/
+    T getOne(QueryFilter<T> filter);
 
-	
-	/**
-	 * 插入（批量）
-	 *
-	 * @param entityList 实体对象集合
-	 */
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午12:40
+     * @描述: 自定义查询条件，返回多个记录
+     **/
+    List<T> list(QueryFilter<T> filter);
 
-	void insertBatch(Collection<T> entityList);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午12:41
+     * @描述: 自定义查询条件，分页返回记录
+     **/
+    Page<T> page(QueryFilter<T> filter);
 
-	/**
-	 * 根据 ID 删除
-	 *
-	 * @param id 主键ID
-	 */
-	void delById(Serializable id);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午12:48
+     * @描述: 插入单个数据
+     **/
+    void insert(T entity);
 
-	/**
-	 * 根据 entity 条件，删除记录
-	 *
-	 * @param queryWrapper 实体包装类
-	 *                     {@link com.baomidou.mybatisplus.core.conditions.query.QueryWrapper}
-	 */
-	void del(Wrapper<T> queryWrapper);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午12:51
+     * @描述: 披露插入数据
+     **/
+    void insertBatch(Collection<T> entityList);
 
-	/**
-	 * 删除（根据ID 批量删除）
-	 *
-	 * @param idList 主键ID列表
-	 */
-	void delByIds(Collection<? extends Serializable> idList);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午12:52
+     * @描述: 根据主键删除一条记录
+     **/
+    void del(Serializable id);
 
-	/**
-	 * 根据 ID 选择修改
-	 *
-	 * @param entity 实体对象
-	 */
-	Integer update(T entity);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午12:55
+     * @描述: 自定义删除条件
+     **/
+    void del(QueryFilter<T> filter);
 
-	/**
-	 * 批量更新
-	 */
-	boolean updateBatch(Collection<T> entityList);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午12:56
+     * @描述: 根据主键 披露删除一批
+     **/
+    void del(Collection<? extends Serializable> ids);
 
-	/**
-	 * 根据 UpdateWrapper 条件，更新记录 需要设置sqlset
-	 *
-	 * @param updateWrapper 实体对象封装操作类
-	 *                      {@link com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper}
-	 */
-	void edit(T entity, Wrapper<T> updateWrapper);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午12:57
+     * @描述: 更新一条记录
+     **/
+    void edit(T entity);
 
-	/**
-	 * 根据 ID 查询
-	 *
-	 * @param id 主键ID
-	 */
-	T getById(Serializable id, Boolean lazy);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午1:14
+     * @描述: 批量更新记录
+     **/
+    void edit(Collection<T> entityList);
 
-	/**
-	 * 查询（根据ID 批量查询）
-	 *
-	 * @param idList 主键ID列表
-	 */
-	List<T> listByIds(Collection<? extends Serializable> idList, Boolean lazy);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午1:14
+     * @描述: 自定义更新条件
+     **/
+    void edit(T entity, Wrapper<T> updateWrapper);
 
-	/**
-	 * 根据 Wrapper，查询一条记录 <br/>
-	 * <p>
-	 * 结果集，如果是多个会抛出异常，随机取一条加上限制条件 wrapper.last("LIMIT 1")
-	 * </p>
-	 */
-	T getOne(String id);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午1:16
+     * @描述: 查询全部数据个数
+     **/
+    int count();
 
-	/**
-	 * 根据 Wrapper，查询一条记录 <br/>
-	 * <p>
-	 * 结果集，如果是多个会抛出异常，随机取一条加上限制条件 wrapper.last("LIMIT 1")
-	 * </p>
-	 */
-	T getModel(String id, Boolean lazy);
-
-	/**
-	 * 根据 Wrapper，查询一条记录 <br/>
-	 * <p>
-	 * 结果集，如果是多个会抛出异常，随机取一条加上限制条件 wrapper.last("LIMIT 1")
-	 * </p>
-	 *
-	 * @param queryWrapper 实体对象封装操作类
-	 *                     {@link com.baomidou.mybatisplus.core.conditions.query.QueryWrapper}
-	 */
-	T getModel(Wrapper<T> queryWrapper, Boolean lazy);
-
-	/**
-	 * 
-	 * @Author:weilai
-	 * @Data:2020年2月18日上午8:35:55
-	 * @Desc:
-	 *
-	 */
-
-	List<T> list(Wrapper<T> queryWrapper, Boolean lazy);
-
-	/**
-	 * 
-	 * @Author:weilai
-	 * @Data:2020年2月18日上午8:35:55
-	 * @Desc:
-	 *
-	 */
-
-	List<T> list(QueryFilter<T> filter, Boolean lazy);
-
-	/**
-	 * 
-	 * @author: weilai
-	 * @Data:2021年1月8日上午9:34:07
-	 * @Desc:
-	 *        <li>查询条件含有子表字段
-	 */
-	public List<T> list(QueryFilter<T> filter, Boolean lazy, Boolean queryIncludeChildren);
-
-	/**
-	 * 查询所有
-	 *
-	 * @see Wrappers#emptyWrapper()
-	 */
-	List<T> list(Boolean lazy);
-
-	/**
-	 * 翻页查询
-	 */
-	Page<T> page(QueryFilter<T> filter, Boolean lazy);
-
-
-	
-	/**
-	 * 翻页查询: 查询条件含有子表字段
-	 */
-	Page<T> page(QueryFilter<T> filter, Boolean lazy, Boolean queryIncludeChildren);
-
-	/**
-	 * 
-	 * @Author:weilai
-	 * @Data:2020年2月20日上午10:08:29
-	 * @Desc: 查询全部数据个数
-	 *
-	 */
-	int count();
-
-	/**
-	 * 
-	 * @Author:weilai
-	 * @Data:2020年2月20日上午10:08:57
-	 * @Desc: 根据条件查询记录个数
-	 *
-	 */
-	int count(QueryWrapper<T> queryWrapper);
+    /**
+     * @作者: 魏来
+     * @日期: 2021/8/21  下午1:16
+     * @描述: 根据条件查询记录个数
+     **/
+    int count(QueryWrapper<T> filter);
 
 }

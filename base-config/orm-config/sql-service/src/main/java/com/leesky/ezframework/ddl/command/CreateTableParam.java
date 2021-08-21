@@ -1,15 +1,17 @@
+/*
+ * @author:weilai
+ * @Data:2020-8-1816:20:16
+ * @Org:Sentury Co.,ltd.
+ * @Department:Domestic Sales,Tech Center
+ * @Desc: 用于存放创建表的字段信息
+ */
 package com.leesky.ezframework.ddl.command;
 
 import lombok.Data;
 
 import java.util.List;
 
-/**
- * 用于存放创建表的字段信息
- *
- * @author sunchenbin, Spet
- * @version 2019/07/06
- */
+
 @Data
 public class CreateTableParam implements Cloneable {
 

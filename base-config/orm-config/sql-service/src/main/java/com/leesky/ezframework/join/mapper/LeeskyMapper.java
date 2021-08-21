@@ -9,6 +9,7 @@
 package com.leesky.ezframework.join.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.leesky.ezframework.join.interfaces.ManyToMany;
 import com.leesky.ezframework.join.interfaces.ManyToOne;
 import com.leesky.ezframework.join.interfaces.OneToMany;
 import com.leesky.ezframework.join.interfaces.OneToOne;
@@ -19,18 +20,14 @@ import java.util.List;
 public interface LeeskyMapper<T> extends BaseMapper<T> {
 
 	/**
-	 * 
-	 * 
 	 * @author:weilai
 	 * @Data: 2020-8-2011:25:59
 	 * @Desc:
 	 *        <li>ManyToMany 注解查询
 	 */
-//	List<HashMap<String, Object>> many2manyQuery(ManyToManyDto param, String value);
+	List<HashMap<String, Object>> many2manyQuery(ManyToMany param, String value);
 
 	/**
-	 * 
-	 * 
 	 * @author:weilai
 	 * @Data: 2020-8-2011:27:28
 	 * @Desc:
@@ -39,8 +36,6 @@ public interface LeeskyMapper<T> extends BaseMapper<T> {
 	HashMap<String, Object> one2oneQuery(OneToOne param, String value);
 
 	/**
-	 * 
-	 * 
 	 * @author:weilai
 	 * @Data: 2020-8-2014:44:41
 	 * @Desc:
@@ -49,8 +44,6 @@ public interface LeeskyMapper<T> extends BaseMapper<T> {
 	HashMap<String, Object> many2oneQuery(ManyToOne param, String value);
 
 	/**
-	 * 
-	 * 
 	 * @author:weilai
 	 * @Data: 2020-8-2016:29:53
 	 * @Desc:
@@ -59,7 +52,6 @@ public interface LeeskyMapper<T> extends BaseMapper<T> {
 	List<HashMap<String, Object>> one2manyQuery(OneToMany param, String value);
 
 	/**
-	 * 
 	 * @author: weilai
 	 * @Data: 2021年1月8日上午9:00:10
 	 * @Desc:
