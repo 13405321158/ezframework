@@ -13,9 +13,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import com.leesky.ezframework.join.mapper.AutoMapper;
 import com.leesky.ezframework.join.mapper.LeeskyMapper;
-import com.leesky.ezframework.join.query.JoinQuery;
 import com.leesky.ezframework.model.BaseAutoModel;
 import com.leesky.ezframework.model.BaseUuidModel;
 import com.leesky.ezframework.model.SuperModel;
@@ -23,7 +21,6 @@ import com.leesky.ezframework.query.QueryFilter;
 import com.leesky.ezframework.service.IbaseService;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -34,32 +31,31 @@ import java.util.List;
 
 @Slf4j
 public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<LeeskyMapper<T>, T> implements IbaseService<T> {
-    @Autowired
-    private M repo;
-    @Autowired
-    private JoinQuery<T, M> joinQuery;
-    @Autowired
-    private AutoMapper<T, M> autoMapper;
+
+//    @Autowired
+//    private JoinQuery<T, M> joinQuery;
+//    @Autowired
+//    private AutoMapper<T, M> autoMapper;
 
     int DEFAULT_BATCH_SIZE = 1000;// 默认批次提交数量
-    protected Class<T> entityClass = currentModelClass();
+//    protected Class<T> entityClass = currentModelClass();
 
     @Override
     @Transactional
     public T getOne(String id) {
-        return this.repo.selectById(id);
+        return this.baseMapper.selectById(id);
     }
 
     @Override
     @Transactional
     public T getOne(QueryFilter<T> filter) {
-        return this.repo.selectOne(filter);
+        return this.baseMapper.selectOne(filter);
     }
 
     @Override
     @Transactional
     public List<T> list(QueryFilter<T> filter) {
-        return this.repo.selectList(filter);
+        return this.baseMapper.selectList(filter);
     }
 
 
@@ -71,7 +67,7 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
         Integer pageSize = filter.getParam().getLimit();
         Page<T> page = new Page<>(payoffs, pageSize);
 
-        return this.repo.selectPage(page, filter);
+        return this.baseMapper.selectPage(page, filter);
     }
 
     @Override
@@ -83,7 +79,7 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
             e.setCreateDate(date);
             e.setModifyDate(date);
         }
-        this.repo.insert(entity);
+        this.baseMapper.insert(entity);
     }
 
     @Override
@@ -120,19 +116,19 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void del(Serializable id) {
-        this.repo.deleteById(id);
+        this.baseMapper.deleteById(id);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void del(QueryFilter<T> filter) {
-        this.repo.delete(filter);
+        this.baseMapper.delete(filter);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void del(Collection<? extends Serializable> ids) {
-        this.repo.deleteBatchIds(ids);
+        this.baseMapper.deleteBatchIds(ids);
     }
 
 
@@ -145,7 +141,7 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
             e.setModifyDate(new Date());
         }
 
-        this.repo.updateById(entity);
+        this.baseMapper.updateById(entity);
     }
 
     @Override
@@ -168,18 +164,18 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
             SuperModel e = ((SuperModel) entity);
             e.setModifyDate(new Date());
         }
-        this.repo.update(entity, updateWrapper);
+        this.baseMapper.update(entity, updateWrapper);
     }
 
     @Override
     @Transactional
     public int count() {
-        return this.repo.selectCount(Wrappers.emptyWrapper());
+        return this.baseMapper.selectCount(Wrappers.emptyWrapper());
     }
 
     @Override
     @Transactional
     public int count(QueryWrapper<T> filter) {
-        return this.repo.selectCount(filter);
+        return this.baseMapper.selectCount(filter);
     }
 }
