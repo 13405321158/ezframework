@@ -12,9 +12,9 @@
     <artifactId>base-config</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>gateway-config</module>
         <module>backend-server</module>
-        <module>orm-config</module>
+        <module>gateway01-server</module>
+        <module>gateway02-server</module>
     </modules>
 
 
