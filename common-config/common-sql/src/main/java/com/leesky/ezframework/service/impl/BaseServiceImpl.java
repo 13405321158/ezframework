@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+
 import com.leesky.ezframework.join.mapper.AutoMapper;
 import com.leesky.ezframework.join.mapper.LeeskyMapper;
 import com.leesky.ezframework.join.query.JoinQuery;
@@ -22,8 +22,7 @@ import com.leesky.ezframework.model.SuperModel;
 import com.leesky.ezframework.query.QueryFilter;
 import com.leesky.ezframework.service.IbaseService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.SqlSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +33,6 @@ import java.util.List;
 
 
 @Slf4j
-//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<LeeskyMapper<T>, T> implements IbaseService<T> {
     @Autowired
     private M repo;
@@ -105,13 +103,16 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertBatch(Collection<T> entityList) {
+        Date date = new Date();
         long start = System.currentTimeMillis();
-        try (SqlSession session = SqlHelper.FACTORY.openSession(ExecutorType.BATCH)) {
-            entityList.forEach(this::insert);
-
-            session.commit();
-            session.clearCache();
+        for (T t:entityList){
+            if (t instanceof SuperModel) {
+                SuperModel e = ((SuperModel) t);
+                e.setCreateDate(date);
+                e.setModifyDate(date);
+            }
         }
+        this.saveBatch(entityList, this.DEFAULT_BATCH_SIZE);
         long end = System.currentTimeMillis();
         log.info("本次批量插入[{}]条记录,耗时{}毫秒", entityList.size(), (end - start));
     }
