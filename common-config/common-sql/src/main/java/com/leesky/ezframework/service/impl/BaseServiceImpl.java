@@ -7,24 +7,25 @@
  */
 package com.leesky.ezframework.service.impl;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leesky.ezframework.join.mapper.LeeskyMapper;
-import com.leesky.ezframework.model.BaseAutoModel;
-import com.leesky.ezframework.model.BaseUuidModel;
 import com.leesky.ezframework.model.SuperModel;
 import com.leesky.ezframework.query.QueryFilter;
 import com.leesky.ezframework.service.IbaseService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
+import com.leesky.ezframework.utils.MappingUtils;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -83,15 +84,17 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insert(T entity, Boolean relation) {
-        String id = null;
+//        String id = null;
 
-        this.insert(entity);
-        if (entity instanceof BaseUuidModel)
-            id = ((BaseUuidModel) entity).getId();
-        if (entity instanceof BaseAutoModel)
-            id = ((BaseAutoModel) entity).getId();
+       MappingUtils.relationship(entity);
 
-        System.out.println(id);
+//       this.insert(entity);
+//        if (entity instanceof BaseUuidModel)
+//            id = ((BaseUuidModel) entity).getId();
+//        if (entity instanceof BaseAutoModel)
+//            id = ((BaseAutoModel) entity).getId();
+//
+//        System.out.println(id);
     }
 
 

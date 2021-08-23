@@ -7,7 +7,11 @@
 
 package com.leesky.ezframework.join.interfaces;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -19,7 +23,7 @@ public @interface ManyToMany {
      * @日期: 2021/8/21  上午11:33
      * @描述: 另外一个 many方 数据表名称
      **/
-    String manyTableName();//目标表名称
+    String otherManytableName();//目标表名称
 
     /**
      * @作者: 魏来

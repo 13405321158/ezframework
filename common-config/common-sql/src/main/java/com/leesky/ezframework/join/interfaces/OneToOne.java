@@ -8,7 +8,11 @@
 
 package com.leesky.ezframework.join.interfaces;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -21,7 +25,7 @@ public @interface OneToOne {
      * @描述: 实体类表名称
      * @描述: 另一个one方的数据表名称，注意是另一个one方，千万别写成当前one方的数据表名称
      **/
-    String tableName();
+    String otherOneTableName();
 
     /**
      * @作者: 魏来
