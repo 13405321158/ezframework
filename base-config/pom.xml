@@ -15,8 +15,16 @@
         <module>backend-server</module>
         <module>gateway01-server</module>
         <module>gateway02-server</module>
+
     </modules>
 
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

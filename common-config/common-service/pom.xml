@@ -11,13 +11,7 @@
 
     <artifactId>common-service</artifactId>
     <properties>
-        <hutool.version>5.7.9</hutool.version>
-        <lang3.version>3.12.0</lang3.version>
-        <guava.version>30.1.1-jre</guava.version>
-        <fastjson.version>1.2.78</fastjson.version>
-        <collections4.version>4.4</collections4.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+
     </properties>
 
     <dependencies>
@@ -25,7 +19,6 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
         </dependency>
 
         <dependency>
@@ -36,25 +29,21 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>${collections4.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${lang3.version}</version>
         </dependency>
 
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-core</artifactId>
-            <version>${hutool.version}</version>
         </dependency>
     </dependencies>
 </project>

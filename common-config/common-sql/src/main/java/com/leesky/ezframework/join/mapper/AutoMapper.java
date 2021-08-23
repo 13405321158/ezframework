@@ -1,9 +1,9 @@
-/**
- * 
+/*
+ *
  * @author:weilai
  * @Data:2020-8-1817:30:06
  * @Org:Sentury Co.,ltd.
- * @Deparment:Domestic Sales,Tech Center
+ * @Department:Domestic Sales,Tech Center
  * @Desc:
  *        <li>
  */
@@ -89,8 +89,8 @@ public class AutoMapper<T, M> {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @author:weilai
 	 * @Data:2020-8-1914:03:33
 	 * @Desc:
@@ -125,8 +125,8 @@ public class AutoMapper<T, M> {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @author:weilai
 	 * @Data:2020-8-2011:07:03
 	 * @Desc:
@@ -152,8 +152,8 @@ public class AutoMapper<T, M> {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @author:weilai
 	 * @Data:2020-8-2014:41:59
 	 * @Desc:
@@ -178,8 +178,8 @@ public class AutoMapper<T, M> {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @author:weilai
 	 * @Data:2020-8-2016:34:24
 	 * @Desc:
@@ -216,8 +216,8 @@ public class AutoMapper<T, M> {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @author:weilai
 	 * @Data:2020-8-1910:44:25
 	 * @Desc:
@@ -239,7 +239,7 @@ public class AutoMapper<T, M> {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author:weilai
 	 * @Data:2020年11月20日 下午4:09:43
 	 * @Desc:
@@ -256,8 +256,8 @@ public class AutoMapper<T, M> {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @author:weilai
 	 * @Data:2020-8-1911:02:06
 	 * @Desc:
@@ -277,8 +277,8 @@ public class AutoMapper<T, M> {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @author:weilai
 	 * @Data:2020-8-1914:32:15
 	 * @Desc:
@@ -323,7 +323,7 @@ public class AutoMapper<T, M> {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author: weilai
 	 * @Data:2021年1月30日下午3:15:20
 	 * @Desc:
@@ -342,7 +342,7 @@ public class AutoMapper<T, M> {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author: weilai
 	 * @Data:2021年1月30日下午3:17:11
 	 * @Desc:

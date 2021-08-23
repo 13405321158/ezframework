@@ -13,15 +13,12 @@
     <packaging>pom</packaging>
     <modules>
         <module>common-service</module>
-        <module>common-feign</module>
+        <module>common-gateway</module>
         <module>common-security</module>
         <module>common-sql</module>
         <module>common-nosql</module>
     </modules>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
+
 
 </project>

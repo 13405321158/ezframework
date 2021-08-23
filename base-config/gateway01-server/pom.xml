@@ -10,12 +10,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gateway01-server</artifactId>
-<dependencies>
-    <dependency>
-        <groupId>com.leesky.ezframework</groupId>
-        <artifactId>common-feign</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
-</dependencies>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.leesky.ezframework</groupId>
+            <artifactId>common-gateway</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
