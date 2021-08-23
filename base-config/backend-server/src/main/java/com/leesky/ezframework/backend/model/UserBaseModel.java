@@ -45,11 +45,11 @@ public class UserBaseModel extends BaseUuidModel {
 	private String ext02Id;
 
 	@TableField(exist = false)
-	@OneToOne(otherOneTableName = "cbm_mag_user1_ext01")
+	@OneToOne(otherOneTableName = "cbm_mag_user1_ext01", serviceName = "iuserBaseExt01Service")
 	private UserBaseExt01Model ext01;
 
 	@TableField(exist = false)
-	@OneToOne(otherOneTableName = "cbm_mag_user1_ext02")
+	@OneToOne(otherOneTableName = "cbm_mag_user1_ext02", serviceName = "iuserBaseExt02Service")
 	private UserBaseExt02Model ext02;
 
 	public UserBaseModel() {
