@@ -140,7 +140,7 @@ public class RsaTool {
      */
     public static String encryptByPrivateKey(String str, String privateKeyStr) {
         int offSet = 0, i = 0;
-        byte[] cache, decryptedData;
+        byte[] cache;
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
             byte[] privateKeyBytes = decryptBase64(privateKeyStr);

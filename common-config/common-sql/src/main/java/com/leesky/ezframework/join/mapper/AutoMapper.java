@@ -10,6 +10,24 @@
 
 package com.leesky.ezframework.join.mapper;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.google.common.collect.Lists;
@@ -19,17 +37,6 @@ import com.leesky.ezframework.join.interfaces.ManyToOne;
 import com.leesky.ezframework.join.interfaces.OneToMany;
 import com.leesky.ezframework.join.interfaces.OneToOne;
 import com.leesky.ezframework.utils.Hump2underline;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.springframework.stereotype.Component;
-import org.springframework.util.ReflectionUtils;
-
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @desc
@@ -42,7 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unchecked")
 public class AutoMapper<T, M> {
 
-	private static ConcurrentHashMap<String, String> selectField = new ConcurrentHashMap<>();
+//	private static ConcurrentHashMap<String, String> selectField = new ConcurrentHashMap<>();
 
 	private LeeskyMapper<T> baseMapper = null;
 
@@ -264,7 +271,7 @@ public class AutoMapper<T, M> {
 	 *        <li>获取ManyToMany 中foreignKey 指定的字段值
 	 *        <li>当前方法 和 @getTableIdPropertyValue(Field f, T clazz)互斥
 	 */
-	private String getForeignKey(ManyToMany key, T clazz) {
+//	private String getForeignKey(ManyToMany key, T clazz) {
 		String value = null;
 //		try {
 //			String foreignKey = key.foreignKey();// 有值则根据此值去查询多对多关联表
@@ -273,8 +280,8 @@ public class AutoMapper<T, M> {
 //		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 //			e.printStackTrace();
 //		}
-		return value;
-	}
+//		return value;
+//	}
 
 	/**
 	 *

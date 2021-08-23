@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 import com.leesky.ezframework.join.mapper.LeeskyMapper;
 import com.leesky.ezframework.model.BaseAutoModel;
 import com.leesky.ezframework.model.BaseUuidModel;
@@ -20,7 +19,6 @@ import com.leesky.ezframework.model.SuperModel;
 import com.leesky.ezframework.query.QueryFilter;
 import com.leesky.ezframework.service.IbaseService;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -86,6 +84,7 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
     @Transactional(rollbackFor = Exception.class)
     public void insert(T entity, Boolean relation) {
         String id = null;
+
         this.insert(entity);
         if (entity instanceof BaseUuidModel)
             id = ((BaseUuidModel) entity).getId();
