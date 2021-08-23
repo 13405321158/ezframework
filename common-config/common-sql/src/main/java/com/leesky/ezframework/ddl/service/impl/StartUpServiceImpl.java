@@ -1,3 +1,11 @@
+/*
+ * @author: weilai
+ * @Data:上午9:59:22,2020年2月2日
+ * @Org:Sentury Co., ltd.
+ * @Department:Domestic Sales, Tech Center
+ * @Desc: <li>启动时进行处理的实现类
+ */
+
 package com.leesky.ezframework.ddl.service.impl;
 
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -22,13 +30,6 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.HashSet;
 
-/**
- * @author: weilai
- * @Data:上午9:59:22,2020年2月2日
- * @Org:Sentury Co., ltd.
- * @Deparment:Domestic Sales, Tech Center
- * @Desc: <li>启动时进行处理的实现类
- */
 
 @Slf4j
 @Service

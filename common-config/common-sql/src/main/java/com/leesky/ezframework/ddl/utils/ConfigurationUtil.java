@@ -45,7 +45,7 @@ public class ConfigurationUtil implements ApplicationContextAware {
 
 	/**
 	 * 获得spring上下文
-	 * 
+	 *
 	 * @return ApplicationContext spring上下文
 	 */
 	public ApplicationContext getApplicationContext() {
@@ -66,7 +66,6 @@ public class ConfigurationUtil implements ApplicationContextAware {
 	 * 获取配置文件的值，兼容传统spring项目和springboot项目
 	 * 
 	 * @param key properties
-	 * @return
 	 */
 	public String getConfig(String key) {
 		if (Constants.DATABASE_TYPE_KEY.equals(key) && !Constants.NULL.equals(databaseType)) {

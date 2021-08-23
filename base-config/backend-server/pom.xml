@@ -56,7 +56,7 @@
 
         <dependency>
             <groupId>com.leesky.ezframework</groupId>
-            <artifactId>sql-service</artifactId>
+            <artifactId>common-sql</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
