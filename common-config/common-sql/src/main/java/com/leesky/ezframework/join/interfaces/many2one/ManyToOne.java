@@ -6,7 +6,7 @@
  * @Desc: <li>
  */
 
-package com.leesky.ezframework.join.interfaces;
+package com.leesky.ezframework.join.interfaces.many2one;
 
 import java.lang.annotation.*;
 

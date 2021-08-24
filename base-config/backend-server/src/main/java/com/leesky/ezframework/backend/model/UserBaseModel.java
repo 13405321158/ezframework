@@ -11,7 +11,7 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.join.interfaces.OneToOne;
+import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
 import com.leesky.ezframework.model.BaseUuidModel;
 
 import io.swagger.annotations.ApiModel;
@@ -45,11 +45,11 @@ public class UserBaseModel extends BaseUuidModel {
 	private String ext02Id;
 
 	@TableField(exist = false)
-	@OneToOne(otherOneTableName = "cbm_mag_user1_ext01")
+	@OneToOne(otherOneTableName = "cbm_mag_user1_ext01", relationField = "ext01_id")
 	private UserBaseExt01Model ext01;
 
 	@TableField(exist = false)
-	@OneToOne(otherOneTableName = "cbm_mag_user1_ext02")
+	@OneToOne(otherOneTableName = "cbm_mag_user1_ext02", relationField = "ext02_id")
 	private UserBaseExt02Model ext02;
 
 	public UserBaseModel() {

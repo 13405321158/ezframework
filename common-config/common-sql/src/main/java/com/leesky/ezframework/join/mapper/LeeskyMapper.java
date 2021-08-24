@@ -9,10 +9,10 @@
 package com.leesky.ezframework.join.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leesky.ezframework.join.interfaces.ManyToMany;
-import com.leesky.ezframework.join.interfaces.ManyToOne;
-import com.leesky.ezframework.join.interfaces.OneToMany;
-import com.leesky.ezframework.join.interfaces.OneToOne;
+import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
+import com.leesky.ezframework.join.interfaces.many2one.ManyToOne;
+import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
+import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
 
 import java.util.HashMap;
 import java.util.List;

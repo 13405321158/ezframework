@@ -7,13 +7,14 @@
  */
 package com.leesky.ezframework.model;
 
+import java.io.Serializable;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -22,6 +23,6 @@ public class BaseAutoModel extends SuperModel implements Serializable {
 
 	@ApiModelProperty(value = "数据表主键")
 	@TableId(value = "id", type = IdType.AUTO)
-	protected String id;
+	protected Long id;
 
 }

@@ -32,10 +32,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.leesky.ezframework.join.interfaces.ManyToMany;
-import com.leesky.ezframework.join.interfaces.ManyToOne;
-import com.leesky.ezframework.join.interfaces.OneToMany;
-import com.leesky.ezframework.join.interfaces.OneToOne;
+import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
+import com.leesky.ezframework.join.interfaces.many2one.ManyToOne;
+import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
+import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
 import com.leesky.ezframework.utils.Hump2underline;
 
 /**

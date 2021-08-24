@@ -5,7 +5,7 @@
  * @Department:Domestic Sales,Tech Center
  */
 
-package com.leesky.ezframework.join.interfaces;
+package com.leesky.ezframework.join.interfaces.many2many;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

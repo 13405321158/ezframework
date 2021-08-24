@@ -7,18 +7,21 @@
  */
 package com.leesky.ezframework.backend.action;
 
-import com.leesky.ezframework.backend.model.UserBaseExt01Model;
-import com.leesky.ezframework.backend.model.UserBaseExt02Model;
-import com.leesky.ezframework.backend.model.UserBaseModel;
-import com.leesky.ezframework.backend.service.IuserBaseService;
-import com.leesky.ezframework.json.AjaxJson;
-import com.leesky.ezframework.query.ParamModel;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.leesky.ezframework.backend.model.UserBaseExt01Model;
+import com.leesky.ezframework.backend.model.UserBaseExt02Model;
+import com.leesky.ezframework.backend.model.UserBaseModel;
+import com.leesky.ezframework.backend.service.IuserBaseExt01Service;
+import com.leesky.ezframework.backend.service.IuserBaseService;
+import com.leesky.ezframework.json.AjaxJson;
+import com.leesky.ezframework.query.ParamModel;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -27,6 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestAction {
 
     private final IuserBaseService iuserBaseService;
+    
+    private final IuserBaseExt01Service iuserBaseExt01Service;
 
 
     @RequestMapping("/r01")
@@ -38,8 +43,11 @@ public class TestAction {
             UserBaseExt01Model ext01 = new UserBaseExt01Model();
             UserBaseExt02Model ext02 = new UserBaseExt02Model();
             UserBaseModel user = new UserBaseModel(ext01, ext02);
-
+//
             this.iuserBaseService.insert(user,true);
+            
+//            ext01.setUserBaseModel(user);
+//            this.iuserBaseExt01Service.insert(ext01,true);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             json.setSuccess(false, e.getMessage());

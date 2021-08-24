@@ -7,8 +7,11 @@
  */
 package com.leesky.ezframework.backend.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
 import com.leesky.ezframework.model.BaseUuidModel;
+
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,6 +52,10 @@ public class UserBaseExt01Model extends BaseUuidModel {
     private String dealerName;// 经销商及其子用户时此字段 有效：经销商名称
 
     private String dealerCmId;// 门店用户时此字段有效上级经销商业务员
+    
+    private String ordersn="0403a53c-5732-4b0a-aced-596b3b3d9320";
 
-
+	@TableField(exist = false)
+	@OneToOne(otherOneTableName = "cbm_mag_user1", joinColumn = "ext01_id")
+	private UserBaseModel userBaseModel;
 }

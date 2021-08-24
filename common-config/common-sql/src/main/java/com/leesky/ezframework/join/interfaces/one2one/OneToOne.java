@@ -6,7 +6,7 @@
  * @Desc: <li>
  */
 
-package com.leesky.ezframework.join.interfaces;
+package com.leesky.ezframework.join.interfaces.one2one;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -35,5 +35,12 @@ public @interface OneToOne {
 	 **/
 	String joinColumn() default "id";
 
+	/**
+	 * @作者: 魏来
+	 * @日期: 2021年8月24日 上午10:16:32
+	 * @描述: one2one 关系可以划分为主表 和 从表： 主表含有从表字段， 从表不含有主表字段
+	 * @描述: 此属性=“”代表从表
+	 */
+	String relationField() default "";
 
 }

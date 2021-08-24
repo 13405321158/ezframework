@@ -7,13 +7,14 @@
  */
 package com.leesky.ezframework.model;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableField;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -25,9 +26,16 @@ public class SuperModel implements Serializable {
 	@ApiModelProperty(value = "记录创建时间")
 	protected Date createDate;
 
-
 	@TableField("modify_date")
 	@ApiModelProperty(value = "记录修改时间")
 	protected Date modifyDate;
+
+	public Date getCreateDate() {
+		return createDate == null ? new Date() : this.createDate;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate == null ? new Date() : this.modifyDate;
+	}
 
 }

@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<LeeskyMapper<T>, T> implements IbaseService<T> {
 
 	@Autowired
-	private MappingUtils mappingUtils;
+	private MappingUtils<T> mappingUtils;
 //    @Autowired
 //    private JoinQuery<T, M> joinQuery;
 //    @Autowired
@@ -87,7 +87,7 @@ public class BaseServiceImpl<M extends LeeskyMapper<T>, T> extends ServiceImpl<L
 	public void insert(T entity, Boolean relation) {
 //        String id = null;
 
-		mappingUtils.relationship(entity);
+		mappingUtils.relationship(entity,this.baseMapper);
 
 //       this.insert(entity);
 //        if (entity instanceof BaseUuidModel)
