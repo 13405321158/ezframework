@@ -8,47 +8,39 @@
 
 package com.leesky.ezframework.utils;
 
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SpringContextHolder {
+public class SpringContextHolder implements ApplicationContextAware {
 
-//	private static ApplicationContext applicationContext = null;
-	public static ConfigurableApplicationContext applicationContext;
-//	@Override
-//	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-//		SpringContextHolder.applicationContext = applicationContext;
-//	}
-//
-//	public static <T> T getBean(Class<T> type) {
-//		assertContextInjected();
-//		return applicationContext.getBean(type);
-//	}
-//
-//
-//
-//	public static Object getBean(String name) {
-//		assertContextInjected();
-//		return applicationContext.getBean(name);
-//
-//	}
-//	
-//	public static void assertContextInjected() {
-//		if (applicationContext == null) {
-//			throw new RuntimeException("applicationContext未注入");
-//		}
-//	}
+	private static ApplicationContext applicationContext = null;
 
-	// 定义一个获取已经实例化bean的方法
-	public static <T> T getBean(Class<T> c) {
-		return applicationContext.getBean(c);
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		SpringContextHolder.applicationContext = applicationContext;
 	}
 
-	// 定义一个获取已经实例化bean的方法
-	public static Object getBean(String c) {
-		Object object = applicationContext.getBean(c);
-
-		return object;
+	public static <T> T getBean(Class<T> type) {
+		assertContextInjected();
+		return applicationContext.getBean(type);
 	}
+
+
+
+	public static Object getBean(String name) {
+		assertContextInjected();
+		return applicationContext.getBean(name);
+
+	}
+	
+	public static void assertContextInjected() {
+		if (applicationContext == null) {
+			throw new RuntimeException("applicationContext未注入");
+		}
+	}
+
+
 }

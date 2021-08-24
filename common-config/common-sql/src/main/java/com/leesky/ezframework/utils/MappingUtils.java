@@ -9,12 +9,15 @@ package com.leesky.ezframework.utils;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.join.interfaces.ManyToMany;
 import com.leesky.ezframework.join.interfaces.ManyToOne;
@@ -22,7 +25,6 @@ import com.leesky.ezframework.join.interfaces.OneToMany;
 import com.leesky.ezframework.join.interfaces.OneToOne;
 import com.leesky.ezframework.model.BaseAutoModel;
 import com.leesky.ezframework.model.BaseUuidModel;
-import com.leesky.ezframework.service.IbaseService;
 
 @Component
 public class MappingUtils {
@@ -46,7 +48,7 @@ public class MappingUtils {
 			ManyToMany many2many = f.getAnnotation(ManyToMany.class);
 
 			if (ObjectUtils.isNotEmpty(one2one)) {
-				saveObject(f, one2one.serviceName(), entity);
+				saveObject(f, entity);
 			}
 			if (ObjectUtils.isNotEmpty(many2one)) {
 				System.err.println(many2one.oneTableName());
@@ -59,32 +61,6 @@ public class MappingUtils {
 			}
 		}
 
-	}
-
-	/**
-	 * @作者: 魏来
-	 * @日期: 2021年8月23日 下午5:29:48
-	 * @描述: 存储实体中的关系对象，适用于：one2one
-	 */
-	@SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
-	private String saveObject(Field f, String service, Object entity) {
-		String key = null;
-		try {
-			f.setAccessible(true);
-			Object obj = f.get(entity);
-
-			IbaseService mapper = (IbaseService) springContextHolder.getBean(service);
-			mapper.insert(obj);
-			if (obj instanceof BaseUuidModel)
-				key = ((BaseUuidModel) obj).getId();
-			else if (obj instanceof BaseAutoModel)
-				key = ((BaseAutoModel) obj).getId();
-
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-
-		return key;
 	}
 
 	/**
@@ -104,4 +80,50 @@ public class MappingUtils {
 		return fields;
 	}
 
+	/**
+	 * @作者: 魏来
+	 * @日期: 2021年8月23日 下午5:29:48
+	 * @描述: 存储实体中的关系对象，适用于：one2one
+	 */
+	@SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
+	private String saveObject(Field f, Object entity) {
+		String key = null;
+		try {
+			Date now = new Date();
+			f.setAccessible(true);
+			Object obj = f.get(entity);
+
+			BaseMapper iMapper = (BaseMapper) springContextHolder.getBean(buildMapperName(f));
+
+			if (obj instanceof BaseUuidModel) {
+				BaseUuidModel model = ((BaseUuidModel) obj);
+				model.setCreateDate(now);
+				model.setModifyDate(now);
+				key = model.getId();
+
+			} else if (obj instanceof BaseAutoModel) {
+				BaseAutoModel model = ((BaseAutoModel) obj);
+				model.setCreateDate(now);
+				model.setModifyDate(now);
+				key = model.getId();
+			}
+
+			iMapper.insert(obj);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			e.getMessage();
+		}
+
+		return key;
+	}
+
+	/**
+	 * @作者: 魏来
+	 * @日期: 2021年8月24日 上午8:27:22
+	 * @描述: 根据model实体名称 构造对应到ixxxMapper名称
+	 */
+	private String buildMapperName(Field f) {
+		String modelName = StringUtils.substringAfterLast(f.getType().getName(), ".").replace("Model", "");
+
+		return "i" + StringUtils.uncapitalize(modelName) + "Mapper";
+	}
 }

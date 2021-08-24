@@ -35,10 +35,5 @@ public @interface OneToOne {
 	 **/
 	String joinColumn() default "id";
 
-	/**
-	 * @作者: 魏来
-	 * @日期: 2021年8月23日 下午5:18:15
-	 * @描述: 数据表对应的service名称：ixxxxService
-	 */
-	String serviceName();
+
 }
