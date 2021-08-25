@@ -7,16 +7,14 @@
  */
 package com.leesky.ezframework.join.utils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.leesky.ezframework.utils.Hump2underline;
+import lombok.Data;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leesky.ezframework.utils.Hump2underline;
-
-import lombok.Data;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 @Data
 @SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
@@ -40,7 +38,6 @@ public class WaitSaveEntityDTO {
 		this.f = f;
 		this.entity = entity;
 		this.relationField = relationField;
-
 
 		f.setAccessible(true);
 	}
