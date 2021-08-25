@@ -7,15 +7,15 @@
  */
 package com.leesky.ezframework.service;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leesky.ezframework.query.QueryFilter;
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
 
 public interface IbaseService<T> extends IService<T> {
@@ -67,7 +67,7 @@ public interface IbaseService<T> extends IService<T> {
      * @日期: 2021/8/21  下午12:51
      * @描述: 披露插入数据
      **/
-    void insertBatch(Collection<T> entityList);
+    void insert(Collection<T> entityList);
 
     /**
      * @作者: 魏来
@@ -116,7 +116,8 @@ public interface IbaseService<T> extends IService<T> {
      * @日期: 2021/8/21  下午1:16
      * @描述: 查询全部数据个数
      **/
-    int count();
+    @Override
+	int count();
 
     /**
      * @作者: 魏来

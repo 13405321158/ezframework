@@ -6,7 +6,7 @@
  * @描述:  
  */
 
-package com.leesky.ezframework.utils;
+package com.leesky.ezframework.join.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

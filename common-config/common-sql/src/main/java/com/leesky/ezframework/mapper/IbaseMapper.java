@@ -1,12 +1,14 @@
 /*
- * @author:weilai
- * @Data:2020-8-1819:12:10
- * @Org:Sentury Co.,ltd.
- * @Department:Domestic Sales,Tech Center
- * @Desc:
+ * @作者: 魏来
+ * @日期: 2021年8月25日  下午1:08:40
+ * @组织: 森麒麟轮胎股份有限公司.
+ * @部门: 国内市场替换部IT组
+ * @描述:  
  */
+package com.leesky.ezframework.mapper;
 
-package com.leesky.ezframework.join.mapper;
+import java.util.HashMap;
+import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
@@ -14,11 +16,7 @@ import com.leesky.ezframework.join.interfaces.many2one.ManyToOne;
 import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
 import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
 
-import java.util.HashMap;
-import java.util.List;
-
-public interface LeeskyMapper<T> extends BaseMapper<T> {
-
+public interface IbaseMapper<T> extends BaseMapper<T> {
 	/**
 	 * @author:weilai
 	 * @Data: 2020-8-2011:25:59

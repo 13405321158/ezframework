@@ -8,6 +8,7 @@
 package com.leesky.ezframework.backend.action;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,30 +30,33 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TestAction {
 
-    private final IuserBaseService iuserBaseService;
-    
-    private final IuserBaseExt01Service iuserBaseExt01Service;
+	private final IuserBaseService iuserBaseService;
 
+	private final IuserBaseExt01Service iuserBaseExt01Service;
 
-    @RequestMapping("/r01")
-    public AjaxJson index01(@RequestBody ParamModel model) {
+	@RequestMapping("/r01")
+	@Transactional
+	public AjaxJson index01(@RequestBody ParamModel model) {
 
-        AjaxJson json = new AjaxJson();
+		AjaxJson json = new AjaxJson();
 
-        try {
-            UserBaseExt01Model ext01 = new UserBaseExt01Model();
-            UserBaseExt02Model ext02 = new UserBaseExt02Model();
-            UserBaseModel user = new UserBaseModel(ext01, ext02);
-//
-            this.iuserBaseService.insert(user,true);
-            
-//            ext01.setUserBaseModel(user);
-//            this.iuserBaseExt01Service.insert(ext01,true);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            json.setSuccess(false, e.getMessage());
-        }
-        return json;
-    }
+		try {
+			UserBaseExt01Model ext01 = new UserBaseExt01Model();
+			UserBaseExt02Model ext02 = new UserBaseExt02Model();
+			UserBaseModel user = new UserBaseModel(ext01, ext02);
+
+			this.iuserBaseService.insert(user, true);
+
+			
+			UserBaseExt01Model ext011= new UserBaseExt01Model();
+			UserBaseModel user1 = new UserBaseModel(ext01, ext02);
+            ext011.setUserBaseModel(user1);
+            this.iuserBaseExt01Service.insert(ext011,true);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			json.setSuccess(false, e.getMessage());
+		}
+		return json;
+	}
 
 }
