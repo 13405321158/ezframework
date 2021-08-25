@@ -7,12 +7,6 @@
  */
 package com.leesky.ezframework.join.utils;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
@@ -20,8 +14,12 @@ import com.leesky.ezframework.join.interfaces.many2many.Many2manyHandler;
 import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
 import com.leesky.ezframework.join.interfaces.one2one.One2oneHandler;
 import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
-
 import lombok.Data;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 @Data
 public class MappingUtils<T> {
