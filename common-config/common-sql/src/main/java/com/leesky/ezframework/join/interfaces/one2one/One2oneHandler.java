@@ -5,20 +5,24 @@
  * @部门: 国内市场替换部IT组
  * @描述:  
  */
-package com.leesky.ezframework.join.utils;
-
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leesky.ezframework.utils.Hump2underline;
-import lombok.Data;
-import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+package com.leesky.ezframework.join.interfaces.one2one;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.leesky.ezframework.join.utils.JoinUtil;
+import com.leesky.ezframework.join.utils.SpringContextHolder;
+import com.leesky.ezframework.utils.Hump2underline;
+
+import lombok.Data;
+
 @Data
 @SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
-public class WaitSaveEntityDTO {
+public class One2oneHandler {
 
 	private Field f;
 
@@ -29,11 +33,11 @@ public class WaitSaveEntityDTO {
 	@Autowired
 	private SpringContextHolder springContextHolder;
 
-	public WaitSaveEntityDTO() {
+	public One2oneHandler() {
 
 	}
 
-	public WaitSaveEntityDTO(Field f, Object entity, String relationField) {
+	public One2oneHandler(Field f, Object entity, String relationField) {
 
 		this.f = f;
 		this.entity = entity;

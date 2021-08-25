@@ -11,12 +11,21 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
 import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
 import com.leesky.ezframework.join.interfaces.many2one.ManyToOne;
 import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
 import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
 
 public interface IbaseMapper<T> extends BaseMapper<T> {
+
+	/**
+	 * @作者: 魏来
+	 * @日期: 2021年8月25日 下午4:46:01
+	 * @描述: 插入数据到： many2many 到中间表
+	 */
+	void insertM2M(Many2manyDTO model);
+
 	/**
 	 * @author:weilai
 	 * @Data: 2020-8-2011:25:59

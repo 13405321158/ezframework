@@ -7,15 +7,21 @@
  */
 package com.leesky.ezframework.join.utils;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.google.common.collect.Lists;
-import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
-import lombok.Data;
+import java.lang.reflect.Field;
+import java.util.List;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.google.common.collect.Lists;
+import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
+import com.leesky.ezframework.join.interfaces.many2many.Many2manyHandler;
+import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
+import com.leesky.ezframework.join.interfaces.one2one.One2oneHandler;
+import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
+
+import lombok.Data;
 
 @Data
 public class MappingUtils<T> {
@@ -24,7 +30,8 @@ public class MappingUtils<T> {
 
 	private BaseMapper<T> baseMapper;
 
-	public List<WaitSaveEntityDTO> waits = Lists.newArrayList();// 保存待存储待实体
+	private List<One2oneHandler> o2o = Lists.newArrayList();// 保存待存储待实体
+	private List<Many2manyHandler> m2m = Lists.newArrayList();// 保存待存储待实体
 
 	/**
 	 * @author:weilai
@@ -43,39 +50,40 @@ public class MappingUtils<T> {
 		// 2、遍历字段，找出：one2one、many2many、many2one、one2many 关系
 		for (Field f : fields) {
 
-//			ManyToOne many2one = f.getAnnotation(ManyToOne.class);
-//			OneToMany one2many = f.getAnnotation(OneToMany.class);
-//			ManyToMany many2many = f.getAnnotation(ManyToMany.class);
-
 			// 2.1 one2one关系
 			OneToOne one2one = f.getAnnotation(OneToOne.class);
 			if (ObjectUtils.isNotEmpty(one2one)) {
 				String rf = one2one.relationField();
 				if (StringUtils.isBlank(rf))
-					waits.add(new WaitSaveEntityDTO(f, entity, one2one.joinColumn()));// f.get(entity)是主表，先保存起来，遍历完毕再存储
+					o2o.add(new One2oneHandler(f, entity, one2one.joinColumn()));// f.get(entity)是主表，先保存起来，遍历完毕再存储
 				else
-					JoinUtil.setValue(entity, rf, one2oneHandler(f, entity, one2one));// f.get(entity)是从表，立刻存储，获取关联关系到主键，并赋值给主表
+					JoinUtil.setValue(entity, rf, getRelation(f, entity, one2one));// f.get(entity)是从表，立刻存储，获取关联关系到主键，并赋值给主表
 			}
-//			if (ObjectUtils.isNotEmpty(many2one))
-//			if (ObjectUtils.isNotEmpty(one2many))
-//			if (ObjectUtils.isNotEmpty(many2many))
+			// 2.2 many2many关系
+			ManyToMany many2many = f.getAnnotation(ManyToMany.class);
+			if (ObjectUtils.isNotEmpty(many2many)) {
+				Object model = new Many2manyHandler(f, entity).save();// 存储另一个many方
+				m2m.add(new Many2manyHandler(new Many2manyDTO(many2many, JoinUtil.getId(model))));// 存储中间表
+			}
+
 		}
 		this.baseMapper.insert(entity);
 
 		Object key = JoinUtil.getId(entity);
-		waits.forEach(e -> e.save(key));// 如果waits不是空，则说明enity 对于某个关系来说 是从表
-		waits.clear();
+		o2o.forEach(e -> e.save(key));// 处理one2one
+		m2m.forEach(e -> e.save(key));// 存储many2many的中间表
+
 	}
 
 	/**
 	 * @作者: 魏来
 	 * @日期: 2021年8月23日 下午5:29:48
-	 * @描述: 存储实体中的关系对象，适用于：one2one
+	 * @描述: 存储实体中的关联数据，适用于：one2one
 	 */
-	private Object one2oneHandler(Field f, Object entity, OneToOne one2one) {
+	private Object getRelation(Field f, Object entity, OneToOne one2one) {
 		Object key;
 
-		Object obj = new WaitSaveEntityDTO(f, entity, one2one.relationField()).save();
+		Object obj = new One2oneHandler(f, entity, one2one.relationField()).save();
 
 		if (StringUtils.equals("id", one2one.joinColumn()))// 主键关联，返回子表主键
 			key = JoinUtil.getId(obj);
