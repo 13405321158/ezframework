@@ -7,22 +7,26 @@
  */
 package com.leesky.ezframework.join.interfaces.many2many;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.collect.Lists;
 
 import lombok.Data;
 
 @Data
 public class Many2manyDTO {
 
-	private Object v01;
+	private String field01;//字段01
 
-	private Object v02;
+	private String field02;//字段02
 
-	private String field01;
+	private List<Object> v01;//字段01的值
 
-	private String field02;
+	private List<Object> v02;//字段02的值
 
-	private String tableName;
+	private String tableName;//表名称
 
 	private Boolean flage = false;
 
@@ -30,7 +34,7 @@ public class Many2manyDTO {
 
 	}
 
-	public Many2manyDTO(ManyToMany flag, Object v) {
+	public Many2manyDTO(ManyToMany flag, List<Object> v) {
 
 		if (StringUtils.equals(flag.order(), "1")) {
 			this.flage = true;
@@ -44,14 +48,18 @@ public class Many2manyDTO {
 			this.field01 = flag.otherMiddleTableColumn();
 		}
 
+		this.tableName = flag.middleTableName();
 	}
 
 	public void build(Object v) {
+		List<Object> ret = Lists.newArrayList();
+		if (flage) {
 
-		if (flage)
-			this.v02 = v;
-		else {
-			this.v01 = v;
+			this.v01.forEach(e -> ret.add(v));
+			this.v02 = ret;
+		} else {
+			this.v02.forEach(e -> ret.add(v));
+			this.v01 = ret;
 		}
 	}
 }

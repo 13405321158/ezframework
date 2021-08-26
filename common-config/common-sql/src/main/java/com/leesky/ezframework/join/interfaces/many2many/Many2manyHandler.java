@@ -8,13 +8,16 @@
 package com.leesky.ezframework.join.interfaces.many2many;
 
 import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.google.common.collect.Lists;
+import com.leesky.ezframework.join.mapper.IbaseMapper;
 import com.leesky.ezframework.join.utils.JoinUtil;
 import com.leesky.ezframework.join.utils.SpringContextHolder;
-import com.leesky.ezframework.mapper.IbaseMapper;
+import com.leesky.ezframework.service.IbaseService;
 
 import lombok.Data;
 
@@ -29,9 +32,6 @@ public class Many2manyHandler {
 	private Object entity;
 
 	private Many2manyDTO dto;
-
-	@Autowired
-	private IbaseMapper iMapper;
 
 
 	@Autowired
@@ -54,26 +54,29 @@ public class Many2manyHandler {
 		f.setAccessible(true);
 	}
 
-	public Object save() {// 存储 另外一方 many 实体
-		Object obj = null;
+	public List<Object> save() {// 存储 另外一方 many 实体
+		List<Object> ret = Lists.newArrayList();
 		try {
-			obj = this.f.get(entity);
+			Object obj = this.f.get(entity);
+			String serviceBeanName = JoinUtil.buildServiceBeanNaem(f);
+			IbaseService service = (IbaseService) this.springContextHolder.getBean(serviceBeanName);
 
-			String mapperBeanName = JoinUtil.buildMapperBeanName(this.f);
+			for (Object o : (Set) obj) {
+				service.insert(o, false);
+				ret.add(JoinUtil.getId(o));
+			}
 
-			BaseMapper iMapper = (BaseMapper) this.springContextHolder.getBean(mapperBeanName);
-
-			iMapper.insert(obj);
-
-		} catch (IllegalArgumentException | IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
 
-		return obj;
+		return ret;
 	}
 
 	public void save(Object v) {// 存储中间表
 
-		this.iMapper.insertM2M(dto);
+		dto.build(v);
+		IbaseMapper baseMapper = (IbaseMapper) this.springContextHolder.getBean("ibaseMapper");
+		baseMapper.insertM2M(dto);
 	}
 }

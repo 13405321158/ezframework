@@ -5,7 +5,7 @@
  * @部门: 国内市场替换部IT组
  * @描述:  
  */
-package com.leesky.ezframework.mapper;
+package com.leesky.ezframework.join.mapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +16,7 @@ import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
 import com.leesky.ezframework.join.interfaces.many2one.ManyToOne;
 import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
 import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
+
 
 public interface IbaseMapper<T> extends BaseMapper<T> {
 

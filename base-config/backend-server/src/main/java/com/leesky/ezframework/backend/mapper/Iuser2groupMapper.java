@@ -8,7 +8,7 @@
 package com.leesky.ezframework.backend.mapper;
 
 import com.leesky.ezframework.backend.model.User2groupModel;
-import com.leesky.ezframework.mapper.IbaseMapper;
+import com.leesky.ezframework.join.mapper.IbaseMapper;
 
 public interface Iuser2groupMapper extends IbaseMapper<User2groupModel> {
 

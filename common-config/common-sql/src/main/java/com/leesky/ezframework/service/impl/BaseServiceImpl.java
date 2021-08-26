@@ -19,8 +19,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.leesky.ezframework.join.mapper.IbaseMapper;
 import com.leesky.ezframework.join.utils.MappingUtils;
-import com.leesky.ezframework.mapper.IbaseMapper;
 import com.leesky.ezframework.model.SuperModel;
 import com.leesky.ezframework.query.QueryFilter;
 import com.leesky.ezframework.service.IbaseService;
@@ -31,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<IbaseMapper<T>, T> implements IbaseService<T> {
 
 	int DEFAULT_BATCH_SIZE = 1000;// 默认批次提交数量
+	
 
 	@Override
 	public T getOne(String id) {
@@ -59,20 +60,20 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void insert(T entity) {
-		if (entity instanceof SuperModel) {
-			SuperModel e = ((SuperModel) entity);
-			Date date = new Date();
-			e.setCreateDate(date);
-			e.setModifyDate(date);
-		}
-		this.baseMapper.insert(entity);
-	}
-
-	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void insert(T entity, Boolean relation) {
-		new MappingUtils<T>().relationship(entity, this.baseMapper);
+		if (relation) {
+			new MappingUtils<T>().relationship(entity, this.baseMapper);
+
+		} else {
+			if (entity instanceof SuperModel) {
+				SuperModel e = ((SuperModel) entity);
+				Date date = new Date();
+				e.setCreateDate(date);
+				e.setModifyDate(date);
+			}
+			this.baseMapper.insert(entity);
+		}
+
 	}
 
 	@Override

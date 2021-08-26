@@ -7,6 +7,8 @@
  */
 package com.leesky.ezframework.backend.model;
 
+import java.util.Set;
+
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -32,5 +34,5 @@ public class GroupModel extends BaseUuidModel {
 
 	@TableField(exist = false)
 	@ManyToMany(middleTableName = "cbm_mag_group_user", middleTableColumn = "group_id",otherMiddleTableColumn="user_id")
-	private UserBaseModel userModel;
+	private Set<UserBaseModel> userSet;
 }

@@ -7,10 +7,15 @@
  */
 package com.leesky.ezframework.join.utils;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +45,35 @@ public class JoinUtil {
 	}
 
 	/**
+	 * @author: weilai
+	 * @Data:2021年1月30日下午3:15:20
+	 * @Desc:获取类所有属性，包括父类，爷爷等类
+	 */
+	public static List<PropertyDescriptor> getFields(Object model) {
+		List<PropertyDescriptor> descriptors = Lists.newArrayList();
+		try {
+			BeanInfo bi = Introspector.getBeanInfo(model.getClass());
+
+			descriptors = Arrays.stream(bi.getPropertyDescriptors()).filter(p -> {
+				return !"class".equals(p.getName());
+			}).collect(Collectors.toList());
+
+		} catch (IntrospectionException e) {
+			e.printStackTrace();
+		}
+//		for (PropertyDescriptor p : descriptors) {
+//			Method readMethod = p.getReadMethod();
+//			 try {
+//				Object o = readMethod.invoke("entity");
+//				 System.out.println(o);
+//			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+//				e.printStackTrace();
+//			}
+//		}
+		return descriptors;
+	}
+
+	/**
 	 * @作者: 魏来
 	 * @日期: 2021年8月24日 上午8:27:22
 	 * @描述: 根据model实体名称 构造对应到ixxxMapper名称
@@ -47,6 +81,16 @@ public class JoinUtil {
 	public static String buildMapperBeanName(Field f) {
 		String modelName = StringUtils.substringAfterLast(f.getType().getName(), ".").replace("Model", "");
 		return "i" + StringUtils.uncapitalize(modelName) + "Mapper";
+	}
+
+	/**
+	 * @作者: 魏来
+	 * @日期: 2021年8月24日 上午8:27:22
+	 * @描述: 根据model实体名称 构造对应的service名称
+	 */
+	public static String buildServiceBeanNaem(Field f) {
+		String modelName = StringUtils.substringAfterLast(f.getGenericType().getTypeName(), ".").replace("Model>", "");
+		return StringUtils.uncapitalize(modelName) + "ServiceImpl";
 	}
 
 	/**
@@ -86,8 +130,7 @@ public class JoinUtil {
 		String beanPropertyName = Hump2underline.lineToHump(filed);
 		return "set" + StringUtils.capitalize(beanPropertyName);
 	}
-	
-	
+
 	/**
 	 * @作者: 魏来
 	 * @日期: 2021年8月24日 下午12:26:39

@@ -7,6 +7,12 @@
  */
 package com.leesky.ezframework.join.utils;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
@@ -14,19 +20,16 @@ import com.leesky.ezframework.join.interfaces.many2many.Many2manyHandler;
 import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
 import com.leesky.ezframework.join.interfaces.one2one.One2oneHandler;
 import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
-import lombok.Data;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import lombok.Data;
 
 @Data
 public class MappingUtils<T> {
 
 	private T entity;
-
+	
 	private BaseMapper<T> baseMapper;
+	
 
 	private List<One2oneHandler> o2o = Lists.newArrayList();// 保存待存储待实体
 	private List<Many2manyHandler> m2m = Lists.newArrayList();// 保存待存储待实体
@@ -40,7 +43,9 @@ public class MappingUtils<T> {
 	 */
 	public void relationship(T entity, BaseMapper<T> baseMapper) {
 		this.entity = entity;
+
 		this.baseMapper = baseMapper;
+
 
 		// 1、查找出当前实体entity中的所有字段
 		List<Field> fields = JoinUtil.getAllField(entity);
@@ -60,8 +65,8 @@ public class MappingUtils<T> {
 			// 2.2 many2many关系
 			ManyToMany many2many = f.getAnnotation(ManyToMany.class);
 			if (ObjectUtils.isNotEmpty(many2many)) {
-				Object model = new Many2manyHandler(f, entity).save();// 存储另一个many方
-				m2m.add(new Many2manyHandler(new Many2manyDTO(many2many, JoinUtil.getId(model))));// 存储中间表
+				List<Object> list = new Many2manyHandler(f, entity).save();// 存储另一个many方
+				m2m.add(new Many2manyHandler(new Many2manyDTO(many2many, list)));// 存储中间表
 			}
 
 		}

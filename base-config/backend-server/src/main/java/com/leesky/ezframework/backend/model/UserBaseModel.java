@@ -8,6 +8,7 @@
 package com.leesky.ezframework.backend.model;
 
 import java.util.Date;
+import java.util.Set;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -55,7 +56,7 @@ public class UserBaseModel extends BaseUuidModel {
 
 	@TableField(exist = false)
 	@ManyToMany(middleTableName = "cbm_mag_group_user", middleTableColumn = "user_id", otherMiddleTableColumn = "group_id")
-	private GroupModel groupModel;
+	private Set<GroupModel> groupSet;
 
 	public UserBaseModel() {
 	}
@@ -65,9 +66,13 @@ public class UserBaseModel extends BaseUuidModel {
 		this.ext02 = ext02;
 	}
 
-	public UserBaseModel(UserBaseExt01Model ext01, UserBaseExt02Model ext02, GroupModel group) {
+	public UserBaseModel(UserBaseExt01Model ext01, UserBaseExt02Model ext02, Set<GroupModel> group) {
 		this.ext01 = ext01;
 		this.ext02 = ext02;
-		this.groupModel = group;
+		this.groupSet = group;
+	}
+
+	public Set<GroupModel> getGroupSet() {
+		return groupSet;
 	}
 }

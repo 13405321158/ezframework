@@ -14,11 +14,10 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.leesky.ezframework.query.QueryFilter;
 
 
-public interface IbaseService<T> extends IService<T> {
+public interface IbaseService<T>  {
 
     /**
      * @作者: 魏来
@@ -50,15 +49,9 @@ public interface IbaseService<T> extends IService<T> {
 
     /**
      * @作者: 魏来
-     * @日期: 2021/8/21  下午12:48
-     * @描述: 插入单个数据
-     **/
-    void insert(T entity);
-
-    /**
-     * @作者: 魏来
      * @日期: 2021/8/21  下午4:48
-     * @描述: 存储one2one、many2many，one2Many，many2one 关系
+     * @描述：relation=false 不处理聚合关系
+     * @描述: relation=true 则同时存储one2one、many2many，one2Many，many2one 关系
      **/
     void insert(T entity, Boolean relation);
 
@@ -116,7 +109,6 @@ public interface IbaseService<T> extends IService<T> {
      * @日期: 2021/8/21  下午1:16
      * @描述: 查询全部数据个数
      **/
-    @Override
 	int count();
 
     /**
