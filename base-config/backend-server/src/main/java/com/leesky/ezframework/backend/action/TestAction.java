@@ -20,6 +20,7 @@ import com.leesky.ezframework.backend.model.GroupModel;
 import com.leesky.ezframework.backend.model.UserBaseExt01Model;
 import com.leesky.ezframework.backend.model.UserBaseExt02Model;
 import com.leesky.ezframework.backend.model.UserBaseModel;
+import com.leesky.ezframework.backend.service.IuserBaseExt01Service;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.query.ParamModel;
@@ -35,7 +36,7 @@ public class TestAction {
 
 	private final IuserBaseService iuserBaseService;
 
-//	private final IuserBaseExt01Service iuserBaseExt01Service;
+	private final IuserBaseExt01Service iuserBaseExt01Service;
 
 	@RequestMapping("/r01")
 	@Transactional
@@ -57,10 +58,10 @@ public class TestAction {
 
 			this.iuserBaseService.insert(user, true);
 
-//			UserBaseExt01Model ext011= new UserBaseExt01Model();
-//			UserBaseModel user1 = new UserBaseModel(ext01, ext02);
-//            ext011.setUserBaseModel(user1);
-//            this.iuserBaseExt01Service.insert(ext011,true);
+			UserBaseExt01Model ext011= new UserBaseExt01Model();
+			UserBaseModel user1 = new UserBaseModel(ext01, ext02);
+            ext011.setUserBaseModel(user1);
+            this.iuserBaseExt01Service.insert(ext011,true);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			json.setSuccess(false, e.getMessage());

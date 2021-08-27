@@ -34,7 +34,7 @@ public class Many2manyHandler {
 
 	private Object entity;
 
-	private ManyToMany m2m;
+	private Many2Many m2m;
 
 	private Many2manyDTO dto;
 
@@ -51,7 +51,7 @@ public class Many2manyHandler {
 		return this;
 	}
 
-	public Many2manyHandler build(Field f, Object entity, ManyToMany m2m) {
+	public Many2manyHandler build(Field f, Object entity, Many2Many m2m) {
 
 		this.f = f;
 		this.m2m = m2m;

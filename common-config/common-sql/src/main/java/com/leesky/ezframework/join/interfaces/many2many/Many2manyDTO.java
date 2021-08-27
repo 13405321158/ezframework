@@ -37,7 +37,7 @@ public class Many2manyDTO {
 
 	}
 
-	public Many2manyDTO(ManyToMany flag, List<Object> v) {
+	public Many2manyDTO(Many2Many flag, List<Object> v) {
 
 		if (StringUtils.equals(flag.order(), "1")) {
 			this.flage = true;

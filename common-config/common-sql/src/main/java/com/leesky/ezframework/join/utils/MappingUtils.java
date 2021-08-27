@@ -20,9 +20,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
 import com.leesky.ezframework.join.interfaces.many2many.Many2manyHandler;
-import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
+import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
+import com.leesky.ezframework.join.interfaces.one2many.One2Many;
 import com.leesky.ezframework.join.interfaces.one2one.One2oneHandler;
-import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
+import com.leesky.ezframework.join.interfaces.one2one.One2One;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -43,11 +44,11 @@ public class MappingUtils<T> {
 	private List<Many2manyHandler> m2mList = Lists.newArrayList();// 保存待存储待实体
 
 	/**
-	 * @author:weilai
-	 * @Data:2020-8-1910:44:25
+	 * @author: weilai
+	 * @Data: 2020-8-1910:44:25
 	 * @Desc: 遍历实体类的中的 one2one、many2many、many2one、one2many
 	 * @Desc: 关联关系 分为主表和从表，含义参见各自类说明
-	 * @Desc：先存储从表后存储主表，因为存储完毕后实体类才有主键，才能把得到到主键 赋值给 主表中对应字段（非主键关联谁先谁后存储，无所谓）
+	 * @Desc: 先存储从表后存储主表，因为存储完毕后实体类才有主键，才能把得到到主键 赋值给 主表中对应字段（非主键关联谁先谁后存储，无所谓）
 	 */
 	public void relationship(T entity, BaseMapper<T> baseMapper) {
 		this.clear();
@@ -61,7 +62,7 @@ public class MappingUtils<T> {
 		for (Field f : fields) {
 
 			// 2.1 one2one关系
-			OneToOne o2o = f.getAnnotation(OneToOne.class);
+			One2One o2o = f.getAnnotation(One2One.class);
 			if (ObjectUtils.isNotEmpty(o2o)) {
 				String rf = o2o.relationField();
 				if (StringUtils.isBlank(rf))
@@ -70,13 +71,16 @@ public class MappingUtils<T> {
 					JoinUtil.setValue(entity, rf, getRelation(f, entity, o2o));// f.get(entity)是从表，立刻存储，获取关联关系到主键，并赋值给主表
 			}
 			// 2.2 many2many关系
-			ManyToMany m2m = f.getAnnotation(ManyToMany.class);
+			Many2Many m2m = f.getAnnotation(Many2Many.class);
 			if (ObjectUtils.isNotEmpty(m2m)) {
 				List<Object> list = many2manyHandler.build(f, entity, m2m).save();// 存储另一个many方
 				if (CollectionUtils.isNotEmpty(list))
 					m2mList.add(this.many2manyHandler.build(new Many2manyDTO(m2m, list)));// 存储中间表
 			}
-
+            //2.3 one2many关系
+			One2Many one2many = f.getAnnotation(One2Many.class);
+			if (ObjectUtils.isNotEmpty(one2many)) {
+			}
 		}
 		this.baseMapper.insert(entity);
 
@@ -91,7 +95,7 @@ public class MappingUtils<T> {
 	 * @日期: 2021年8月23日 下午5:29:48
 	 * @描述: 存储实体中的关联数据，适用于：one2one
 	 */
-	private Object getRelation(Field f, Object entity, OneToOne one2one) {
+	private Object getRelation(Field f, Object entity, One2One one2one) {
 
 		Object obj = one2oneHandler.build(f, entity, one2one.relationField()).save();
 

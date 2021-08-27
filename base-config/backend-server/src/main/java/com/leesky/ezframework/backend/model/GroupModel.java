@@ -13,7 +13,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
+import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
 import com.leesky.ezframework.model.BaseUuidModel;
 
 import io.swagger.annotations.ApiModel;
@@ -33,6 +33,6 @@ public class GroupModel extends BaseUuidModel {
 	private String groupName=RandomStringUtils.randomGraph(5);
 
 	@TableField(exist = false)
-	@ManyToMany(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "group_id",otherMiddleTableColumn="user_id")
+	@Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "group_id",otherMiddleTableColumn="user_id")
 	private Set<UserBaseModel> userSet;
 }

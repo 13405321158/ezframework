@@ -9,7 +9,7 @@ package com.leesky.ezframework.backend.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
+import com.leesky.ezframework.join.interfaces.one2one.One2One;
 import com.leesky.ezframework.model.BaseUuidModel;
 
 import io.swagger.annotations.ApiModel;
@@ -36,6 +36,6 @@ public class UserBaseExt02Model extends BaseUuidModel {
 	private String ordersn="165f9951-ba75-4eed-8b25-67296c0ba6f1";
 
 	@TableField(exist = false)
-	@OneToOne(otherOneTableName = "cbm_mag_user1", joinColumn = "ext02_id")
+	@One2One(otherOneTableName = "cbm_mag_user1", joinColumn = "ext02_id")
 	private UserBaseModel userBaseModel;
 }

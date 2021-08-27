@@ -12,10 +12,10 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
-import com.leesky.ezframework.join.interfaces.many2many.ManyToMany;
-import com.leesky.ezframework.join.interfaces.many2one.ManyToOne;
-import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
-import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
+import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
+import com.leesky.ezframework.join.interfaces.many2one.Many2One;
+import com.leesky.ezframework.join.interfaces.one2many.One2Many;
+import com.leesky.ezframework.join.interfaces.one2one.One2One;
 
 public interface IbaseMapper<T> extends BaseMapper<T> {
 
@@ -39,7 +39,7 @@ public interface IbaseMapper<T> extends BaseMapper<T> {
 	 * @Desc:
 	 *        <li>ManyToMany 注解查询
 	 */
-	List<HashMap<String, Object>> many2manyQuery(ManyToMany param, String value);
+	List<HashMap<String, Object>> many2manyQuery(Many2Many param, String value);
 
 	/**
 	 * @author:weilai
@@ -47,7 +47,7 @@ public interface IbaseMapper<T> extends BaseMapper<T> {
 	 * @Desc:
 	 *        <li>OneToOne 注解查询
 	 */
-	HashMap<String, Object> one2oneQuery(OneToOne param, String value);
+	HashMap<String, Object> one2oneQuery(One2One param, String value);
 
 	/**
 	 * @author:weilai
@@ -55,7 +55,7 @@ public interface IbaseMapper<T> extends BaseMapper<T> {
 	 * @Desc:
 	 *        <li>ManyToOne 注解查询
 	 */
-	HashMap<String, Object> many2oneQuery(ManyToOne param, String value);
+	HashMap<String, Object> many2oneQuery(Many2One param, String value);
 
 	/**
 	 * @author:weilai
@@ -63,7 +63,7 @@ public interface IbaseMapper<T> extends BaseMapper<T> {
 	 * @Desc:
 	 *        <li>OneToMany 注解查询
 	 */
-	List<HashMap<String, Object>> one2manyQuery(OneToMany param, String value);
+	List<HashMap<String, Object>> one2manyQuery(One2Many param, String value);
 
 	/**
 	 * @author: weilai

@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
-public @interface ManyToMany {
+public @interface Many2Many {
 
 	/**
 	 * @作者: 魏来
