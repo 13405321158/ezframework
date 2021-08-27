@@ -23,7 +23,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@TableName("cbm_mag_group1")
+@TableName("cbm_mag_group")
 @ApiModel(value = "群组信息表")
 public class GroupModel extends BaseUuidModel {
 
@@ -33,6 +33,6 @@ public class GroupModel extends BaseUuidModel {
 	private String groupName=RandomStringUtils.randomGraph(5);
 
 	@TableField(exist = false)
-	@ManyToMany(middleTableName = "cbm_mag_group_user", middleTableColumn = "group_id",otherMiddleTableColumn="user_id")
+	@ManyToMany(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "group_id",otherMiddleTableColumn="user_id")
 	private Set<UserBaseModel> userSet;
 }

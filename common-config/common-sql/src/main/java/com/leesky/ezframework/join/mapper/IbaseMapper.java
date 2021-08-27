@@ -17,8 +17,14 @@ import com.leesky.ezframework.join.interfaces.many2one.ManyToOne;
 import com.leesky.ezframework.join.interfaces.one2many.OneToMany;
 import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
 
-
 public interface IbaseMapper<T> extends BaseMapper<T> {
+
+	/**
+	 * @作者: 魏来
+	 * @日期: 2021年8月27日 上午9:11:38
+	 * @描述: 中级表数据变换前先删除
+	 */
+	void delM2M(Many2manyDTO model);
 
 	/**
 	 * @作者: 魏来

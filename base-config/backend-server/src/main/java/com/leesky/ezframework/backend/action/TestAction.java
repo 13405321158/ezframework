@@ -49,7 +49,10 @@ public class TestAction {
 			UserBaseExt01Model ext01 = new UserBaseExt01Model();
 			UserBaseExt02Model ext02 = new UserBaseExt02Model();
 			
-			Set<GroupModel> gs = Sets.newHashSet(new GroupModel(), new GroupModel());
+			
+			GroupModel g = new GroupModel();
+			g.setId("398d422cdf92e122c41890724e607996");
+			Set<GroupModel> gs = Sets.newHashSet(g);
 			UserBaseModel user = new UserBaseModel(ext01, ext02, gs);
 
 			this.iuserBaseService.insert(user, true);

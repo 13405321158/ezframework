@@ -9,6 +9,7 @@ package com.leesky.ezframework.backend.model;
 
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import io.swagger.annotations.ApiModel;
@@ -18,13 +19,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@TableName("cbm_mag_group_user")
+@TableName("cbm_mag_l_group_user")
 @ApiModel(value = "用户与群组 中间表")
 public class User2groupModel implements Serializable{
 
 
 	private static final long serialVersionUID = -6935710252282544978L;
 
+	@TableField(exist = false)
+	private String id;
+	
+	
 	@ApiModelProperty("用户id")
 	private String userId;
 	

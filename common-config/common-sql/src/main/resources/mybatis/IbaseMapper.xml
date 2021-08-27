@@ -3,24 +3,29 @@
 <mapper
 	namespace="com.leesky.ezframework.join.mapper.IbaseMapper">
 
+	<delete id="delM2M" parameterType="com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO">
+		DELETE FROM ${tableName} where ${targetField} ='${targetValue}'
+	</delete>
 
 	<insert id="insertM2M" parameterType="com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO">
 		Insert INTO ${tableName}
 		(${field01},${field02})
 		VALUES
-		<foreach collection ="v01" item="v" index= "index" separator =",">
-		('${v}','${v02.get(index)}')
-		</foreach >
+		<foreach collection="v01" item="v" index="index" separator=",">
+			('${v}','${v02.get(index)}')
+		</foreach>
 	</insert>
 
-	<select id="many2manyQuery" parameterType="String"
-		resultType="java.util.HashMap">
+
+
+
+
+	<select id="many2manyQuery" parameterType="String" resultType="java.util.HashMap">
 
 		select ${param.selectColumn} from ${param.targetTableName}
 		a left join
 		${param.shipTableName} b on a.${param.targetOnColumn} =
 		b.${param.shipOnColumn} where b.${param.shipWhereColumn} = '${value}'
-
 
 	</select>
 

@@ -18,7 +18,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@TableName("cbm_mag_user1_ext01")
+@TableName("cbm_mag_user1_ext0")
 @ApiModel(value = "基本用户扩展表01")
 public class UserBaseExt01Model extends BaseUuidModel {
 

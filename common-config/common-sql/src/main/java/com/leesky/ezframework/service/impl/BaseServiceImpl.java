@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
@@ -31,7 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<IbaseMapper<T>, T> implements IbaseService<T> {
 
 	int DEFAULT_BATCH_SIZE = 1000;// 默认批次提交数量
-	
+
+	@Autowired
+	private MappingUtils<T> mappingUtils;
 
 	@Override
 	public T getOne(String id) {
@@ -61,33 +64,18 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void insert(T entity, Boolean relation) {
-		if (relation) {
-			new MappingUtils<T>().relationship(entity, this.baseMapper);
-
-		} else {
-			if (entity instanceof SuperModel) {
-				SuperModel e = ((SuperModel) entity);
-				Date date = new Date();
-				e.setCreateDate(date);
-				e.setModifyDate(date);
-			}
+		if (relation)
+			mappingUtils.relationship(entity, this.baseMapper);
+		else
 			this.baseMapper.insert(entity);
-		}
 
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void insert(Collection<T> entityList) {
-		Date date = new Date();
+
 		long start = System.currentTimeMillis();
-		for (T t : entityList) {
-			if (t instanceof SuperModel) {
-				SuperModel e = ((SuperModel) t);
-				e.setCreateDate(date);
-				e.setModifyDate(date);
-			}
-		}
 		this.saveBatch(entityList, this.DEFAULT_BATCH_SIZE);
 		long end = System.currentTimeMillis();
 		log.info("本次批量插入[{}]条记录,耗时{}毫秒", entityList.size(), (end - start));
@@ -154,4 +142,5 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
 	public int count(QueryWrapper<T> filter) {
 		return this.baseMapper.selectCount(filter);
 	}
+
 }

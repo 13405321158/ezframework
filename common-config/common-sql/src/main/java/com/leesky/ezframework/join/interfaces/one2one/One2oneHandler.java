@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.leesky.ezframework.join.utils.JoinUtil;
@@ -21,6 +22,7 @@ import com.leesky.ezframework.utils.Hump2underline;
 import lombok.Data;
 
 @Data
+@Component
 @SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
 public class One2oneHandler {
 
@@ -33,17 +35,15 @@ public class One2oneHandler {
 	@Autowired
 	private SpringContextHolder springContextHolder;
 
-	public One2oneHandler() {
-
-	}
-
-	public One2oneHandler(Field f, Object entity, String relationField) {
+	public One2oneHandler build(Field f, Object entity, String relationField) {
 
 		this.f = f;
 		this.entity = entity;
 		this.relationField = relationField;
 
 		f.setAccessible(true);
+
+		return this;
 	}
 
 	public Object save() {
@@ -57,13 +57,13 @@ public class One2oneHandler {
 
 			iMapper.insert(obj);
 
-		} catch (IllegalArgumentException | IllegalAccessException  e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 
 		return obj;
 	}
-	
+
 	public Object save(Object v) {
 		Object obj = null;
 		try {
@@ -83,6 +83,5 @@ public class One2oneHandler {
 
 		return obj;
 	}
-	
 
 }

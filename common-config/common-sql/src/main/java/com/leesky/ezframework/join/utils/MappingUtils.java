@@ -10,8 +10,11 @@ package com.leesky.ezframework.join.utils;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
@@ -22,17 +25,22 @@ import com.leesky.ezframework.join.interfaces.one2one.One2oneHandler;
 import com.leesky.ezframework.join.interfaces.one2one.OneToOne;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MappingUtils<T> {
 
 	private T entity;
-	
-	private BaseMapper<T> baseMapper;
-	
 
-	private List<One2oneHandler> o2o = Lists.newArrayList();// 保存待存储待实体
-	private List<Many2manyHandler> m2m = Lists.newArrayList();// 保存待存储待实体
+	private BaseMapper<T> baseMapper;
+
+	private final One2oneHandler one2oneHandler;
+	private final Many2manyHandler many2manyHandler;
+
+	private List<One2oneHandler> o2oList = Lists.newArrayList();// 保存待存储待实体
+	private List<Many2manyHandler> m2mList = Lists.newArrayList();// 保存待存储待实体
 
 	/**
 	 * @author:weilai
@@ -42,10 +50,9 @@ public class MappingUtils<T> {
 	 * @Desc：先存储从表后存储主表，因为存储完毕后实体类才有主键，才能把得到到主键 赋值给 主表中对应字段（非主键关联谁先谁后存储，无所谓）
 	 */
 	public void relationship(T entity, BaseMapper<T> baseMapper) {
+		this.clear();
 		this.entity = entity;
-
 		this.baseMapper = baseMapper;
-
 
 		// 1、查找出当前实体entity中的所有字段
 		List<Field> fields = JoinUtil.getAllField(entity);
@@ -54,27 +61,28 @@ public class MappingUtils<T> {
 		for (Field f : fields) {
 
 			// 2.1 one2one关系
-			OneToOne one2one = f.getAnnotation(OneToOne.class);
-			if (ObjectUtils.isNotEmpty(one2one)) {
-				String rf = one2one.relationField();
+			OneToOne o2o = f.getAnnotation(OneToOne.class);
+			if (ObjectUtils.isNotEmpty(o2o)) {
+				String rf = o2o.relationField();
 				if (StringUtils.isBlank(rf))
-					o2o.add(new One2oneHandler(f, entity, one2one.joinColumn()));// f.get(entity)是主表，先保存起来，遍历完毕再存储
+					o2oList.add(this.one2oneHandler.build(f, entity, o2o.joinColumn()));// f.get(entity)是主表，先保存起来，遍历完毕再存储
 				else
-					JoinUtil.setValue(entity, rf, getRelation(f, entity, one2one));// f.get(entity)是从表，立刻存储，获取关联关系到主键，并赋值给主表
+					JoinUtil.setValue(entity, rf, getRelation(f, entity, o2o));// f.get(entity)是从表，立刻存储，获取关联关系到主键，并赋值给主表
 			}
 			// 2.2 many2many关系
-			ManyToMany many2many = f.getAnnotation(ManyToMany.class);
-			if (ObjectUtils.isNotEmpty(many2many)) {
-				List<Object> list = new Many2manyHandler(f, entity).save();// 存储另一个many方
-				m2m.add(new Many2manyHandler(new Many2manyDTO(many2many, list)));// 存储中间表
+			ManyToMany m2m = f.getAnnotation(ManyToMany.class);
+			if (ObjectUtils.isNotEmpty(m2m)) {
+				List<Object> list = many2manyHandler.build(f, entity, m2m).save();// 存储另一个many方
+				if (CollectionUtils.isNotEmpty(list))
+					m2mList.add(this.many2manyHandler.build(new Many2manyDTO(m2m, list)));// 存储中间表
 			}
 
 		}
 		this.baseMapper.insert(entity);
 
 		Object key = JoinUtil.getId(entity);
-		o2o.forEach(e -> e.save(key));// 处理one2one
-		m2m.forEach(e -> e.save(key));// 存储many2many的中间表
+		o2oList.forEach(e -> e.save(key));// 处理one2one
+		m2mList.forEach(e -> e.save(key));// 存储many2many的中间表
 
 	}
 
@@ -84,16 +92,21 @@ public class MappingUtils<T> {
 	 * @描述: 存储实体中的关联数据，适用于：one2one
 	 */
 	private Object getRelation(Field f, Object entity, OneToOne one2one) {
-		Object key;
 
-		Object obj = new One2oneHandler(f, entity, one2one.relationField()).save();
+		Object obj = one2oneHandler.build(f, entity, one2one.relationField()).save();
 
-		if (StringUtils.equals("id", one2one.joinColumn()))// 主键关联，返回子表主键
-			key = JoinUtil.getId(obj);
-		else
-			key = JoinUtil.getValue(obj, one2one.joinColumn());// 非主键关联，返回指定的关联字段值
+		// 主键关联，返回子表主键; 非主键关联，返回指定的关联字段值
+		return StringUtils.equals("id", one2one.joinColumn()) ? JoinUtil.getId(obj) : JoinUtil.getValue(obj, one2one.joinColumn());
 
-		return key;
 	}
 
+	/**
+	 * @作者: 魏来
+	 * @日期: 2021年8月27日 上午8:25:06
+	 * @描述: 初始化
+	 */
+	private void clear() {
+		o2oList.clear();
+		m2mList.clear();
+	}
 }

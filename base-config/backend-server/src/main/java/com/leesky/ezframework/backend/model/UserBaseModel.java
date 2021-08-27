@@ -23,7 +23,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@TableName("cbm_mag_user1")
+@TableName("cbm_mag_user")
 @ApiModel(value = "基本用户信息")
 public class UserBaseModel extends BaseUuidModel {
 
@@ -55,7 +55,7 @@ public class UserBaseModel extends BaseUuidModel {
 	private UserBaseExt02Model ext02;
 
 	@TableField(exist = false)
-	@ManyToMany(middleTableName = "cbm_mag_group_user", middleTableColumn = "user_id", otherMiddleTableColumn = "group_id")
+	@ManyToMany(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "user_id", otherMiddleTableColumn = "group_id")
 	private Set<GroupModel> groupSet;
 
 	public UserBaseModel() {
@@ -70,9 +70,5 @@ public class UserBaseModel extends BaseUuidModel {
 		this.ext01 = ext01;
 		this.ext02 = ext02;
 		this.groupSet = group;
-	}
-
-	public Set<GroupModel> getGroupSet() {
-		return groupSet;
 	}
 }

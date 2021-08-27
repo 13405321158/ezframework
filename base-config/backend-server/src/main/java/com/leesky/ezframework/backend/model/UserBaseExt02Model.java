@@ -20,7 +20,7 @@ import lombok.Setter;
 @Setter
 @Getter
 
-@TableName("cbm_mag_user1_ext02")
+@TableName("cbm_mag_user_ext02")
 @ApiModel(value = "基本用户扩展表02")
 public class UserBaseExt02Model extends BaseUuidModel {
 
