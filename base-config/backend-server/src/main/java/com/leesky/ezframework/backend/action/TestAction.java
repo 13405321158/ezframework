@@ -7,24 +7,23 @@
  */
 package com.leesky.ezframework.backend.action;
 
-import com.alibaba.nacos.shaded.com.google.common.collect.Sets;
-import com.leesky.ezframework.backend.model.GroupModel;
-import com.leesky.ezframework.backend.model.UserBaseExt01Model;
-import com.leesky.ezframework.backend.model.UserBaseExt02Model;
-import com.leesky.ezframework.backend.model.UserBaseModel;
-import com.leesky.ezframework.backend.service.IuserBaseExt01Service;
-import com.leesky.ezframework.backend.service.IuserBaseService;
-import com.leesky.ezframework.json.AjaxJson;
-import com.leesky.ezframework.query.ParamModel;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import com.alibaba.nacos.shaded.com.google.common.collect.Lists;
+import com.leesky.ezframework.backend.model.DealerOrderItemModel;
+import com.leesky.ezframework.backend.model.DealerOrderModel;
+import com.leesky.ezframework.backend.service.IdealerOrderService;
+import com.leesky.ezframework.json.AjaxJson;
+import com.leesky.ezframework.query.ParamModel;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -32,9 +31,7 @@ import java.util.Set;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TestAction {
 
-	private final IuserBaseService iuserBaseService;
-
-	private final IuserBaseExt01Service iuserBaseExt01Service;
+	private final IdealerOrderService idealerOrderService;
 
 	@RequestMapping("/r01")
 	@Transactional
@@ -43,23 +40,13 @@ public class TestAction {
 		AjaxJson json = new AjaxJson();
 
 		try {
+			DealerOrderModel order = new DealerOrderModel();
 
+			List<DealerOrderItemModel> list = Lists.newArrayList(new DealerOrderItemModel(), new DealerOrderItemModel(), new DealerOrderItemModel());
 
-			UserBaseExt01Model ext01 = new UserBaseExt01Model();
-			UserBaseExt02Model ext02 = new UserBaseExt02Model();
-			
-			
-			GroupModel g = new GroupModel();
-			g.setId("398d422cdf92e122c41890724e607996");
-			Set<GroupModel> gs = Sets.newHashSet(g);
-			UserBaseModel user = new UserBaseModel(ext01, ext02, gs);
+			order.setItems(list);
 
-			this.iuserBaseService.insert(user, true);
-
-			UserBaseExt01Model ext011= new UserBaseExt01Model();
-			UserBaseModel user1 = new UserBaseModel(ext01, ext02);
-            ext011.setUserBaseModel(user1);
-            this.iuserBaseExt01Service.insert(ext011,true);
+			this.idealerOrderService.insert(order, true);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			json.setSuccess(false, e.getMessage());

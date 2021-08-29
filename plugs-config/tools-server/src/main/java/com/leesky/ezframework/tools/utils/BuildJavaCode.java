@@ -1,21 +1,26 @@
 //package com.leesky.ezframework.tools.utils;
 //
 //
-//import com.google.common.collect.Lists;
+//import java.io.BufferedReader;
+//import java.io.File;
+//import java.io.FileInputStream;
+//import java.io.IOException;
+//import java.io.InputStreamReader;
+//import java.util.Date;
+//import java.util.Iterator;
+//import java.util.List;
+//
 //import org.apache.commons.io.FileUtils;
 //import org.apache.commons.lang3.StringUtils;
 //import org.apache.commons.lang3.time.DateFormatUtils;
 //
-//import java.io.*;
-//import java.util.Date;
-//import java.util.Iterator;
-//import java.util.List;
+//import com.google.common.collect.Lists;
 //
 //public class BuildJavaCode {
 //    //输出文件路径
 //    private static final String output_path = "/home/leesky/code/";
 //    //根据实际修改： xxxModel.java 文件位置
-//    private static final String input_path = "/home/leesky/model";
+//    private static final String input_path = "/home/leesky/m02";
 //    //根据实际修改： 涉及的 model 所在包名称前缀
 //    private static final String modelBasePack = "com.leesky.ezframework.backend.model";
 //
@@ -44,10 +49,10 @@
 //                mapperList.addAll(zhushi());
 //                mapperList.add("package " + absPath.replace("model", "mapper") + ";");
 //                mapperList.add("");
-//                mapperList.add("import com.leesky.ezframework.join.mapper.LeeskyMapper;");
+//                mapperList.add("import com.leesky.ezframework.join.mapper.IbaseMapper;");
 //                mapperList.add("import  " + absPath + "." + modelName + ";");
 //                mapperList.add("");
-//                mapperList.add("public interface " + mapperName + " extends LeeskyMapper<" + modelName + "> {");
+//                mapperList.add("public interface " + mapperName + " extends IbaseMapper<" + modelName + "> {");
 //                mapperList.add("}");
 //                FileUtils.writeLines(new File(getPath(absPath, "/mapper") + File.separatorChar + mapperName + ".java"), "UTF-8", mapperList, false);
 //

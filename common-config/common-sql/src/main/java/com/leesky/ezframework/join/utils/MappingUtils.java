@@ -7,26 +7,24 @@
  */
 package com.leesky.ezframework.join.utils;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.google.common.collect.Lists;
+import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
+import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
+import com.leesky.ezframework.join.interfaces.many2many.Many2manyHandler;
+import com.leesky.ezframework.join.interfaces.one2many.One2Many;
+import com.leesky.ezframework.join.interfaces.one2one.One2One;
+import com.leesky.ezframework.join.interfaces.one2one.One2oneHandler;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.google.common.collect.Lists;
-import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
-import com.leesky.ezframework.join.interfaces.many2many.Many2manyHandler;
-import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
-import com.leesky.ezframework.join.interfaces.one2many.One2Many;
-import com.leesky.ezframework.join.interfaces.one2one.One2oneHandler;
-import com.leesky.ezframework.join.interfaces.one2one.One2One;
-
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import java.lang.reflect.Field;
+import java.util.List;
 
 @Data
 @Component
@@ -80,6 +78,7 @@ public class MappingUtils<T> {
             //2.3 one2many关系
 			One2Many one2many = f.getAnnotation(One2Many.class);
 			if (ObjectUtils.isNotEmpty(one2many)) {
+
 			}
 		}
 		this.baseMapper.insert(entity);
