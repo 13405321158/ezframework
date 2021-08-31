@@ -49,7 +49,7 @@ public class TestAction {
 			this.idealerOrderService.insert(order, true);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			json.setSuccess(false, e.getMessage());
+			json.setSuccess(false, e.getLocalizedMessage());
 		}
 		return json;
 	}

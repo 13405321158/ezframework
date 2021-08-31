@@ -7,78 +7,63 @@
  */
 package com.leesky.ezframework.join.interfaces.one2many;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leesky.ezframework.join.utils.JoinUtil;
-import com.leesky.ezframework.join.utils.SpringContextHolder;
-import com.leesky.ezframework.utils.Hump2underline;
-import lombok.Data;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
+import com.leesky.ezframework.join.utils.JoinUtil;
+import com.leesky.ezframework.join.utils.SpringContextHolder;
+import com.leesky.ezframework.service.IbaseService;
+
+import lombok.Data;
 
 @Data
 @Component
+@SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
 public class One2manyHandler {
 
-    private Field f;
+	private Field f;
 
-    private Object entity;
+	private Object entity;
 
-    private String relationField;
+	private String joinField;
 
-    @Autowired
-    private SpringContextHolder springContextHolder;
+	@Autowired
+	private SpringContextHolder springContextHolder;
 
-    public One2manyHandler build(Field f, Object entity, String relationField) {
+	public One2manyHandler build(Field f, Object entity, String joinField) {
 
-        this.f = f;
-        this.entity = entity;
-        this.relationField = relationField;
+		this.f = f;
+		this.entity = entity;
+		this.joinField = joinField;
 
-        f.setAccessible(true);
+		f.setAccessible(true);
 
-        return this;
-    }
+		return this;
+	}
 
+	public void save(Object v) {
 
-    public Object save() {
-        Object obj = null;
-        try {
-            obj = this.f.get(entity);
+		try {
+			Object obj = this.f.get(entity);
+			String beanName = JoinUtil.buildServiceBeanNaem(this.f);
+			IbaseService service = (IbaseService) this.springContextHolder.getBean(beanName);
 
-            String mapperBeanName = JoinUtil.buildMapperBeanName(this.f);
+			if (obj instanceof List) {
+				for (Object o : (List) obj) {
+					BeanUtils.setProperty(o, this.joinField, v);
+					service.insert(o, false);
+				}
+			}
 
-            BaseMapper iMapper = (BaseMapper) this.springContextHolder.getBean(mapperBeanName);
+		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
 
-            iMapper.insert(obj);
+	}
 
-        } catch (IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return obj;
-    }
-
-    public Object save(Object v) {
-        Object obj = null;
-        try {
-            obj = this.f.get(entity);
-
-            String mapperBeanName = JoinUtil.buildMapperBeanName(this.f);
-
-            BaseMapper iMapper = (BaseMapper) this.springContextHolder.getBean(mapperBeanName);
-
-            BeanUtils.setProperty(obj, Hump2underline.lineToHump(this.relationField), v);
-
-            iMapper.insert(obj);
-
-        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        return obj;
-    }
 }

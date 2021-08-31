@@ -41,6 +41,6 @@ public @interface One2One {
 	 * @描述: one2one 关系可以划分为主表 和 从表： 主表含有从表字段， 从表不含有主表字段
 	 * @描述: 此属性=“”代表从表
 	 */
-	String relationField() default "";
+	String joinField() default "";
 
 }

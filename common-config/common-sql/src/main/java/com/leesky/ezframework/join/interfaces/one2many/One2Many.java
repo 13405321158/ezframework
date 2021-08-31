@@ -9,7 +9,11 @@
 
 package com.leesky.ezframework.join.interfaces.one2many;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -36,8 +40,7 @@ public @interface One2Many {
     /**
      * @作者: 魏来
      * @日期: 2021/8/21  上午10:46
-     * @描述: one方类的bean属性，一般是个List，或Set。
-     * @描述: 此属性必须带有 @TableField(exist = false)，即此字段不出现在数据表中
+     * @描述: many方类的bean属性,通过此属性和one方建立映射关系。
      **/
     String joinField();
 

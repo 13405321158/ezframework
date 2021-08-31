@@ -47,11 +47,11 @@ public class UserBaseModel extends BaseUuidModel {
 	private String ext02Id;
 
 	@TableField(exist = false)
-	@One2One(otherOneTableName = "cbm_mag_user1_ext01", relationField = "ext01_id")
+	@One2One(otherOneTableName = "cbm_mag_user1_ext01", joinField = "ext01_id")
 	private UserBaseExt01Model ext01;
 
 	@TableField(exist = false)
-	@One2One(otherOneTableName = "cbm_mag_user1_ext02", relationField = "ext02_id")
+	@One2One(otherOneTableName = "cbm_mag_user1_ext02", joinField = "ext02_id")
 	private UserBaseExt02Model ext02;
 
 	@TableField(exist = false)

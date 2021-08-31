@@ -1,0 +1,11 @@
+// $ANTLR : sql-script.g -> GeneratedSqlScriptParserTokenTypes.txt$
+GeneratedSqlScriptParser    // output token vocab name
+DELIMITER=4
+QUOTED_TEXT=5
+NEWLINE=6
+SPACE=7
+TAB=8
+CHAR=9
+ESCqs=10
+LINE_COMMENT=11
+BLOCK_COMMENT=12

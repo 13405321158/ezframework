@@ -41,4 +41,5 @@ public class DealerOrderItemModel extends BaseUuidModel {
 	@TableField(exist = false)
 	@Many2One(oneTableName = "cbm_mag_order", joinColumn = "order_sn", joinField = "orderSn")
 	private DealerOrderModel orderinfo;
+
 }

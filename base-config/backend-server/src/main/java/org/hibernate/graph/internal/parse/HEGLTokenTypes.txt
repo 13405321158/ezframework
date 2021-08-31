@@ -1,0 +1,11 @@
+// $ANTLR : graph.g -> HEGLTokenTypes.txt$
+HEGL    // output token vocab name
+COMMA=4
+NAME=5
+DOT=6
+LPAREN=7
+COLON=8
+RPAREN=9
+WHITESPACE=10
+NAME_START=11
+NAME_CONTINUATION=12

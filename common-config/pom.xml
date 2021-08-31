@@ -18,6 +18,7 @@
         <module>common-sql</module>
         <module>common-nosql</module>
         <module>common-feign</module>
+        <module>common-jpa</module>
     </modules>
 
 
