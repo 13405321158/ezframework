@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<IbaseMapper<T>, T> implements IbaseService<T> {
 
-	int DEFAULT_BATCH_SIZE = 1000;// 默认批次提交数量
+	int DEFAULT_BATCH_SIZE = 100;// 默认批次提交数量
 
 	@Autowired
 	private MappingUtils<T> mappingUtils;
@@ -74,9 +74,8 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void insert(Collection<T> entityList) {
-
 		long start = System.currentTimeMillis();
-		this.saveBatch(entityList, this.DEFAULT_BATCH_SIZE);
+		this.baseMapper.insertBatch(entityList);
 		long end = System.currentTimeMillis();
 		log.info("本次批量插入[{}]条记录,耗时{}毫秒", entityList.size(), (end - start));
 	}
@@ -134,12 +133,12 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
 	}
 
 	@Override
-	public int count() {
+	public long count() {
 		return this.baseMapper.selectCount(Wrappers.emptyWrapper());
 	}
 
 	@Override
-	public int count(QueryWrapper<T> filter) {
+	public long count(QueryWrapper<T> filter) {
 		return this.baseMapper.selectCount(filter);
 	}
 

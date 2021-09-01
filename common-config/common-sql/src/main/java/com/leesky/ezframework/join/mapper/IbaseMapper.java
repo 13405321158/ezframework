@@ -7,12 +7,13 @@
  */
 package com.leesky.ezframework.join.mapper;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
 import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
+import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
 import com.leesky.ezframework.join.interfaces.many2one.Many2One;
 import com.leesky.ezframework.join.interfaces.one2many.One2Many;
 import com.leesky.ezframework.join.interfaces.one2one.One2One;
@@ -32,6 +33,20 @@ public interface IbaseMapper<T> extends BaseMapper<T> {
 	 * @描述: 插入数据到： many2many 到中间表
 	 */
 	void insertM2M(Many2manyDTO model);
+
+	/**
+	 * @作者: 魏来
+	 * @日期: 2021年9月1日 下午3:51:35
+	 * @描述: 批量插入
+	 */
+	int insertBatch(Collection<T> list);
+
+	/**
+	 * @作者: 魏来
+	 * @日期: 2021年9月1日 下午3:51:35
+	 * @描述: 批量更新
+	 */
+	int updateBatch(Collection<T> list);
 
 	/**
 	 * @author:weilai

@@ -89,7 +89,7 @@ public class JoinUtil {
 	 * @描述: 根据model实体名称 构造对应的service名称
 	 */
 	public static String buildServiceBeanNaem(Field f) {
-		String modelName = StringUtils.substringAfterLast(f.getGenericType().getTypeName(), ".").replace("Model>", "");
+		String modelName = StringUtils.substringAfterLast(f.getGenericType().getTypeName(), ".").replace("Model", "").replace(">", "");
 		return StringUtils.uncapitalize(modelName) + "ServiceImpl";
 	}
 

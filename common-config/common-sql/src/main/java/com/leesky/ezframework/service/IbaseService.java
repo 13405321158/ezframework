@@ -108,13 +108,13 @@ public interface IbaseService<T> {
 	 * @日期: 2021/8/21 下午1:16
 	 * @描述: 查询全部数据个数
 	 **/
-	int count();
+	long count();
 
 	/**
 	 * @作者: 魏来
 	 * @日期: 2021/8/21 下午1:16
 	 * @描述: 根据条件查询记录个数
 	 **/
-	int count(QueryWrapper<T> filter);
+	long count(QueryWrapper<T> filter);
 
 }

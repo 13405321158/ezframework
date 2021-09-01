@@ -42,4 +42,14 @@ public class DealerOrderItemModel extends BaseUuidModel {
 	@Many2One(oneTableName = "cbm_mag_order", joinColumn = "order_sn", joinField = "orderSn")
 	private DealerOrderModel orderinfo;
 
+
+	public DealerOrderItemModel(DealerOrderModel orderinfo) {
+
+		this.orderinfo = orderinfo;
+	}
+
+	public DealerOrderItemModel() {
+
+	}
+
 }

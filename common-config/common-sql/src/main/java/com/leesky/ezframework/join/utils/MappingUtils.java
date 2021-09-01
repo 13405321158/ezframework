@@ -21,6 +21,8 @@ import com.google.common.collect.Lists;
 import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
 import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
 import com.leesky.ezframework.join.interfaces.many2many.Many2manyHandler;
+import com.leesky.ezframework.join.interfaces.many2one.Many2One;
+import com.leesky.ezframework.join.interfaces.many2one.Many2oneHandler;
 import com.leesky.ezframework.join.interfaces.one2many.One2Many;
 import com.leesky.ezframework.join.interfaces.one2many.One2manyHandler;
 import com.leesky.ezframework.join.interfaces.one2one.One2One;
@@ -41,6 +43,7 @@ public class MappingUtils<T> {
 	private final One2oneHandler one2oneHandler;
 	private final One2manyHandler one2manyHandler;
 	private final Many2manyHandler many2manyHandler;
+	private final Many2oneHandler many2oneHandler;
 
 	/**
 	 * @author: weilai
@@ -81,9 +84,14 @@ public class MappingUtils<T> {
 			}
 			// 2.3 one2many关系
 			One2Many one2many = f.getAnnotation(One2Many.class);
-			if (ObjectUtils.isNotEmpty(one2many)) {
+			if (ObjectUtils.isNotEmpty(one2many))
 				o2mList.add(this.one2manyHandler.build(f, entity, one2many.joinField()));
-			}
+
+			// 2.4 many2one关系
+			Many2One many2one = f.getAnnotation(Many2One.class);
+			if (ObjectUtils.isNotEmpty(many2one))
+				this.many2oneHandler.build(f, entity, many2one.joinField()).save();;
+
 		}
 		this.baseMapper.insert(entity);
 
@@ -91,6 +99,7 @@ public class MappingUtils<T> {
 		o2oList.forEach(e -> e.save(key));// 处理one2one
 		m2mList.forEach(e -> e.save(key));// 存储many2many的中间表
 		o2mList.forEach(e -> e.save(key));// 存储one2many中的 many方
+
 	}
 
 	/**

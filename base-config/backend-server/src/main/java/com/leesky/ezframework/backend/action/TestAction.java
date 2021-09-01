@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.nacos.shaded.com.google.common.collect.Lists;
 import com.leesky.ezframework.backend.model.DealerOrderItemModel;
 import com.leesky.ezframework.backend.model.DealerOrderModel;
-import com.leesky.ezframework.backend.service.IdealerOrderService;
+import com.leesky.ezframework.backend.service.IdealerOrderItemService;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.query.ParamModel;
 
@@ -31,7 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TestAction {
 
-	private final IdealerOrderService idealerOrderService;
+//	private final IdealerOrderService idealerOrderService;
+	private final IdealerOrderItemService idealerOrderItemService;
 
 	@RequestMapping("/r01")
 	@Transactional
@@ -42,11 +43,13 @@ public class TestAction {
 		try {
 			DealerOrderModel order = new DealerOrderModel();
 
-			List<DealerOrderItemModel> list = Lists.newArrayList(new DealerOrderItemModel(), new DealerOrderItemModel(), new DealerOrderItemModel());
+			List<DealerOrderItemModel> list = Lists.newArrayList(new DealerOrderItemModel(order), new DealerOrderItemModel(order), new DealerOrderItemModel(order));
 
 			order.setItems(list);
 
-			this.idealerOrderService.insert(order, true);
+//			this.idealerOrderService.insert(order, true);
+
+			this.idealerOrderItemService.insert(list);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			json.setSuccess(false, e.getLocalizedMessage());
