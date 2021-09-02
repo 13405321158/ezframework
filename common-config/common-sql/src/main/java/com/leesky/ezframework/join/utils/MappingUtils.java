@@ -7,15 +7,6 @@
  */
 package com.leesky.ezframework.join.utils;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
@@ -27,9 +18,16 @@ import com.leesky.ezframework.join.interfaces.one2many.One2Many;
 import com.leesky.ezframework.join.interfaces.one2many.One2manyHandler;
 import com.leesky.ezframework.join.interfaces.one2one.One2One;
 import com.leesky.ezframework.join.interfaces.one2one.One2oneHandler;
-
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 @Data
 @Component
@@ -90,7 +88,7 @@ public class MappingUtils<T> {
 			// 2.4 many2one关系
 			Many2One many2one = f.getAnnotation(Many2One.class);
 			if (ObjectUtils.isNotEmpty(many2one))
-				this.many2oneHandler.build(f, entity, many2one.joinField()).save();;
+				this.many2oneHandler.build(f, entity, many2one.joinField()).save();
 
 		}
 		this.baseMapper.insert(entity);
