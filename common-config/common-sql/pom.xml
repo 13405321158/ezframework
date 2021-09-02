@@ -16,7 +16,7 @@
         <p6spy.version>3.9.1</p6spy.version>
         <swagger.version>1.6.2</swagger.version>
         <baomidou.version>3.4.3.2</baomidou.version>
-        <beanutils.version>20030211.134440</beanutils.version>
+        <beanutils.version>1.9.4</beanutils.version>
     </properties>
     <description>mybatis 工具集合：1、ddl自动创建数据表结构 2、query单表快速查询工具 3、select查询指定字段</description>
     <dependencies>
