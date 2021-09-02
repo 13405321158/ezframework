@@ -18,3 +18,4 @@ spy.log
 .DS_Store
 .classpath
 .project
+rebel.xml
