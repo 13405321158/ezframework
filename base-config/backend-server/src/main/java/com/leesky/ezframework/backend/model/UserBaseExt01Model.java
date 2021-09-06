@@ -42,6 +42,6 @@ public class UserBaseExt01Model extends BaseUuidModel {
 	private String ordersn = "0403a53c-5732-4b0a-aced-596b3b3d9320";
 
 	@TableField(exist = false)
-	@One2One(otherOneTableName = "cbm_mag_user", joinColumn = "ext01_id")
+	@One2One(otherOneTableName = "cbm_mag_user", otherOneTableColumn = "ext01_id")
 	private UserBaseModel userBaseModel;
 }

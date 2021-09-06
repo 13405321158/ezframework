@@ -32,13 +32,13 @@ import java.util.List;
 @Data
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class MappingUtils<T> {
+public class SaveWithRelation<T> {
 
 	private T entity;
 
 	private BaseMapper<T> baseMapper;
 
-	private final One2oneHandler one2oneHandler;
+	private final One2oneHandler<T> one2oneHandler;
 	private final One2manyHandler one2manyHandler;
 	private final Many2manyHandler many2manyHandler;
 	private final Many2oneHandler many2oneHandler;
@@ -54,7 +54,7 @@ public class MappingUtils<T> {
 		this.entity = entity;
 		this.baseMapper = baseMapper;
 
-		List<One2oneHandler> o2oList = Lists.newArrayList();
+		List<One2oneHandler<T>> o2oList = Lists.newArrayList();
 		List<Many2manyHandler> m2mList = Lists.newArrayList();
 		List<One2manyHandler> o2mList = Lists.newArrayList();
 
@@ -69,7 +69,7 @@ public class MappingUtils<T> {
 			if (ObjectUtils.isNotEmpty(o2o)) {
 				String rf = o2o.joinField();
 				if (StringUtils.isBlank(rf))
-					o2oList.add(this.one2oneHandler.build(f, entity, o2o.joinColumn()));// f.get(entity)是主表，先保存起来，遍历完毕再存储
+					o2oList.add(this.one2oneHandler.build(f, entity, o2o.otherOneTableColumn()));// f.get(entity)是主表，先保存起来，遍历完毕再存储
 				else
 					JoinUtil.setValue(entity, rf, getRelation(f, entity, o2o));// f.get(entity)是从表，立刻存储，获取关联关系到主键，并赋值给主表
 			}
@@ -110,7 +110,7 @@ public class MappingUtils<T> {
 		Object obj = one2oneHandler.build(f, entity, one2one.joinField()).save();
 
 		// 主键关联，返回子表主键; 非主键关联，返回指定的关联字段值
-		return StringUtils.equals("id", one2one.joinColumn()) ? JoinUtil.getId(obj) : JoinUtil.getValue(obj, one2one.joinColumn());
+		return StringUtils.equals("id", one2one.otherOneTableColumn()) ? JoinUtil.getId(obj) : JoinUtil.getValue(obj, one2one.otherOneTableColumn());
 
 	}
 

@@ -8,9 +8,9 @@
 package com.leesky.ezframework.backend.action;
 
 import com.alibaba.nacos.shaded.com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.backend.model.*;
 import com.leesky.ezframework.backend.service.IdealerOrderItemService;
-import com.leesky.ezframework.backend.service.IdealerOrderService;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.query.ParamModel;
@@ -29,7 +29,7 @@ import java.util.List;
 public class TestAction {
 
     private final IuserBaseService iuserBaseService;
-    private final IdealerOrderService idealerOrderService;
+//    private final IdealerOrderService idealerOrderService;
     private final IdealerOrderItemService idealerOrderItemService;
 
     @Transactional
@@ -55,7 +55,11 @@ public class TestAction {
         return json;
     }
 
-
+    /**
+     * @作者: 魏来
+     * @日期: 2021/9/2  上午10:24
+     * @描述: one2one 关系增加测试
+     **/
     @PostMapping("/c02")
     public AjaxJson index01() {
         AjaxJson json = new AjaxJson();
@@ -79,7 +83,9 @@ public class TestAction {
     public AjaxJson index02() {
         AjaxJson json = new AjaxJson();
         try {
-
+            ImmutableMap<String, String> param = ImmutableMap.of("ext01_select", "id,id_card","ext02_select","id,create_date");
+            List<UserBaseModel> data = this.iuserBaseService.findAll(param);
+            json.setData(data);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             json.setSuccess(false, e.getMessage());

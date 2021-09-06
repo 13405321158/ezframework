@@ -76,7 +76,7 @@ public class Many2manyHandler {
 						QueryFilter filter = new QueryFilter<>();
 						filter.select("id");
 						filter.eq("id", id.toString());
-						Object dd = service.getOne(filter);
+						Object dd = service.findOne(filter);
 
 						if (ObjectUtils.isEmpty(dd))
 							service.insert(o, false);

@@ -30,43 +30,41 @@
 	</select>
 
 
-	<select id="one2oneQuery" parameterType="String"
-		resultType="java.util.HashMap">
+	<select id="one2oneQuery" resultType="java.util.HashMap">
 
-		select ${param.selectColumn} from ${param.tableName} where
-		${param.joinColumn} = '${value}'
+		select ${select} from ${param.otherOneTableName} where ${param.otherOneTableColumn} = '${value}'
 
 	</select>
 
 
-	<select id="many2oneQuery" parameterType="String"
-		resultType="java.util.HashMap">
+<!--	<select id="many2oneQuery" parameterType="String"-->
+<!--		resultType="java.util.HashMap">-->
 
-		select ${param.selectColumn} from ${param.tableName} where
-		${param.joinColumn} = '${value}'
+<!--		select ${param.selectColumn} from ${param.tableName} where-->
+<!--		${param.joinColumn} = '${value}'-->
 
-	</select>
+<!--	</select>-->
 
 
-	<select id="one2manyQuery" parameterType="String"
-		resultType="java.util.HashMap">
+<!--	<select id="one2manyQuery" parameterType="String"-->
+<!--		resultType="java.util.HashMap">-->
 
-		select ${param.selectColumn} from ${param.tableName} where
-		${param.joinColumn} = '${value}'
+<!--		select ${param.selectColumn} from ${param.tableName} where-->
+<!--		${param.joinColumn} = '${value}'-->
 
-	</select>
+<!--	</select>-->
 
-	<select id="findAll" parameterType="String"
-		resultType="java.util.HashMap">
+<!--	<select id="findAll" parameterType="String"-->
+<!--		resultType="java.util.HashMap">-->
 
-		SELECT DISTINCT ${param}
+<!--		SELECT DISTINCT ${param}-->
 
-	</select>
+<!--	</select>-->
 
-	<select id="count" parameterType="String"
-		resultType="java.lang.Long">
+<!--	<select id="count" parameterType="String"-->
+<!--		resultType="java.lang.Long">-->
 
-		SELECT count(*) ${param}
+<!--		SELECT count(*) ${param}-->
 
-	</select>
+<!--	</select>-->
 </mapper>
