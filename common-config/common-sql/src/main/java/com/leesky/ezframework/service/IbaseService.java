@@ -20,73 +20,82 @@ import java.util.Map;
 public interface IbaseService<T> {
 
     /**
+     * 描述: 根据记录主键查询
+     *
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:39
-     * @描述: 根据记录主键查询
      **/
     T findOne(String id);
 
     /**
+     * 描述: 自定义查询条件，返回一条记录
+     *
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:39
-     * @描述: 自定义查询条件，返回一条记录
      **/
     T findOne(QueryFilter<T> filter);
 
     /**
+     * 描述: 查询全部
+     *
      * @作者: 魏来
      * @日期: 2021/9/2  上午10:31
-     * @描述: 查询全部
      **/
     List<T> findAll();
 
     /**
+     * 描述: 带o2o, m2m,m2o,o2m映射关系查询
+     *
      * @作者: 魏来
      * @日期: 2021/9/2  上午10:31
-     * @描述: 查询全部:支持o2o, m2m,m2o,o2m 映射关系
      **/
-    List<T> findAll(Map<String,String> param);
+    List<T> findAll(Map<String, String> param);
 
     /**
+     * 描述: 自定义查询条件，返回多个记录
+     *
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:40
-     * @描述: 自定义查询条件，返回多个记录
      **/
     List<T> findAll(QueryFilter<T> filter);
 
     /**
+     * 描述: 自定义查询条件，分页返回记录
+     *
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:41
-     * @描述: 自定义查询条件，分页返回记录
      **/
     Page<T> findByPage(QueryFilter<T> filter);
 
     /**
+     * 描述: relation=false 不处理聚合关系
+     * 描述: relation=true 则同时存储one2one、many2many，one2Many，many2one 关系
+     *
      * @作者: 魏来
      * @日期: 2021/8/21 下午4:48
-     * @描述：relation=false 不处理聚合关系
-     * @描述: relation=true 则同时存储one2one、many2many，one2Many，many2one 关系
      **/
     void insert(T entity, Boolean withRelation);
 
     /**
+     * 描述: 批量插入数据
+     *
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:51
-     * @描述: 披露插入数据
      **/
     void insert(Collection<T> entityList);
 
     /**
+     * 描述: 根据主键删除一条记录
+     *
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:52
-     * @描述: 根据主键删除一条记录
      **/
     void del(Serializable id);
 
     /**
+     * 描述: 自定义删除条件
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:55
-     * @描述: 自定义删除条件
      **/
     void del(QueryFilter<T> filter);
 

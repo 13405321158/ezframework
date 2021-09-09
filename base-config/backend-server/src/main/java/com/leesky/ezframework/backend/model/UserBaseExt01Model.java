@@ -11,10 +11,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.join.interfaces.one2one.One2One;
 import com.leesky.ezframework.model.BaseUuidModel;
-
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
 
 @Getter
 @Setter
@@ -22,26 +22,37 @@ import lombok.Setter;
 @ApiModel(value = "基本用户扩展表01")
 public class UserBaseExt01Model extends BaseUuidModel {
 
-	private static final long serialVersionUID = -73195295975819428L;
+    private static final long serialVersionUID = -73195295975819428L;
 
-	private String idCard = "370882197411031236";// 身份证号码：中文名称
+    private String idCard;// 身份证号码：中文名称
 
-	private String idName = "魏来";// 身份证上的姓名
+    private String idName;// 身份证上的姓名
 
-	private String idAddress = "青岛市市北区湖光山色小区22-2-402";// 身份证上的地址
+    private String idAddress;// 身份证上的地址
 
-	private String companyName = "森麒麟(青岛)轮胎股份有限公司";// 所在公司名称
+    private String companyName;// 所在公司名称
 
-	private String nickName = "一个徘徊在牛A和牛C之间的程序员";// 昵称
+    private String nickName;// 昵称
 
-	private String mobile = "13405321158";// 手机
+    private String mobile;// 手机
 
-	private String email = "13405321158@139.com";// 邮箱
+    private String email;// 邮箱
 
 
-	private String ordersn = "0403a53c-5732-4b0a-aced-596b3b3d9320";
+    private String ordersn;
 
-	@TableField(exist = false)
-	@One2One(otherOneTableName = "cbm_mag_user", otherOneTableColumn = "ext01_id")
-	private UserBaseModel userBaseModel;
+    @TableField(exist = false)
+    @One2One(otherOneTableName = "cbm_mag_user", otherOneTableColumn = "ext01_id")
+    private UserBaseModel userBaseModel;
+
+    public UserBaseExt01Model() {
+        this.idCard = RandomStringUtils.randomAlphanumeric(21);
+        this.idName = RandomStringUtils.randomAlphabetic(3);
+        this.idAddress = RandomStringUtils.randomNumeric(3);
+        this.companyName = "青岛森麒麟轮胎股份有限公司";
+        this.nickName = RandomStringUtils.randomNumeric(9);
+        this.mobile = "1340532" + RandomStringUtils.randomAlphanumeric(4);
+        this.email = "1340532" + RandomStringUtils.randomAlphanumeric(4) + "@139.com";
+        this.ordersn = RandomStringUtils.randomAlphanumeric(20);
+    }
 }

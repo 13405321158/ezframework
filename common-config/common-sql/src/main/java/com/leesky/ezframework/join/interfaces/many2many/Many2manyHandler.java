@@ -3,7 +3,7 @@
  * @日期: 2021年8月25日  上午10:37:30
  * @组织: 森麒麟轮胎股份有限公司.
  * @部门: 国内市场替换部IT组
- * @描述:  
+ * @描述:
  */
 package com.leesky.ezframework.join.interfaces.many2many;
 
@@ -25,82 +25,81 @@ import java.util.Set;
 
 @Data
 @Component
-@SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
+@SuppressWarnings({"static-access", "rawtypes", "unchecked"})
 public class Many2manyHandler {
 
-	private Field f;
+    private Field f;
 
-	private Object key;
+    private Object key;
 
-	private Object entity;
+    private Object entity;
 
-	private Many2Many m2m;
+    private Many2Many m2m;
 
-	private Many2manyDTO dto;
+    private Many2manyDTO dto;
 
-	@Autowired
-	private SpringContextHolder springContextHolder;
+    @Autowired
+    private SpringContextHolder springContextHolder;
 
-	public Many2manyHandler() {
+    public Many2manyHandler() {
+    }
 
-	}
+    public Many2manyHandler build(Many2manyDTO dto) {
+        this.dto = dto;
+        return this;
+    }
 
-	public Many2manyHandler build(Many2manyDTO dto) {
+    public Many2manyHandler build(Field f, Object entity, Many2Many m2m) {
+        this.f = f;
+        this.m2m = m2m;
+        this.entity = entity;
+        f.setAccessible(true);
+        return this;
+    }
 
-		this.dto = dto;
-		return this;
-	}
+    public List<Object> save() {// 存储 另外一方 many 实体
+        List<Object> ret = Lists.newArrayList();
+        try {
+            Object obj = this.f.get(entity);
+            if (ObjectUtils.isNotEmpty(obj)) {
+                String serviceBeanName = JoinUtil.buildServiceBeanNaem(f);
+                IbaseService service = (IbaseService) this.springContextHolder.getBean(serviceBeanName);
 
-	public Many2manyHandler build(Field f, Object entity, Many2Many m2m) {
+                for (Object o : (Set) obj) {// 如果使用批量插入，则报错，以后优化吧
+                    Object id = JoinUtil.getId(o);
 
-		this.f = f;
-		this.m2m = m2m;
-		this.entity = entity;
-		f.setAccessible(true);
+                    if (ObjectUtils.isNotEmpty(id)) {
+                        QueryFilter filter = new QueryFilter<>();
+                        filter.select("id");
+                        filter.eq("id", id.toString());
+                        Object dd = service.findOne(filter);
 
-		return this;
-	}
+                        if (ObjectUtils.isEmpty(dd))
+                            service.insert(o, false);
+                    } else
+                        service.insert(o, false);
 
-	public List<Object> save() {// 存储 另外一方 many 实体
-		List<Object> ret = Lists.newArrayList();
-		try {
-			Object obj = this.f.get(entity);
-			if (ObjectUtils.isNotEmpty(obj)) {
-				String serviceBeanName = JoinUtil.buildServiceBeanNaem(f);
-				IbaseService service = (IbaseService) this.springContextHolder.getBean(serviceBeanName);
+                    // 主键关联，返回子表主键; 非主键关联，返回指定的关联字段值
+                    Object shipDate = StringUtils.equals("id", m2m.joinColumn()) ? JoinUtil.getId(o) : JoinUtil.getValue(o, m2m.joinColumn());
 
-				for (Object o : (Set) obj) {// 如果使用批量插入，则报错，以后优化吧
-					Object id = JoinUtil.getId(o);
+                    ret.add(shipDate);
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
 
-					if (ObjectUtils.isNotEmpty(id)) {
-						QueryFilter filter = new QueryFilter<>();
-						filter.select("id");
-						filter.eq("id", id.toString());
-						Object dd = service.findOne(filter);
+    public void save(Object v) {// 存储中间表
+        dto.build(v);
+        IbaseMapper baseMapper = (IbaseMapper) this.springContextHolder.getBean("ibaseMapper");
+        // 1、首先在中间表中删除
+        baseMapper.delM2M(dto);
+        // 2、然后插入
+        baseMapper.insertM2M(dto);
+    }
 
-						if (ObjectUtils.isEmpty(dd))
-							service.insert(o, false);
-					} else {
-						service.insert(o, false);
-					}
-					// 主键关联，返回子表主键; 非主键关联，返回指定的关联字段值
-					Object shipDate = StringUtils.equals("id", m2m.joinColumn()) ? id : JoinUtil.getValue(o, m2m.joinColumn());
-
-					ret.add(shipDate);
-				}
-			}
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return ret;
-	}
-
-	public void save(Object v) {// 存储中间表
-		dto.build(v);
-		IbaseMapper baseMapper = (IbaseMapper) this.springContextHolder.getBean("ibaseMapper");
-		// 1、首先在中间表中删除
-		baseMapper.delM2M(dto);
-		// 2、然后插入
-		baseMapper.insertM2M(dto);
-	}
+    public void query() {
+    }
 }

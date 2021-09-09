@@ -7,19 +7,17 @@
  */
 package com.leesky.ezframework.backend.model;
 
-import java.util.Set;
-
-import org.apache.commons.lang3.RandomStringUtils;
-
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
 import com.leesky.ezframework.model.BaseUuidModel;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -30,9 +28,13 @@ public class GroupModel extends BaseUuidModel {
 	private static final long serialVersionUID = 682190171806572223L;
 
 	@ApiModelProperty("群组名称")
-	private String groupName=RandomStringUtils.randomGraph(5);
+	private String groupName;
 
 	@TableField(exist = false)
 	@Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "group_id",otherMiddleTableColumn="user_id")
 	private Set<UserBaseModel> userSet;
+
+	public GroupModel() {
+		this.groupName=RandomStringUtils.randomAlphanumeric(5);
+	}
 }

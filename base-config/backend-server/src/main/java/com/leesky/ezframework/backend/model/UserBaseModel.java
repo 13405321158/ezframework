@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Date;
 import java.util.Set;
@@ -28,16 +29,16 @@ public class UserBaseModel extends BaseUuidModel {
 
     private static final long serialVersionUID = 8547824568011487339L;
     @ApiModelProperty("登录名")
-    private String username = "weilai";
+    private String username ;
 
     @ApiModelProperty("密码")
     private String password;
 
     @ApiModelProperty("随机数")
-    private String randomKey = "leesky09";
+    private String randomKey ;
 
     @ApiModelProperty("修改密码时间")
-    private Date editPwdDate = new Date();
+    private Date editPwdDate;
 
     @ApiModelProperty("扩展表01主键")
     private String ext01Id;
@@ -58,9 +59,11 @@ public class UserBaseModel extends BaseUuidModel {
     private Set<GroupModel> groupSet;
 
     public UserBaseModel() {
+        build();
     }
 
     public UserBaseModel(UserBaseExt01Model ext01, UserBaseExt02Model ext02) {
+        build();
         this.ext01 = ext01;
         this.ext02 = ext02;
     }
@@ -69,5 +72,12 @@ public class UserBaseModel extends BaseUuidModel {
         this.ext01 = ext01;
         this.ext02 = ext02;
         this.groupSet = group;
+    }
+
+    private void build(){
+        this.username= RandomStringUtils.randomAlphanumeric(8);
+        this.password = RandomStringUtils.randomAlphanumeric(4);
+        this.randomKey = RandomStringUtils.randomAlphanumeric(4);
+        this.editPwdDate = new Date();
     }
 }

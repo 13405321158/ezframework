@@ -135,6 +135,7 @@ public class JoinUtil {
      */
     public static void setValue(Object entity, String filed, Object v) {
         try {
+            BeanUtils.setProperty(entity, filed, v);
             BeanUtils.setProperty(entity, Hump2underline.lineToHump(filed), v);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();

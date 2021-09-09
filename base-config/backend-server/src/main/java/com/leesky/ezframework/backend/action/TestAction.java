@@ -9,8 +9,10 @@ package com.leesky.ezframework.backend.action;
 
 import com.alibaba.nacos.shaded.com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import com.leesky.ezframework.backend.model.*;
 import com.leesky.ezframework.backend.service.IdealerOrderItemService;
+import com.leesky.ezframework.backend.service.IgroupService;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.query.ParamModel;
@@ -21,12 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
 @RequestMapping("/test")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TestAction {
+
+    private final IgroupService igroupService;
 
     private final IuserBaseService iuserBaseService;
 //    private final IdealerOrderService idealerOrderService;
@@ -55,13 +60,9 @@ public class TestAction {
         return json;
     }
 
-    /**
-     * @作者: 魏来
-     * @日期: 2021/9/2  上午10:24
-     * @描述: one2one 关系增加测试
-     **/
+
     @PostMapping("/c02")
-    public AjaxJson index01() {
+    public AjaxJson index02() {
         AjaxJson json = new AjaxJson();
         try {
             UserBaseExt01Model e1 = new UserBaseExt01Model();
@@ -77,13 +78,43 @@ public class TestAction {
         }
         return json;
     }
-
-
-    @GetMapping("/r01")
-    public AjaxJson index02() {
+    @Transactional
+    @PostMapping("/c03")
+    public AjaxJson index03() {
         AjaxJson json = new AjaxJson();
         try {
-            ImmutableMap<String, String> param = ImmutableMap.of("ext01_select", "id,id_card","ext02_select","id,create_date");
+            UserBaseModel user = new UserBaseModel();
+            Set<GroupModel> set = Sets.newHashSet(new GroupModel(),new GroupModel());
+            user.setGroupSet(set);
+
+            this.iuserBaseService.insert(user, true);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            json.setSuccess(false, e.getMessage());
+        }
+        return json;
+    }
+    @Transactional
+    @PostMapping("/c04")
+    public AjaxJson index04() {
+        AjaxJson json = new AjaxJson();
+        try {
+            GroupModel group = new GroupModel();
+            Set<UserBaseModel> set = Sets.newHashSet(new UserBaseModel(),new UserBaseModel());
+            group.setUserSet(set);
+
+            this.igroupService.insert(group, true);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            json.setSuccess(false, e.getMessage());
+        }
+        return json;
+    }
+    @GetMapping("/r01")
+    public AjaxJson index05() {
+        AjaxJson json = new AjaxJson();
+        try {
+            ImmutableMap<String, String> param = ImmutableMap.of("ext01_select", "*","ext02_select","*");
             List<UserBaseModel> data = this.iuserBaseService.findAll(param);
             json.setData(data);
         } catch (Exception e) {
