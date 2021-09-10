@@ -11,6 +11,7 @@ import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
 import com.leesky.ezframework.join.interfaces.many2many.Many2manyHandler;
 import com.leesky.ezframework.join.interfaces.one2one.One2One;
 import com.leesky.ezframework.join.interfaces.one2one.One2oneHandler;
+import com.leesky.ezframework.join.mapper.IbaseMapper;
 import com.leesky.ezframework.join.utils.JoinUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
@@ -24,10 +25,13 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class QueryWithRelation<T> {
-    private final One2oneHandler<T> o2oHandler;
-    private final Many2manyHandler m2mHandler;
+    private IbaseMapper ibaseMapper;
 
-    public void relationship(T t, Map<String, String> param) {
+    private final One2oneHandler<T> o2oHandler;
+    private final Many2manyHandler<T> m2mHandler;
+
+    public void relationship(T t, Map<String, String> param, IbaseMapper ibaseMapper) {
+        this.ibaseMapper = ibaseMapper;
         List<Field> list = JoinUtil.getAllField(t);
 
         for (Field f : list) {
@@ -38,7 +42,7 @@ public class QueryWithRelation<T> {
 
             Many2Many m2m = f.getAnnotation(Many2Many.class);
             if (ObjectUtils.isNotEmpty(m2m))
-                this.m2mHandler.query();
+                this.m2mHandler.query(m2m, f, t, param,ibaseMapper);
 
         }
     }

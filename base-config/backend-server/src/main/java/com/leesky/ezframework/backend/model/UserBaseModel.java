@@ -29,13 +29,13 @@ public class UserBaseModel extends BaseUuidModel {
 
     private static final long serialVersionUID = 8547824568011487339L;
     @ApiModelProperty("登录名")
-    private String username ;
+    private String username;
 
     @ApiModelProperty("密码")
     private String password;
 
     @ApiModelProperty("随机数")
-    private String randomKey ;
+    private String randomKey;
 
     @ApiModelProperty("修改密码时间")
     private Date editPwdDate;
@@ -55,7 +55,7 @@ public class UserBaseModel extends BaseUuidModel {
     private UserBaseExt02Model ext02;
 
     @TableField(exist = false)
-    @Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "user_id", otherMiddleTableColumn = "group_id")
+    @Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "user_id", otherMiddleTableColumn = "group_id", otherTableName = "cbm_mag_group")
     private Set<GroupModel> groupSet;
 
     public UserBaseModel() {
@@ -74,8 +74,8 @@ public class UserBaseModel extends BaseUuidModel {
         this.groupSet = group;
     }
 
-    private void build(){
-        this.username= RandomStringUtils.randomAlphanumeric(8);
+    private void build() {
+        this.username = RandomStringUtils.randomAlphanumeric(8);
         this.password = RandomStringUtils.randomAlphanumeric(4);
         this.randomKey = RandomStringUtils.randomAlphanumeric(4);
         this.editPwdDate = new Date();

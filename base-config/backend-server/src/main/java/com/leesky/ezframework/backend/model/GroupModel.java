@@ -31,7 +31,7 @@ public class GroupModel extends BaseUuidModel {
 	private String groupName;
 
 	@TableField(exist = false)
-	@Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "group_id",otherMiddleTableColumn="user_id")
+	@Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "group_id",otherMiddleTableColumn="user_id",otherTableName="cbm_mag_user")
 	private Set<UserBaseModel> userSet;
 
 	public GroupModel() {

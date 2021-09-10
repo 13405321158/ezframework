@@ -7,13 +7,16 @@
  */
 package com.leesky.ezframework.join.interfaces.many2many;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.leesky.ezframework.join.mapper.IbaseMapper;
 import com.leesky.ezframework.join.utils.JoinUtil;
 import com.leesky.ezframework.join.utils.SpringContextHolder;
 import com.leesky.ezframework.query.QueryFilter;
 import com.leesky.ezframework.service.IbaseService;
 import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +24,13 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Data
 @Component
 @SuppressWarnings({"static-access", "rawtypes", "unchecked"})
-public class Many2manyHandler {
+public class Many2manyHandler<T> {
 
     private Field f;
 
@@ -57,8 +61,9 @@ public class Many2manyHandler {
         return this;
     }
 
-    public List<Object> save() {// 存储 另外一方 many 实体
-        List<Object> ret = Lists.newArrayList();
+    public Multimap save() {// 存储 另外一方 many 实体
+        Multimap multimap = ArrayListMultimap.create();
+
         try {
             Object obj = this.f.get(entity);
             if (ObjectUtils.isNotEmpty(obj)) {
@@ -68,38 +73,50 @@ public class Many2manyHandler {
                 for (Object o : (Set) obj) {// 如果使用批量插入，则报错，以后优化吧
                     Object id = JoinUtil.getId(o);
 
-                    if (ObjectUtils.isNotEmpty(id)) {
-                        QueryFilter filter = new QueryFilter<>();
-                        filter.select("id");
-                        filter.eq("id", id.toString());
-                        Object dd = service.findOne(filter);
+                    if (ObjectUtils.isEmpty(id)) {
+                        service.insert(o, false);
+                    } else {
+                        QueryFilter f = new QueryFilter<>();
+                        f.select("id");
+                        f.eq("id", id.toString());
+                        Object dd = service.findOne(f);
 
                         if (ObjectUtils.isEmpty(dd))
                             service.insert(o, false);
-                    } else
-                        service.insert(o, false);
-
+                        else
+                            multimap.put("exist", id.toString());
+                    }
                     // 主键关联，返回子表主键; 非主键关联，返回指定的关联字段值
                     Object shipDate = StringUtils.equals("id", m2m.joinColumn()) ? JoinUtil.getId(o) : JoinUtil.getValue(o, m2m.joinColumn());
 
-                    ret.add(shipDate);
+                    multimap.put("ids", shipDate);
                 }
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return ret;
+        return multimap;
     }
 
     public void save(Object v) {// 存储中间表
         dto.build(v);
         IbaseMapper baseMapper = (IbaseMapper) this.springContextHolder.getBean("ibaseMapper");
-        // 1、首先在中间表中删除
-        baseMapper.delM2M(dto);
-        // 2、然后插入
+//        // 1、首先在中间表中删除
+//        if (StringUtils.isNotBlank(dto.getTargetValue()))
+//            baseMapper.delM2M(dto);
+//        // 2、然后插入
         baseMapper.insertM2M(dto);
     }
 
-    public void query() {
+    public void query(Many2Many m2m, Field f, T t, Map<String, String> param, IbaseMapper ibaseMapper) {
+        Object v = JoinUtil.getValue(t, m2m.joinColumn());// 在中间表查询的 where 中条件值
+
+        String s = param.get(f.getName() + "_select");// select 内容
+        s = StringUtils.equals(null, s) ? "a.*" : ("a." + String.join(",", s)).replace(",", ",a.");
+
+        List data = ibaseMapper.many2manyQuery(m2m, v, s);
+
+        if (CollectionUtils.isNotEmpty(data))
+            JoinUtil.setValue(t, f.getName(), Sets.newHashSet(data));
     }
 }

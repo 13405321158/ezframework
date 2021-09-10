@@ -8,9 +8,11 @@
 package com.leesky.ezframework.join.interfaces.many2many;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
+import java.util.Collection;
 
 @Data
 public class Many2manyDTO {
@@ -19,33 +21,32 @@ public class Many2manyDTO {
 
     private String field02;// 字段02
 
-    private List<Object> v01;// 字段01的值
+    private Collection<Object> v01;// 字段01的值
 
-    private List<Object> v02;// 字段02的值
+    private Collection<Object> v02;// 字段02的值
 
     private String tableName;// 表名称
 
 
     private String targetField;//插入前删除条件字段
-    private Object targetValue;//插入前删除条件内容
+    private String targetValue;//插入前删除条件内容
 
     public Many2manyDTO() {
 
     }
 
-    public Many2manyDTO(Many2Many m2m, List<Object> v) {
-        this.v01 = v;
+    public Many2manyDTO(Many2Many m2m, Multimap<String, Object> multimap) {
+        this.v01 = multimap.get("ids");
         this.tableName = m2m.middleTableName();
 
         this.field02 = m2m.middleTableColumn();
-        this.field01 = m2m.otherMiddleTableColumn();
+
+        this.targetField = this.field01 = m2m.otherMiddleTableColumn();
+        this.targetValue = StringUtils.join(multimap.get("exist"), "','");
     }
 
     public void build(Object v) {
-        this.targetValue = v;
-        this.targetField = field02;
-
-        this.v02  = Lists.newArrayList();
-        this.v01.forEach(e ->  this.v02.add(v));
+        this.v02 = Lists.newArrayList();
+        this.v01.forEach(e -> this.v02.add(v));
     }
 }

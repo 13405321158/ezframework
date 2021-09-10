@@ -9,6 +9,7 @@ package com.leesky.ezframework.join.utils;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
 import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
 import com.leesky.ezframework.join.interfaces.many2many.Many2manyDTO;
 import com.leesky.ezframework.join.interfaces.many2many.Many2manyHandler;
@@ -76,9 +77,9 @@ public class SaveWithRelation<T> {
             // 2.2 many2many关系
             Many2Many m2m = f.getAnnotation(Many2Many.class);
             if (ObjectUtils.isNotEmpty(m2m)) {
-                List<Object> ids = many2manyHandler.build(f, entity, m2m).save();// 存储另一个many方
-                if (CollectionUtils.isNotEmpty(ids))
-                    m2mList.add(this.many2manyHandler.build(new Many2manyDTO(m2m, ids)));// 保存待存储中间表
+                Multimap multimap = many2manyHandler.build(f, entity, m2m).save();// 存储另一个many方
+                if (CollectionUtils.isNotEmpty(multimap.get("ids")))
+                    m2mList.add(this.many2manyHandler.build(new Many2manyDTO(m2m, multimap)));// 保存待存储中间表
             }
             // 2.3 one2many关系
             One2Many one2many = f.getAnnotation(One2Many.class);

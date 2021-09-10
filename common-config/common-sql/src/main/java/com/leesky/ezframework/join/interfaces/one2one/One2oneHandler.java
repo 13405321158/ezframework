@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -94,25 +95,25 @@ public class One2oneHandler<T> {
 
     public void query(One2One o2o, Field f, T t, Map<String, String> param) {
         registerCover();
-
         Object v = JoinUtil.getValue(t, o2o.joinField());// where 中条件值
-        String s = param.get(f.getName() + "_select");// select 内容
-        s = StringUtils.equals(null, s) ? "*" : s;
+        if (ObjectUtils.isNotEmpty(v)) {
+            String s = param.get(f.getName() + "_select");// select 内容
+            s = StringUtils.equals(null, s) ? "*" : s;
 
-        String mapperBeanName = JoinUtil.buildMapperBeanName(f);
-        IbaseMapper iMapper = (IbaseMapper) this.springContextHolder.getBean(mapperBeanName);
-        HashMap<String, Object> result = iMapper.one2oneQuery(o2o, v, s);
+            String mapperBeanName = JoinUtil.buildMapperBeanName(f);
+            IbaseMapper iMapper = (IbaseMapper) this.springContextHolder.getBean(mapperBeanName);
+            HashMap<String, Object> result = iMapper.one2oneQuery(o2o, v, s);
 
-        try {
-            Object a = f.getType().getDeclaredConstructor().newInstance();
-            Map<String, Object> value = getColumnValue(a, result);
-            BeanUtils.populate(a, value);
-            JoinUtil.setValue(t, f.getName(), a);
-        } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                Object a = f.getType().getDeclaredConstructor().newInstance();
+                Map<String, Object> value = getColumnValue(a, result);
+                BeanUtils.populate(a, value);
+                JoinUtil.setValue(t, f.getName(), a);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
-
-
     }
 
     /**
@@ -123,23 +124,28 @@ public class One2oneHandler<T> {
     private Map<String, Object> getColumnValue(Object target, HashMap<String, Object> data) {
         String column;
         Map<String, Object> map = Maps.newHashMap();
-        List<Field> fields = JoinUtil.getAllField(target);
+        if (MapUtils.isNotEmpty(data)) {
+            List<Field> fields = JoinUtil.getAllField(target);
+            for (Field fs : fields) {
+                TableField tableField = fs.getAnnotation(TableField.class);//model属性上是否有 TableField注解
+                if (ObjectUtils.isNotEmpty(tableField))
+                    column = tableField.value();// 有注解则取注解的名称
+                else
+                    column = Hump2underline.build(fs.getName());// 没有注解则取属性的驼峰命名值
 
-        for (Field fs : fields) {
-            TableField tableField = fs.getAnnotation(TableField.class);//model属性上是否有 TableField注解
-            if (ObjectUtils.isNotEmpty(tableField))
-                column = tableField.value();// 有注解则取注解的名称
-            else
-                column = Hump2underline.build(fs.getName());// 没有注解则取属性的驼峰命名值
-
-            if (ObjectUtils.isNotEmpty(data.get(column)))
-                map.put(fs.getName(), data.get(column));
+                if (ObjectUtils.isNotEmpty(data.get(column)))
+                    map.put(fs.getName(), data.get(column));
+            }
         }
         return map;
     }
 
 
-    //注册一个日期转换器
+    //注册一个日期转换器:
+    // BeanUtils.populate 这个方法会遍历map<key,value>中的key,如果bean中有这个属性，就把这个key对应的value值赋给bean的属性。
+    // BeanUtils.populate 的getProperty,setProperty方法其实都会调用convert进行转换
+    //但Converter只支持一些基本的类型，甚至连Java.util.Date类型也不支持。而且它比较笨的一个地方是当遇到不认识的类型时，居然会抛出异常来。
+    //所以这里注册一个转换器
     private void registerCover() {
         ConvertUtils.register(new Converter() {
             public Object convert(Class type, Object value) {

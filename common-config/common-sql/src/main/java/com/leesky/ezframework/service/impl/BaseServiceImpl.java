@@ -61,7 +61,7 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
     public List<T> findAll(Map<String, String> param) {
         List<T> data = this.baseMapper.selectList(Wrappers.emptyWrapper());
         if (MapUtils.isNotEmpty(param))
-            data.forEach(e -> this.queryWithRelation.relationship(e, param));
+            data.forEach(e -> this.queryWithRelation.relationship(e, param,this.baseMapper));
         return data;
     }
     @Override

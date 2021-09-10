@@ -100,7 +100,13 @@ public class TestAction {
         AjaxJson json = new AjaxJson();
         try {
             GroupModel group = new GroupModel();
-            Set<UserBaseModel> set = Sets.newHashSet(new UserBaseModel(),new UserBaseModel());
+
+            UserBaseModel a = new UserBaseModel();
+            a.setId("5e92a7699a1585774ab11ff961650d73");
+            UserBaseModel b = new UserBaseModel();
+//            b.setId("0de6e45d35f01f80f03968e3eb589d60");
+
+            Set<UserBaseModel> set = Sets.newHashSet(a,b);
             group.setUserSet(set);
 
             this.igroupService.insert(group, true);
@@ -114,7 +120,7 @@ public class TestAction {
     public AjaxJson index05() {
         AjaxJson json = new AjaxJson();
         try {
-            ImmutableMap<String, String> param = ImmutableMap.of("ext01_select", "*","ext02_select","*");
+            ImmutableMap<String, String> param = ImmutableMap.of("ext01_select", "*");
             List<UserBaseModel> data = this.iuserBaseService.findAll(param);
             json.setData(data);
         } catch (Exception e) {
