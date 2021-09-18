@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
-import com.leesky.ezframework.mybatis.mapper.AbstractAutoMapper;
+import com.leesky.ezframework.mybatis.mapper.CommonCode;
 import com.leesky.ezframework.mybatis.utils.JoinTableUtil;
 import lombok.Data;
 import org.springframework.cglib.proxy.Enhancer;
@@ -195,26 +195,7 @@ public class ManyToManyResult<T, E, X> {
                                 entityXListMap.put(fieldCode, entityXList);
                             }
 
-                            List<Serializable> idList = Lists.newArrayList();
-                            for (int ii = 0; ii < entityXList.size(); ii++) {
-                                X entityX = entityXList.get(ii);
-                                try {
-                                    Field fieldX = entityX.getClass().getDeclaredField(inverseRefColumnProperty);
-                                    fieldX.setAccessible(true);
-                                    Serializable id = (Serializable) fieldX.get(entityX);
-                                    if (id != null && !idList.contains(id)) {
-                                        idList.add(id);
-                                    }
-                                } catch (Exception e1) {
-                                    e1.printStackTrace();
-                                }
-
-                            }
-                            List<Serializable> idListDistinct = Lists.newArrayList();
-                            if (idList.size() > 0)
-                                AbstractAutoMapper.buildList(idListDistinct, idList);
-
-                            idList = idListDistinct;
+                            List<Serializable> idList = CommonCode.getSerializable(inverseRefColumnProperty,entityXList);
 
                             if (idList.size() == 1) {
                                 collectionMap.put(field.getName(),
@@ -330,37 +311,11 @@ public class ManyToManyResult<T, E, X> {
                                 entityXListMap.put(fieldCode, entityXList);
                             }
 
-                            ArrayList<Serializable> idList = Lists.newArrayList();
-                            for (int ii = 0; ii < entityXList.size(); ii++) {
-                                X entityX = entityXList.get(ii);
-                                try {
-                                    Field fieldX = entityX.getClass().getDeclaredField(inverseRefColumnProperty);
-                                    fieldX.setAccessible(true);
-                                    Serializable id = (Serializable) fieldX.get(entityX);
-                                    if (id != null && !idList.contains(id)) {
-                                        idList.add(id);
-                                    }
-                                } catch (Exception e1) {
-                                    e1.printStackTrace();
-                                }
+                            List<Serializable> idList = Lists.newArrayList();
+                            List<Serializable> idListDistinct = Lists.newArrayList();
 
-                            }
-                            ArrayList<Serializable> idListDistinct = Lists.newArrayList();
-
-                            for (int s = 0; s < idList.size(); s++) {
-                                boolean isExists = false;
-                                for (int ss = 0; ss < idListDistinct.size(); ss++) {
-                                    if (idList.get(s) != null && idListDistinct.get(ss) != null
-                                            && idList.get(s).toString().equals(idListDistinct.get(ss).toString())) {
-                                        isExists = true;
-                                        break;
-                                    }
-                                }
-
-                                if (idList.get(s) != null && !isExists) {
-                                    idListDistinct.add(idList.get(s));
-                                }
-                            }
+                            CommonCode.extracted(inverseRefColumnProperty,entityXList, idList);
+                            CommonCode.buildList(idListDistinct, idList);
 
                             idList = idListDistinct;
 
@@ -449,6 +404,8 @@ public class ManyToManyResult<T, E, X> {
         }
 
     }
+
+
 
     public static <E> List<E> getListResult(Field field) {
         return null;
