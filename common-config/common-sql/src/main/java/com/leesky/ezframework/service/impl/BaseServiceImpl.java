@@ -161,4 +161,9 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
         return this.baseMapper.selectCount(filter);
     }
 
+    @Override
+    public T leek(String id) {
+        return this.baseMapper.leek(id);
+    }
+
 }

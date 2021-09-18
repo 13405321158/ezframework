@@ -50,6 +50,7 @@ public interface IbaseMapper<T> extends BaseMapper<T> {
      */
     int updateBatch(Collection<T> list);
 
+T leek(String id);
 
     /**
      * <li>OneToOne 注解查询</li>

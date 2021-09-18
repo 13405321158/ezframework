@@ -7,11 +7,11 @@
  */
 package com.leesky.ezframework.config;
 
-import java.util.List;
-
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
+
+import java.util.List;
 
 public class CustomizeInjector extends DefaultSqlInjector {
 
@@ -23,6 +23,9 @@ public class CustomizeInjector extends DefaultSqlInjector {
 		methodList.add(new InsertBatchMethod());
 
 		methodList.add(new UpdateBatchMethod());
+
+		methodList.add(new QueryMethod());
+
 
 		return methodList;
 	}

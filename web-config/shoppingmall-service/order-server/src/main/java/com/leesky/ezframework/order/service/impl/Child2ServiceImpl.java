@@ -1,0 +1,32 @@
+package com.leesky.ezframework.order.service.impl;
+
+
+import com.leesky.ezframework.mybatis.service.impl.BaseServiceImpl;
+import com.leesky.ezframework.order.mapper.Child2Mapper;
+import com.leesky.ezframework.order.model.Child2;
+import com.leesky.ezframework.order.service.IChild2Service;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+
+
+@Service
+public class Child2ServiceImpl extends BaseServiceImpl<Child2Mapper, Child2> implements IChild2Service {
+	@Transactional
+	public List<Child2> list2() {
+		List<Child2> list = this.list();
+		this.autoMapper.initialize(list, "courses");
+		return list;
+	}
+
+	@Transactional
+	@Override
+	public Child2 getById1(Long id) {
+		Child2 child2 = ((Child2Mapper)this.getBaseMapper()).selectById1(id);
+		this.autoMapper.initialize(child2, "courses");
+		return child2;
+	}
+
+}

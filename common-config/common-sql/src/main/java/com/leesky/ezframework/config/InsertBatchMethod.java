@@ -26,6 +26,7 @@ public class InsertBatchMethod extends AbstractMethod {
 		String sqlResult = String.format(sql, tableInfo.getTableName(), fieldSql, valueSql);
 
 		SqlSource sqlSource = languageDriver.createSqlSource(configuration, sqlResult, modelClass);
+
 		return this.addInsertMappedStatement(mapperClass, modelClass, "insertBatch", sqlSource, new NoKeyGenerator(), null, null);
 	}
 

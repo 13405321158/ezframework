@@ -1,0 +1,28 @@
+server:
+ port: 30000
+
+spring:
+   application:
+      name: order-server
+   profiles:
+      active: dev
+   cloud:
+      nacos:
+         discovery:
+            server-addr: 127.0.0.1:8848
+         config:
+            server-addr: 127.0.0.1:8848
+            file-extension: yaml
+            prefix: order-provider
+            extension-configs: #配置公共配置列表
+            -  dataId: common-dev.yaml
+               refresh: true
+            -  dataId: common-seata-dev.yaml
+               refresh: true
+            - dataId: mybatis-dev.yaml
+              refresh: true
+
+logging:
+  level:
+    com.alibaba.*: warn
+    org.reflections.*: warn

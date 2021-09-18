@@ -15,13 +15,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Set;
 
 @Getter
 @Setter
-@TableName("cbm_mag_group")
+
+@TableName(value = "cbm_mag_group",autoResultMap = true)
 @ApiModel(value = "群组信息表")
 public class GroupModel extends BaseUuidModel {
 
@@ -35,6 +35,6 @@ public class GroupModel extends BaseUuidModel {
 	private Set<UserBaseModel> userSet;
 
 	public GroupModel() {
-		this.groupName=RandomStringUtils.randomAlphanumeric(5);
+//		this.groupName=RandomStringUtils.randomAlphanumeric(5);
 	}
 }

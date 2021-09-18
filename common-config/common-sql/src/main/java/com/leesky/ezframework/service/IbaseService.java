@@ -141,4 +141,6 @@ public interface IbaseService<T> {
      **/
     long count(QueryWrapper<T> filter);
 
+
+    T leek(String id);
 }

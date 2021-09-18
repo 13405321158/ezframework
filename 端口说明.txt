@@ -1,4 +1,7 @@
-backend        后台服务：20010
-elasticsearch  缓存服务：20020
-gateway01      网关01： 20030
-gateway02      网关02： 20031
+backend        后台服务：   20010
+elasticsearch  缓存服务：   20020
+gateway01      网关01：    20030
+gateway02      网关02：    20031
+
+order          商城订单    30000
+cart           商城购物车  30010

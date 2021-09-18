@@ -129,4 +129,19 @@ public class TestAction {
         }
         return json;
     }
+
+
+    @GetMapping("/r02")
+    public AjaxJson index06() {
+        AjaxJson json = new AjaxJson();
+        try {
+            ImmutableMap<String, String> param = ImmutableMap.of("ext01_select", "*");
+            GroupModel data = this.igroupService.leek("weilai");
+            json.setData(data);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            json.setSuccess(false, e.getMessage());
+        }
+        return json;
+    }
 }
