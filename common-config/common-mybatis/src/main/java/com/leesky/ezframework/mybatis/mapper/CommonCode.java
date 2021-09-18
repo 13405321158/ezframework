@@ -24,8 +24,8 @@ import java.util.List;
  */
 public class CommonCode {
 
-    public static void buildList(List<Serializable> idListDistinct, List<Serializable> columnPropertyValueList) {
-        for (Serializable serializable : columnPropertyValueList) {
+    public static void buildList(List<Serializable> idListDistinct, List<Serializable> idList) {
+        for (Serializable serializable : idList) {
             boolean isExists = false;
             for (Serializable value : idListDistinct) {
                 if (serializable != null && value != null && serializable.toString().equals(value.toString())) {
@@ -34,9 +34,9 @@ public class CommonCode {
                 }
             }
 
-            if (serializable != null && !isExists) {
+            if (serializable != null && !isExists)
                 idListDistinct.add(serializable);
-            }
+
         }
     }
 
@@ -60,9 +60,9 @@ public class CommonCode {
                 Field fieldX = x.getClass().getDeclaredField(inverseRefColumnProperty);
                 fieldX.setAccessible(true);
                 Serializable id = (Serializable) fieldX.get(x);
-                if (id != null && !idList.contains(id)) {
+                if (id != null && !idList.contains(id))
                     idList.add(id);
-                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
