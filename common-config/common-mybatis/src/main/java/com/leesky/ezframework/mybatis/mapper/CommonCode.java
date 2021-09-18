@@ -7,7 +7,13 @@
  */
 package com.leesky.ezframework.mybatis.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
+import com.leesky.ezframework.mybatis.condition.FieldCondition;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.ObjectFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -19,17 +25,17 @@ import java.util.List;
 public class CommonCode {
 
     public static void buildList(List<Serializable> idListDistinct, List<Serializable> columnPropertyValueList) {
-        for (int s = 0; s < columnPropertyValueList.size(); s++) {
+        for (Serializable serializable : columnPropertyValueList) {
             boolean isExists = false;
-            for (int ss = 0; ss < idListDistinct.size(); ss++) {
-                if (columnPropertyValueList.get(s) != null && idListDistinct.get(ss) != null && columnPropertyValueList.get(s).toString().equals(idListDistinct.get(ss).toString())) {
+            for (Serializable value : idListDistinct) {
+                if (serializable != null && value != null && serializable.toString().equals(value.toString())) {
                     isExists = true;
                     break;
                 }
             }
 
-            if (columnPropertyValueList.get(s) != null && !isExists) {
-                idListDistinct.add(columnPropertyValueList.get(s));
+            if (serializable != null && !isExists) {
+                idListDistinct.add(serializable);
             }
         }
     }
@@ -63,6 +69,61 @@ public class CommonCode {
         }
     }
 
+    public static Field[] buildField(String[] proNames, Class<?> entityClass) {
+
+        Field[] fields = new Field[proNames.length];
+        for (int i = 0; i < proNames.length; i++) {
+            try {
+                fields[i] = entityClass.getDeclaredField(proNames[i]);
+            } catch (NoSuchFieldException | SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return fields;
+    }
+
+    public static <T, E> void extracted(MapperUtil<T, E, ?> maps, String fieldCode, FieldCondition<T> fc, boolean lazy,
+                                        String column, String refColumn, String refColumnProperty, String columnProperty,
+                                        Serializable columnPropertyValue, ObjectFactory<SqlSession> factory) {
+        if (!maps.isLazyMap.containsKey(fieldCode))
+            maps.isLazyMap.put(fieldCode, lazy);
+
+        if (!maps.columnMap.containsKey(fieldCode))
+            maps.columnMap.put(fieldCode, column);
+
+        if (!maps.refColumnMap.containsKey(fieldCode))
+            maps.refColumnMap.put(fieldCode, refColumn);
+
+        if (!maps.columnPropertyMap.containsKey(fieldCode))
+            maps.columnPropertyMap.put(fieldCode, columnProperty);
+
+        if (!maps.refColumnPropertyMap.containsKey(fieldCode))
+            maps.refColumnPropertyMap.put(fieldCode, refColumnProperty);
+
+
+        if (!maps.columnPropertyValueListMap.containsKey(fieldCode))
+            maps.columnPropertyValueListMap.put(fieldCode, Lists.newArrayList());
+
+        maps.columnPropertyValueListMap.get(fieldCode).add(columnPropertyValue);
+
+        if (!maps.fieldCollectionTypeMap.containsKey(fieldCode))
+            maps.fieldCollectionTypeMap.put(fieldCode, fc.getFieldCollectionType());
+
+        if (!maps.mapperMap.containsKey(fieldCode))
+            maps.mapperMap.put(fieldCode, (BaseMapper<E>) factory.getObject().getMapper(fc.getMapperClass()));
+    }
+
+    public static <T, E, X> Serializable[] getSerializable(FieldCondition<T> fc, String refColumn, Serializable columnPropertyValue,
+                                                           String inverseRefColumn, ObjectFactory<SqlSession> factory) {
+        Class<X> entityClassX = (Class<X>) fc.getJoinTable().entityClass();
+        Class<?> mapperXClass = fc.getJoinTableMapperClass();
+
+        BaseMapper<X> mapperX = (BaseMapper<X>) factory.getObject().getMapper(mapperXClass);
+        List<Object> xIds = mapperX.selectObjs((Wrapper<X>) new QueryWrapper<E>()
+                .select(inverseRefColumn).eq(refColumn, columnPropertyValue));
+        return xIds.toArray(new Serializable[]{});
+    }
 
 
 }

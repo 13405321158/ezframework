@@ -36,7 +36,7 @@ public class MapperUtil<T, E, X> {
     public Map<String, FieldCollectionType> fieldCollectionTypeMap;
     public Map<String, ArrayList<Serializable>> columnPropertyValueListMap;
 
-    public  MapperUtil buildMap() {
+    public MapperUtil buildMap_m2m() {
         isLazyMap = Maps.newHashMap();
         mapperMap = Maps.newHashMap();
         columnMap = Maps.newHashMap();
@@ -52,6 +52,20 @@ public class MapperUtil<T, E, X> {
         inverseColumnPropertyMap = Maps.newHashMap();
         inverseRefColumnPropertyMap = Maps.newHashMap();
         columnPropertyValueListMap = Maps.newHashMap();
+        return this;
+    }
+
+    public MapperUtil buildMap_o2m() {
+
+        isLazyMap = Maps.newHashMap();
+        mapperMap = Maps.newHashMap();
+        columnMap = Maps.newHashMap();
+        refColumnMap = Maps.newHashMap();
+        columnPropertyMap = Maps.newHashMap();
+        refColumnPropertyMap = Maps.newHashMap();
+        fieldCollectionTypeMap = Maps.newHashMap();
+        columnPropertyValueListMap = Maps.newHashMap();
+
         return this;
     }
 }
