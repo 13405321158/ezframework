@@ -51,15 +51,13 @@ public class ManyToOneResult<T, E> {
         }
 
         if (listAll != null && listAll.size() > 0) {
-            for (int j = 0; j < list.size(); j++) {
-                T entity = list.get(j);
+            for (T entity : list) {
                 String columnProperty = columnPropertyMap.get(fieldCode);
                 String refColumnProperty = refColumnPropertyMap.get(fieldCode);
 
                 E objForThisEntity = null;
 
-                for (int k = 0; k < listAll.size(); k++) {
-                    E entityE = listAll.get(k);
+                for (E entityE : listAll) {
                     Field entityField, entity2Field;
                     try {
                         entityField = entity.getClass().getDeclaredField(columnProperty);
@@ -68,9 +66,9 @@ public class ManyToOneResult<T, E> {
 
                         entity2Field = entityE.getClass().getDeclaredField(refColumnProperty);
                         entity2Field.setAccessible(true);
-                        Object refCoumnValue = entity2Field.get(entityE);
+                        Object refColumnValue = entity2Field.get(entityE);
 
-                        if (columnValue != null && columnValue.toString().equals(refCoumnValue.toString())) {
+                        if (columnValue != null && columnValue.toString().equals(refColumnValue.toString())) {
                             objForThisEntity = entityE;
                             break;
                         }
@@ -93,66 +91,60 @@ public class ManyToOneResult<T, E> {
     }
 
     public void handleLazy(Field field) {
-        final BaseMapper<E> mapper = (BaseMapper<E>) this.mapperE;
+        final BaseMapper<E> mapper = this.mapperE;
 
-        for (int i = 0; i < this.list.size(); i++) {
-            T entity = list.get(i);
+        for (T entity : this.list) {
             @SuppressWarnings("unchecked")
             Class<E> entityEClass = (Class<E>) field.getType();
 
             @SuppressWarnings("unchecked")
-            E objForThisEntityProxy = (E) Enhancer.create(entityEClass, new LazyLoader() {
-                @Override
-                public E loadObject() throws Exception {
-                    if (isExeSqlMap.get(field.getName()) == false) {
-                        if (columnPropertyValueList.size() == 1) {
-                            collectionMap.put(field.getName(), mapper
-                                    .selectList(new QueryWrapper<E>().eq(refColumn, columnPropertyValueList.get(0))));
-                        } else {
-                            collectionMap.put(field.getName(),
-                                    mapper.selectList(new QueryWrapper<E>().in(refColumn, columnPropertyValueList)));
-                        }
-                        isExeSqlMap.put(field.getName(), true);
+            E objForThisEntityProxy = (E) Enhancer.create(entityEClass, (LazyLoader) () -> {
+                if (!isExeSqlMap.get(field.getName())) {
+                    if (columnPropertyValueList.size() == 1) {
+                        collectionMap.put(field.getName(), mapper
+                                .selectList(new QueryWrapper<E>().eq(refColumn, columnPropertyValueList.get(0))));
+                    } else {
+                        collectionMap.put(field.getName(),
+                                mapper.selectList(new QueryWrapper<E>().in(refColumn, columnPropertyValueList)));
                     }
-
-                    List<E> listAll = (List<E>) collectionMap.get(field.getName());
-
-                    String columnProperty = columnPropertyMap.get(fieldCode);
-                    String refColumnProperty = refColumnPropertyMap.get(fieldCode);
-
-                    E objForThisEntity = null;
-
-                    for (int k = 0; k < listAll.size(); k++) {
-                        E entityE = listAll.get(k);
-                        Field entityField, entity2Field;
-                        try {
-                            entityField = entity.getClass().getDeclaredField(columnProperty);
-                            entityField.setAccessible(true);
-                            Object columnValue = entityField.get(entity);
-
-                            entity2Field = entityE.getClass().getDeclaredField(refColumnProperty);
-                            entity2Field.setAccessible(true);
-                            Object refCoumnValue = entity2Field.get(entityE);
-
-                            if (columnValue != null && refCoumnValue != null
-                                    && columnValue.toString().equals(refCoumnValue.toString())) {
-                                objForThisEntity = entityE;
-                                break;
-                            }
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-
-                    }
-
-                    if (listAll == null || listAll.size() == 0 || objForThisEntity == null) {
-                        Class<E> e2Class = (Class<E>) fieldClass;
-                        objForThisEntity = e2Class.getDeclaredConstructor().newInstance();
-                    }
-
-                    return objForThisEntity;
+                    isExeSqlMap.put(field.getName(), true);
                 }
 
+                List<E> listAll = (List<E>) collectionMap.get(field.getName());
+
+                String columnProperty = columnPropertyMap.get(fieldCode);
+                String refColumnProperty = refColumnPropertyMap.get(fieldCode);
+
+                E objForThisEntity = null;
+
+                for (E entityE : listAll) {
+                    Field entityField, entity2Field;
+                    try {
+                        entityField = entity.getClass().getDeclaredField(columnProperty);
+                        entityField.setAccessible(true);
+                        Object columnValue = entityField.get(entity);
+
+                        entity2Field = entityE.getClass().getDeclaredField(refColumnProperty);
+                        entity2Field.setAccessible(true);
+                        Object refColumnValue = entity2Field.get(entityE);
+
+                        if (columnValue != null && refColumnValue != null
+                                && columnValue.toString().equals(refColumnValue.toString())) {
+                            objForThisEntity = entityE;
+                            break;
+                        }
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+
+                }
+
+                if (listAll.size() == 0 || objForThisEntity == null) {
+                    Class<E> e2Class = (Class<E>) fieldClass;
+                    objForThisEntity = e2Class.getDeclaredConstructor().newInstance();
+                }
+
+                return objForThisEntity;
             });
 
             // 设置代理

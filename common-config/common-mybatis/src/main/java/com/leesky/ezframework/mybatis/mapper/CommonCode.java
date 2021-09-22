@@ -11,13 +11,17 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
+import com.leesky.ezframework.mybatis.annotation.AutoLazy;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.LazyLoader;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * <li>描述: AbstractAutoMappper.java 中通用代码
@@ -34,7 +38,7 @@ public class CommonCode {
                 }
             }
 
-            if (serializable != null && !isExists)
+            if (!isExists)
                 idListDistinct.add(serializable);
 
         }
@@ -72,13 +76,13 @@ public class CommonCode {
     public static Field[] buildField(String[] proNames, Class<?> entityClass) {
 
         Field[] fields = new Field[proNames.length];
-        for (int i = 0; i < proNames.length; i++) {
+        IntStream.range(0, proNames.length).forEach(i -> {
             try {
                 fields[i] = entityClass.getDeclaredField(proNames[i]);
             } catch (NoSuchFieldException | SecurityException e) {
                 e.printStackTrace();
             }
-        }
+        });
 
         return fields;
     }
@@ -116,7 +120,7 @@ public class CommonCode {
 
     public static <T, E, X> Serializable[] getSerializable(FieldCondition<T> fc, String refColumn, Serializable columnPropertyValue,
                                                            String inverseRefColumn, ObjectFactory<SqlSession> factory) {
-        Class<X> entityClassX = (Class<X>) fc.getJoinTable().entityClass();
+//        Class<X> entityClassX = (Class<X>) fc.getJoinTable().entityClass();
         Class<?> mapperXClass = fc.getJoinTableMapperClass();
 
         BaseMapper<X> mapperX = (BaseMapper<X>) factory.getObject().getMapper(mapperXClass);
@@ -125,5 +129,37 @@ public class CommonCode {
         return xIds.toArray(new Serializable[]{});
     }
 
+    public static <T, E> void extracted(T entity, Field field, FieldCondition<T> fc, boolean lazy, String refColumn,
+                                        Serializable columnPropertyValue,ObjectFactory<SqlSession> factory) {
+        if (columnPropertyValue == null)
+            return;
 
+
+        if (!lazy) {
+            BaseMapper<E> mapper = (BaseMapper<E>) factory.getObject().getMapper(fc.getMapperClass());
+            E e = mapper.selectOne(new QueryWrapper<E>().eq(refColumn, columnPropertyValue));
+            fc.setFieldValueByObject(e);
+        } else {// lazy
+            boolean needLazyProcessor = entity.getClass().isAnnotationPresent(AutoLazy.class)
+                    && entity.getClass().getDeclaredAnnotation(AutoLazy.class).value();
+            if (!needLazyProcessor)
+                return;
+
+
+             Serializable columnPropertyValueX = columnPropertyValue;
+
+            E e = (E) Enhancer.create(fc.getFieldClass(), (LazyLoader) () -> {
+                BaseMapper<E> mapper = (BaseMapper<E>) factory.getObject().getMapper(fc.getMapperClass());
+                E e1 = mapper.selectOne(new QueryWrapper<E>().eq(refColumn, columnPropertyValueX));
+
+                if (e1 == null) {
+                    Class<E> e2Class = (Class<E>) field.getType();
+                    e1 = e2Class.getDeclaredConstructor().newInstance();
+                }
+                return e1;
+            });
+
+            fc.setFieldValueByObject(e);
+        }
+    }
 }

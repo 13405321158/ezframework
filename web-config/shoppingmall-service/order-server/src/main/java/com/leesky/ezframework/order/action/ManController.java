@@ -32,7 +32,7 @@ public class ManController {
 	@GetMapping(value = "mans")
 	public List<Man> listMans() {
 		List<Man> list = manService.list();
-		autoMapper.mapperEntityList(list,"company");
+//		autoMapper.mapperEntityList(list,"company");
 //		autoMapper.mapperEntityList(list,"tels");
 		return list;
 	}

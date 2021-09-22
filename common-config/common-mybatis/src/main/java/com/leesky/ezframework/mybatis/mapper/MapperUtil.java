@@ -25,6 +25,7 @@ public class MapperUtil<T, E, X> {
     public Map<String, String> refColumnMap;
     public Map<String, JoinTable> joinTableMap;
     public Map<String, Class<X>> entityClassMap;
+    public Map<String, Class<?>> fieldClassMap;
     public Map<String, BaseMapper<E>> mapperMap;
     public Map<String, BaseMapper<X>> mapperxMap;
     public Map<String, String> columnPropertyMap;
@@ -35,6 +36,24 @@ public class MapperUtil<T, E, X> {
     public Map<String, Class<BaseMapper<X>>> mapperxClassMap;
     public Map<String, FieldCollectionType> fieldCollectionTypeMap;
     public Map<String, ArrayList<Serializable>> columnPropertyValueListMap;
+
+
+
+
+    public MapperUtil buildMap_o2o() {
+
+        isLazyMap = Maps.newHashMap();
+        mapperMap = Maps.newHashMap();
+        columnMap = Maps.newHashMap();
+        refColumnMap = Maps.newHashMap();
+        fieldClassMap = Maps.newHashMap();
+        columnPropertyMap = Maps.newHashMap();
+        refColumnPropertyMap = Maps.newHashMap();
+        fieldCollectionTypeMap = Maps.newHashMap();
+        columnPropertyValueListMap = Maps.newHashMap();
+        return this;
+    }
+
 
     public MapperUtil buildMap_m2m() {
         isLazyMap = Maps.newHashMap();
@@ -55,6 +74,20 @@ public class MapperUtil<T, E, X> {
         return this;
     }
 
+    public MapperUtil buildMap_m2o() {
+
+        isLazyMap = Maps.newHashMap();
+        mapperMap = Maps.newHashMap();
+        columnMap = Maps.newHashMap();
+        refColumnMap = Maps.newHashMap();
+        fieldClassMap = Maps.newHashMap();
+        columnPropertyMap = Maps.newHashMap();
+        refColumnPropertyMap = Maps.newHashMap();
+        fieldCollectionTypeMap = Maps.newHashMap();
+        columnPropertyValueListMap = Maps.newHashMap();
+
+        return this;
+    }
     public MapperUtil buildMap_o2m() {
 
         isLazyMap = Maps.newHashMap();
