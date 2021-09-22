@@ -1075,7 +1075,8 @@ public abstract class AbstractAutoMapper {
 
                 FieldCondition<T> fc = new FieldCondition<>(entity, field, fetchEager, factory);
                 boolean lazy = fc.getIsLazy();
-
+                System.out.println("lazy1 = " + lazy);
+                System.out.println("field1 ="+ field.getName());
                 JoinColumn joinColumn = fc.getJoinColumn();
                 String column = JoinColumnUtil.getColumn(fc);
                 String refColumn = JoinColumnUtil.getRefColumn(fc);
@@ -1134,6 +1135,8 @@ public abstract class AbstractAutoMapper {
             String refColumn = m2mMaps.refColumnMap.get(field.getName());
             BaseMapper<E> mapper = m2mMaps.mapperMap.get(field.getName());
             boolean lazy = m2mMaps.isLazyMap.get(field.getName());
+
+
             FieldCollectionType fieldCollectionType = m2mMaps.fieldCollectionTypeMap.get(field.getName());
             List<Serializable> columnPropertyValueList = m2mMaps.columnPropertyValueListMap.get(field.getName());
 

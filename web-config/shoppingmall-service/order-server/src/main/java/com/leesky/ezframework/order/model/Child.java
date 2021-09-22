@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Data
-@AutoLazy
+
 @TableName("child")
 public class Child {
 
@@ -29,29 +29,28 @@ public class Child {
 	@ManyToOne
 	@JoinColumn(name = "lao_han_id", referencedColumnName = "man_id")
 	@EntityMapper
-	@Lazy
 	private Man laoHan;
 
 	@TableField(exist = false)
 	@ManyToOne
 	@JoinColumn(name = "lao_ma_id", referencedColumnName = "woman_id")
 	@EntityMapper
-	@Lazy
 	private Woman laoMa;
 
 
-	@TableField(exist = false)
+
 	@ManyToMany
+	@TableField(exist = false)
 	@JoinTable(targetMapper = StudentCourseMapper.class)
 	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
 	@InverseJoinColumn(name = "course_id", referencedColumnName = "course_id")
 	private List<Course> courses;
 
-	@TableField(exist = false)
+
 	@ManyToMany
+	@TableField(exist = false)
 	@JoinTable(targetMapper = StudentTeacherMapper.class)
 	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
 	@InverseJoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
 	private Set<Teacher> teachers;
-
 }

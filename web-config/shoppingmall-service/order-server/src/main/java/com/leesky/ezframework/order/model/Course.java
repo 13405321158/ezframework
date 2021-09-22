@@ -21,6 +21,5 @@ public class Course {
 	@JoinTable(targetMapper = StudentCourseMapper.class)
 	@JoinColumn(name = "course_id", referencedColumnName = "course_id")
 	@InverseJoinColumn(name = "child_id", referencedColumnName = "student_id")
-	@Lazy(false)
 	private List<Child> students;
 }
