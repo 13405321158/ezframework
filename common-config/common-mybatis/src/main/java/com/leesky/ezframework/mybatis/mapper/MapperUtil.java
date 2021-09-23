@@ -7,18 +7,19 @@
  */
 package com.leesky.ezframework.mybatis.mapper;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Map;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Maps;
 import com.leesky.ezframework.mybatis.annotation.JoinTable;
 import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Map;
-
 /**
  * <li>描述:
  */
+@SuppressWarnings("rawtypes")
 public class MapperUtil<T, E, X> {
     public Map<String, String> columnMap;
     public Map<String, Boolean> isLazyMap;
@@ -40,7 +41,8 @@ public class MapperUtil<T, E, X> {
 
 
 
-    public MapperUtil buildMap_o2o() {
+
+	public MapperUtil buildMap_o2o() {
 
         isLazyMap = Maps.newHashMap();
         mapperMap = Maps.newHashMap();

@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
 import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.LazyLoader;
 
@@ -16,10 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 @Data
+@SuppressWarnings("unchecked")
 public class ManyToOneResult<T, E> {
     private List<T> list;
     private Field[] fields;
-    private Collection<E> CollectionAll;
+    private List<E> CollectionAll;
     private boolean lazy;
     private Class<?> fieldClass;
     private String fieldCode;
@@ -45,21 +47,17 @@ public class ManyToOneResult<T, E> {
     }
 
     public void handle(Field field) {
-        List<E> listAll = null;
-        if (!lazy) {
-            listAll = (List<E>) CollectionAll;
-        }
+        try {
+            if (CollectionUtils.isNotEmpty(CollectionAll)) {
+                for (T entity : list) {
+                    String columnProperty = columnPropertyMap.get(fieldCode);
+                    String refColumnProperty = refColumnPropertyMap.get(fieldCode);
 
-        if (listAll != null && listAll.size() > 0) {
-            for (T entity : list) {
-                String columnProperty = columnPropertyMap.get(fieldCode);
-                String refColumnProperty = refColumnPropertyMap.get(fieldCode);
+                    E objForThisEntity = null;
 
-                E objForThisEntity = null;
+                    for (E entityE : CollectionAll) {
+                        Field entityField, entity2Field;
 
-                for (E entityE : listAll) {
-                    Field entityField, entity2Field;
-                    try {
                         entityField = entity.getClass().getDeclaredField(columnProperty);
                         entityField.setAccessible(true);
                         Object columnValue = entityField.get(entity);
@@ -72,32 +70,24 @@ public class ManyToOneResult<T, E> {
                             objForThisEntity = entityE;
                             break;
                         }
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
                     }
-
-                }
-
-                try {
                     field.set(entity, objForThisEntity);
-                } catch (
 
-                        Exception e) {
-                    e.printStackTrace();
-                }
-            } // end loop-entity
-        } // end if
-
+                } // end loop-entity
+            } // end if
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void handleLazy(Field field) {
         final BaseMapper<E> mapper = this.mapperE;
 
         for (T entity : this.list) {
-            @SuppressWarnings("unchecked")
+
             Class<E> entityEClass = (Class<E>) field.getType();
 
-            @SuppressWarnings("unchecked")
+
             E objForThisEntityProxy = (E) Enhancer.create(entityEClass, (LazyLoader) () -> {
                 if (!isExeSqlMap.get(field.getName())) {
                     if (columnPropertyValueList.size() == 1) {
@@ -119,24 +109,20 @@ public class ManyToOneResult<T, E> {
 
                 for (E entityE : listAll) {
                     Field entityField, entity2Field;
-                    try {
-                        entityField = entity.getClass().getDeclaredField(columnProperty);
-                        entityField.setAccessible(true);
-                        Object columnValue = entityField.get(entity);
 
-                        entity2Field = entityE.getClass().getDeclaredField(refColumnProperty);
-                        entity2Field.setAccessible(true);
-                        Object refColumnValue = entity2Field.get(entityE);
+                    entityField = entity.getClass().getDeclaredField(columnProperty);
+                    entityField.setAccessible(true);
+                    Object columnValue = entityField.get(entity);
 
-                        if (columnValue != null && refColumnValue != null
-                                && columnValue.toString().equals(refColumnValue.toString())) {
-                            objForThisEntity = entityE;
-                            break;
-                        }
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                    entity2Field = entityE.getClass().getDeclaredField(refColumnProperty);
+                    entity2Field.setAccessible(true);
+                    Object refColumnValue = entity2Field.get(entityE);
+
+                    if (columnValue != null && refColumnValue != null
+                            && columnValue.toString().equals(refColumnValue.toString())) {
+                        objForThisEntity = entityE;
+                        break;
                     }
-
                 }
 
                 if (listAll.size() == 0 || objForThisEntity == null) {
@@ -157,7 +143,5 @@ public class ManyToOneResult<T, E> {
 
     }
 
-    public static <E> List<E> getListResult(Field field) {
-        return null;
-    }
+
 }

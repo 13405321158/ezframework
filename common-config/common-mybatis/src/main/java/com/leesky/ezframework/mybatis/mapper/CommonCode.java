@@ -7,25 +7,27 @@
  */
 package com.leesky.ezframework.mybatis.mapper;
 
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.stream.IntStream;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.LazyLoader;
+
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.mybatis.annotation.AutoLazy;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.LazyLoader;
-
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * <li>描述: AbstractAutoMappper.java 中通用代码
  */
+@SuppressWarnings("unchecked")
 public class CommonCode {
 
     public static void buildList(List<Serializable> idListDistinct, List<Serializable> idList) {
@@ -87,7 +89,8 @@ public class CommonCode {
         return fields;
     }
 
-    public static <T, E> void extracted(MapperUtil<T, E, ?> maps, String fieldCode, FieldCondition<T> fc, boolean lazy,
+
+	public static <T, E> void extracted(MapperUtil<T, E, ?> maps, String fieldCode, FieldCondition<T> fc, boolean lazy,
                                         String column, String refColumn, String refColumnProperty, String columnProperty,
                                         Serializable columnPropertyValue, ObjectFactory<SqlSession> factory) {
         if (!maps.isLazyMap.containsKey(fieldCode))

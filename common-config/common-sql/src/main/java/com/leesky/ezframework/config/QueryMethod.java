@@ -7,13 +7,14 @@
  */
 package com.leesky.ezframework.config;
 
-import com.baomidou.mybatisplus.core.injector.AbstractMethod;
-import com.baomidou.mybatisplus.core.metadata.TableInfo;
-import com.leesky.ezframework.join.interfaces.one2one.One2One;
+import java.lang.reflect.Field;
+
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
 
-import java.lang.reflect.Field;
+import com.baomidou.mybatisplus.core.injector.AbstractMethod;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.leesky.ezframework.join.interfaces.one2one.One2One;
 
 /**
  * <li>描述:
@@ -21,26 +22,27 @@ import java.lang.reflect.Field;
  */
 public class QueryMethod extends AbstractMethod {
 
-    @Override
-    public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
-        String ff = tableInfo.getResultMap();
-        System.out.println("ff = " + ff);
-        String sql = "select " + tableInfo.getKeyColumn() + " from " + tableInfo.getTableName() + " limit 1";
-        SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, modelClass);
 
-        Field[] fs = tableInfo.getEntityType().getDeclaredFields();
-        for (Field f : fs) {
-            if (f.isAnnotationPresent(One2One.class)) {
-                sql = "select * from " + tableInfo.getTableName()
-                        + " where " + tableInfo.getKeyColumn() + "=#{" + tableInfo.getKeyProperty() + "}";
+	private static final long serialVersionUID = -514230032415273901L;
 
-                sqlSource = languageDriver.createSqlSource(configuration, sql, modelClass);
-            }
-        }
+	@Override
+	public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
+		String ff = tableInfo.getResultMap();
+		System.out.println("ff = " + ff);
+		String sql = "select " + tableInfo.getKeyColumn() + " from " + tableInfo.getTableName() + " limit 1";
+		SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, modelClass);
 
-        /* 执行 SQL ，动态 SQL 参考类 SqlMethod */
+		Field[] fs = tableInfo.getEntityType().getDeclaredFields();
+		for (Field f : fs) {
+			if (f.isAnnotationPresent(One2One.class)) {
+				sql = "select * from " + tableInfo.getTableName() + " where " + tableInfo.getKeyColumn() + "=#{" + tableInfo.getKeyProperty() + "}";
 
+				sqlSource = languageDriver.createSqlSource(configuration, sql, modelClass);
+			}
+		}
 
-        return addSelectMappedStatementForTable(mapperClass, "leek", sqlSource, tableInfo);
-    }
+		/* 执行 SQL ，动态 SQL 参考类 SqlMethod */
+
+		return addSelectMappedStatementForTable(mapperClass, "leek", sqlSource, tableInfo);
+	}
 }

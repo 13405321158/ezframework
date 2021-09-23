@@ -1,24 +1,21 @@
 package com.leesky.ezframework.order.action;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.leesky.ezframework.mybatis.mapper.AutoMapper;
-import com.leesky.ezframework.order.model.Child2;
-import com.leesky.ezframework.order.service.IChild2Service;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.leesky.ezframework.order.model.Child2;
+import com.leesky.ezframework.order.service.IChild2Service;
 
 
 @RestController
 @RequestMapping(value = "/")
 public class Child2Controller {
-	@Autowired
-	private AutoMapper autoMapper;
-
 	@Autowired
 	private IChild2Service child2Service;
 

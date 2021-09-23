@@ -1,5 +1,16 @@
 package com.leesky.ezframework.mybatis.service.impl;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -8,11 +19,6 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.leesky.ezframework.mybatis.annotation.DisableAutoMapper;
 import com.leesky.ezframework.mybatis.mapper.AutoMapper;
 import com.leesky.ezframework.mybatis.service.IbaseService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.Serializable;
-import java.util.*;
 
 public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<BaseMapper<T>, T> implements IbaseService<T> {
 	@Autowired(required = false)
@@ -133,8 +139,9 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 	@Transactional(readOnly = true)
 	@Override
 	public List<T> list() {
-		List<T> list = super.list();
-		if (isAutoMapperEnabled())
+	
+		List<T> list = this.baseMapper.selectList(null);
+		if (isAutoMapperEnabled()) 
 			autoMapper.mapperEntityList(list);
 
 		return list;

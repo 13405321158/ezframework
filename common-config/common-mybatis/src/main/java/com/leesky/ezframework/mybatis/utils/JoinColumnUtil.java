@@ -1,10 +1,10 @@
 package com.leesky.ezframework.mybatis.utils;
 
-import com.leesky.ezframework.mybatis.condition.FieldCondition;
+import java.lang.reflect.Field;
+
 import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-
-import java.lang.reflect.Field;
+import com.leesky.ezframework.mybatis.condition.FieldCondition;
 
 public class JoinColumnUtil {
 	public static <T> String getColumn(FieldCondition<T> fc) {

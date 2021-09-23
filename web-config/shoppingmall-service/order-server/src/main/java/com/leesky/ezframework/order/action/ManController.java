@@ -1,12 +1,17 @@
 package com.leesky.ezframework.order.action;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.leesky.ezframework.mybatis.mapper.AutoMapper;
 import com.leesky.ezframework.order.model.Man;
 import com.leesky.ezframework.order.service.IManService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 
@@ -32,7 +37,7 @@ public class ManController {
 	@GetMapping(value = "mans")
 	public List<Man> listMans() {
 		List<Man> list = manService.list();
-//		autoMapper.mapperEntityList(list,"company");
+//		autoMapper.mapperEntityList(list,"laoPo");
 //		autoMapper.mapperEntityList(list,"tels");
 		return list;
 	}

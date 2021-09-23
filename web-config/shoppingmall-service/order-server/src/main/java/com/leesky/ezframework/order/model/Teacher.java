@@ -3,7 +3,10 @@ package com.leesky.ezframework.order.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.mybatis.annotation.*;
+import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.annotation.JoinTable;
+import com.leesky.ezframework.mybatis.annotation.ManyToMany;
 import com.leesky.ezframework.order.mapper.StudentCourseMapper;
 import lombok.Data;
 

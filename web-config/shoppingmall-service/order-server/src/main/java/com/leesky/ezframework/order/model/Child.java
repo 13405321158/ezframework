@@ -8,7 +8,6 @@ import com.leesky.ezframework.order.mapper.StudentCourseMapper;
 import com.leesky.ezframework.order.mapper.StudentTeacherMapper;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -44,7 +43,7 @@ public class Child {
 	@JoinTable(targetMapper = StudentCourseMapper.class)
 	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
 	@InverseJoinColumn(name = "course_id", referencedColumnName = "course_id")
-	private List<Course> courses;
+	private Set<Course> courses;
 
 
 	@ManyToMany
