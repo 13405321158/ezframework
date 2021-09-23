@@ -1,17 +1,23 @@
 package com.leesky.ezframework.order.model;
 
+import java.util.List;
+import java.util.Set;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.mybatis.annotation.*;
+import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.annotation.JoinTable;
+import com.leesky.ezframework.mybatis.annotation.ManyToMany;
+import com.leesky.ezframework.mybatis.annotation.ManyToOne;
 import com.leesky.ezframework.order.mapper.StudentCourseMapper;
 import com.leesky.ezframework.order.mapper.StudentTeacherMapper;
+
 import lombok.Data;
 
-import java.util.Set;
-
 @Data
-
+//@AutoLazy(true)
 @TableName("child")
 public class Child {
 
@@ -27,23 +33,21 @@ public class Child {
 	@TableField(exist = false)
 	@ManyToOne
 	@JoinColumn(name = "lao_han_id", referencedColumnName = "man_id")
-	@EntityMapper
 	private Man laoHan;
 
 	@TableField(exist = false)
 	@ManyToOne
 	@JoinColumn(name = "lao_ma_id", referencedColumnName = "woman_id")
-	@EntityMapper
 	private Woman laoMa;
 
 
-
+//@Lazy(false)
 	@ManyToMany
 	@TableField(exist = false)
 	@JoinTable(targetMapper = StudentCourseMapper.class)
 	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
 	@InverseJoinColumn(name = "course_id", referencedColumnName = "course_id")
-	private Set<Course> courses;
+	private List<Course> courses;
 
 
 	@ManyToMany

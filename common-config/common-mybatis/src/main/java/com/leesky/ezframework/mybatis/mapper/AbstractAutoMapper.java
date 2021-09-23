@@ -187,25 +187,25 @@ public abstract class AbstractAutoMapper {
             return entityList;
         }
 
-        if (!entityMap.containsKey(entityFirst.getClass().getName() + "." + RelationType.ONETOMANY.name())) {
+        if (!entityMap.containsKey(entityFirst.getClass().getName() + "." + RelationType.ONETOMANY.name()))
             return entityList;
-        }
+
 
         Class<?> entityClass = entityFirst.getClass();
 
         String[] proNames = null;
-        if (entityMap.containsKey(entityClass.getName() + "." + RelationType.ONETOMANY.name())) {
+        if (entityMap.containsKey(entityClass.getName() + "." + RelationType.ONETOMANY.name()))
             proNames = entityMap.get(entityClass.getName() + "." + RelationType.ONETOMANY.name());
-        }
 
-        if (proNames == null || proNames.length == 0)
+
+        if (ArrayUtils.isEmpty(proNames))
             return entityList;
 
-        if (propertyName != null && !Arrays.asList(proNames).contains(propertyName)) {
+        if (propertyName != null && !Arrays.asList(proNames).contains(propertyName))
             return entityList;
-        } else if (propertyName != null) {
+        else if (propertyName != null)
             proNames = new String[]{propertyName};
-        }
+
 
         Field[] fields = CommonCode.buildField(proNames, entityClass);
 
@@ -260,29 +260,29 @@ public abstract class AbstractAutoMapper {
             if (idListDistinct.size() == 0)
                 continue;
 
-            final OneToManyResult<T, E> oneToManyResult = new OneToManyResult<>(fields);
+            OneToManyResult<T, E> oneToManyResult = new OneToManyResult<>(fields);
             oneToManyResult.setList(list);
-            oneToManyResult.setLazy(lazy);
             oneToManyResult.setFieldCode(fieldCode);
             oneToManyResult.setRefColumn(refColumn);
             oneToManyResult.setMapperE(mapper);
-            oneToManyResult.setMapperMap(o2mMaps.mapperMap);
+
             oneToManyResult.setFieldCollectionType(fieldCollectionType);
             oneToManyResult.setColumnPropertyValueList(idListDistinct);
             oneToManyResult.setColumnPropertyMap(o2mMaps.columnPropertyMap);
             oneToManyResult.setRefColumnPropertyMap(o2mMaps.refColumnPropertyMap);
-            oneToManyResult.setFields(fields);
+
 
             if (!lazy) {
                 QueryWrapper<E> filter = new QueryWrapper<E>().in(refColumn, idListDistinct);
                 List<E> listAll = mapper.selectList(filter);
 
                 if (fieldCollectionType == FieldCollectionType.SET) {
-                    Set<E> setAll = listAll != null ? Sets.newHashSet(listAll) : null;
+                    Set<E> setAll = listAll != null ? Sets.newHashSet(listAll) : Sets.newHashSet();
                     oneToManyResult.setCollectionAll(setAll);
-                } else
+                } else {
+                    listAll = listAll != null ? listAll : Lists.newArrayList();
                     oneToManyResult.setCollectionAll(listAll);
-
+                }
                 oneToManyResult.handle(field);
             } else {// lazy
                 boolean needLazyProcessor = entityFirst.getClass().isAnnotationPresent(AutoLazy.class) && entityFirst.getClass().getDeclaredAnnotation(AutoLazy.class).value();
@@ -764,16 +764,15 @@ public abstract class AbstractAutoMapper {
 
             ManyToOneResult<T, E> manyToOneResult = new ManyToOneResult<>(fields);
             manyToOneResult.setList(list);
-            manyToOneResult.setFieldClass(fieldClass);
-            manyToOneResult.setLazy(lazy);
+            manyToOneResult.setMapperE(mapper);
             manyToOneResult.setFieldCode(fieldCode);
             manyToOneResult.setRefColumn(refColumn);
-            manyToOneResult.setMapperE(mapper);
-            manyToOneResult.setFieldCollectionType(fieldCollectionType);
+            manyToOneResult.setFieldClass(fieldClass);
+
             manyToOneResult.setColumnPropertyValueList(idListDistinct);
             manyToOneResult.setColumnPropertyMap(m2oMaps.columnPropertyMap);
             manyToOneResult.setRefColumnPropertyMap(m2oMaps.refColumnPropertyMap);
-            manyToOneResult.setFields(fields);
+
 
             if (!lazy) {
 
@@ -1113,11 +1112,11 @@ public abstract class AbstractAutoMapper {
                 List<X> entityXList = mapperX.selectList(new QueryWrapper<X>().in(refColumn, columnPropertyValueList));
                 entityXListMap.put(fieldCode, entityXList);
 
-                if (manyToManyResult.getEntityXListMap() == null) {
+                if (manyToManyResult.getEntityXListMap() == null)
                     manyToManyResult.setEntityXListMap(entityXListMap);
-                }
 
-                if (entityXList == null || entityXList.size() == 0) {
+
+                if (CollectionUtils.isEmpty(entityXList)) {
                     continue;
                 }
 
@@ -1143,7 +1142,12 @@ public abstract class AbstractAutoMapper {
                     continue;
 
                 manyToManyResult.setCollectionAll(null);
-                manyToManyResult.handleLazy(field);
+                try {
+                    manyToManyResult.handleLazy(field);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
             } // end if-lazy
         } // end loop-field

@@ -1,11 +1,15 @@
 package com.leesky.ezframework.order.model;
 
+import java.util.List;
+import java.util.Set;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.mybatis.annotation.AutoLazy;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.OneToMany;
 import com.leesky.ezframework.mybatis.annotation.OneToOne;
 
 import lombok.Data;
@@ -14,7 +18,7 @@ import lombok.Data;
  *
  */
 @Data
-@AutoLazy(false)
+@AutoLazy(true)
 /*
  * @AutoLazy(true) 可开启自动延迟加载(默认为false)，对于多个延迟的属性，会触发多次连接（不是一个事务完成）。
  * 当@AutoLazy(false)时，如需要，可手动方式调用
@@ -34,16 +38,15 @@ public class Man {
 	@TableField("company_id")
 	private Long companyId;
 
-//    @OneToMany
-//    @TableField(exist = false)
-//    @JoinColumn(name = "man_id", referencedColumnName = "man_id")
-//    private Set<Tel> tels;
-//
-//
-//    @OneToMany
-//    @TableField(exist = false)
-//    @JoinColumn(name = "man_id", referencedColumnName = "lao_han_id")
-//    private List<Child> waWa;
+	@OneToMany
+	@TableField(exist = false)
+	@JoinColumn(name = "man_id", referencedColumnName = "man_id")
+	private Set<Tel> tels;
+
+	@OneToMany
+	@TableField(exist = false)
+	@JoinColumn(name = "man_id", referencedColumnName = "lao_han_id")
+	private List<Child> waWa;
 
 	@OneToOne
 	@TableField(exist = false)

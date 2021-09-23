@@ -1,5 +1,16 @@
 package com.leesky.ezframework.mybatis.result;
 
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.LazyLoader;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
@@ -9,13 +20,8 @@ import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
 import com.leesky.ezframework.mybatis.mapper.CommonCode;
 import com.leesky.ezframework.mybatis.utils.JoinTableUtil;
-import lombok.Data;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.LazyLoader;
 
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.*;
+import lombok.Data;
 
 @SuppressWarnings("unused")
 @Data
@@ -46,8 +52,8 @@ public class ManyToManyResult<T, E, X> {
     private FieldCollectionType fieldCollectionType;
     private List<Serializable> columnPropertyValueList;
 
-    public void build01(boolean lazy, List<T> list, Field[] fields, BaseMapper<E> mapperE, BaseMapper<X> mapperX, String fieldCode,
-                        String refColumn, String inverseRefColumn, FieldCollectionType fieldCollectionType, List<Serializable> columnPropertyValueList) {
+    public void build01(boolean lazy, List<T> list, Field[] fields, BaseMapper<E> mapperE, BaseMapper<X> mapperX, String fieldCode, String refColumn, String inverseRefColumn,
+                        FieldCollectionType fieldCollectionType, List<Serializable> columnPropertyValueList) {
         this.lazy = lazy;
         this.list = list;
         this.fields = fields;
@@ -61,8 +67,8 @@ public class ManyToManyResult<T, E, X> {
 
     }
 
-    public void build02(Map<String, String> columnPropertyMap, Map<String, String> refColumnPropertyMap,
-                        Map<String, String> inverseColumnPropertyMap, Map<String, String> inverseRefColumnPropertyMap) {
+    public void build02(Map<String, String> columnPropertyMap, Map<String, String> refColumnPropertyMap, Map<String, String> inverseColumnPropertyMap,
+                        Map<String, String> inverseRefColumnPropertyMap) {
         this.columnPropertyMap = columnPropertyMap;
         this.refColumnPropertyMap = refColumnPropertyMap;
         this.inverseColumnPropertyMap = inverseColumnPropertyMap;
@@ -80,334 +86,188 @@ public class ManyToManyResult<T, E, X> {
     }
 
     public void handle(Field field) {
-        List<E> listAll = null;
-        if (!lazy) {
-            if (fieldCollectionType == FieldCollectionType.SET) {
-                Set<E> setAll = (Set<E>) CollectionAll;
-                if (setAll != null) {
-                    listAll = Lists.newArrayList(setAll);
-                }
-            } else {
-                listAll = (List<E>) CollectionAll;
-            }
-        }
 
-        if (listAll != null && listAll.size() > 0) {
-            for (int j = 0; j < list.size(); j++) {
-                T entity = list.get(j);
-                String columnProperty = columnPropertyMap.get(fieldCode);
-                String refColumnProperty = refColumnPropertyMap.get(fieldCode);
-                String inverseColumnProperty = inverseColumnPropertyMap.get(fieldCode);
-                String inverseRefColumnProperty = inverseRefColumnPropertyMap.get(fieldCode);
-                List<X> entityXList = entityXListMap.get(fieldCode);
+        if (CollectionUtils.isNotEmpty(CollectionAll)) {
 
-                Collection<E> listForThisEntity = new ArrayList<E>();
-                if (fieldCollectionType == FieldCollectionType.SET) {
-                    listForThisEntity = new HashSet<E>();
-                }
+            String columnProperty = columnPropertyMap.get(fieldCode);
+            String refColumnProperty = refColumnPropertyMap.get(fieldCode);
+            String inverseColumnProperty = inverseColumnPropertyMap.get(fieldCode);
+            String inverseRefColumnProperty = inverseRefColumnPropertyMap.get(fieldCode);
+            List<X> entityXList = entityXListMap.get(fieldCode);
 
-                for (int k = 0; k < listAll.size(); k++) {
-                    E entityE = listAll.get(k);
-                    Field entityField, entity2Field, entityXField, entityXField2;
-                    try {
+            Collection<E> listForThisEntity = fieldCollectionType == FieldCollectionType.SET ? Sets.newHashSet() : Lists.newArrayList();
+            try {
+                for (T entity : list) {
+
+                    for (E entityE : CollectionAll) {
+                        Field entityField, entity2Field, entityXField, entityXField2;
+
                         entityField = entity.getClass().getDeclaredField(columnProperty);
                         entityField.setAccessible(true);
                         Object columnValue = entityField.get(entity);
 
                         entity2Field = entityE.getClass().getDeclaredField(inverseColumnProperty);
                         entity2Field.setAccessible(true);
-                        Object refCoumnValue = entity2Field.get(entityE);
+                        Object refComValue = entity2Field.get(entityE);
 
-                        // table1~table3&&table2~table3
-
-                        for (int x = 0; x < entityXList.size(); x++) {
-                            X entityX = entityXList.get(x);
-
-                            entityXField = entityX.getClass()
-                                    .getDeclaredField(JoinTableUtil.getRefColumnProperty(refColumn));
+                        for (X entityX : entityXList) {
+                            entityXField = entityX.getClass().getDeclaredField(JoinTableUtil.getRefColumnProperty(refColumn));
                             entityXField.setAccessible(true);
                             Object columnValueX = entityXField.get(entityX);
 
-                            entityXField2 = entityX.getClass()
-                                    .getDeclaredField(JoinTableUtil.getInverseRefColumnProperty(inverseRefColumn));
+                            entityXField2 = entityX.getClass().getDeclaredField(JoinTableUtil.getInverseRefColumnProperty(inverseRefColumn));
                             entityXField2.setAccessible(true);
                             Object refColumnValueX = entityXField2.get(entityX);
 
                             if (columnValueX != null && columnValue != null && refColumnValueX != null
-                                    && refCoumnValue != null && columnValueX.toString().equals(columnValue.toString())
-                                    && refColumnValueX.toString().equals(refCoumnValue.toString())) {
+                                    && refComValue != null && columnValueX.toString().equals(columnValue.toString())
+                                    && refColumnValueX.toString().equals(refComValue.toString())) {
                                 listForThisEntity.add(entityE);
                             }
                         }
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
                     }
-
-                }
-
-                try {
                     field.set(entity, listForThisEntity);
-                } catch (
 
-                        Exception e) {
-                    e.printStackTrace();
-                }
-            } // end loop-entity
+                } // end loop-entity
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } // end if
 
     }
 
-    public void handleLazy(Field field) {
-        final BaseMapper<E> mapper = (BaseMapper<E>) this.mapperE;
+    @SuppressWarnings("unchecked")
+    public void handleLazy(Field field) throws IllegalAccessException {
+        final BaseMapper<E> mapper = this.mapperE;
         Map<String, List<X>> entityXListMap = Maps.newHashMap();
-
+        String inverseRefColumnProperty = inverseRefColumnPropertyMap.get(fieldCode);
         if (fieldCollectionType == FieldCollectionType.SET) {
 
-            for (int i = 0; i < this.list.size(); i++) {
-                T entity = list.get(i);
+            for (T entity : this.list) {
 
-                String columnProperty = columnPropertyMap.get(fieldCode);
-                String refColumnProperty = refColumnPropertyMap.get(fieldCode);
-                String inverseColumnProperty = inverseColumnPropertyMap.get(fieldCode);
-                String inverseRefColumnProperty = inverseRefColumnPropertyMap.get(fieldCode);
-                // List<X> entityXList = entityXListMap.get(fieldCode);
+                Set<E> setForThisEntityProxy = (Set<E>) Enhancer.create(Set.class, (LazyLoader) () -> {
+                    if (!isExeSqlMap.get(field.getName())) {
 
-                @SuppressWarnings("unchecked")
-                Set<E> setForThisEntityProxy = (Set<E>) Enhancer.create(Set.class, new LazyLoader() {
+                        List<X> entityXList = getXes(field, entityXListMap);
 
-                    @Override
-                    public Set<E> loadObject() {
-
-                        List<X> entityXList;
-                        if (isExeSqlMap.get(field.getName()) == false) {
-                            isExeSqlMap.put(field.getName(), true);
-
-                            if (columnPropertyValueList.size() == 1) {
-                                entityXList = mapperX
-                                        .selectList(new QueryWrapper<X>().select("DISTINCT " + inverseRefColumn)
-                                                .eq(refColumn, columnPropertyValueList.get(0)));
-                            } else {
-                                entityXList = mapperX.selectList(new QueryWrapper<X>()
-                                        .select("DISTINCT " + inverseRefColumn).in(refColumn, columnPropertyValueList));
-                            }
-
-                            if (!entityXListMap.containsKey(fieldCode)) {
-                                entityXListMap.put(fieldCode, entityXList);
-                            }
-
-                            List<Serializable> idList = CommonCode.getSerializable(inverseRefColumnProperty,entityXList);
-
-                            if (idList.size() == 1) {
-                                collectionMap.put(field.getName(),
-                                        mapper.selectList(new QueryWrapper<E>().eq(inverseRefColumn, idList.get(0))));
-                            } else if (idList.size() > 1) {
-                                collectionMap.put(field.getName(), mapper.selectList(
-                                        new QueryWrapper<E>().in(inverseRefColumn, (ArrayList<Serializable>) idList)));
-                            }
-
-                            isExeSqlMap.put(field.getName(), true);
-
-                            if (idList.size() == 0) {
-                                return new HashSet<E>();
-                            }
-
+                        List<Serializable> idList = CommonCode.getSerializable(inverseRefColumnProperty, entityXList);
+                        QueryWrapper<E> filter = new QueryWrapper<>();
+                        if (idList.size() == 1) {
+                            filter.eq(inverseRefColumn, idList.get(0));
+                            collectionMap.put(field.getName(), mapper.selectList(filter));
+                        } else if (idList.size() > 1) {
+                            filter.in(inverseRefColumn, idList);
+                            collectionMap.put(field.getName(), mapper.selectList(filter));
                         }
+                        isExeSqlMap.put(field.getName(), true);
 
-                        entityXList = entityXListMap.get(fieldCode);
-
-                        List<E> listAll = (List<E>) collectionMap.get(field.getName());
-
-                        String columnProperty = columnPropertyMap.get(fieldCode);
-                        String refColumnProperty = refColumnPropertyMap.get(fieldCode);
-                        String inverseColumnProperty = inverseColumnPropertyMap.get(fieldCode);
-                        String inverseRefColumnProperty = inverseRefColumnPropertyMap.get(fieldCode);
-                        // List<X> entityXList = entityXListMap.get(fieldCode);
-
-                        Collection<E> listForThisEntity = new ArrayList<E>();
-                        if (fieldCollectionType == FieldCollectionType.SET) {
-                            listForThisEntity = new HashSet<E>();
-                        }
-
-                        for (int k = 0; k < listAll.size(); k++) {
-                            E entityE = listAll.get(k);
-                            Field entityField, entity2Field, entityXField, entityXField2;
-                            try {
-                                entityField = entity.getClass().getDeclaredField(columnProperty);
-                                entityField.setAccessible(true);
-                                Object columnValue = entityField.get(entity);
-
-                                entity2Field = entityE.getClass().getDeclaredField(inverseColumnProperty);
-                                entity2Field.setAccessible(true);
-                                Object refColumnValue = entity2Field.get(entityE);
-
-                                // table1~table3&&table2~table3
-                                for (int x = 0; x < entityXList.size(); x++) {
-                                    X entityX = entityXList.get(x);
-
-                                    entityXField = entityX.getClass()
-                                            .getDeclaredField(JoinTableUtil.getRefColumnProperty(refColumn));
-                                    entityXField.setAccessible(true);
-                                    Object columnValueX = entityXField.get(entityX);
-
-                                    entityXField2 = entityX.getClass().getDeclaredField(
-                                            JoinTableUtil.getInverseRefColumnProperty(inverseRefColumn));
-                                    entityXField2.setAccessible(true);
-                                    Object refColumnValueX = entityXField2.get(entityX);
-
-                                    if (columnValueX != null && columnValue != null && refColumnValueX != null
-                                            && refColumnValue != null
-                                            && columnValueX.toString().equals(columnValue.toString())
-                                            && refColumnValueX.toString().equals(refColumnValue.toString())) {
-                                        listForThisEntity.add(entityE);
-                                    }
-                                }
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
-                            }
-
-                        }
-
-                        return (Set<E>) listForThisEntity;
+                        if (idList.size() == 0)
+                            return Sets.newHashSet();
                     }
 
+                    return common(field, entityXListMap, entity);
                 });
 
-                // 设置代理
-                try {
-                    field.set(entity, setForThisEntityProxy);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                field.set(entity, setForThisEntityProxy);
+
             }
-        } else {
-            for (int i = 0; i < this.list.size(); i++) {
-                T entity = list.get(i);
+        }
+        if (fieldCollectionType == FieldCollectionType.LIST) {
+            for (T entity : this.list) {
 
-                String columnProperty = columnPropertyMap.get(fieldCode);
-                String refColumnProperty = refColumnPropertyMap.get(fieldCode);
-                String inverseColumnProperty = inverseColumnPropertyMap.get(fieldCode);
-                String inverseRefColumnProperty = inverseRefColumnPropertyMap.get(fieldCode);
-                // List<X> entityXList = entityXListMap.get(fieldCode);
+                List<E> listForThisEntityProxy = (List<E>) Enhancer.create(List.class, (LazyLoader) () -> {
 
-                @SuppressWarnings("unchecked")
-                List<E> listForThisEntityProxy = (List<E>) Enhancer.create(List.class, new LazyLoader() {
+                    if (!isExeSqlMap.get(field.getName())) {
+                        List<X> entityXList = getXes(field, entityXListMap);
 
-                    @Override
-                    public List<E> loadObject() {
+                        List<Serializable> idList = Lists.newArrayList();
+                        List<Serializable> idListDistinct = Lists.newArrayList();
 
-                        List<X> entityXList = null;
-                        if (isExeSqlMap.get(field.getName()) == false) {
-                            isExeSqlMap.put(field.getName(), true);
+                        CommonCode.extracted(inverseRefColumnProperty, entityXList, idList);
+                        CommonCode.buildList(idListDistinct, idList);
 
-                            if (columnPropertyValueList.size() == 1) {
-                                entityXList = mapperX
-                                        .selectList(new QueryWrapper<X>().select("DISTINCT " + inverseRefColumn)
-                                                .eq(refColumn, columnPropertyValueList.get(0)));
-                            } else {
-                                entityXList = mapperX.selectList(new QueryWrapper<X>()
-                                        .select("DISTINCT " + inverseRefColumn).in(refColumn, columnPropertyValueList));
-                            }
-                            if (!entityXListMap.containsKey(fieldCode)) {
-                                entityXListMap.put(fieldCode, entityXList);
-                            }
-
-                            List<Serializable> idList = Lists.newArrayList();
-                            List<Serializable> idListDistinct = Lists.newArrayList();
-
-                            CommonCode.extracted(inverseRefColumnProperty,entityXList, idList);
-                            CommonCode.buildList(idListDistinct, idList);
-
-                            idList = idListDistinct;
-
-                            if (idList.size() == 1) {
-                                collectionMap.put(field.getName(),
-                                        mapper.selectList(new QueryWrapper<E>().eq(inverseRefColumn, idList.get(0))));
-                            } else if (idList.size() > 1) {
-                                collectionMap.put(field.getName(), mapper.selectList(
-                                        new QueryWrapper<E>().in(inverseRefColumn, (ArrayList<Serializable>) idList)));
-                            }
-
-                            isExeSqlMap.put(field.getName(), true);
-
-                            if (idList.size() == 0) {
-                                return new ArrayList<E>();
-                            }
-
+                        QueryWrapper<E> filter = new QueryWrapper<>();
+                        if (idListDistinct.size() == 1) {
+                            filter.eq(inverseRefColumn, idListDistinct.get(0));
+                            collectionMap.put(field.getName(), mapper.selectList(filter));
+                        } else if (idListDistinct.size() > 1) {
+                            filter.in(inverseRefColumn, idListDistinct);
+                            collectionMap.put(field.getName(), mapper.selectList(filter));
                         }
 
-                        entityXList = entityXListMap.get(fieldCode);
+                        isExeSqlMap.put(field.getName(), true);
 
-                        List<E> listAll = (List<E>) collectionMap.get(field.getName());
+                        if (idListDistinct.size() == 0)
+                            return Lists.newArrayList();
 
-                        String columnProperty = columnPropertyMap.get(fieldCode);
-                        String refColumnProperty = refColumnPropertyMap.get(fieldCode);
-                        String inverseColumnProperty = inverseColumnPropertyMap.get(fieldCode);
-                        String inverseRefColumnProperty = inverseRefColumnPropertyMap.get(fieldCode);
-                        // List<X> entityXList = entityXListMap.get(fieldCode);
-
-                        Collection<E> listForThisEntity = new ArrayList<E>();
-                        if (fieldCollectionType == FieldCollectionType.SET) {
-                            listForThisEntity = Sets.newHashSet();
-                        }
-
-                        for (int k = 0; k < listAll.size(); k++) {
-                            E entityE = listAll.get(k);
-                            Field entityField, entity2Field, entityXField, entityXField2;
-                            try {
-                                entityField = entity.getClass().getDeclaredField(columnProperty);
-                                entityField.setAccessible(true);
-                                Object columnValue = entityField.get(entity);
-
-                                entity2Field = entityE.getClass().getDeclaredField(inverseColumnProperty);
-                                entity2Field.setAccessible(true);
-                                Object refColumnValue = entity2Field.get(entityE);
-
-                                // table1~table3&&table2~table3
-                                for (int x = 0; x < entityXList.size(); x++) {
-                                    X entityX = entityXList.get(x);
-
-                                    entityXField = entityX.getClass()
-                                            .getDeclaredField(JoinTableUtil.getRefColumnProperty(refColumn));
-                                    entityXField.setAccessible(true);
-                                    Object columnValueX = entityXField.get(entityX);
-
-                                    entityXField2 = entityX.getClass().getDeclaredField(
-                                            JoinTableUtil.getInverseRefColumnProperty(inverseRefColumn));
-                                    entityXField2.setAccessible(true);
-                                    Object refColumnValueX = entityXField2.get(entityX);
-
-                                    if (columnValueX != null && columnValue != null && refColumnValueX != null
-                                            && refColumnValue != null
-                                            && columnValueX.toString().equals(columnValue.toString())
-                                            && refColumnValueX.toString().equals(refColumnValue.toString())) {
-                                        listForThisEntity.add(entityE);
-                                    }
-                                }
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
-                            }
-
-                        }
-
-                        return (List<E>) listForThisEntity;
                     }
-
+                    return common(field, entityXListMap, entity);
                 });
 
-                // 设置代理
-                try {
-                    field.set(entity, listForThisEntityProxy);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                field.set(entity, listForThisEntityProxy);
+
             }
         }
 
     }
 
+    private List<X> getXes(Field field, Map<String, List<X>> entityXListMap) {
+        isExeSqlMap.put(field.getName(), true);
+        QueryWrapper<X> filter = new QueryWrapper<X>();
+        if (columnPropertyValueList.size() == 1)
+            filter.eq(refColumn, columnPropertyValueList.get(0));
+        else
+            filter.in(refColumn, columnPropertyValueList);
 
-
-    public static <E> List<E> getListResult(Field field) {
-        return null;
+        List<X> entityXList = mapperX.selectList(filter);
+        if (!entityXListMap.containsKey(fieldCode))
+            entityXListMap.put(fieldCode, entityXList);
+        
+        return entityXList;
     }
+
+    private Collection<E> common(Field field, Map<String, List<X>> entityXListMap, T entity) throws NoSuchFieldException, IllegalAccessException {
+        List<X> entityXList = entityXListMap.get(fieldCode);
+
+        List<E> listAll = (List<E>) collectionMap.get(field.getName());
+
+        String columnProperty1 = columnPropertyMap.get(fieldCode);
+        String refColumnProperty1 = refColumnPropertyMap.get(fieldCode);
+        String inverseColumnProperty1 = inverseColumnPropertyMap.get(fieldCode);
+        String inverseRefColumnProperty1 = inverseRefColumnPropertyMap.get(fieldCode);
+
+        Collection<E> listForThisEntity = fieldCollectionType == FieldCollectionType.SET ? Sets.newHashSet() : Lists.newArrayList();
+
+        for (E entityE : listAll) {
+            Field entityField, entity2Field, entityXField, entityXField2;
+
+            entityField = entity.getClass().getDeclaredField(columnProperty1);
+            entityField.setAccessible(true);
+            Object columnValue = entityField.get(entity);
+
+            entity2Field = entityE.getClass().getDeclaredField(inverseColumnProperty1);
+            entity2Field.setAccessible(true);
+            Object refColumnValue = entity2Field.get(entityE);
+
+            for (X entityX : entityXList) {
+                entityXField = entityX.getClass().getDeclaredField(JoinTableUtil.getRefColumnProperty(refColumn));
+                entityXField.setAccessible(true);
+                Object columnValueX = entityXField.get(entityX);
+
+                entityXField2 = entityX.getClass().getDeclaredField(JoinTableUtil.getInverseRefColumnProperty(inverseRefColumn));
+                entityXField2.setAccessible(true);
+                Object refColumnValueX = entityXField2.get(entityX);
+
+                if (columnValueX != null && columnValue != null && refColumnValueX != null && refColumnValue != null && columnValueX.toString().equals(columnValue.toString())
+                        && refColumnValueX.toString().equals(refColumnValue.toString())) {
+                    listForThisEntity.add(entityE);
+                }
+            }
+
+        }
+
+        return listForThisEntity;
+    }
+
 }

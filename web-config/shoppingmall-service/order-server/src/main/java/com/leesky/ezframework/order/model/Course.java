@@ -1,5 +1,7 @@
 package com.leesky.ezframework.order.model;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -8,9 +10,8 @@ import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.JoinTable;
 import com.leesky.ezframework.mybatis.annotation.ManyToMany;
 import com.leesky.ezframework.order.mapper.StudentCourseMapper;
-import lombok.Data;
 
-import java.util.Set;
+import lombok.Data;
 
 @Data
 @TableName("course")
@@ -24,5 +25,5 @@ public class Course {
     @JoinTable(targetMapper = StudentCourseMapper.class)
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @InverseJoinColumn(name = "child_id", referencedColumnName = "student_id")
-    private Set<Child> students;
+    private List<Child> students;
 }

@@ -1,16 +1,17 @@
 package com.leesky.ezframework.order.action;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.leesky.ezframework.mybatis.mapper.AutoMapper;
-import com.leesky.ezframework.order.model.Child;
-import com.leesky.ezframework.order.service.IChildService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.leesky.ezframework.mybatis.mapper.AutoMapper;
+import com.leesky.ezframework.order.model.Child;
+import com.leesky.ezframework.order.service.IChildService;
 
 
 @RestController
@@ -34,7 +35,7 @@ public class ChildController {
 	@RequestMapping(value = "childs")
 	public List<Child> list() {
 		List<Child> childs = childService.list();
-this.autoMapper.mapperEntityList(childs,"teachers");
+
 		return childs;
 	}
 	
