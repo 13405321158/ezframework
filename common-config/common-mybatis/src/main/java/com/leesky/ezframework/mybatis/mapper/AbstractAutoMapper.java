@@ -1,34 +1,12 @@
 package com.leesky.ezframework.mybatis.mapper;
 
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.LazyLoader;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.leesky.ezframework.mybatis.annotation.AutoLazy;
-import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.ManyToMany;
-import com.leesky.ezframework.mybatis.annotation.ManyToOne;
-import com.leesky.ezframework.mybatis.annotation.OneToMany;
-import com.leesky.ezframework.mybatis.annotation.OneToOne;
+import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.enums.FetchType;
 import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
@@ -39,6 +17,17 @@ import com.leesky.ezframework.mybatis.result.OneToManyResult;
 import com.leesky.ezframework.mybatis.result.OneToOneResult;
 import com.leesky.ezframework.mybatis.utils.InverseJoinColumnUtil;
 import com.leesky.ezframework.mybatis.utils.JoinColumnUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.LazyLoader;
+
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @SuppressWarnings({"unused", "unchecked"})
 public abstract class AbstractAutoMapper {
@@ -74,7 +63,7 @@ public abstract class AbstractAutoMapper {
 
         return entityPage;
     }
-
+    @SuppressWarnings("static-access")
     public <T, E> T oneToMany(T entity, String propertyName, boolean fetchEager) {
         if (!entityMap.containsKey(entity.getClass().getName() + "." + RelationType.ONETOMANY.name())) {
             return entity;
@@ -153,7 +142,7 @@ public abstract class AbstractAutoMapper {
                         enhancer.setSuperclass(ArrayList.class);
 
                         if (fc.getFieldCollectionType() == FieldCollectionType.SET) {
-                            @SuppressWarnings("static-access")
+
                             Set<E> set = (Set<E>) enhancer.create(Set.class, (LazyLoader) () -> {
                                 Class<?> mapperClass = fc.getMapperClass();
                                 BaseMapper<E> mapper = (BaseMapper<E>) factory.getObject().getMapper(mapperClass);
@@ -163,7 +152,7 @@ public abstract class AbstractAutoMapper {
 
                             fc.setFieldValueBySet(set);
                         } else {
-                            @SuppressWarnings("static-access")
+
                             List<E> list = (List<E>) enhancer.create(List.class, (LazyLoader) () -> {
                                 Class<?> mapperClass = fc.getMapperClass();
                                 BaseMapper<E> mapper = (BaseMapper<E>) factory.getObject().getMapper(mapperClass);
