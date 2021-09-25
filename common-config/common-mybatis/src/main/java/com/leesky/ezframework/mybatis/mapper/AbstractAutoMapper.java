@@ -1,26 +1,14 @@
 package com.leesky.ezframework.mybatis.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.leesky.ezframework.mybatis.annotation.*;
-import com.leesky.ezframework.mybatis.condition.FieldCondition;
-import com.leesky.ezframework.mybatis.enums.FetchType;
-import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
-import com.leesky.ezframework.mybatis.enums.RelationType;
-import com.leesky.ezframework.mybatis.exception.ManyToManyException;
-import com.leesky.ezframework.mybatis.exception.ManyToOneException;
-import com.leesky.ezframework.mybatis.exception.OneToManyException;
-import com.leesky.ezframework.mybatis.exception.OneToOneException;
-import com.leesky.ezframework.mybatis.result.ManyToManyResult;
-import com.leesky.ezframework.mybatis.result.ManyToOneResult;
-import com.leesky.ezframework.mybatis.result.OneToManyResult;
-import com.leesky.ezframework.mybatis.result.OneToOneResult;
-import com.leesky.ezframework.mybatis.utils.InverseJoinColumnUtil;
-import com.leesky.ezframework.mybatis.utils.JoinColumnUtil;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -29,9 +17,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.LazyLoader;
 
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.*;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.leesky.ezframework.mybatis.annotation.AutoLazy;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.annotation.ManyToMany;
+import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.OneToMany;
+import com.leesky.ezframework.mybatis.annotation.OneToOne;
+import com.leesky.ezframework.mybatis.condition.FieldCondition;
+import com.leesky.ezframework.mybatis.enums.FetchType;
+import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
+import com.leesky.ezframework.mybatis.enums.RelationType;
+import com.leesky.ezframework.mybatis.result.ManyToManyResult;
+import com.leesky.ezframework.mybatis.result.ManyToOneResult;
+import com.leesky.ezframework.mybatis.result.OneToManyResult;
+import com.leesky.ezframework.mybatis.result.OneToOneResult;
+import com.leesky.ezframework.mybatis.utils.InverseJoinColumnUtil;
+import com.leesky.ezframework.mybatis.utils.JoinColumnUtil;
 
 @SuppressWarnings({"unused", "unchecked"})
 public abstract class AbstractAutoMapper {
@@ -122,7 +129,7 @@ public abstract class AbstractAutoMapper {
                         columnField.setAccessible(true);
                         columnPropertyValue = (Serializable) columnField.get(entity);
                     } catch (Exception e) {
-                        throw new OneToManyException("refProperty/refPropertyValue one to many id is not correct!");
+                        throw new RuntimeException("refProperty/refPropertyValue one to many id is not correct!");
                     }
 
                     if (columnPropertyValue == null) {
@@ -232,7 +239,7 @@ public abstract class AbstractAutoMapper {
                     columnField.setAccessible(true);
                     columnPropertyValue = (Serializable) columnField.get(entity);
                 } catch (Exception e) {
-                    throw new OneToManyException("refProperty/refPropertyValue one to many(List) id is not correct!");
+                    throw new RuntimeException("refProperty/refPropertyValue one to many(List) id is not correct!");
                 }
 
                 CommonCode.extracted(o2mMaps, fieldCode, fc, lazy, column, refColumn, refColumnProperty, columnProperty, columnPropertyValue, factory);
@@ -385,7 +392,7 @@ public abstract class AbstractAutoMapper {
                         columnField.setAccessible(true);
                         columnPropertyValue = (Serializable) columnField.get(entity);
                     } catch (Exception e) {
-                        throw new OneToOneException("refProperty/refPropertyValue one to one id is not correct!");
+                        throw new RuntimeException("refProperty/refPropertyValue one to one id is not correct!");
                     }
 
                     CommonCode.extracted(entity, field, fc, lazy, refColumn, columnPropertyValue, factory);
@@ -452,7 +459,7 @@ public abstract class AbstractAutoMapper {
                     columnField.setAccessible(true);
                     columnPropertyValue = (Serializable) columnField.get(entity);
                 } catch (Exception e) {
-                    throw new OneToOneException("refProperty/refPropertyValue one to one(List) id is not correct!");
+                    throw new RuntimeException("refProperty/refPropertyValue one to one(List) id is not correct!");
                 }
 
                 if (!o2oMaps.fieldClassMap.containsKey(fieldCode))
@@ -619,7 +626,7 @@ public abstract class AbstractAutoMapper {
                         columnField.setAccessible(true);
                         columnPropertyValue = (Serializable) columnField.get(entity);
                     } catch (Exception e) {
-                        throw new ManyToOneException("refProperty/refPropertyValue many to one id is not correct!");
+                        throw new RuntimeException("refProperty/refPropertyValue many to one id is not correct!");
                     }
                     CommonCode.extracted(entity, field, fc, lazy, refColumn, columnPropertyValue, factory);
 
@@ -704,7 +711,7 @@ public abstract class AbstractAutoMapper {
                     columnField.setAccessible(true);
                     columnPropertyValue = (Serializable) columnField.get(entity);
                 } catch (Exception e) {
-                    throw new ManyToOneException("refProperty/refPropertyValue many to one(List) id is not correct!");
+                    throw new RuntimeException("refProperty/refPropertyValue many to one(List) id is not correct!");
                 }
 
                 if (!m2oMaps.fieldClassMap.containsKey(fieldCode))
@@ -823,7 +830,8 @@ public abstract class AbstractAutoMapper {
         return entity;
     }
 
-    public <T, E, X> T manyToMany(T entity, String propertyName, boolean fetchEager) {
+    @SuppressWarnings("static-access")
+	public <T, E, X> T manyToMany(T entity, String propertyName, boolean fetchEager) {
         if (!entityMap.containsKey(entity.getClass().getName() + "." + RelationType.MANYTOMANY.name())) {
             return entity;
         }
@@ -876,7 +884,7 @@ public abstract class AbstractAutoMapper {
                         columnField.setAccessible(true);
                         columnPropertyValue = (Serializable) columnField.get(entity);
                     } catch (Exception e) {
-                        throw new ManyToManyException("refProperty/refPropertyValue many to many id is not correct!");
+                        throw new RuntimeException("refProperty/refPropertyValue many to many id is not correct!");
                     }
 
                     if (columnPropertyValue == null) {
@@ -915,7 +923,7 @@ public abstract class AbstractAutoMapper {
                         enhancer.setSuperclass(List.class);
 
                         if (fc.getFieldCollectionType() == FieldCollectionType.SET) {
-                            @SuppressWarnings("static-access")
+
                             Set<E> set = (Set<E>) enhancer.create(Set.class, (LazyLoader) () -> {
                                 String inverseRefColumn = InverseJoinColumnUtil.getInverseRefColumn(fc);
                                 Serializable[] ids = CommonCode.getSerializable(fc, refColumn, columnPropertyValueX, inverseRefColumn, factory);
@@ -929,8 +937,8 @@ public abstract class AbstractAutoMapper {
                                 if (CollectionUtils.isEmpty(idList))
                                     return Sets.newHashSet();
 
-                                Class<E> entityClass2 = (Class<E>) fc.getFieldClass();
                                 Class<?> mapperClass = fc.getMapperClass();
+                                Class<E> entityClass2 = (Class<E>) fc.getFieldClass();
                                 BaseMapper<E> mapper = (BaseMapper<E>) factory.getObject().getMapper(mapperClass);
                                 List<E> list = mapper.selectBatchIds(idList);
                                 return list != null ? Sets.newHashSet(list) : Sets.newHashSet();
@@ -938,7 +946,7 @@ public abstract class AbstractAutoMapper {
 
                             fc.setFieldValueBySet(set);
                         } else {
-                            @SuppressWarnings("static-access")
+
                             List<E> list = (List<E>) enhancer.create(List.class, (LazyLoader) () -> {
                                 String inverseRefColumn = InverseJoinColumnUtil.getInverseRefColumn(fc);
                                 Serializable[] ids = CommonCode.getSerializable(fc, refColumn, columnPropertyValueX, inverseRefColumn, factory);
@@ -1004,7 +1012,7 @@ public abstract class AbstractAutoMapper {
             proNames = entityMap.get(entityClass.getName() + "." + RelationType.MANYTOMANY.name());
         }
 
-        if (proNames == null || proNames.length == 0) {
+        if (ArrayUtils.isEmpty(proNames)) {
             return entityList;
         }
 
@@ -1040,7 +1048,7 @@ public abstract class AbstractAutoMapper {
                     columnField.setAccessible(true);
                     columnPropertyValue = (Serializable) columnField.get(entity);
                 } catch (Exception e) {
-                    throw new ManyToManyException("refProperty/refPropertyValue many to many(List) id is not correct!");
+                    throw new RuntimeException("refProperty/refPropertyValue many to many(List) id is not correct!");
                 }
 
                 CommonCode.extracted(m2mMaps, fieldCode, fc, lazy, column, refColumn, refColumnProperty, columnProperty, columnPropertyValue, factory);
@@ -1116,9 +1124,9 @@ public abstract class AbstractAutoMapper {
                     manyToManyResult.setEntityXListMap(entityXListMap);
 
 
-                if (CollectionUtils.isEmpty(entityXList)) {
+                if (CollectionUtils.isEmpty(entityXList)) 
                     continue;
-                }
+                
 
                 columnPropertyValueList = CommonCode.getSerializable(inverseRefColumnProperty, entityXList);
 
@@ -1136,7 +1144,8 @@ public abstract class AbstractAutoMapper {
                 manyToManyResult.handle(field);
             } else {// lazy
                 Class<?> c = entityFirst.getClass();
-                boolean needLazyProcessor = c.isAnnotationPresent(AutoLazy.class) && c.getDeclaredAnnotation(AutoLazy.class).value();
+                boolean needLazyProcessor = c.isAnnotationPresent(AutoLazy.class) 
+                		&& c.getDeclaredAnnotation(AutoLazy.class).value();
 
                 if (!needLazyProcessor)
                     continue;

@@ -1,25 +1,33 @@
 package com.leesky.ezframework.mybatis.condition;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.google.common.collect.Sets;
-import com.leesky.ezframework.mybatis.annotation.*;
-import com.leesky.ezframework.mybatis.enums.FetchType;
-import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
-import com.leesky.ezframework.mybatis.enums.RelationType;
-import com.leesky.ezframework.mybatis.exception.OneToManyException;
-import com.leesky.ezframework.mybatis.exception.OneToOneException;
-import com.leesky.ezframework.mybatis.exception.RelationException;
-import lombok.Data;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.ObjectFactory;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.ObjectFactory;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.google.common.collect.Sets;
+import com.leesky.ezframework.mybatis.annotation.EntityMapper;
+import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.annotation.JoinColumns;
+import com.leesky.ezframework.mybatis.annotation.JoinTable;
+import com.leesky.ezframework.mybatis.annotation.Lazy;
+import com.leesky.ezframework.mybatis.annotation.ManyToMany;
+import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.OneToMany;
+import com.leesky.ezframework.mybatis.annotation.OneToOne;
+import com.leesky.ezframework.mybatis.enums.FetchType;
+import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
+import com.leesky.ezframework.mybatis.enums.RelationType;
+
+import lombok.Data;
 
 @Data
 public class FieldCondition<T> {
@@ -164,7 +172,7 @@ public class FieldCondition<T> {
             }
 
             if (mapperClass == null) {
-                throw new RelationException(
+                throw new RuntimeException(
                         "[Class: FieldCondition=>FieldCondition(T entity, Field field, boolean fetchEager, ObjectFactory<SqlSession> factory)],RelationException By: load Class(Mapper Interface):"
                                 + this.getFieldClass().getSimpleName() + "Mapper");
             }
@@ -197,7 +205,7 @@ public class FieldCondition<T> {
                 }
 
                 if (!isMapperFound) {
-                    throw new RelationException(
+                    throw new RuntimeException(
                             "[Class: FieldCondition=>FieldCondition(T entity, Field field, boolean fetchEager, ObjectFactory<SqlSession> factory)],RelationException By: load Class(Mapper Interface):"
                                     + entity.getClass().getSimpleName() + this.getFieldClass().getSimpleName()
                                     + "Mapper" + " Or " + this.getFieldClass().getSimpleName()
@@ -225,7 +233,7 @@ public class FieldCondition<T> {
                 }
 
             } catch (Exception e) {
-                throw new OneToManyException(String.format(this.ex, entity, field.getName()));
+                throw new RuntimeException(String.format(this.ex, entity, field.getName()));
             }
         }
     }
@@ -236,7 +244,7 @@ public class FieldCondition<T> {
             try {
                 field.set(entity, set);
             } catch (Exception e) {
-                throw new OneToManyException(String.format(this.ex, entity, field.getName()));
+                throw new RuntimeException(String.format(this.ex, entity, field.getName()));
             }
         }
     }
@@ -246,7 +254,7 @@ public class FieldCondition<T> {
         try {
             field.set(entity, e);
         } catch (Exception ex) {
-            throw new OneToOneException(String.format(this.ex, entity, field.getName()));
+            throw new RuntimeException(String.format(this.ex, entity, field.getName()));
         }
     }
 }

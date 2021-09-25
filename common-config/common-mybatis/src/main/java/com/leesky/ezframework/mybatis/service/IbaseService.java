@@ -1,86 +1,119 @@
 package com.leesky.ezframework.mybatis.service;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.leesky.ezframework.mybatis.mapper.AutoMapper;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public interface IbaseService<T> extends IService<T> {
-	default T getById(Serializable id) {
-		if (isAutoMapperEnabled()) {
-			return getAutoMapper().mapperEntity(getBaseMapper().selectById(id));
-		} else {
-			return getBaseMapper().selectById(id);
-		}
-	}
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
-	default List<T> listByIds(Collection<? extends Serializable> idList) {
-		if (isAutoMapperEnabled()) {
-			return getAutoMapper().mapperEntityList(getBaseMapper().selectBatchIds(idList));
-		} else {
-			return getBaseMapper().selectBatchIds(idList);
-		}
-	}
+public interface IbaseService<T> {
 
-	default List<T> listByMap(Map<String, Object> columnMap) {
-		if (isAutoMapperEnabled()) {
-			return getAutoMapper().mapperEntityList(getBaseMapper().selectByMap(columnMap));
-		} else {
-			return getBaseMapper().selectByMap(columnMap);
-		}
-	}
+	/**
+	 * <li>根据记录主键查询
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午12:39
+	 **/
+	T findOne(Serializable id);
 
-	default T getOne(Wrapper<T> queryWrapper) {
-		if (isAutoMapperEnabled()) {
-			return getAutoMapper().mapperEntity(getOne(queryWrapper, true));
-		} else {
-			return getOne(queryWrapper, true);
-		}
-	}
+	/**
+	 * <li>自定义查询条件，返回一条记录
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午12:39
+	 **/
+	T findOne(Wrapper<T> filter);
 
-	default List<T> list(Wrapper<T> queryWrapper) {
-		if (isAutoMapperEnabled()) {
-			return getAutoMapper().mapperEntityList(getBaseMapper().selectList(queryWrapper));
-		} else {
-			return getBaseMapper().selectList(queryWrapper);
-		}
-	}
+	/**
+	 * <li>查询全部
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午12:39
+	 **/
+	List<T> findAll();
 
-	default <E extends IPage<T>> E page(E page, Wrapper<T> queryWrapper) {
-		if (isAutoMapperEnabled()) {
-			return getAutoMapper().mapperEntityPage(getBaseMapper().selectPage(page, queryWrapper));
-		} else {
-			return getBaseMapper().selectPage(page, queryWrapper);
-		}
-	}
+	/**
+	 * <li>根据主键集合查询
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午12:39
+	 **/
+	List<T> findAll(Collection<? extends Serializable> idList);
 
-	default <E extends IPage<T>> E page(E page) {
-		if (isAutoMapperEnabled()) {
-			return getAutoMapper().mapperEntityPage(getBaseMapper().selectPage(page, Wrappers.emptyWrapper()));
-		} else {
-			return getBaseMapper().selectPage(page, Wrappers.emptyWrapper());
-		}
-	}
+	/**
+	 * 描述：根据字段集合(map)查询
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:00:26
+	 */
+	List<T> findAll(Map<String, Object> columnMap);
 
-	AutoMapper getAutoMapper();
+	/**
+	 * <li>根据wrapper过滤器 查询
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:15:49
+	 */
+	List<T> findAll(Wrapper<T> filter);
 
-	boolean isAutoMapperEnabled();
+	/**
+	 * <li>根据wrapper过滤器 分页查询
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:20:12
+	 */
+	<E extends IPage<T>> E findByPage(E page, Wrapper<T> filter);
 
-	<E extends IPage<T>> void initialize(Object t, String... propertyNames);
+	/**
+	 * <li>无条件 分页查询
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:20:12
+	 */
+	<E extends IPage<T>> E findByPage(E page);
 
+	/**
+	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是单体 Bean
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:43:04
+	 */
 	void initializeEntity(T t, String... propertyNames);
 
-	void initializeList(List<T> list, String... propertyNames);
-
+	/**
+	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是set集合
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:43:04
+	 */
 	void initializeSet(Set<T> list, String... propertyNames);
 
+	/**
+	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是list集合
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:43:04
+	 */
+	void initializeList(List<T> list, String... propertyNames);
+
+	/**
+	 * <li>根据 propertyNames 自动加载映射关系</li>；
+	 * <li>适用结果集是object[可以是list或set或page或单体bean]</li>
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:43:04
+	 */
+	<E extends IPage<T>> void initialize(Object t, String... propertyNames);
+
+	/**
+	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是page
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:43:04
+	 */
 	<E extends IPage<T>> void initializePage(E page, String... propertyNames);
 
 }

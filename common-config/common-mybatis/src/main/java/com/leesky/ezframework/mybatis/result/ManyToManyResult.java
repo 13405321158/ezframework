@@ -95,10 +95,12 @@ public class ManyToManyResult<T, E, X> {
             String inverseRefColumnProperty = inverseRefColumnPropertyMap.get(fieldCode);
             List<X> entityXList = entityXListMap.get(fieldCode);
 
-            Collection<E> listForThisEntity = fieldCollectionType == FieldCollectionType.SET ? Sets.newHashSet() : Lists.newArrayList();
+
             try {
                 for (T entity : list) {
-
+                	
+                    Collection<E> listForThisEntity = fieldCollectionType == FieldCollectionType.SET ? Sets.newHashSet() : Lists.newArrayList();
+                    
                     for (E entityE : CollectionAll) {
                         Field entityField, entity2Field, entityXField, entityXField2;
 
@@ -259,7 +261,8 @@ public class ManyToManyResult<T, E, X> {
                 entityXField2.setAccessible(true);
                 Object refColumnValueX = entityXField2.get(entityX);
 
-                if (columnValueX != null && columnValue != null && refColumnValueX != null && refColumnValue != null && columnValueX.toString().equals(columnValue.toString())
+                if (columnValueX != null && columnValue != null && refColumnValueX != null && refColumnValue != null 
+                		&& columnValueX.toString().equals(columnValue.toString())
                         && refColumnValueX.toString().equals(refColumnValue.toString())) {
                     listForThisEntity.add(entityE);
                 }

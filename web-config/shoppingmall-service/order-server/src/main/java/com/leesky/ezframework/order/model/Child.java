@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.JoinTable;
+import com.leesky.ezframework.mybatis.annotation.Lazy;
 import com.leesky.ezframework.mybatis.annotation.ManyToMany;
 import com.leesky.ezframework.mybatis.annotation.ManyToOne;
 import com.leesky.ezframework.order.mapper.StudentCourseMapper;
@@ -40,15 +41,13 @@ public class Child {
 	@JoinColumn(name = "lao_ma_id", referencedColumnName = "woman_id")
 	private Woman laoMa;
 
-
-//@Lazy(false)
+	@Lazy(false)
 	@ManyToMany
 	@TableField(exist = false)
 	@JoinTable(targetMapper = StudentCourseMapper.class)
 	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
 	@InverseJoinColumn(name = "course_id", referencedColumnName = "course_id")
 	private List<Course> courses;
-
 
 	@ManyToMany
 	@TableField(exist = false)

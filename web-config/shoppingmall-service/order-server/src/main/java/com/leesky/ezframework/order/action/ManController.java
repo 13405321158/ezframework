@@ -27,7 +27,7 @@ public class ManController {
 	@ResponseBody
 	@RequestMapping(value = "man/{id}")
 	public Man getMan(@PathVariable("id") Long id) {
-		Man man = manService.getById(id);
+		Man man = manService.findOne(id);
 		return man;
 	}
 
@@ -36,7 +36,7 @@ public class ManController {
 
 	@GetMapping(value = "mans")
 	public List<Man> listMans() {
-		List<Man> list = manService.list();
+		List<Man> list = manService.findAll();
 //		autoMapper.mapperEntityList(list,"laoPo");
 //		autoMapper.mapperEntityList(list,"tels");
 		return list;

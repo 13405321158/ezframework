@@ -1,9 +1,7 @@
 package com.leesky.ezframework.mybatis.service.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,192 +12,214 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.leesky.ezframework.mybatis.annotation.DisableAutoMapper;
 import com.leesky.ezframework.mybatis.mapper.AutoMapper;
 import com.leesky.ezframework.mybatis.service.IbaseService;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<BaseMapper<T>, T> implements IbaseService<T> {
-	@Autowired(required = false)
+
+	@Autowired
 	protected AutoMapper autoMapper;
 
-	private boolean autoMapperEnabled = true;
+	protected boolean autoMapperEnabled = true;
 
 	public BaseServiceImpl() {
 		Class<?> clazz = this.getClass();
-		if (clazz.getAnnotation(DisableAutoMapper.class) != null
-				&& clazz.getAnnotation(DisableAutoMapper.class).value() == true) {
+		if (clazz.getAnnotation(DisableAutoMapper.class) != null && clazz.getAnnotation(DisableAutoMapper.class).value() == true)
 			autoMapperEnabled = false;
-		}
+
 	}
+
+	/**
+	 * 描述: 根据记录主键查询
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午12:39
+	 **/
+	@Override
+	@Transactional(readOnly = true)
+	public T findOne(Serializable id) {
+		T data = this.baseMapper.selectById(id);
+		return isAutoMapperEnabled() ? this.autoMapper.mapperEntity(data) : data;
+	}
+
+	/**
+	 * 描述: 自定义查询条件，返回一条记录
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午12:39
+	 **/
+	@Override
+	@Transactional(readOnly = true)
+	public T findOne(Wrapper<T> filter) {
+		T data = this.baseMapper.selectOne(filter);
+
+		return isAutoMapperEnabled() ? this.autoMapper.mapperEntity(data) : data;
+	}
+	/**
+	 * 描述: 查询全部
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午12:39
+	 **/
+	@Override
+	public List<T> findAll() {
+		List<T> data = this.baseMapper.selectList(Wrappers.emptyWrapper());
+
+		return isAutoMapperEnabled() ? this.autoMapper.mapperEntityList(data) : data;
+
+	}
+	/**
+	 * 描述: 根据主键集合查询
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午12:39
+	 **/
+	@Override
+	public List<T> findAll(Collection<? extends Serializable> idList) {
+		List<T> data = this.baseMapper.selectBatchIds(idList);
+
+		return isAutoMapperEnabled() ? this.autoMapper.mapperEntityList(data) : data;
+
+	}
+
+	/**
+	 * 描述：根据字段集合(map)查询
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:00:26
+	 */
+	@Override
+	public List<T> findAll(Map<String, Object> columnMap) {
+		List<T> data = this.baseMapper.selectByMap(columnMap);
+
+		return isAutoMapperEnabled() ? this.autoMapper.mapperEntityList(data) : data;
+
+	}
+
+	/**
+	 * 描述:根据wrapper过滤器 查询
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:15:49
+	 */
+	@Override
+	public List<T> findAll(Wrapper<T> filter) {
+		List<T> data = this.baseMapper.selectList(filter);
+
+		return isAutoMapperEnabled() ? this.autoMapper.mapperEntityList(data) : data;
+
+	}
+
+	/**
+	 * 描述:根据wrapper过滤器 分页查询
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:20:12
+	 */
+	@Override
+	public <E extends IPage<T>> E findByPage(E page, Wrapper<T> filter) {
+		E data = this.baseMapper.selectPage(page, filter);
+
+		return isAutoMapperEnabled() ? this.autoMapper.mapperEntityPage(data) : data;
+	}
+
+	/**
+	 * 描述:无条件 分页查询
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:20:12
+	 */
+	@Override
+	public <E extends IPage<T>> E findByPage(E page) {
+		E data = this.baseMapper.selectPage(page, Wrappers.emptyWrapper());
+
+		return isAutoMapperEnabled() ? this.autoMapper.mapperEntityPage(data) : data;
+
+	}
+
+	/**
+	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是单体 Bean
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:43:04
+	 */
 
 	@Override
-	public AutoMapper getAutoMapper() {
+	@Transactional(readOnly = true)
+	public void initializeEntity(T t, String... propertyNames) {
+		for (String propertyName : propertyNames)
+			autoMapper.mapperEntity(t, propertyName);
 
-		return this.autoMapper;
 	}
-
+	/**
+	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是list集合
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:43:04
+	 */
 	@Override
-	public boolean isAutoMapperEnabled() {
-		return autoMapperEnabled;
-	}
+	@Transactional(readOnly = true)
+	public void initializeList(List<T> list, String... propertyNames) {
+		for (String propertyName : propertyNames)
+			autoMapper.mapperEntityList(list, propertyName);
 
-	public void setAutoMapperEnabled(boolean autoMapperEnabled) {
-		this.autoMapperEnabled = autoMapperEnabled;
 	}
-
+	/**
+	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是set集合
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:43:04
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public void initializeSet(Set<T> set, String... propertyNames) {
+		for (String propertyName : propertyNames) 
+			autoMapper.mapperEntitySet(set, propertyName);
+		
+	}
+	/**
+	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是page
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:43:04
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public <E extends IPage<T>> void initializePage(E page, String... propertyNames) {
+		for (String propertyName : propertyNames) 
+			autoMapper.mapperEntityPage(page, propertyName);
+		
+	}
+	
+	/**
+	 * <li>根据 propertyNames 自动加载映射关系</li>；
+	 * <li>适用结果集是object[可以是list或set或page或单体bean]</li>
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年9月25日 上午8:43:04
+	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-	@Override
 	public <E extends IPage<T>> void initialize(Object object, String... propertyNames) {
 		if (object != null) {
-			if (object.getClass() == List.class || object.getClass() == ArrayList.class) {
+			if (object.getClass() == List.class)
 				initializeList((List<T>) object, propertyNames);
-			} else if (object.getClass() == Set.class || object.getClass() == HashSet.class) {
+			else if (object.getClass() == Set.class)
 				initializeSet((Set<T>) object, propertyNames);
-			} else if (object instanceof IPage) {
+			else if (object instanceof IPage)
 				initializePage((E) object, propertyNames);
-			} else {
+			else
 				initializeEntity((T) object, propertyNames);
-			}
+
 		}
 	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public void initializeEntity(T t, String... propertyNames) {
-		for (String propertyName : propertyNames) {
-			autoMapper.mapperEntity(t, propertyName);
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public void initializeList(List<T> list, String... propertyNames) {
-		for (String propertyName : propertyNames) {
-			autoMapper.mapperEntityList(list, propertyName);
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public void initializeSet(Set<T> set, String... propertyNames) {
-		for (String propertyName : propertyNames) {
-			autoMapper.mapperEntitySet(set, propertyName);
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public <E extends IPage<T>> void initializePage(E page, String... propertyNames) {
-		for (String propertyName : propertyNames) {
-			autoMapper.mapperEntityPage(page, propertyName);
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public T getOne(Wrapper<T> queryWrapper) {
-		T t = super.getOne(queryWrapper);
-		if (isAutoMapperEnabled()) {
-			autoMapper.mapperEntity(t);
-		}
-
-		return t;
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public T getOne(Wrapper<T> queryWrapper, boolean throwEx) {
-		if (isAutoMapperEnabled()) {
-			if (throwEx) {
-				return autoMapper.mapperEntity(baseMapper.selectOne(queryWrapper));
-			}
-			return autoMapper.mapperEntity(SqlHelper.getObject(log, baseMapper.selectList(queryWrapper)));
-		} else {
-			if (throwEx) {
-				return baseMapper.selectOne(queryWrapper);
-			}
-			return SqlHelper.getObject(log, baseMapper.selectList(queryWrapper));
-		}
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public T getById(Serializable id) {
-		T t = super.getById(id);
-		if (isAutoMapperEnabled()) {
-			autoMapper.mapperEntity(t);
-		}
-
-		return t;
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public List<T> list() {
-	
-		List<T> list = this.baseMapper.selectList(null);
-		if (isAutoMapperEnabled()) 
-			autoMapper.mapperEntityList(list);
-
-		return list;
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public List<T> list(Wrapper<T> queryWrapper) {
-		List<T> list = super.list(queryWrapper);
-		if (isAutoMapperEnabled()) {
-			autoMapper.mapperEntityList(list);
-		}
-
-		return list;
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public List<T> listByIds(Collection<? extends Serializable> idList) {
-		List<T> list = super.listByIds(idList);
-		if (isAutoMapperEnabled()) {
-			autoMapper.mapperEntityList(list);
-		}
-
-		return list;
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public List<T> listByMap(Map<String, Object> columnMap) {
-		List<T> list = super.listByMap(columnMap);
-		if (isAutoMapperEnabled()) {
-			autoMapper.mapperEntityList(list);
-		}
-
-		return list;
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public <E extends IPage<T>> E page(E page, Wrapper<T> queryWrapper) {
-		E ePage = super.page(page, queryWrapper);
-		if (isAutoMapperEnabled()) {
-			autoMapper.mapperEntityPage(ePage);
-		}
-
-		return ePage;
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public <E extends IPage<T>> E page(E page) {
-		E ePage = super.page(page);
-		if (isAutoMapperEnabled()) {
-			autoMapper.mapperEntityPage(ePage);
-		}
-
-		return ePage;
-	}
-
 }

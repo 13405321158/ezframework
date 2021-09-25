@@ -1,11 +1,11 @@
 package com.leesky.ezframework.mybatis.annotation;
 
-import com.leesky.ezframework.mybatis.enums.ConstraintMode;
-
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import com.leesky.ezframework.mybatis.enums.ConstraintMode;
 
 
 @Target({})

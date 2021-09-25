@@ -1,15 +1,13 @@
 package com.leesky.ezframework.mybatis.mapper;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.google.common.collect.Lists;
-import com.leesky.ezframework.mybatis.annotation.ManyToMany;
-import com.leesky.ezframework.mybatis.annotation.ManyToOne;
-import com.leesky.ezframework.mybatis.annotation.OneToMany;
-import com.leesky.ezframework.mybatis.annotation.OneToOne;
-import com.leesky.ezframework.mybatis.enums.RelationType;
-import com.leesky.ezframework.mybatis.exception.AutoMapperException;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -22,9 +20,16 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ClassUtils;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.*;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.google.common.collect.Lists;
+import com.leesky.ezframework.mybatis.annotation.ManyToMany;
+import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.OneToMany;
+import com.leesky.ezframework.mybatis.annotation.OneToOne;
+import com.leesky.ezframework.mybatis.enums.RelationType;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * AutoMapper for one2one/one2many/many2many
@@ -359,7 +364,7 @@ public class AutoMapper extends AbstractAutoMapper {
             }
 
         } catch (ClassNotFoundException e) {
-            throw new AutoMapperException("Error in scan entity bean");
+            throw new RuntimeException("Error in scan entity bean");
         }
     }
 
