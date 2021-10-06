@@ -1,9 +1,9 @@
 package com.leesky.ezframework.order.mapper;
 
 import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
-import com.leesky.ezframework.order.model.Tel;
+import com.leesky.ezframework.order.model.Man;
 
 
-public interface TelMapper extends IbaseMapper<Tel> {
+public interface ImanMapper extends IbaseMapper<Man> {
 
 }

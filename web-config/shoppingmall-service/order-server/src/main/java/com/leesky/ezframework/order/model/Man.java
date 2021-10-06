@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
-import com.leesky.ezframework.order.mapper.ChildMapper;
-import com.leesky.ezframework.order.mapper.CompanyMapper;
-import com.leesky.ezframework.order.mapper.TelMapper;
-import com.leesky.ezframework.order.mapper.WomanMapper;
+import com.leesky.ezframework.order.mapper.IchildMapper;
+import com.leesky.ezframework.order.mapper.IcompanyMapper;
+import com.leesky.ezframework.order.mapper.ItelMapper;
+import com.leesky.ezframework.order.mapper.IwomanMapper;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,25 +37,25 @@ public class Man extends BaseUuidModel {
     @OneToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "man_id")
-    @EntityMapper(targetMapper = TelMapper.class)
+    @EntityMapper(targetMapper = ItelMapper.class)
     private Set<Tel> tels;
 
     @OneToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "lao_han_id")
-	@EntityMapper(targetMapper = ChildMapper.class)
+	@EntityMapper(targetMapper = IchildMapper.class)
     private List<Child> waWa;
 
     @OneToOne
     @TableField(exist = false)
     @JoinColumn(name = "lao_po_id")
-    @EntityMapper(targetMapper = WomanMapper.class)
+    @EntityMapper(targetMapper = IwomanMapper.class)
     private Woman laoPo;
 
     @ManyToOne
     @TableField(exist = false)
     @JoinColumn(name = "company_id")
-    @EntityMapper(targetMapper = CompanyMapper.class)
+    @EntityMapper(targetMapper = IcompanyMapper.class)
     private Company company;
 
     public Man() {

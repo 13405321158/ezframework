@@ -9,8 +9,8 @@ import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.OneToMany;
 import com.leesky.ezframework.mybatis.annotation.OneToOne;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
-import com.leesky.ezframework.order.mapper.ChildMapper;
-import com.leesky.ezframework.order.mapper.ManMapper;
+import com.leesky.ezframework.order.mapper.IchildMapper;
+import com.leesky.ezframework.order.mapper.ImanMapper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,13 +29,13 @@ public class Woman extends BaseUuidModel {
 	@OneToOne
 	@TableField(exist = false)
 	@JoinColumn(name = "lao_gong_id")
-	@EntityMapper(targetMapper = ManMapper.class)
+	@EntityMapper(targetMapper = ImanMapper.class)
 	private Man laoGong;
 
 	@OneToMany
 	@TableField(exist = false)
 	@JoinColumn(referencedColumnName = "lao_ma_id")
-	@EntityMapper(targetMapper = ChildMapper.class)
+	@EntityMapper(targetMapper = IchildMapper.class)
 	private List<Child> waWa;
 
 	public Woman() {

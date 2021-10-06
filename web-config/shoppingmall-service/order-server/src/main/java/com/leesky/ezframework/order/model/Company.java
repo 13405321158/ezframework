@@ -8,7 +8,7 @@ import com.leesky.ezframework.mybatis.annotation.EntityMapper;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.OneToMany;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
-import com.leesky.ezframework.order.mapper.ManMapper;
+import com.leesky.ezframework.order.mapper.ImanMapper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +26,6 @@ public class Company extends BaseUuidModel {
     @OneToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "company_id")
-    @EntityMapper(targetMapper = ManMapper.class)
+    @EntityMapper(targetMapper = ImanMapper.class)
     private List<Man> employees;
 }

@@ -1,11 +1,11 @@
 package com.leesky.ezframework.order.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.mybatis.annotation.*;
-import com.leesky.ezframework.order.mapper.StudentCourseMapper;
-import com.leesky.ezframework.order.mapper.StudentTeacherMapper;
+import com.leesky.ezframework.mybatis.model.BaseUuidModel;
+import com.leesky.ezframework.order.mapper.IstudentCourseMapper;
+import com.leesky.ezframework.order.mapper.IstudentTeacherMapper;
 import lombok.Data;
 
 import java.util.List;
@@ -14,10 +14,9 @@ import java.util.Set;
 @Data
 //@AutoLazy(true)
 @TableName("cbm_child")
-public class Child {
+public class Child extends BaseUuidModel {
 
-	@TableId("child_id")
-	private Long id;
+	private static final long serialVersionUID = 4806381129926616239L;
 
 	private String name;
 
@@ -38,15 +37,22 @@ public class Child {
 	@Lazy(false)
 	@ManyToMany
 	@TableField(exist = false)
-	@JoinTable(targetMapper = StudentCourseMapper.class)
+	@JoinTable(targetMapper = IstudentCourseMapper.class)
 	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
 	@InverseJoinColumn(name = "course_id", referencedColumnName = "course_id")
 	private List<Course> courses;
 
 	@ManyToMany
 	@TableField(exist = false)
-	@JoinTable(targetMapper = StudentTeacherMapper.class)
+	@JoinTable(targetMapper = IstudentTeacherMapper.class)
 	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
 	@InverseJoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
 	private Set<Teacher> teachers;
+
+	public Child() {
+	}
+
+	public Child(String name) {
+		this.name = name;
+	}
 }

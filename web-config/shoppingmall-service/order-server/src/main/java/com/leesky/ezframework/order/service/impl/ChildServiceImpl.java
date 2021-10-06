@@ -1,7 +1,7 @@
 package com.leesky.ezframework.order.service.impl;
 
 import com.leesky.ezframework.mybatis.service.impl.BaseServiceImpl;
-import com.leesky.ezframework.order.mapper.ChildMapper;
+import com.leesky.ezframework.order.mapper.IchildMapper;
 import com.leesky.ezframework.order.model.Child;
 import com.leesky.ezframework.order.service.IChildService;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @Service
-public class ChildServiceImpl extends BaseServiceImpl<ChildMapper, Child> implements IChildService {
+public class ChildServiceImpl extends BaseServiceImpl<IchildMapper, Child> implements IChildService {
 	@Transactional
 	public List<Child> listByInitialize() {
 			List<Child> list = this.list();
