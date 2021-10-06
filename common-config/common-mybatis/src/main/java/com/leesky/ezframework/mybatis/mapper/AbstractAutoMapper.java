@@ -63,6 +63,7 @@ public abstract class AbstractAutoMapper {
 
         return entityPage;
     }
+
     @SuppressWarnings("static-access")
     public <T, E> T oneToMany(T entity, String propertyName, boolean fetchEager) {
         if (!entityMap.containsKey(entity.getClass().getName() + "." + RelationType.ONETOMANY.name())) {
@@ -669,13 +670,14 @@ public abstract class AbstractAutoMapper {
             proNames = new String[]{propertyName};
 
         Field[] fields = new Field[proNames.length];
-        for (int i = 0; i < proNames.length; i++) {
-            try {
-                fields[i] = entityClass.getDeclaredField(proNames[i]);
-            } catch (NoSuchFieldException | SecurityException e) {
-                e.printStackTrace();
-            }
+
+        try {
+            for (String str : proNames)
+                fields = ArrayUtils.add(fields, entityClass.getDeclaredField(str));
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
         }
+
 
         MapperUtil<T, E, ?> m2oMaps = new MapperUtil<>().buildMap_m2o();
         for (T entity : entityList) {
@@ -820,7 +822,7 @@ public abstract class AbstractAutoMapper {
     }
 
     @SuppressWarnings("static-access")
-	public <T, E, X> T manyToMany(T entity, String propertyName, boolean fetchEager) {
+    public <T, E, X> T manyToMany(T entity, String propertyName, boolean fetchEager) {
         if (!entityMap.containsKey(entity.getClass().getName() + "." + RelationType.MANYTOMANY.name())) {
             return entity;
         }
@@ -1113,9 +1115,9 @@ public abstract class AbstractAutoMapper {
                     manyToManyResult.setEntityXListMap(entityXListMap);
 
 
-                if (CollectionUtils.isEmpty(entityXList)) 
+                if (CollectionUtils.isEmpty(entityXList))
                     continue;
-                
+
 
                 columnPropertyValueList = CommonCode.getSerializable(inverseRefColumnProperty, entityXList);
 
@@ -1133,8 +1135,8 @@ public abstract class AbstractAutoMapper {
                 manyToManyResult.handle(field);
             } else {// lazy
                 Class<?> c = entityFirst.getClass();
-                boolean needLazyProcessor = c.isAnnotationPresent(AutoLazy.class) 
-                		&& c.getDeclaredAnnotation(AutoLazy.class).value();
+                boolean needLazyProcessor = c.isAnnotationPresent(AutoLazy.class)
+                        && c.getDeclaredAnnotation(AutoLazy.class).value();
 
                 if (!needLazyProcessor)
                     continue;

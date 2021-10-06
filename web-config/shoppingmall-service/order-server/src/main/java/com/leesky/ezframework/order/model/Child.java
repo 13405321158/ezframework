@@ -1,25 +1,19 @@
 package com.leesky.ezframework.order.model;
 
-import java.util.List;
-import java.util.Set;
-
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
-import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.JoinTable;
-import com.leesky.ezframework.mybatis.annotation.Lazy;
-import com.leesky.ezframework.mybatis.annotation.ManyToMany;
-import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.order.mapper.StudentCourseMapper;
 import com.leesky.ezframework.order.mapper.StudentTeacherMapper;
-
 import lombok.Data;
+
+import java.util.List;
+import java.util.Set;
 
 @Data
 //@AutoLazy(true)
-@TableName("child")
+@TableName("cbm_child")
 public class Child {
 
 	@TableId("child_id")
@@ -27,9 +21,9 @@ public class Child {
 
 	private String name;
 
-	private Long laoHanId;
+	private String laoHanId;
 
-	private Long laoMaId;
+	private String laoMaId;
 
 	@TableField(exist = false)
 	@ManyToOne

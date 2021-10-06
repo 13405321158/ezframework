@@ -3,23 +3,26 @@ package com.leesky.ezframework.order.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.Lazy;
 import com.leesky.ezframework.mybatis.annotation.ManyToOne;
-import lombok.Data;
+import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 
-@Data
-@TableName("tel")
-public class Tel {
-	private Long id;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@TableName("cbm_tel")
+public class Tel extends BaseUuidModel {
+
+	private static final long serialVersionUID = 1260334746552255040L;
+
 	private String tel;
-	
-	@TableField("man_id")
-	private Long manId;
 
-	@TableField(exist = false)
+	private String manId;
+
 	@ManyToOne
-	@JoinColumn(name = "man_id", referencedColumnName = "man_id")
-	@Lazy
+	@JoinColumn
+	@TableField(exist = false)
 	private Man laoHan;
-	
+
 }

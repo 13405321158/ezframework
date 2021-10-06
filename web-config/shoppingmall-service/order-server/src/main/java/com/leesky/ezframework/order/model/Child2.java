@@ -1,15 +1,22 @@
 package com.leesky.ezframework.order.model;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.mybatis.annotation.*;
+import com.leesky.ezframework.mybatis.annotation.AutoLazy;
+import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.annotation.JoinTable;
+import com.leesky.ezframework.mybatis.annotation.Lazy;
+import com.leesky.ezframework.mybatis.annotation.ManyToMany;
+import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-@TableName("child2")
+@TableName("cbm_child2")
 @AutoLazy
 public class Child2 {
 	@TableId("child_id")

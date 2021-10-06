@@ -1,9 +1,9 @@
 package com.leesky.ezframework.order.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
 import com.leesky.ezframework.order.model.Man;
 
 
-public interface ManMapper extends BaseMapper<Man> {
+public interface ManMapper extends IbaseMapper<Man> {
 
 }

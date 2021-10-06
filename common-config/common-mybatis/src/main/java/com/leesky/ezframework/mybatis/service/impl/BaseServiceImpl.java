@@ -1,32 +1,34 @@
 package com.leesky.ezframework.mybatis.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.leesky.ezframework.mybatis.annotation.DisableAutoMapper;
+import com.leesky.ezframework.mybatis.mapper.AutoMapper;
+import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
+import com.leesky.ezframework.mybatis.query.QueryFilter;
+import com.leesky.ezframework.mybatis.save.SaveHandler;
+import com.leesky.ezframework.mybatis.service.IbaseService;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.leesky.ezframework.mybatis.annotation.DisableAutoMapper;
-import com.leesky.ezframework.mybatis.mapper.AutoMapper;
-import com.leesky.ezframework.mybatis.service.IbaseService;
-
-import lombok.Getter;
-import lombok.Setter;
-
 @Getter
 @Setter
-public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<BaseMapper<T>, T> implements IbaseService<T> {
+public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<IbaseMapper<T>, T> implements IbaseService<T> {
 
 	@Autowired
 	protected AutoMapper autoMapper;
+
+	@Autowired
+	private SaveHandler<T> saveHandler;
 
 	protected boolean autoMapperEnabled = true;
 
@@ -58,11 +60,12 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 	 **/
 	@Override
 	@Transactional(readOnly = true)
-	public T findOne(Wrapper<T> filter) {
+	public T findOne(QueryFilter<T> filter) {
 		T data = this.baseMapper.selectOne(filter);
 
 		return isAutoMapperEnabled() ? this.autoMapper.mapperEntity(data) : data;
 	}
+
 	/**
 	 * 描述: 查询全部
 	 *
@@ -76,6 +79,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 		return isAutoMapperEnabled() ? this.autoMapper.mapperEntityList(data) : data;
 
 	}
+
 	/**
 	 * 描述: 根据主键集合查询
 	 *
@@ -111,7 +115,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 	 * @日期: 2021年9月25日 上午8:15:49
 	 */
 	@Override
-	public List<T> findAll(Wrapper<T> filter) {
+	public List<T> findAll(QueryFilter<T> filter) {
 		List<T> data = this.baseMapper.selectList(filter);
 
 		return isAutoMapperEnabled() ? this.autoMapper.mapperEntityList(data) : data;
@@ -125,7 +129,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 	 * @日期: 2021年9月25日 上午8:20:12
 	 */
 	@Override
-	public <E extends IPage<T>> E findByPage(E page, Wrapper<T> filter) {
+	public <E extends IPage<T>> E findByPage(E page, QueryFilter<T> filter) {
 		E data = this.baseMapper.selectPage(page, filter);
 
 		return isAutoMapperEnabled() ? this.autoMapper.mapperEntityPage(data) : data;
@@ -146,12 +150,42 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 	}
 
 	/**
+	 * <li>relation=false 不处理聚合关系</li>
+	 * <li>relation=true 则同时存储one2one、many2many，one2Many，many2one 关系</li>
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午4:48
+	 **/
+	@Override
+	public void insert(T entity, Boolean withRelation) {
+		if (withRelation)
+			this.autoMapper.insert(entity, this.baseMapper,saveHandler);
+		else
+			this.baseMapper.insert(entity);
+	}
+
+	/**
+	 * 描述: 批量插入数据
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午12:51
+	 **/
+	@Override
+	public void insert(List<T> entityList, Boolean withRelation) {
+
+		if (withRelation)
+			this.autoMapper.insert(entityList, this.baseMapper, saveHandler);
+		else
+			this.baseMapper.insertBatch(entityList);
+
+	}
+
+	/**
 	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是单体 Bean
 	 * 
 	 * @作者: 魏来
 	 * @日期: 2021年9月25日 上午8:43:04
 	 */
-
 	@Override
 	@Transactional(readOnly = true)
 	public void initializeEntity(T t, String... propertyNames) {
@@ -159,6 +193,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 			autoMapper.mapperEntity(t, propertyName);
 
 	}
+
 	/**
 	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是list集合
 	 * 
@@ -172,6 +207,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 			autoMapper.mapperEntityList(list, propertyName);
 
 	}
+
 	/**
 	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是set集合
 	 * 
@@ -181,10 +217,11 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 	@Override
 	@Transactional(readOnly = true)
 	public void initializeSet(Set<T> set, String... propertyNames) {
-		for (String propertyName : propertyNames) 
+		for (String propertyName : propertyNames)
 			autoMapper.mapperEntitySet(set, propertyName);
-		
+
 	}
+
 	/**
 	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是page
 	 * 
@@ -194,11 +231,11 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 	@Override
 	@Transactional(readOnly = true)
 	public <E extends IPage<T>> void initializePage(E page, String... propertyNames) {
-		for (String propertyName : propertyNames) 
+		for (String propertyName : propertyNames)
 			autoMapper.mapperEntityPage(page, propertyName);
-		
+
 	}
-	
+
 	/**
 	 * <li>根据 propertyNames 自动加载映射关系</li>；
 	 * <li>适用结果集是object[可以是list或set或page或单体bean]</li>
@@ -222,4 +259,5 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<Bas
 
 		}
 	}
+
 }

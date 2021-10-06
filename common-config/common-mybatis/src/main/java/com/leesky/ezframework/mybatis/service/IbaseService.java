@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.leesky.ezframework.mybatis.query.QueryFilter;
 
 public interface IbaseService<T> {
 
@@ -25,7 +25,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021/8/21 下午12:39
 	 **/
-	T findOne(Wrapper<T> filter);
+	T findOne(QueryFilter<T> filter);
 
 	/**
 	 * <li>查询全部
@@ -57,7 +57,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021年9月25日 上午8:15:49
 	 */
-	List<T> findAll(Wrapper<T> filter);
+	List<T> findAll(QueryFilter<T> filter);
 
 	/**
 	 * <li>根据wrapper过滤器 分页查询
@@ -65,7 +65,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021年9月25日 上午8:20:12
 	 */
-	<E extends IPage<T>> E findByPage(E page, Wrapper<T> filter);
+	<E extends IPage<T>> E findByPage(E page, QueryFilter<T> filter);
 
 	/**
 	 * <li>无条件 分页查询
@@ -74,6 +74,23 @@ public interface IbaseService<T> {
 	 * @日期: 2021年9月25日 上午8:20:12
 	 */
 	<E extends IPage<T>> E findByPage(E page);
+
+	/**
+	 * <li>relation=false 不处理聚合关系</li>
+	 * <li>relation=true 则同时存储one2one、many2many，one2Many，many2one 关系</li>
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午4:48
+	 **/
+	void insert(T entity, Boolean withRelation);
+
+	/**
+	 * 描述: 批量插入数据
+	 *
+	 * @作者: 魏来
+	 * @日期: 2021/8/21 下午12:51
+	 **/
+	void insert(List<T> entityList, Boolean withRelation);
 
 	/**
 	 * <li>根据 propertyNames 自动加载映射关系；适用结果集是单体 Bean

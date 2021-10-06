@@ -7,6 +7,15 @@
  */
 package com.leesky.ezframework.join.utils;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
@@ -19,16 +28,9 @@ import com.leesky.ezframework.join.interfaces.one2many.One2Many;
 import com.leesky.ezframework.join.interfaces.one2many.One2manyHandler;
 import com.leesky.ezframework.join.interfaces.one2one.One2One;
 import com.leesky.ezframework.join.interfaces.one2one.One2oneHandler;
+
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Field;
-import java.util.List;
 
 @Data
 @Component
@@ -41,7 +43,7 @@ public class SaveWithRelation<T> {
 
     private final One2oneHandler<T> one2oneHandler;
     private final One2manyHandler one2manyHandler;
-    private final Many2manyHandler many2manyHandler;
+    private final Many2manyHandler<T> many2manyHandler;
     private final Many2oneHandler many2oneHandler;
 
     /**
@@ -51,13 +53,15 @@ public class SaveWithRelation<T> {
      * @Desc: 关联关系 分为主表和从表，含义参见各自类说明
      * @Desc: 先存储从表后存储主表，因为存储完毕后实体类才有主键，才能把得到到主键 赋值给 主表中对应字段（非主键关联谁先谁后存储，无所谓）
      */
-    public void relationship(T entity, BaseMapper<T> baseMapper) {
+    @SuppressWarnings("unchecked")
+	public void relationship(T entity, BaseMapper<T> baseMapper) {
         this.entity = entity;
         this.baseMapper = baseMapper;
 
-        List<One2oneHandler<T>> o2oList = Lists.newArrayList();
-        List<Many2manyHandler> m2mList = Lists.newArrayList();
         List<One2manyHandler> o2mList = Lists.newArrayList();
+        List<One2oneHandler<T>> o2oList = Lists.newArrayList();
+        List<Many2manyHandler<T>> m2mList = Lists.newArrayList();
+
 
         // 1、查找出当前实体entity中的所有字段
         List<Field> fields = JoinUtil.getAllField(entity);
@@ -77,7 +81,7 @@ public class SaveWithRelation<T> {
             // 2.2 many2many关系
             Many2Many m2m = f.getAnnotation(Many2Many.class);
             if (ObjectUtils.isNotEmpty(m2m)) {
-                Multimap multimap = many2manyHandler.build(f, entity, m2m).save();// 存储另一个many方
+                Multimap<String, Object> multimap = many2manyHandler.build(f, entity, m2m).save();// 存储另一个many方
                 if (CollectionUtils.isNotEmpty(multimap.get("ids")))
                     m2mList.add(this.many2manyHandler.build(new Many2manyDTO(m2m, multimap)));// 保存待存储中间表
             }
