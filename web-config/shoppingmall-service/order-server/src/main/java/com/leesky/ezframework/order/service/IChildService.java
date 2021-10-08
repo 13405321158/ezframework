@@ -3,13 +3,13 @@ package com.leesky.ezframework.order.service;
 import java.util.List;
 
 import com.leesky.ezframework.mybatis.service.IbaseService;
-import com.leesky.ezframework.order.model.Child;
+import com.leesky.ezframework.order.model.ChildModel;
 
 
-public interface IChildService extends IbaseService<Child> {
-    List<Child> listByInitialize();
+public interface IChildService extends IbaseService<ChildModel> {
+    List<ChildModel> listByInitialize();
 
-    List<Child> listByInitialize2();
+    List<ChildModel> listByInitialize2();
 
-    List<Child> listByInitialize3();
+    List<ChildModel> listByInitialize3();
 }

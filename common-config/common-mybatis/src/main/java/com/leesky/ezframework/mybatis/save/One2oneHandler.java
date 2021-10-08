@@ -7,13 +7,10 @@
  */
 package com.leesky.ezframework.mybatis.save;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.condition.FieldCondition;
-import com.leesky.ezframework.mybatis.condition.TableIdCondition;
-import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
-import com.leesky.ezframework.mybatis.query.QueryFilter;
-import com.leesky.ezframework.utils.Hump2underline;
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.UUID;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -21,8 +18,13 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-import java.util.Map;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.condition.FieldCondition;
+import com.leesky.ezframework.mybatis.condition.TableIdCondition;
+import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
+import com.leesky.ezframework.mybatis.query.QueryFilter;
+import com.leesky.ezframework.utils.Hump2underline;
 
 /**
  * 类功能说明：
@@ -48,6 +50,10 @@ public class One2oneHandler<T> {
 	 **/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void handler(String[] fields, T entity, IbaseMapper ibaseMapper, Map<String, String[]> entityMap) throws Exception {
+
+		String entityKey = UUID.randomUUID().toString();
+		TableIdCondition tc = new TableIdCondition(entity.getClass());
+		BeanUtils.setProperty(entity, tc.getFieldOfTableId().getName(), entityKey);
 
 		for (String f : fields) {
 
@@ -84,26 +90,24 @@ public class One2oneHandler<T> {
 			if (!StringUtils.equals(n, "id")) // 不等于 id则认为 o2o 在entity对应的数据表中有 关联字段
 				BeanUtils.setProperty(entity, Hump2underline.lineToHump(n), v);
 
-			// 4、存储 entity
-			ibaseMapper.insert(entity);
-
-			// 5、判断o2o对象中是否有 对entity实体对引用，如果有：则更新一下(在2中做了保存动作，所以这里更新)
+			// 4、判断o2o对象中是否有 对entity实体对引用，如果有：则更新一下(在2中做了保存动作，所以这里更新)
 			Field[] fs = o2o.getClass().getDeclaredFields();
 			String n1 = field.getDeclaringClass().getName();
 			for (Field o : fs) {
 				if (StringUtils.equals(o.getGenericType().getTypeName(), n1)) {
 					String j = o.getAnnotation(JoinColumn.class).name();
-					TableIdCondition tc = new TableIdCondition(entity.getClass());
 					UpdateWrapper uw = new UpdateWrapper();
 					uw.eq(dbColumn, v);
-					uw.set(j, BeanUtils.getProperty(entity, tc.getFieldOfTableId().getName()));
+					uw.set(j, entityKey);
 					o2oMapper.update(null, uw);
 					break;
 				}
-
 			}
 
+			
+			
 		}
-
+		// 5、存储 entity
+		ibaseMapper.insert(entity);
 	}
 }

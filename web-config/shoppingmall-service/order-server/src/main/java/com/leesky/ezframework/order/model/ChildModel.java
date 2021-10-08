@@ -22,7 +22,7 @@ import lombok.Setter;
 @Setter
 //@AutoLazy(true)
 @TableName("cbm_child")
-public class Child extends BaseUuidModel {
+public class ChildModel extends BaseUuidModel {
 
 	private static final long serialVersionUID = 4806381129926616239L;
 
@@ -35,32 +35,37 @@ public class Child extends BaseUuidModel {
 	@TableField(exist = false)
 	@ManyToOne
 	@JoinColumn(name = "lao_han_id", referencedColumnName = "man_id")
-	private Man laoHan;
+	private ManModel laoHan;
 
 	@TableField(exist = false)
 	@ManyToOne
 	@JoinColumn(name = "lao_ma_id", referencedColumnName = "woman_id")
-	private Woman laoMa;
+	private WomanModel laoMa;
 
 	@Lazy(false)
 	@ManyToMany
 	@TableField(exist = false)
-	@JoinTable(targetMapper = IstudentCourseMapper.class)
+
 	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
 	@InverseJoinColumn(name = "course_id", referencedColumnName = "course_id")
-	private List<Course> courses;
+	@JoinTable(targetMapper = IstudentCourseMapper.class,entityClass =StudentCourseModel.class )
+	private List<CourseModel> cours;
 
 	@ManyToMany
 	@TableField(exist = false)
-	@JoinTable(targetMapper = IstudentTeacherMapper.class)
 	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
 	@InverseJoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
-	private Set<Teacher> teachers;
+	@JoinTable(targetMapper = IstudentTeacherMapper.class, entityClass = StudentTeacherModel.class)
+	private Set<TeacherModel> teacher;
 
-	public Child() {
+	public ChildModel() {
 	}
 
-	public Child(String name) {
+	public ChildModel(String name) {
+		this.name = name;
+	}
+	public ChildModel(String name,String id) {
+		this.id= id;
 		this.name = name;
 	}
 }

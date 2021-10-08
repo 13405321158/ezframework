@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("cbm_tel")
-public class Tel extends BaseUuidModel {
+public class TelModel extends BaseUuidModel {
 
 	private static final long serialVersionUID = 1260334746552255040L;
 
@@ -23,6 +23,6 @@ public class Tel extends BaseUuidModel {
 	@ManyToOne
 	@JoinColumn
 	@TableField(exist = false)
-	private Man laoHan;
+	private ManModel laoHan;
 
 }

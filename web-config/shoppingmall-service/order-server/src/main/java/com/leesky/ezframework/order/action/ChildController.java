@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.mybatis.mapper.AutoMapper;
-import com.leesky.ezframework.order.model.Child;
-import com.leesky.ezframework.order.model.Course;
+import com.leesky.ezframework.order.model.ChildModel;
+import com.leesky.ezframework.order.model.CourseModel;
 import com.leesky.ezframework.order.service.IChildService;
 
 @RestController
@@ -27,30 +27,30 @@ public class ChildController {
 
     @ResponseBody
     @RequestMapping(value = "child/{id}")
-    public Child get(@PathVariable("id") Long id) {
-        Child child = childService.findOne(id);
-        return child;
+    public ChildModel get(@PathVariable("id") Long id) {
+        ChildModel childModel = childService.findOne(id);
+        return childModel;
     }
 
     @ResponseBody
     @RequestMapping(value = "childs")
-    public List<Child> list() {
+    public List<ChildModel> list() {
 
-        List<Child> childs = childService.findAll();
+        List<ChildModel> childModels = childService.findAll();
 
-        return childs;
+        return childModels;
     }
 
     @GetMapping("/c01")
     public AjaxJson index01() {
         AjaxJson json = new AjaxJson();
         try {
-            Child child = new Child("魏浩然");
-            List<Course> course = Lists.newArrayList(new Course("语文"), new Course("数学","04b9be9a-451b-4f59-86e3-6f9759c6ad4e"), new Course("化学", "00b429e6-3e1e-48e7-a6e4-f2428fa5ae0b"));
+            ChildModel childModel = new ChildModel("魏浩然");
+            List<CourseModel> courseModel = Lists.newArrayList(new CourseModel("语文"), new CourseModel("数学","04b9be9a-451b-4f59-86e3-6f9759c6ad4e"), new CourseModel("化学", "00b429e6-3e1e-48e7-a6e4-f2428fa5ae0b"));
 //            Set<Teacher> teacher = Sets.newHashSet(new Teacher("张老师"), new Teacher("杨老师"), new Teacher("仝老师", "02fe3b27-4a7e-4c53-b984-3d30a561add7"));
-            child.setCourses(course);
+            childModel.setCours(courseModel);
 //            child.setTeachers(teacher);
-            this.childService.insert(child, true);
+            this.childService.insert(childModel, true);
         } catch (Exception e) {
             e.printStackTrace();
         }

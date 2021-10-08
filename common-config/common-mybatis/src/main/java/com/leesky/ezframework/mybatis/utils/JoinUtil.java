@@ -27,6 +27,17 @@ public class JoinUtil {
         return "i" + StringUtils.uncapitalize(modelName) + "Mapper";
     }
 
+    /**
+     * <li>:根据mapper名字 返回 model名字
+     *
+     * @作者: 魏来
+     * @日期: 2021/10/8  上午10:42
+     **/
+    public static String buildModelBeanName(String name) {
+        String modelName = StringUtils.replace(name, "Mapper", "");
+        modelName = StringUtils.substring(modelName, 1);
+        return StringUtils.capitalize(modelName) + "Model";
+    }
 
     /**
      * @author: weilai
@@ -72,7 +83,6 @@ public class JoinUtil {
 ////		}
 //        return descriptors;
 //    }
-
 
 
 //    /**

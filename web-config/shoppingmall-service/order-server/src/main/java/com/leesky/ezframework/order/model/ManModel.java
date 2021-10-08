@@ -24,7 +24,7 @@ import java.util.Set;
  * t_man_service_001_initialize()
  */
 @TableName("cbm_man")
-public class Man extends BaseUuidModel {
+public class ManModel extends BaseUuidModel {
 
     private static final long serialVersionUID = 592676841068359256L;
 
@@ -38,30 +38,30 @@ public class Man extends BaseUuidModel {
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "man_id")
     @EntityMapper(targetMapper = ItelMapper.class)
-    private Set<Tel> tels;
+    private Set<TelModel> telModels;
 
     @OneToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "lao_han_id")
 	@EntityMapper(targetMapper = IchildMapper.class)
-    private List<Child> waWa;
+    private List<ChildModel> waWa;
 
     @OneToOne
     @TableField(exist = false)
     @JoinColumn(name = "lao_po_id")
     @EntityMapper(targetMapper = IwomanMapper.class)
-    private Woman laoPo;
+    private WomanModel laoPo;
 
     @ManyToOne
     @TableField(exist = false)
     @JoinColumn(name = "company_id")
     @EntityMapper(targetMapper = IcompanyMapper.class)
-    private Company company;
+    private CompanyModel companyModel;
 
-    public Man() {
+    public ManModel() {
     }
 
-	public Man(Woman laoPo) {
+	public ManModel(WomanModel laoPo) {
 
 		this.laoPo = laoPo;
 		this.name="刘德华";

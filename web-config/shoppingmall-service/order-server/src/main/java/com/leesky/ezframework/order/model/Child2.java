@@ -31,7 +31,7 @@ public class Child2 {
 	@JoinColumn(name = "lao_han_id", referencedColumnName = "man_id")
 	//@EntityMapper
 	@Lazy
-	private Man laoHan;
+	private ManModel laoHan;
 	
 	
 	@TableField(exist = false)
@@ -40,7 +40,7 @@ public class Child2 {
 	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
 	@InverseJoinColumn(name = "course_id", referencedColumnName = "course_id")
 	@Lazy(false)
-	private List<Course> courses;
+	private List<CourseModel> cours;
 	
 	
 

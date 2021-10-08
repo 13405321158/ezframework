@@ -11,32 +11,32 @@ import com.leesky.ezframework.order.mapper.IstudentCourseMapper;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
-@TableName("cbm_course")
-public class Course extends BaseUuidModel {
+@TableName("cbm_teacher")
+public class TeacherModel extends BaseUuidModel {
 
-    private static final long serialVersionUID = -2246038785611164245L;
+    private static final long serialVersionUID = -7564115763006797934L;
 
     private String name;
 
-    @TableField(exist = false)
     @ManyToMany
+    @TableField(exist = false)
     @JoinTable(targetMapper = IstudentCourseMapper.class)
-    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
-    @InverseJoinColumn(name = "child_id", referencedColumnName = "student_id")
-    private List<Child> students;
+    @JoinColumn(name = "id", referencedColumnName = "teacher_id")
+    @InverseJoinColumn(name = "id", referencedColumnName = "student_id")
+    private Set<ChildModel> students;
 
-    public Course() {
+    public TeacherModel() {
     }
 
-    public Course(String name) {
+    public TeacherModel(String name) {
         this.name = name;
     }
 
-    public Course(String name, String id) {
+    public TeacherModel(String name, String id) {
         this.id = id;
         this.name = name;
     }

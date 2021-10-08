@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("cbm_company")
-public class Company extends BaseUuidModel {
+public class CompanyModel extends BaseUuidModel {
 
     private static final long serialVersionUID = -4065233907401013994L;
 
@@ -27,5 +27,5 @@ public class Company extends BaseUuidModel {
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "company_id")
     @EntityMapper(targetMapper = ImanMapper.class)
-    private List<Man> employees;
+    private List<ManModel> employees;
 }

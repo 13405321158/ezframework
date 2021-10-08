@@ -1,34 +1,23 @@
 package com.leesky.ezframework.mybatis.condition;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.google.common.collect.Sets;
+import com.leesky.ezframework.mybatis.annotation.*;
+import com.leesky.ezframework.mybatis.enums.FetchType;
+import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
+import com.leesky.ezframework.mybatis.enums.RelationType;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.ObjectFactory;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.ObjectFactory;
-
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.google.common.collect.Sets;
-import com.leesky.ezframework.mybatis.annotation.EntityMapper;
-import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
-import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.JoinColumns;
-import com.leesky.ezframework.mybatis.annotation.JoinTable;
-import com.leesky.ezframework.mybatis.annotation.Lazy;
-import com.leesky.ezframework.mybatis.annotation.ManyToMany;
-import com.leesky.ezframework.mybatis.annotation.ManyToOne;
-import com.leesky.ezframework.mybatis.annotation.OneToMany;
-import com.leesky.ezframework.mybatis.annotation.OneToOne;
-import com.leesky.ezframework.mybatis.enums.FetchType;
-import com.leesky.ezframework.mybatis.enums.FieldCollectionType;
-import com.leesky.ezframework.mybatis.enums.RelationType;
-
-import lombok.Data;
 
 @Data
 public class FieldCondition<T> {
@@ -162,7 +151,7 @@ public class FieldCondition<T> {
         if (entityMapper != null && entityMapper.targetMapper() != void.class) {
             mapperClass = entityMapper.targetMapper();
         } else {
-            String entityName = this.getFieldClass().getSimpleName();
+            String entityName = this.getFieldClass().getSimpleName().replace("Model","");
             Collection<Class<?>> mappers = this.factory.getObject().getConfiguration().getMapperRegistry().getMappers();
             for (Class<?> mapperClz : mappers) {
                 String mapperClassName = mapperClz.getSimpleName();
@@ -182,9 +171,9 @@ public class FieldCondition<T> {
         this.joinTableMapperClass = null;
         String[] joinMapperNames = new String[]{
         		
-        		"i"+StringUtils.uncapitalize(entity.getClass().getSimpleName()) + this.getFieldClass().getSimpleName() + "Mapper",
+        		"i"+StringUtils.uncapitalize(entity.getClass().getSimpleName().replace("Model","")) + this.getFieldClass().getSimpleName() + "Mapper",
         		
-        		"i"+StringUtils.uncapitalize(this.getFieldClass().getSimpleName())+ entity.getClass().getSimpleName() + "Mapper"};
+        		"i"+StringUtils.uncapitalize(this.getFieldClass().getSimpleName().replace("Model",""))+ entity.getClass().getSimpleName() + "Mapper"};
 
         if (joinTable != null) {
             if (joinTable.targetMapper() != null && joinTable.targetMapper() != void.class) {

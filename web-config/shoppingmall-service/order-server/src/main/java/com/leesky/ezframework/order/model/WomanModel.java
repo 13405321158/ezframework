@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("cbm_woman")
-public class Woman extends BaseUuidModel {
+public class WomanModel extends BaseUuidModel {
 
 	private static final long serialVersionUID = 4535079787922191738L;
 
@@ -30,19 +30,19 @@ public class Woman extends BaseUuidModel {
 	@TableField(exist = false)
 	@JoinColumn(name = "lao_gong_id")
 	@EntityMapper(targetMapper = ImanMapper.class)
-	private Man laoGong;
+	private ManModel laoGong;
 
 	@OneToMany
 	@TableField(exist = false)
 	@JoinColumn(referencedColumnName = "lao_ma_id")
 	@EntityMapper(targetMapper = IchildMapper.class)
-	private List<Child> waWa;
+	private List<ChildModel> waWa;
 
-	public Woman() {
+	public WomanModel() {
 		
 	}
 
-	public Woman(String name) {
+	public WomanModel(String name) {
 		this.name = "赵雅芝";
 	}
 }

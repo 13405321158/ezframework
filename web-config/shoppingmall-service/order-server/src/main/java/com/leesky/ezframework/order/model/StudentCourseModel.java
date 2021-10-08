@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @TableName("cbm_l_student_course")
-public class StudentCourse {
+public class StudentCourseModel {
 
 
 	private String studentId;
