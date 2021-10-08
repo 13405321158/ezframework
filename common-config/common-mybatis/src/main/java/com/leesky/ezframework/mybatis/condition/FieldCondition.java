@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.ObjectFactory;
 
@@ -165,7 +166,7 @@ public class FieldCondition<T> {
             Collection<Class<?>> mappers = this.factory.getObject().getConfiguration().getMapperRegistry().getMappers();
             for (Class<?> mapperClz : mappers) {
                 String mapperClassName = mapperClz.getSimpleName();
-                if (mapperClassName.equalsIgnoreCase(entityName + "Mapper")) {
+                if (mapperClassName.equalsIgnoreCase("i"+StringUtils.uncapitalize(entityName) + "Mapper")) {
                     mapperClass = mapperClz;
                     break;
                 }
@@ -180,8 +181,10 @@ public class FieldCondition<T> {
 
         this.joinTableMapperClass = null;
         String[] joinMapperNames = new String[]{
-                entity.getClass().getSimpleName() + this.getFieldClass().getSimpleName() + "Mapper",
-                this.getFieldClass().getSimpleName() + entity.getClass().getSimpleName() + "Mapper"};
+        		
+        		"i"+StringUtils.uncapitalize(entity.getClass().getSimpleName()) + this.getFieldClass().getSimpleName() + "Mapper",
+        		
+        		"i"+StringUtils.uncapitalize(this.getFieldClass().getSimpleName())+ entity.getClass().getSimpleName() + "Mapper"};
 
         if (joinTable != null) {
             if (joinTable.targetMapper() != null && joinTable.targetMapper() != void.class) {

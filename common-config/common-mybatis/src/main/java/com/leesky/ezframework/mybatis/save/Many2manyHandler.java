@@ -7,23 +7,29 @@
  */
 package com.leesky.ezframework.mybatis.save;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.leesky.ezframework.mybatis.condition.FieldCondition;
+import com.leesky.ezframework.mybatis.condition.TableIdCondition;
+import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
+import com.leesky.ezframework.mybatis.utils.JoinUtil;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.leesky.ezframework.mybatis.condition.TableIdCondition;
-import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
-import com.leesky.ezframework.mybatis.utils.JoinUtil;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 类功能说明：
@@ -32,17 +38,28 @@ import com.leesky.ezframework.mybatis.utils.JoinUtil;
  */
 @Component
 
-@SuppressWarnings({ "rawtypes", "unused", "unchecked" })
+@SuppressWarnings({ "rawtypes", "unchecked", "static-access" })
 public class Many2manyHandler<T> {
+
+	@Autowired
+	private ObjectFactory<SqlSession> factory;
 
 	@Autowired
 	private SpringContextHolder springContextHolder;
 
-	@SuppressWarnings("static-access")
+	@Transactional
 	public void handler(String[] fields, T entity, IbaseMapper ibaseMapper, Map<String, String[]> entityMap) throws Exception {
 
-		List<Object> noKey = Lists.newArrayList();
+		List<Object> noKey02 = Lists.newArrayList();
+		List<Object> noKey01 = Lists.newArrayList();
 		Map<Object, Object> haveKey = Maps.newHashMap();
+
+		// 1、插入entity实体
+		ibaseMapper.insert(entity);
+		TableIdCondition tf = new TableIdCondition(entity.getClass());
+		String entityKey = BeanUtils.getProperty(entity, tf.getFieldOfTableId().getName());// m2m对象的主键值
+
+		// 循环处理entity中的many2many注解
 		for (String f : fields) {
 
 			Field field = entity.getClass().getDeclaredField(f);
@@ -51,27 +68,49 @@ public class Many2manyHandler<T> {
 
 			List list = m2m instanceof Set ? Lists.newArrayList((Set) m2m) : (List) m2m;
 
-			// 1、查询
+			// 2、查询集合中的实体是否在数据库中存在： 不存在的存储到数据表
+			FieldCondition<T> fc = new FieldCondition<>(entity, field, false, factory);
+
 			if (CollectionUtils.isNotEmpty(list)) {
-				Class<?> m = list.get(0).getClass();
-				TableIdCondition tidConditionRef = new TableIdCondition(m);
 				for (Object e : list) {
-					String v = BeanUtils.getProperty(e, tidConditionRef.getFieldOfTableId().getName());// m2m对象的主键值
+					String v = BeanUtils.getProperty(e, fc.getFieldOfTableId().getName());// m2m对象的主键值
 					if (StringUtils.isBlank(v))
-						noKey.add(e);
+						noKey01.add(e);
 					else
 						haveKey.put(v, e);
 				}
-				Set<Object> set = haveKey.keySet();
-				String keyColmun = tidConditionRef.getTableId().value();
-				IbaseMapper iMapper = (IbaseMapper) this.springContextHolder.getBean(JoinUtil.buildMapperBeanName(m.getName()));
-				QueryWrapper filter = new QueryWrapper().select(keyColmun);
-				filter.in(keyColmun, set);
 
+				String keyColumn = fc.getTableId().value();
+
+				Class<?> m = list.get(0).getClass();
+				IbaseMapper iMapper = (IbaseMapper) this.springContextHolder.getBean(JoinUtil.buildMapperBeanName(m.getName()));
+				QueryWrapper filter = new QueryWrapper().select(keyColumn);
+				filter.in(keyColumn, haveKey.keySet());
 				List<Map> data = iMapper.selectMaps(filter);
-				data.forEach(e -> e.get(keyColmun));
+
+				data.forEach(e -> noKey02.add(e.get(keyColumn)));
+
+				haveKey.keySet().removeIf(noKey02::contains);
+
+				Stream<Object> stream = Stream.concat(noKey01.stream(), haveKey.values().stream());
+				iMapper.insertBatch(stream.collect(Collectors.toList()));
 
 			}
+			// 3、在中间表中删除相关数据
+			List a = Lists.newArrayList();
+			for (Object e : list)
+				a.add(BeanUtils.getProperty(e, fc.getFieldOfTableId().getName()));// m2m对象的主键值
+
+			Class<?> mapperClass = fc.getJoinTable().targetMapper();
+			IbaseMapper m2mMapper = (IbaseMapper) factory.getObject().getMapper(mapperClass);
+			QueryWrapper delFilter = new QueryWrapper();
+			delFilter.eq(fc.getJoinColumn().referencedColumnName(), entityKey);
+			delFilter.in(fc.getInverseJoinColumn().referencedColumnName(), a);
+			m2mMapper.delete(delFilter);
+
+			// 4、插入记录到中间表
+			String tableNameMiddle = mapperClass.getAnnotation(TableName.class).value();
+			System.out.println("tableNameMiddle = " + tableNameMiddle);
 		}
 	}
 }

@@ -1,15 +1,20 @@
 package com.leesky.ezframework.order.action;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.mybatis.mapper.AutoMapper;
 import com.leesky.ezframework.order.model.Child;
 import com.leesky.ezframework.order.model.Course;
 import com.leesky.ezframework.order.service.IChildService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/child")
