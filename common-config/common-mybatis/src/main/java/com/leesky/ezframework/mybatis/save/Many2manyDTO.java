@@ -25,21 +25,20 @@ public class Many2manyDTO {
 
     private String column02;
 
-    private List<String> v01 = Lists.newArrayList();
-
     private List<String> v02;
 
+    private List<String> v01 = Lists.newArrayList();
     public Many2manyDTO() {
     }
 
     public Many2manyDTO(String tableName, String column01, String column02) {
-        this.tableName = tableName;
         this.column01 = column01;
         this.column02 = column02;
+        this.tableName = tableName;
     }
 
     public void build(String v1, List<String> v02) {
-        v02.forEach(e -> v01.add(v1));
         this.v02 = v02;
+        v02.forEach(e -> v01.add(v1));
     }
 }

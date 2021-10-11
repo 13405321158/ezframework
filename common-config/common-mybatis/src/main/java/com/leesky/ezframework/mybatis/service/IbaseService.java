@@ -1,13 +1,13 @@
 package com.leesky.ezframework.mybatis.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.leesky.ezframework.mybatis.query.QueryFilter;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.leesky.ezframework.mybatis.query.QueryFilter;
 
 public interface IbaseService<T> {
 

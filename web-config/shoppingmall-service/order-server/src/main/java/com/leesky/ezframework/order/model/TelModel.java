@@ -21,8 +21,19 @@ public class TelModel extends BaseUuidModel {
 	private String manId;
 
 	@ManyToOne
-	@JoinColumn
+	@JoinColumn(name = "man_id")
 	@TableField(exist = false)
 	private ManModel laoHan;
 
+	public TelModel() {
+	}
+
+	public TelModel(String tel) {
+		this.tel = tel;
+	}
+
+	public TelModel(String tel, String id) {
+		this.id = id;
+		this.tel = tel;
+	}
 }

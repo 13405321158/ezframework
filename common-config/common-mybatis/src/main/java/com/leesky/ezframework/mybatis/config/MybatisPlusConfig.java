@@ -7,16 +7,15 @@
  */
 package com.leesky.ezframework.mybatis.config;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
@@ -24,9 +23,10 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 public class MybatisPlusConfig {
 
     /**
+     * 描述: v3.4.3.2 配置
+     *
      * @作者: 魏来
      * @日期: 2021/8/21 上午10:36
-     * @描述: v3.4.3.2 配置
      **/
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
@@ -38,7 +38,7 @@ public class MybatisPlusConfig {
         return interceptor;
     }
 
-    
+
     @Bean
     public CustomizeInjector customizedSqlInjector() {
 

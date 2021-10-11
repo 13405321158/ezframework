@@ -61,11 +61,15 @@ public class ManModel extends BaseUuidModel {
     public ManModel() {
     }
 
-	public ManModel(WomanModel laoPo) {
+
+    public ManModel(WomanModel laoPo) {
 
 		this.laoPo = laoPo;
 		this.name="刘德华";
 	}
 
-
+    public ManModel(CompanyModel companyModel,String name) {
+        this.name = name;
+        this.companyModel = companyModel;
+    }
 }
