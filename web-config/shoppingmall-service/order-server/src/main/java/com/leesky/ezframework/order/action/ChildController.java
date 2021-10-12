@@ -30,7 +30,7 @@ public class ChildController {
     @ResponseBody
     @RequestMapping(value = "child/{id}")
     public ChildModel get(@PathVariable("id") Long id) {
-        ChildModel childModel = childService.findOne(id);
+        ChildModel childModel = childService.findOne(id,false);
         return childModel;
     }
 
@@ -38,7 +38,7 @@ public class ChildController {
     @RequestMapping(value = "childs")
     public List<ChildModel> list() {
 
-        List<ChildModel> childModels = childService.findAll();
+        List<ChildModel> childModels = childService.findAll(false);
 
         return childModels;
     }

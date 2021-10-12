@@ -30,7 +30,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.condition.TableIdCondition;
-import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
+import com.leesky.ezframework.mybatis.mapper.IleeskyMapper;
 import com.leesky.ezframework.mybatis.utils.JoinUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class Many2manyHandler<T> {
 	private final SpringContextHolder springContextHolder;
 
 
-	public void handler(String[] fields, T entity, IbaseMapper ibaseMapper) throws Exception {
+	public void handler(String[] fields, T entity, IleeskyMapper ibaseMapper) throws Exception {
 
 		// 1、插入entity实体
 		TableIdCondition tf = new TableIdCondition(entity.getClass());
@@ -88,7 +88,7 @@ public class Many2manyHandler<T> {
 				String keyColumn = fc.getTableId().value();
 
 				Class<?> m = list.get(0).getClass();
-				IbaseMapper iMapper = (IbaseMapper) this.springContextHolder.getBean(JoinUtil.buildMapperBeanName(m.getName()));
+				IleeskyMapper iMapper = (IleeskyMapper) this.springContextHolder.getBean(JoinUtil.buildMapperBeanName(m.getName()));
 
 				if (MapUtils.isNotEmpty(haveKey)) {
 					QueryWrapper filter = new QueryWrapper().select(keyColumn);
@@ -107,7 +107,7 @@ public class Many2manyHandler<T> {
 					a.add(BeanUtils.getProperty(e, fc.getFieldOfTableId().getName()));// m2m对象的主键值
 
 				Class<?> mapperClass = fc.getJoinTable().targetMapper();
-				IbaseMapper m2mMapper = (IbaseMapper) factory.getObject().getMapper(mapperClass);
+				IleeskyMapper m2mMapper = (IleeskyMapper) factory.getObject().getMapper(mapperClass);
 				QueryWrapper delFilter = new QueryWrapper();
 				delFilter.eq(fc.getJoinColumn().referencedColumnName(), entityKey);
 				delFilter.in(fc.getInverseJoinColumn().referencedColumnName(), a);

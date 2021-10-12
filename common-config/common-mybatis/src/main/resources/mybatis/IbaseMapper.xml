@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.leesky.ezframework.mybatis.mapper.IbaseMapper">
+<mapper namespace="com.leesky.ezframework.mybatis.mapper.IleeskyMapper">
 
  	<insert id="insertM2M" parameterType="com.leesky.ezframework.mybatis.save.Many2manyDTO">
  		Insert INTO ${tableName}

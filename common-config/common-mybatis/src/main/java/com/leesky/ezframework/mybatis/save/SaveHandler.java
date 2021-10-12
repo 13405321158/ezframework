@@ -7,16 +7,18 @@
  */
 package com.leesky.ezframework.mybatis.save;
 
-import com.leesky.ezframework.mybatis.enums.RelationType;
-import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
+import com.leesky.ezframework.mybatis.enums.RelationType;
+import com.leesky.ezframework.mybatis.mapper.IleeskyMapper;
+
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -39,7 +41,7 @@ public class SaveHandler<T> {
 	 */
 	@Transactional
 	@SuppressWarnings("rawtypes")
-	public void relationship(List<T> entity, IbaseMapper ibaseMapper, Map<String, String[]> entityMap) {
+	public void relationship(List<T> entity, IleeskyMapper ibaseMapper, Map<String, String[]> entityMap) {
 		T t = entity.get(0);
 
 		try {

@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.condition.TableIdCondition;
-import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
+import com.leesky.ezframework.mybatis.mapper.IleeskyMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +35,7 @@ public class Many2oneHandler<T> {
 
 	private final ObjectFactory<SqlSession> factory;
 
-	public void handler(String[] fields, T entity, IbaseMapper ibaseMapper) throws Exception {
+	public void handler(String[] fields, T entity, IleeskyMapper ibaseMapper) throws Exception {
 
 		// 1、插入entity实体
 		TableIdCondition tf = new TableIdCondition(entity.getClass());
@@ -54,7 +54,7 @@ public class Many2oneHandler<T> {
 
 			// 2、查询数据表中是否存在 
 			String v = BeanUtils.getProperty(field.get(entity), fc.getFieldOfTableId().getName());// m2o对象的主键值
-			IbaseMapper m2oMapper = (IbaseMapper) factory.getObject().getMapper(fc.getEntityMapper().targetMapper());
+			IleeskyMapper m2oMapper = (IleeskyMapper) factory.getObject().getMapper(fc.getEntityMapper().targetMapper());
 			if (StringUtils.isNotBlank(v)) {
 
 				QueryWrapper filter = new QueryWrapper<>();
@@ -75,7 +75,7 @@ public class Many2oneHandler<T> {
 		}
 	}
 
-	private void update(String fc, String tf, String v, String entityKey, IbaseMapper ibaseMapper) {
+	private void update(String fc, String tf, String v, String entityKey, IleeskyMapper ibaseMapper) {
 		UpdateWrapper uw = new UpdateWrapper();
 		uw.set(fc, v);
 		uw.eq(tf, entityKey);

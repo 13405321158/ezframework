@@ -12,7 +12,7 @@ import java.util.Collection;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.leesky.ezframework.mybatis.save.Many2manyDTO;
 
-public interface IbaseMapper<T> extends BaseMapper<T> {
+public interface IleeskyMapper<T> extends BaseMapper<T> {
 
     /**
      * <li>插入数据到： many2many 到中间表</li>

@@ -3,12 +3,11 @@ package com.leesky.ezframework.mybatis.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.leesky.ezframework.mybatis.annotation.DisableAutoMapper;
 import com.leesky.ezframework.mybatis.mapper.AutoMapper;
-import com.leesky.ezframework.mybatis.mapper.IbaseMapper;
+import com.leesky.ezframework.mybatis.mapper.IleeskyMapper;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.mybatis.save.SaveHandler;
-import com.leesky.ezframework.mybatis.service.IbaseService;
+import com.leesky.ezframework.mybatis.service.IleeskyService;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,22 +21,15 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<IbaseMapper<T>, T> implements IbaseService<T> {
 
-    @Autowired
-    protected AutoMapper autoMapper;
+public class LeeskyServiceImpl<M extends IleeskyMapper<T>, T> extends ServiceImpl<IleeskyMapper<T>, T> implements IleeskyService<T> {
 
-    @Autowired
-    private SaveHandler<T> saveHandler;
 
-    protected boolean autoMapperEnabled = true;
+	@Autowired
+    protected  AutoMapper autoMapper;
+	@Autowired
+    protected  SaveHandler<T> saveHandler;
 
-    public BaseServiceImpl() {
-        Class<?> clazz = this.getClass();
-        if (clazz.getAnnotation(DisableAutoMapper.class) != null && clazz.getAnnotation(DisableAutoMapper.class).value() == true)
-            autoMapperEnabled = false;
-
-    }
 
     /**
      * 描述: 根据记录主键查询
@@ -47,9 +39,9 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
      **/
     @Override
     @Transactional(readOnly = true)
-    public T findOne(Serializable id) {
+    public T findOne(Serializable id, Boolean withRelation) {
         T data = this.baseMapper.selectById(id);
-        return isAutoMapperEnabled() ? this.autoMapper.mapperEntity(data) : data;
+        return withRelation ? this.autoMapper.mapperEntity(data) : data;
     }
 
     /**
@@ -60,10 +52,10 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
      **/
     @Override
     @Transactional(readOnly = true)
-    public T findOne(QueryFilter<T> filter) {
+    public T findOne(QueryFilter<T> filter, Boolean withRelation) {
         T data = this.baseMapper.selectOne(filter);
 
-        return isAutoMapperEnabled() ? this.autoMapper.mapperEntity(data) : data;
+        return withRelation ? this.autoMapper.mapperEntity(data) : data;
     }
 
     /**
@@ -73,10 +65,10 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
      * @日期: 2021/8/21 下午12:39
      **/
     @Override
-    public List<T> findAll() {
+    public List<T> findAll(Boolean withRelation) {
         List<T> data = this.baseMapper.selectList(Wrappers.emptyWrapper());
 
-        return isAutoMapperEnabled() ? this.autoMapper.mapperEntityList(data) : data;
+        return withRelation ? this.autoMapper.mapperEntityList(data) : data;
 
     }
 
@@ -87,10 +79,10 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
      * @日期: 2021/8/21 下午12:39
      **/
     @Override
-    public List<T> findAll(Collection<? extends Serializable> idList) {
+    public List<T> findAll(Collection<? extends Serializable> idList,Boolean withRelation) {
         List<T> data = this.baseMapper.selectBatchIds(idList);
 
-        return isAutoMapperEnabled() ? this.autoMapper.mapperEntityList(data) : data;
+        return withRelation ? this.autoMapper.mapperEntityList(data) : data;
 
     }
 
@@ -101,10 +93,10 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
      * @日期: 2021年9月25日 上午8:00:26
      */
     @Override
-    public List<T> findAll(Map<String, Object> columnMap) {
+    public List<T> findAll(Map<String, Object> columnMap,Boolean withRelation) {
         List<T> data = this.baseMapper.selectByMap(columnMap);
 
-        return isAutoMapperEnabled() ? this.autoMapper.mapperEntityList(data) : data;
+        return withRelation ? this.autoMapper.mapperEntityList(data) : data;
 
     }
 
@@ -115,10 +107,10 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
      * @日期: 2021年9月25日 上午8:15:49
      */
     @Override
-    public List<T> findAll(QueryFilter<T> filter) {
+    public List<T> findAll(QueryFilter<T> filter,Boolean withRelation) {
         List<T> data = this.baseMapper.selectList(filter);
 
-        return isAutoMapperEnabled() ? this.autoMapper.mapperEntityList(data) : data;
+        return withRelation ? this.autoMapper.mapperEntityList(data) : data;
 
     }
 
@@ -129,10 +121,10 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
      * @日期: 2021年9月25日 上午8:20:12
      */
     @Override
-    public <E extends IPage<T>> E findByPage(E page, QueryFilter<T> filter) {
+    public <E extends IPage<T>> E findByPage(E page, QueryFilter<T> filter,Boolean withRelation) {
         E data = this.baseMapper.selectPage(page, filter);
 
-        return isAutoMapperEnabled() ? this.autoMapper.mapperEntityPage(data) : data;
+        return withRelation ? this.autoMapper.mapperEntityPage(data) : data;
     }
 
     /**
@@ -142,10 +134,10 @@ public class BaseServiceImpl<M extends IbaseMapper<T>, T> extends ServiceImpl<Ib
      * @日期: 2021年9月25日 上午8:20:12
      */
     @Override
-    public <E extends IPage<T>> E findByPage(E page) {
+    public <E extends IPage<T>> E findByPage(E page,Boolean withRelation) {
         E data = this.baseMapper.selectPage(page, Wrappers.emptyWrapper());
 
-        return isAutoMapperEnabled() ? this.autoMapper.mapperEntityPage(data) : data;
+        return withRelation ? this.autoMapper.mapperEntityPage(data) : data;
 
     }
 

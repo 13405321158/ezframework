@@ -20,14 +20,14 @@ public class Child2Controller {
 	@ResponseBody
 	@RequestMapping(value = "child2/{id}")
 	public Child2 get(@PathVariable("id") Long id) {
-		Child2 child = child2Service.findOne(id);
+		Child2 child = child2Service.findOne(id,false);
 		return child;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "child2list")
 	public List<Child2> list() {
-		List<Child2> childs = child2Service.findAll();
+		List<Child2> childs = child2Service.findAll(false);
 
 		return childs;
 	}

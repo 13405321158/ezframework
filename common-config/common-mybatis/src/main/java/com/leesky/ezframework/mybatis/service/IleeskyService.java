@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public interface IbaseService<T> {
+public interface IleeskyService<T> {
 
 	/**
 	 * <li>根据记录主键查询
@@ -17,7 +17,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021/8/21 下午12:39
 	 **/
-	T findOne(Serializable id);
+	T findOne(Serializable id, Boolean withRelation);
 
 	/**
 	 * <li>自定义查询条件，返回一条记录
@@ -25,7 +25,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021/8/21 下午12:39
 	 **/
-	T findOne(QueryFilter<T> filter);
+	T findOne(QueryFilter<T> filter, Boolean withRelation);
 
 	/**
 	 * <li>查询全部
@@ -33,7 +33,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021/8/21 下午12:39
 	 **/
-	List<T> findAll();
+	List<T> findAll(Boolean withRelation);
 
 	/**
 	 * <li>根据主键集合查询
@@ -41,7 +41,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021/8/21 下午12:39
 	 **/
-	List<T> findAll(Collection<? extends Serializable> idList);
+	List<T> findAll(Collection<? extends Serializable> idList,Boolean withRelation);
 
 	/**
 	 * 描述：根据字段集合(map)查询
@@ -49,7 +49,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021年9月25日 上午8:00:26
 	 */
-	List<T> findAll(Map<String, Object> columnMap);
+	List<T> findAll(Map<String, Object> columnMap,Boolean withRelation);
 
 	/**
 	 * <li>根据wrapper过滤器 查询
@@ -57,7 +57,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021年9月25日 上午8:15:49
 	 */
-	List<T> findAll(QueryFilter<T> filter);
+	List<T> findAll(QueryFilter<T> filter,Boolean withRelation);
 
 	/**
 	 * <li>根据wrapper过滤器 分页查询
@@ -65,7 +65,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021年9月25日 上午8:20:12
 	 */
-	<E extends IPage<T>> E findByPage(E page, QueryFilter<T> filter);
+	<E extends IPage<T>> E findByPage(E page, QueryFilter<T> filter,Boolean withRelation);
 
 	/**
 	 * <li>无条件 分页查询
@@ -73,7 +73,7 @@ public interface IbaseService<T> {
 	 * @作者: 魏来
 	 * @日期: 2021年9月25日 上午8:20:12
 	 */
-	<E extends IPage<T>> E findByPage(E page);
+	<E extends IPage<T>> E findByPage(E page,Boolean withRelation);
 
 	/**
 	 * <li>relation=false 不处理聚合关系</li>

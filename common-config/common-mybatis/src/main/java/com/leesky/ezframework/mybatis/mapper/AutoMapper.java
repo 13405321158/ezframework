@@ -324,7 +324,7 @@ public class AutoMapper extends AbstractAutoMapper {
 	 * @日期: 2021年9月26日 上午11:15:34
 	 */
 
-	public <T> void insert(T t, IbaseMapper ibaseMapper,SaveHandler<T> saveHandler) {
+	public <T> void insert(T t, IleeskyMapper ibaseMapper,SaveHandler<T> saveHandler) {
 
 		if (ObjectUtils.isNotEmpty(t))
 			saveHandler.relationship(Lists.newArrayList(t),ibaseMapper,entityMap);
@@ -337,7 +337,7 @@ public class AutoMapper extends AbstractAutoMapper {
 	 * @作者: 魏来
 	 * @日期: 2021年9月26日 上午11:15:49
 	 */
-	public <T> void insert(List<T> t, IbaseMapper ibaseMapper, SaveHandler<T> saveHandler) {
+	public <T> void insert(List<T> t, IleeskyMapper ibaseMapper, SaveHandler<T> saveHandler) {
 
 		if (CollectionUtils.isNotEmpty(t))
 			saveHandler.relationship(t,ibaseMapper,entityMap);

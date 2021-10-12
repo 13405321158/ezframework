@@ -1,5 +1,16 @@
 package com.leesky.ezframework.order.action;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.google.common.collect.Sets;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.order.model.CompanyModel;
@@ -8,11 +19,6 @@ import com.leesky.ezframework.order.model.TelModel;
 import com.leesky.ezframework.order.model.WomanModel;
 import com.leesky.ezframework.order.service.IManService;
 import com.leesky.ezframework.query.ParamModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/man")
@@ -24,13 +30,13 @@ public class ManController {
 
     @RequestMapping(value = "man/{id}")
     public ManModel getMan(@PathVariable("id") Long id) {
-        ManModel manModel = manService.findOne(id);
+        ManModel manModel = manService.findOne(id,false);
         return manModel;
     }
 
     @GetMapping(value = "mans")
     public List<ManModel> listMans() {
-        List<ManModel> list = manService.findAll();
+        List<ManModel> list = manService.findAll(false);
 
         return list;
     }
