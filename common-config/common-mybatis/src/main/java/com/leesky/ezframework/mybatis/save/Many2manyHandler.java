@@ -30,7 +30,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.condition.TableIdCondition;
-import com.leesky.ezframework.mybatis.mapper.IleeskyMapper;
+import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
 import com.leesky.ezframework.mybatis.utils.JoinUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class Many2manyHandler<T> {
 	private final SpringContextHolder springContextHolder;
 
 
-	public void handler(String[] fields, T entity, IleeskyMapper ibaseMapper) throws Exception {
+	public void handler(String[] fields, T entity, IeeskyMapper ibaseMapper) throws Exception {
 
 		// 1、插入entity实体
 		TableIdCondition tf = new TableIdCondition(entity.getClass());
@@ -88,7 +88,7 @@ public class Many2manyHandler<T> {
 				String keyColumn = fc.getTableId().value();
 
 				Class<?> m = list.get(0).getClass();
-				IleeskyMapper iMapper = (IleeskyMapper) this.springContextHolder.getBean(JoinUtil.buildMapperBeanName(m.getName()));
+				IeeskyMapper iMapper = (IeeskyMapper) this.springContextHolder.getBean(JoinUtil.buildMapperBeanName(m.getName()));
 
 				if (MapUtils.isNotEmpty(haveKey)) {
 					QueryWrapper filter = new QueryWrapper().select(keyColumn);
@@ -106,15 +106,15 @@ public class Many2manyHandler<T> {
 				for (Object e : list)
 					a.add(BeanUtils.getProperty(e, fc.getFieldOfTableId().getName()));// m2m对象的主键值
 
-				Class<?> mapperClass = fc.getJoinTable().targetMapper();
-				IleeskyMapper m2mMapper = (IleeskyMapper) factory.getObject().getMapper(mapperClass);
+				Class<?> mapperClass = fc.getEntityMapper().targetMapper();
+				IeeskyMapper m2mMapper = (IeeskyMapper) factory.getObject().getMapper(mapperClass);
 				QueryWrapper delFilter = new QueryWrapper();
 				delFilter.eq(fc.getJoinColumn().referencedColumnName(), entityKey);
 				delFilter.in(fc.getInverseJoinColumn().referencedColumnName(), a);
 				m2mMapper.delete(delFilter);
 
 				// 4、插入记录到中间表
-				Class<?> modelClass = fc.getJoinTable().entityClass();
+				Class<?> modelClass = fc.getEntityMapper().entityClass();
 				TableName tableName = modelClass.getAnnotation(TableName.class);
 				if (ObjectUtils.isNotEmpty(tableName)) {
 					Many2manyDTO dto = new Many2manyDTO(tableName.value(), fc.getJoinColumn().referencedColumnName(), fc.getInverseJoinColumn().referencedColumnName());

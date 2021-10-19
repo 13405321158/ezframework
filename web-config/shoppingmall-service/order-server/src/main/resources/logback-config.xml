@@ -176,7 +176,7 @@
 	<logger name="com.github.dozermapper.core" level="error" />
 
 
-	<root level="debug">
+	<root level="info">
 		<!-- 控制台输出 -->
 		<appender-ref ref="STDOUT" />
 		<!-- 文件输出 -->

@@ -1,28 +1,30 @@
 package com.leesky.ezframework.order.model;
 
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang3.RandomStringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.mybatis.annotation.*;
+import com.leesky.ezframework.mybatis.annotation.EntityMapper;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.OneToMany;
+import com.leesky.ezframework.mybatis.annotation.OneToOne;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import com.leesky.ezframework.order.mapper.IchildMapper;
 import com.leesky.ezframework.order.mapper.IcompanyMapper;
+import com.leesky.ezframework.order.mapper.IidCardMapper;
 import com.leesky.ezframework.order.mapper.ItelMapper;
 import com.leesky.ezframework.order.mapper.IwomanMapper;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
-import java.util.Set;
 
 
 @Getter
 @Setter
-/*
- * @AutoLazy(true) 可开启自动延迟加载(默认为false)，对于多个延迟的属性，会触发多次连接（不是一个事务完成）。
- * 当@AutoLazy(false)时，如需要，可手动方式调用
- * initilizeXXX方法来加载@lazy(true)的属性（多个延迟的属性，可以只触发一次连接，在同个事务内未完成）。参见示例中的：
- * t_man_service_001_initialize()
- */
 @TableName("cbm_man")
 public class ManModel extends BaseUuidModel {
 
@@ -30,27 +32,35 @@ public class ManModel extends BaseUuidModel {
 
     private String name;
 
-    private String laoPoId;
+    private String laopoId;
+
+    private String cardId;
 
     private String companyId;
 
     @OneToMany
     @TableField(exist = false)
-    @JoinColumn(referencedColumnName = "man_id")
+    @JoinColumn(referencedColumnName = "lao_han_id")
     @EntityMapper(targetMapper = ItelMapper.class)
-    private Set<TelModel> telModels;
+    private Set<TelModel> tels;
 
     @OneToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "lao_han_id")
-	@EntityMapper(targetMapper = IchildMapper.class)
-    private List<ChildModel> waWa;
+    @EntityMapper(targetMapper = IchildMapper.class)
+    private List<ChildModel> childs;
 
     @OneToOne
     @TableField(exist = false)
-    @JoinColumn(name = "lao_po_id")
+    @JoinColumn(name = "laopo_id")
     @EntityMapper(targetMapper = IwomanMapper.class)
     private WomanModel laoPo;
+
+    @OneToOne
+    @TableField(exist = false)
+    @JoinColumn(name = "card_id")
+    @EntityMapper(targetMapper = IidCardMapper.class)
+    private IdCardModel idCard;
 
     @ManyToOne
     @TableField(exist = false)
@@ -59,16 +69,17 @@ public class ManModel extends BaseUuidModel {
     private CompanyModel companyModel;
 
     public ManModel() {
+        this.name = "man_" + RandomStringUtils.randomAlphabetic(4);
     }
 
 
     public ManModel(WomanModel laoPo) {
 
-		this.laoPo = laoPo;
-		this.name="刘德华";
-	}
+        this.laoPo = laoPo;
+        this.name = RandomStringUtils.randomAlphabetic(4);
+    }
 
-    public ManModel(CompanyModel companyModel,String name) {
+    public ManModel(CompanyModel companyModel, String name) {
         this.name = name;
         this.companyModel = companyModel;
     }

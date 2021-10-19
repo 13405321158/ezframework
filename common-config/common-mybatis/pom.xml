@@ -15,7 +15,7 @@
 		<poi.version>5.0.0</poi.version>
 		<p6spy.version>3.9.1</p6spy.version>
 		<swagger.version>1.6.2</swagger.version>
-		<baomidou.version>3.4.3.3</baomidou.version>
+		<baomidou.version>3.4.3.4</baomidou.version>
         <beanutils.version>1.9.4</beanutils.version>
 	</properties>
 

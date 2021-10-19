@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.leesky.ezframework.order.mapper.IwomanMapper">
+    <resultMap type="com.leesky.ezframework.order.model.WomanModel" id="womanResult">
+
+        <association property="laoGong" column="laogong_id"
+                     select="com.leesky.ezframework.order.mapper.ImanMapper.selectById" fetchType="lazy"/>
+
+
+        <association property="idCard" column="card_id"
+                     select="com.leesky.ezframework.order.mapper.IidCardMapper.selectById" fetchType="lazy"/>
+
+    </resultMap>
+
+
+    <insert id="insert" parameterType="com.leesky.ezframework.order.model.WomanModel"
+            keyProperty="id">
+        insert into cbm_woman(id, name, laogong_id,card_id, create_date, modify_date)
+        values (#{id}, #{name}, #{laoGong.id},#{idCard.id}, #{createDate}, #{modifyDate})
+    </insert>
+
+
+    <select id="selectById" parameterType="String"
+            resultMap="womanResult">
+        select *
+        from cbm_woman p
+        where p.id = #{id}
+    </select>
+
+
+    <select id="selectList" parameterType="com.leesky.ezframework.mybatis.query.QueryFilter"
+            resultMap="womanResult">
+        select *
+        from cbm_woman p
+        where p.id = #{id}
+    </select>
+
+
+</mapper>
+

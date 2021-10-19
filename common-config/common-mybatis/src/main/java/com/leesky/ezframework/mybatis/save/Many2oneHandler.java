@@ -7,8 +7,12 @@
  */
 package com.leesky.ezframework.mybatis.save;
 
-import java.lang.reflect.Field;
-
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.leesky.ezframework.mybatis.condition.FieldCondition;
+import com.leesky.ezframework.mybatis.condition.TableIdCondition;
+import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,13 +21,7 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.leesky.ezframework.mybatis.condition.FieldCondition;
-import com.leesky.ezframework.mybatis.condition.TableIdCondition;
-import com.leesky.ezframework.mybatis.mapper.IleeskyMapper;
-
-import lombok.RequiredArgsConstructor;
+import java.lang.reflect.Field;
 
 /**
  * <li>描述:
@@ -35,13 +33,13 @@ public class Many2oneHandler<T> {
 
 	private final ObjectFactory<SqlSession> factory;
 
-	public void handler(String[] fields, T entity, IleeskyMapper ibaseMapper) throws Exception {
+	public void handler(String[] fields, T entity, IeeskyMapper ieeskyMapper) throws Exception {
 
 		// 1、插入entity实体
 		TableIdCondition tf = new TableIdCondition(entity.getClass());
 		String entityKey = BeanUtils.getProperty(entity, tf.getFieldOfTableId().getName());// m2o对象的主键值
 		if (StringUtils.isBlank(entityKey)) {
-			ibaseMapper.insert(entity);
+			ieeskyMapper.insert(entity);
 			entityKey = BeanUtils.getProperty(entity, tf.getFieldOfTableId().getName());// m2o对象的主键值
 		}
 
@@ -52,30 +50,33 @@ public class Many2oneHandler<T> {
 
 			FieldCondition<T> fc = new FieldCondition<>(entity, field, false, factory);
 
-			// 2、查询数据表中是否存在 
-			String v = BeanUtils.getProperty(field.get(entity), fc.getFieldOfTableId().getName());// m2o对象的主键值
-			IleeskyMapper m2oMapper = (IleeskyMapper) factory.getObject().getMapper(fc.getEntityMapper().targetMapper());
-			if (StringUtils.isNotBlank(v)) {
+			// 2、查询数据表中是否存在
+			Object e = field.get(entity);
+			if (ObjectUtils.isNotEmpty(e)) {
+				String v = BeanUtils.getProperty(e, fc.getFieldOfTableId().getName());// m2o对象的主键值
+				IeeskyMapper m2oMapper = (IeeskyMapper) factory.getObject().getMapper(fc.getEntityMapper().targetMapper());
+				if (StringUtils.isNotBlank(v)) {
 
-				QueryWrapper filter = new QueryWrapper<>();
-				filter.eq(fc.getFieldOfTableId().getName(), v);
-				filter.select(fc.getFieldOfTableId().getName());
-				Object data = m2oMapper.selectOne(filter);
+					QueryWrapper filter = new QueryWrapper<>();
+					filter.eq(fc.getFieldOfTableId().getName(), v);
+					filter.select(fc.getFieldOfTableId().getName());
+					Object data = m2oMapper.selectOne(filter);
 
-				if (ObjectUtils.isEmpty(data))
+					if (ObjectUtils.isEmpty(data))
+						m2oMapper.insert(field.get(entity));
+					else
+						update(fc.getJoinColumn().name(), tf.getFieldOfTableId().getName(), v, entityKey, ieeskyMapper);
+
+				} else {
 					m2oMapper.insert(field.get(entity));
-				else
-					update(fc.getJoinColumn().name(), tf.getFieldOfTableId().getName(), v, entityKey, ibaseMapper);
-
-			} else {
-				m2oMapper.insert(field.get(entity));
-				v = BeanUtils.getProperty(field.get(entity), fc.getFieldOfTableId().getName());// m2o对象的主键值
-				update(fc.getJoinColumn().name(), tf.getFieldOfTableId().getName(), v, entityKey, ibaseMapper);
+					v = BeanUtils.getProperty(field.get(entity), fc.getFieldOfTableId().getName());// m2o对象的主键值
+					update(fc.getJoinColumn().name(), tf.getFieldOfTableId().getName(), v, entityKey, ieeskyMapper);
+				}
 			}
 		}
 	}
 
-	private void update(String fc, String tf, String v, String entityKey, IleeskyMapper ibaseMapper) {
+	private void update(String fc, String tf, String v, String entityKey, IeeskyMapper ibaseMapper) {
 		UpdateWrapper uw = new UpdateWrapper();
 		uw.set(fc, v);
 		uw.eq(tf, entityKey);

@@ -3,12 +3,13 @@ package com.leesky.ezframework.order.model;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.leesky.ezframework.mybatis.annotation.EntityMapper;
 import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.JoinTable;
-import com.leesky.ezframework.mybatis.annotation.Lazy;
 import com.leesky.ezframework.mybatis.annotation.ManyToMany;
 import com.leesky.ezframework.mybatis.annotation.ManyToOne;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
@@ -20,7 +21,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-//@AutoLazy(true)
 @TableName("cbm_child")
 public class ChildModel extends BaseUuidModel {
 
@@ -28,37 +28,43 @@ public class ChildModel extends BaseUuidModel {
 
 	private String name;
 
-	private String laoHanId;
-
 	private String laoMaId;
 
-	@TableField(exist = false)
+	private String laoHanId;
+
+    
 	@ManyToOne
-	@JoinColumn(name = "lao_han_id", referencedColumnName = "man_id")
+	@TableField(exist = false)
+	@JoinColumn(name = "lao_han_id")
 	private ManModel laoHan;
 
-	@TableField(exist = false)
 	@ManyToOne
-	@JoinColumn(name = "lao_ma_id", referencedColumnName = "woman_id")
+	@TableField(exist = false)
+	@JoinColumn(name = "lao_ma_id")
 	private WomanModel laoMa;
 
-	@Lazy(false)
+
 	@ManyToMany
 	@TableField(exist = false)
 
-	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
-	@InverseJoinColumn(name = "course_id", referencedColumnName = "course_id")
-	@JoinTable(targetMapper = IstudentCourseMapper.class,entityClass =StudentCourseModel.class )
+	@JoinColumn(referencedColumnName = "student_id")
+	@InverseJoinColumn(referencedColumnName = "course_id")
+	@EntityMapper(targetMapper = IstudentCourseMapper.class,entityClass =StudentCourseModel.class )
 	private List<CourseModel> cours;
 
 	@ManyToMany
 	@TableField(exist = false)
-	@JoinColumn(name = "child_id", referencedColumnName = "student_id")
-	@InverseJoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
-	@JoinTable(targetMapper = IstudentTeacherMapper.class, entityClass = StudentTeacherModel.class)
+	@JoinColumn(referencedColumnName = "student_id")
+	@InverseJoinColumn(referencedColumnName = "teacher_id")
+	@EntityMapper(targetMapper = IstudentTeacherMapper.class, entityClass = StudentTeacherModel.class)
 	private Set<TeacherModel> teacher;
 
 	public ChildModel() {
+		this.name = "Child_"+RandomStringUtils.randomAlphabetic(4);
+	}
+
+	public ChildModel(ManModel laoHan) {
+		this.laoHan = laoHan;
 	}
 
 	public ChildModel(String name) {

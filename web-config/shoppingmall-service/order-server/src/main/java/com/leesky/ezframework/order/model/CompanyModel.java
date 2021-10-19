@@ -17,26 +17,27 @@ import java.util.List;
 @TableName("cbm_company")
 public class CompanyModel extends BaseUuidModel {
 
-    private static final long serialVersionUID = -4065233907401013994L;
+	private static final long serialVersionUID = -4065233907401013994L;
 
-    private String name;
+	private String name;
 
-    //一对多
-    @OneToMany
-    @TableField(exist = false)
-    @JoinColumn(referencedColumnName = "company_id")
-    @EntityMapper(targetMapper = ImanMapper.class)
-    private List<ManModel> employees;
+	private String companyAddr;
 
-    public CompanyModel() {
-    }
+	@OneToMany
+	@TableField(exist = false)
+	@JoinColumn(referencedColumnName = "company_id")
+	@EntityMapper(targetMapper = ImanMapper.class)
+	private List<ManModel> employees;
 
-    public CompanyModel(String name) {
-        this.name = name;
-    }
+	public CompanyModel() {
+	}
 
-    public CompanyModel(String name, String id) {
-        this.id = id;
-        this.name = name;
-    }
+	public CompanyModel(String name) {
+		this.name = name;
+	}
+
+	public CompanyModel(String name, String id) {
+		this.id = id;
+		this.name = name;
+	}
 }

@@ -7,13 +7,16 @@
  */
 package com.leesky.ezframework.mybatis.save;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.leesky.ezframework.mybatis.condition.FieldCondition;
+import com.leesky.ezframework.mybatis.condition.TableIdCondition;
+import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
+import com.leesky.ezframework.mybatis.utils.JoinUtil;
+import com.leesky.ezframework.utils.Hump2underline;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -23,17 +26,12 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.leesky.ezframework.mybatis.condition.FieldCondition;
-import com.leesky.ezframework.mybatis.condition.TableIdCondition;
-import com.leesky.ezframework.mybatis.mapper.IleeskyMapper;
-import com.leesky.ezframework.mybatis.utils.JoinUtil;
-import com.leesky.ezframework.utils.Hump2underline;
-
-import lombok.RequiredArgsConstructor;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <li>描述:
@@ -46,7 +44,7 @@ public class One2manyHandler<T> {
 	private final ObjectFactory<SqlSession> factory;
 
 
-	public void handler(String[] fields, T entity, IleeskyMapper ibaseMapper) throws Exception {
+	public void handler(String[] fields, T entity, IeeskyMapper ibaseMapper) throws Exception {
 
 		// 1、插入entity实体
 		TableIdCondition tf = new TableIdCondition(entity.getClass());
@@ -80,7 +78,7 @@ public class One2manyHandler<T> {
 				}
 
 				Class<?> m = list.get(0).getClass();
-				IleeskyMapper iMapper = (IleeskyMapper) SpringContextHolder.getBean(JoinUtil.buildMapperBeanName(m.getName()));
+				IeeskyMapper iMapper = (IeeskyMapper) SpringContextHolder.getBean(JoinUtil.buildMapperBeanName(m.getName()));
 
 				if (MapUtils.isNotEmpty(haveKey)) {
 					QueryWrapper filter = new QueryWrapper().select(keyColumn);
@@ -98,7 +96,7 @@ public class One2manyHandler<T> {
 			if (CollectionUtils.isNotEmpty(list)) {
 				List keys = Lists.newArrayList();
 				Class<?> manyMapper = fc.getEntityMapper().targetMapper();
-				IleeskyMapper m2mMapper = (IleeskyMapper) factory.getObject().getMapper(manyMapper);
+				IeeskyMapper m2mMapper = (IeeskyMapper) factory.getObject().getMapper(manyMapper);
 				for (Object e : list) {// 3.1 赋值
 					BeanUtils.setProperty(e, Hump2underline.lineToHump(fc.getJoinColumn().referencedColumnName()), entityKey);
 					keys.add(BeanUtils.getProperty(e, fc.getFieldOfTableId().getName()));

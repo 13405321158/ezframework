@@ -5,29 +5,23 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.leesky.ezframework.mybatis.enums.FetchType;
-
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({ ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EntityMapper {
 
 	/**
-	 * (Optional) The entity class that is the target of the association. Optional
-	 * only if the collection property is defined using Java generics. Must be
-	 * specified otherwise.
-	 *
-	 * <p>
-	 * Defaults to the parameterized type of the collection when defined using
-	 * generics.
+	 * <li></li>
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年10月19日 上午9:11:33
 	 */
 	Class<?> targetMapper() default void.class;
 
 	/**
-	 * (Optional) Whether the association should be lazily loaded or must be eagerly
-	 * fetched. The EAGER strategy is a requirement on the persistence provider
-	 * runtime that the associated entities must be eagerly fetched. The LAZY
-	 * strategy is a hint to the persistence provider runtime.
+	 * <li>many2many专用:中间表实体类</li>
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年10月19日 上午9:10:41
 	 */
-	FetchType fetch() default FetchType.LAZY;
-
+	Class<?> entityClass() default void.class;
 }

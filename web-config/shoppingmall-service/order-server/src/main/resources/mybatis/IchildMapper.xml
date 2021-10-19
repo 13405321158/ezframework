@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.leesky.ezframework.order.mapper.IchildMapper">
+
+    <resultMap type="com.leesky.ezframework.order.model.ChildModel" id="xmlResult">
+
+    </resultMap>
+
+
+    <sql id="tableName">cbm_child</sql>
+
+    <insert id="insert" parameterType="com.leesky.ezframework.order.model.ChildModel" keyProperty="id">
+        insert into <include refid="tableName"/>(id, name, lao_han_id,  create_date, modify_date)
+        values (#{id}, #{name}, #{laoHan.id},  #{createDate}, #{modifyDate})
+    </insert>
+
+
+
+    <select id="selectById" parameterType="String" resultMap="xmlResult">
+        select * from
+        <include refid="tableName"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectList" parameterType="com.leesky.ezframework.mybatis.query.QueryFilter" resultMap="xmlResult">
+        <choose>
+            <when test="ew.param!=null">
+                select ${ew.sqlSelect} from
+                <include refid="tableName"/>
+                where
+                <foreach collection="ew.op" item="value" separator=" and ">${value}</foreach>
+            </when>
+            <otherwise>
+                select * from
+                <include refid="tableName"/>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectBatchIds" parameterType="java.util.Collection" resultMap="xmlResult">
+        <if test="coll!=null">
+            select * from
+            <include refid="tableName"/>
+            where id in (
+            <foreach collection="coll" item="value" separator=",">
+                #{value}
+            </foreach>
+            )
+        </if>
+    </select>
+
+    <select id="selectPage" resultMap="xmlResult">
+        select ${ew.sqlSelect} from
+        <include refid="tableName"/>
+        where
+        <foreach collection="ew.op" item="value" separator=" and ">${value}</foreach>
+    </select>
+
+</mapper>
+

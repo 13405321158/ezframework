@@ -1,17 +1,18 @@
 package com.leesky.ezframework.order.model;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.leesky.ezframework.mybatis.annotation.EntityMapper;
 import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.JoinTable;
 import com.leesky.ezframework.mybatis.annotation.ManyToMany;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import com.leesky.ezframework.order.mapper.IstudentCourseMapper;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -22,11 +23,12 @@ public class CourseModel extends BaseUuidModel {
 
     private String name;
 
-    @TableField(exist = false)
     @ManyToMany
-    @JoinTable(targetMapper = IstudentCourseMapper.class)
-    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
-    @InverseJoinColumn(name = "child_id", referencedColumnName = "student_id")
+    @TableField(exist = false)
+
+    @JoinColumn(referencedColumnName = "course_id")
+    @InverseJoinColumn(referencedColumnName = "student_id")
+    @EntityMapper(targetMapper = IstudentCourseMapper.class, entityClass = StudentCourseModel.class)
     private List<ChildModel> students;
 
     public CourseModel() {

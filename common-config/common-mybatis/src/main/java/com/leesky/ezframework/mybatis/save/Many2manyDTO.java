@@ -7,10 +7,11 @@
  */
 package com.leesky.ezframework.mybatis.save;
 
-import com.google.common.collect.Lists;
-import lombok.Data;
-
 import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import lombok.Data;
 
 /**
  * 类功能说明：
@@ -28,6 +29,7 @@ public class Many2manyDTO {
     private List<String> v02;
 
     private List<String> v01 = Lists.newArrayList();
+    
     public Many2manyDTO() {
     }
 

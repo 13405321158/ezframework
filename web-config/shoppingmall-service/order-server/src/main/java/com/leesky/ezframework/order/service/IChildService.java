@@ -1,15 +1,9 @@
 package com.leesky.ezframework.order.service;
 
-import java.util.List;
-
-import com.leesky.ezframework.mybatis.service.IleeskyService;
+import com.leesky.ezframework.mybatis.service.IeeskyService;
 import com.leesky.ezframework.order.model.ChildModel;
 
 
-public interface IChildService extends IleeskyService<ChildModel> {
-    List<ChildModel> listByInitialize();
+public interface IChildService extends IeeskyService<ChildModel> {
 
-    List<ChildModel> listByInitialize2();
-
-    List<ChildModel> listByInitialize3();
 }

@@ -7,18 +7,15 @@
  */
 package com.leesky.ezframework.mybatis.save;
 
-import java.util.List;
-import java.util.Map;
-
+import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.leesky.ezframework.mybatis.enums.RelationType;
-import com.leesky.ezframework.mybatis.mapper.IleeskyMapper;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -41,28 +38,28 @@ public class SaveHandler<T> {
 	 */
 	@Transactional
 	@SuppressWarnings("rawtypes")
-	public void relationship(List<T> entity, IleeskyMapper ibaseMapper, Map<String, String[]> entityMap) {
+	public void relationship(List<T> entity, IeeskyMapper ieeskyMapper, Map<String, String[]> entityMap) {
 		T t = entity.get(0);
 
 		try {
 			String entityName = t.getClass().getName() + ".";
 
-			String[] o2o = entityMap.get(entityName + RelationType.ONETOONE.name());
-			String[] m2o = entityMap.get(entityName + RelationType.MANYTOONE.name());
-			String[] o2m = entityMap.get(entityName + RelationType.ONETOMANY.name());
-			String[] m2m = entityMap.get(entityName + RelationType.MANYTOMANY.name());
+			String[] o2o = entityMap.get(entityName + "ONETOONE");
+			String[] m2o = entityMap.get(entityName + "MANYTOONE");
+			String[] o2m = entityMap.get(entityName + "ONETOMANY");
+			String[] m2m = entityMap.get(entityName + "MANYTOMANY");
 
 			if (ArrayUtils.isNotEmpty(o2o))
-				o2oHandler.handler(o2o, t, ibaseMapper);
+				o2oHandler.handler(o2o, t, ieeskyMapper);
 
 			if (ArrayUtils.isNotEmpty(m2m))
-				m2mHandler.handler(m2m, t, ibaseMapper);
+				m2mHandler.handler(m2m, t, ieeskyMapper);
 
 			if (ArrayUtils.isNotEmpty(o2m))
-				o2mHandler.handler(o2m, t, ibaseMapper);
+				o2mHandler.handler(o2m, t, ieeskyMapper);
 
 			if (ArrayUtils.isNotEmpty(m2o))
-				m2oHandler.handler(m2o, t, ibaseMapper);
+				m2oHandler.handler(m2o, t, ieeskyMapper);
 
 		} catch (Exception e) {
 			e.printStackTrace();

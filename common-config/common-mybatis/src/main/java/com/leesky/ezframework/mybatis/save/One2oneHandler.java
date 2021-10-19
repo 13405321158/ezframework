@@ -7,9 +7,14 @@
  */
 package com.leesky.ezframework.mybatis.save;
 
-import java.lang.reflect.Field;
-import java.util.UUID;
-
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.condition.FieldCondition;
+import com.leesky.ezframework.mybatis.condition.TableIdCondition;
+import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
+import com.leesky.ezframework.mybatis.query.QueryFilter;
+import com.leesky.ezframework.utils.Hump2underline;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,15 +23,8 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.condition.FieldCondition;
-import com.leesky.ezframework.mybatis.condition.TableIdCondition;
-import com.leesky.ezframework.mybatis.mapper.IleeskyMapper;
-import com.leesky.ezframework.mybatis.query.QueryFilter;
-import com.leesky.ezframework.utils.Hump2underline;
-
-import lombok.RequiredArgsConstructor;
+import java.lang.reflect.Field;
+import java.util.UUID;
 
 /**
  * 类功能说明：
@@ -51,7 +49,7 @@ public class One2oneHandler<T> {
      * @日期: 2021/9/29 上午9:30
      **/
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public void handler(String[] fields, T entity, IleeskyMapper ibaseMapper) throws Exception {
+    public void handler(String[] fields, T entity, IeeskyMapper ieeskyMapper) throws Exception {
 
         String entityKey = UUID.randomUUID().toString();
         TableIdCondition tc = new TableIdCondition(entity.getClass());
@@ -73,7 +71,7 @@ public class One2oneHandler<T> {
                 String v = BeanUtils.getProperty(o2o, fc.getFieldOfTableId().getName());// o2o对象的主键值
                 Class<?> mapperClass = fc.getEntityMapper().targetMapper();
                 String dbColumn = fc.getTableId().value();
-                IleeskyMapper o2oMapper = (IleeskyMapper) factory.getObject().getMapper(mapperClass);
+                IeeskyMapper o2oMapper = (IeeskyMapper) factory.getObject().getMapper(mapperClass);
 
                 if (StringUtils.isNotBlank(v)) {
 
@@ -111,6 +109,6 @@ public class One2oneHandler<T> {
 
         }
         // 5、存储 entity
-        ibaseMapper.insert(entity);
+        ieeskyMapper.insert(entity);
     }
 }
