@@ -24,7 +24,7 @@ public class QueryFiler {
 	}
 
 	public Query buildQuery(Criteria criteria, ParamModel model) {
-		String[] list = StringUtils.split(model.getExt(), ",");
+		String[] list = StringUtils.split(model.getSelect(), ",");
 
 		BasicDBObject fieldsObject = new BasicDBObject();
 

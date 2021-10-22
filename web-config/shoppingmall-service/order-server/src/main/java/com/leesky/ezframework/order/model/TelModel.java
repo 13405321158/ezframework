@@ -4,9 +4,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.leesky.ezframework.mybatis.annotation.EntityMapper;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.ManyToOne;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
+import com.leesky.ezframework.order.mapper.ImanMapper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,10 +27,11 @@ public class TelModel extends BaseUuidModel {
     @ManyToOne
     @TableField(exist = false)
     @JoinColumn(name = "lao_han_id")
+    @EntityMapper(targetMapper = ImanMapper.class)
     private ManModel laoHan;
 
     public TelModel() {
-        this.tel = "134" + RandomStringUtils.randomAlphanumeric(7);
+        this.tel = "13" + RandomStringUtils.randomNumeric(9);
     }
 
     public TelModel(ManModel laoHan) {

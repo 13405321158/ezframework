@@ -59,7 +59,7 @@ public class BaseServiceImpl<E, ObjectId> implements IbaseService<E, ObjectId> {
 
         CriteriaParam params = new CriteriaParam(model);
 
-        if (StringUtils.isNotBlank(model.getExt()))
+        if (StringUtils.isNotBlank(model.getSelect()))
             query = filter.buildQuery(params.make(), model);
         else
             query = filter.buildQuery(params.make());

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper
-	namespace="com.leesky.ezframework.mybatis.mapper.CreateMysqlTablesMapper">
+	namespace="com.leesky.ezframework.mybatis.mapper.CreateTablesMapper">
 
 	<!-- 强制指定查询表结构映射字段，避免被mybatis下划线转驼峰配置影响，导致查询不到值 -->
 	<resultMap id="SysMysqlColumnsResultMap" type="com.leesky.ezframework.mybatis.ddl.command.SysMysqlColumns">

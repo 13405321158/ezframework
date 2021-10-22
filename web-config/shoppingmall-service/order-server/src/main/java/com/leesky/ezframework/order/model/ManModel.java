@@ -41,13 +41,13 @@ public class ManModel extends BaseUuidModel {
     @OneToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "lao_han_id")
-    @EntityMapper(targetMapper = ItelMapper.class)
+    @EntityMapper(targetMapper = ItelMapper.class,entityClass = TelModel.class)
     private Set<TelModel> tels;
 
     @OneToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "lao_han_id")
-    @EntityMapper(targetMapper = IchildMapper.class)
+    @EntityMapper(targetMapper = IchildMapper.class,entityClass = ChildModel.class)
     private List<ChildModel> childs;
 
     @OneToOne

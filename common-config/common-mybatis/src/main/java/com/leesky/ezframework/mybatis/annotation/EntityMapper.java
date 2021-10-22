@@ -15,7 +15,7 @@ public @interface EntityMapper {
 	 * @作者: 魏来
 	 * @日期: 2021年10月19日 上午9:11:33
 	 */
-	Class<?> targetMapper() default void.class;
+	Class<?> targetMapper();
 
 	/**
 	 * <li>many2many专用:中间表实体类</li>

@@ -15,7 +15,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.leesky.ezframework.mybatis.ddl.command.SysMysqlColumns;
 
-public interface CreateMysqlTablesMapper {
+public interface CreateTablesMapper {
 
     /**
      * 根据结构注解解析出来的信息创建表

@@ -13,8 +13,10 @@ import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.ManyToMany;
 import com.leesky.ezframework.mybatis.annotation.ManyToOne;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
+import com.leesky.ezframework.order.mapper.ImanMapper;
 import com.leesky.ezframework.order.mapper.IstudentCourseMapper;
 import com.leesky.ezframework.order.mapper.IstudentTeacherMapper;
+import com.leesky.ezframework.order.mapper.IwomanMapper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,17 +38,18 @@ public class ChildModel extends BaseUuidModel {
 	@ManyToOne
 	@TableField(exist = false)
 	@JoinColumn(name = "lao_han_id")
+    @EntityMapper(targetMapper = ImanMapper.class)
 	private ManModel laoHan;
 
 	@ManyToOne
 	@TableField(exist = false)
 	@JoinColumn(name = "lao_ma_id")
+    @EntityMapper(targetMapper = IwomanMapper.class)
 	private WomanModel laoMa;
 
 
 	@ManyToMany
 	@TableField(exist = false)
-
 	@JoinColumn(referencedColumnName = "student_id")
 	@InverseJoinColumn(referencedColumnName = "course_id")
 	@EntityMapper(targetMapper = IstudentCourseMapper.class,entityClass =StudentCourseModel.class )

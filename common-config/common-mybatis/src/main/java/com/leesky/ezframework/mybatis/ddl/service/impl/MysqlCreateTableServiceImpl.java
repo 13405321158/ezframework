@@ -42,7 +42,7 @@ import com.leesky.ezframework.mybatis.ddl.constants.Constants;
 import com.leesky.ezframework.mybatis.ddl.constants.MySqlTypeConstant;
 import com.leesky.ezframework.mybatis.ddl.service.ImysqlCreateTableService;
 import com.leesky.ezframework.mybatis.ddl.utils.ClassTools;
-import com.leesky.ezframework.mybatis.mapper.CreateMysqlTablesMapper;
+import com.leesky.ezframework.mybatis.mapper.CreateTablesMapper;
 import com.leesky.ezframework.utils.Hump2underline;
 
 import io.swagger.annotations.ApiModel;
@@ -57,7 +57,7 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
 
     private static final Logger log = LoggerFactory.getLogger(MysqlCreateTableServiceImpl.class);
 
-    private final CreateMysqlTablesMapper createMysqlTablesMapper;
+    private final CreateTablesMapper createMysqlTablesMapper;
     private static Map<String, String> CommentMap = Maps.newHashMap();//数据表注释
     // 获取Mysql的类型，以及类型需要设置几个长度
     private static Map<String, Object> mySqlTypeAndLengthMap = mySqlTypeAndLengthMap();

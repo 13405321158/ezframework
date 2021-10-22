@@ -45,7 +45,7 @@ public class WomanModel extends BaseUuidModel {
     @OneToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "lao_ma_id")
-    @EntityMapper(targetMapper = IchildMapper.class)
+    @EntityMapper(targetMapper = IchildMapper.class,entityClass =ChildModel.class )
     private List<ChildModel> waWa;
 
     public WomanModel() {

@@ -1,32 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.leesky.ezframework.order.mapper.ImanMapper">
-    <resultMap type="com.leesky.ezframework.order.model.ManModel" id="xmlResult">
-        <association property="laoPo"  javaType="com.leesky.ezframework.order.model.WomanModel"/>
-
-        <association property="idCard" javaType="com.leesky.ezframework.order.model.IdCardModel"/>
-
-        <association property="companyModel" javaType="com.leesky.ezframework.order.model.CompanyModel"/>
-
-        <collection property="tels"  javaType="com.leesky.ezframework.order.model.TelModel"/>
-
-        <collection property="childs"  javaType="com.leesky.ezframework.order.model.ChildModel"/>
+<mapper namespace="com.leesky.ezframework.order.mapper.IcompanyMapper">
+    <resultMap type="com.leesky.ezframework.order.model.CompanyModel" id="xmlResult">
+        <collection property="employees" column="id" ofType="com.leesky.ezframework.order.model.ManModel" select="com.leesky.ezframework.order.mapper.ImanMapper.selectBycompanyId" fetchType="lazy"/>
     </resultMap>
-
-    <sql id="tableName">cbm_man</sql>
-
-    <select id="selectBycompanyId" parameterType="String" resultMap="xmlResult">
-        select * from
-        <include refid="tableName"/>
-        where company_id = #{id}
-    </select>
+    <sql id="tableName">cbm_company</sql>
 
     <select id="selectById" parameterType="String" resultMap="xmlResult">
         select * from
         <include refid="tableName"/>
         where id = #{id}
     </select>
-
     <select id="selectList" parameterType="com.leesky.ezframework.mybatis.query.QueryFilter" resultMap="xmlResult">
         <choose>
             <when test="ew.param!=null">
@@ -41,7 +25,6 @@
             </otherwise>
         </choose>
     </select>
-
     <select id="selectBatchIds" parameterType="java.util.Collection" resultMap="xmlResult">
         <if test="coll!=null">
             select * from
@@ -53,7 +36,6 @@
             )
         </if>
     </select>
-
     <select id="selectPage" resultMap="xmlResult">
         select ${ew.sqlSelect} from
         <include refid="tableName"/>

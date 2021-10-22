@@ -26,7 +26,7 @@ public class CompanyModel extends BaseUuidModel {
 	@OneToMany
 	@TableField(exist = false)
 	@JoinColumn(referencedColumnName = "company_id")
-	@EntityMapper(targetMapper = ImanMapper.class)
+	@EntityMapper(targetMapper = ImanMapper.class,entityClass = ManModel.class)
 	private List<ManModel> employees;
 
 	public CompanyModel() {
