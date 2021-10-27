@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.leesky.ezframework.order.mapper.ImanMapper">
     <resultMap type="com.leesky.ezframework.order.model.ManModel" id="xmlResult">
-        <association property="laoPo"  javaType="com.leesky.ezframework.order.model.WomanModel"/>
+        <association property="laoPo" javaType="com.leesky.ezframework.order.model.WomanModel"/>
 
         <association property="idCard" javaType="com.leesky.ezframework.order.model.IdCardModel"/>
 
         <association property="companyModel" javaType="com.leesky.ezframework.order.model.CompanyModel"/>
 
-        <collection property="tels"  javaType="com.leesky.ezframework.order.model.TelModel"/>
+        <collection property="tels" javaType="com.leesky.ezframework.order.model.TelModel"/>
 
-        <collection property="childs"  javaType="com.leesky.ezframework.order.model.ChildModel"/>
+        <collection property="childs" javaType="com.leesky.ezframework.order.model.ChildModel"/>
     </resultMap>
 
     <sql id="tableName">cbm_man</sql>
@@ -55,10 +55,14 @@
     </select>
 
     <select id="selectPage" resultMap="xmlResult">
-        select ${ew.sqlSelect} from
+        select  ${ew.sqlSelect} from
         <include refid="tableName"/>
+        <if test="ew.join!=null"> a
+            <foreach collection="ew.join" item="value" separator="  ">${value}</foreach>
+        </if>
         where
         <foreach collection="ew.op" item="value" separator=" and ">${value}</foreach>
     </select>
+
 
 </mapper>

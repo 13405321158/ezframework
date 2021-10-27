@@ -9,8 +9,7 @@ package com.leesky.ezframework.backend.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
-import com.leesky.ezframework.model.BaseUuidModel;
+import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -31,7 +30,7 @@ public class GroupModel extends BaseUuidModel {
 	private String groupName;
 
 	@TableField(exist = false)
-	@Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "group_id",otherMiddleTableColumn="user_id",otherTableName="cbm_mag_user")
+//	@Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "group_id",otherMiddleTableColumn="user_id",otherTableName="cbm_mag_user")
 	private Set<UserBaseModel> userSet;
 
 	public GroupModel() {

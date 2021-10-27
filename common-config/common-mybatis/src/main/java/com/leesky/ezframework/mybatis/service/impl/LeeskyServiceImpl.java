@@ -1,5 +1,7 @@
 package com.leesky.ezframework.mybatis.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -12,13 +14,16 @@ import com.leesky.ezframework.mybatis.save.SaveHandler;
 import com.leesky.ezframework.mybatis.service.IeeskyService;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @Getter
 @Setter
 @SuppressWarnings("unchecked")
@@ -26,10 +31,8 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
 
     @Autowired
     protected M baseMapper;
-
     @Autowired
     protected AutoMapper autoMapper;
-
     @Autowired
     protected SaveHandler<T> saveHandler;
 
@@ -106,11 +109,29 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     @Override
     public Page<T> page(QueryFilter<T> filter) {
 
-        Integer pageSize = filter.getParam().getLimit();
-        Integer pageoffset = filter.getParam().getPage();
-        Page<T> page = new Page<>(pageoffset, pageSize);
+        Integer size = filter.getParam().getLimit();
+        Integer offset = filter.getParam().getPage();
+        Page<T> page = new Page<>(offset, size);
 
         return this.baseMapper.selectPage(page, filter);
+    }
+
+    /**
+     * 描述:根据wrapper过滤器 分页查询
+     *
+     * @作者: 魏来
+     * @日期: 2021年9月25日 上午8:20:12
+     */
+    @Override
+    public <E> Page<E> page(QueryFilter<T> filter, Class<E> clz) {
+        Page<E> page = new Page<>();
+        Long total = this.baseMapper.getTotal(filter);
+        List<Map<String, Object>> data = this.baseMapper.page(filter);
+        List<E> bean = JSON.parseArray(JSONObject.toJSONString(data), clz);
+
+        page.setTotal(total);
+        page.setRecords(bean);
+        return page;
     }
 
     /**

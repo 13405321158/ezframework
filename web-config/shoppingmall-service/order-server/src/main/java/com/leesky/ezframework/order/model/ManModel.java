@@ -1,26 +1,16 @@
 package com.leesky.ezframework.order.model;
 
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang3.RandomStringUtils;
-
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.mybatis.annotation.EntityMapper;
-import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.ManyToOne;
-import com.leesky.ezframework.mybatis.annotation.OneToMany;
-import com.leesky.ezframework.mybatis.annotation.OneToOne;
+import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
-import com.leesky.ezframework.order.mapper.IchildMapper;
-import com.leesky.ezframework.order.mapper.IcompanyMapper;
-import com.leesky.ezframework.order.mapper.IidCardMapper;
-import com.leesky.ezframework.order.mapper.ItelMapper;
-import com.leesky.ezframework.order.mapper.IwomanMapper;
-
+import com.leesky.ezframework.order.mapper.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -41,32 +31,32 @@ public class ManModel extends BaseUuidModel {
     @OneToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "lao_han_id")
-    @EntityMapper(targetMapper = ItelMapper.class,entityClass = TelModel.class)
+    @EntityMapper(targetMapper = ItelMapper.class, entityClass = TelModel.class)
     private Set<TelModel> tels;
 
     @OneToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "lao_han_id")
-    @EntityMapper(targetMapper = IchildMapper.class,entityClass = ChildModel.class)
+    @EntityMapper(targetMapper = IchildMapper.class, entityClass = ChildModel.class)
     private List<ChildModel> childs;
 
     @OneToOne
     @TableField(exist = false)
     @JoinColumn(name = "laopo_id")
-    @EntityMapper(targetMapper = IwomanMapper.class)
+    @EntityMapper(targetMapper = IwomanMapper.class, entityClass = WomanModel.class)
     private WomanModel laoPo;
 
     @OneToOne
     @TableField(exist = false)
     @JoinColumn(name = "card_id")
-    @EntityMapper(targetMapper = IidCardMapper.class)
+    @EntityMapper(targetMapper = IidCardMapper.class, entityClass = IdCardModel.class)
     private IdCardModel idCard;
 
     @ManyToOne
     @TableField(exist = false)
     @JoinColumn(name = "company_id")
-    @EntityMapper(targetMapper = IcompanyMapper.class)
-    private CompanyModel companyModel;
+    @EntityMapper(targetMapper = IcompanyMapper.class, entityClass = CompanyModel.class)
+    private CompanyModel company;
 
     public ManModel() {
         this.name = "man_" + RandomStringUtils.randomAlphabetic(4);
@@ -79,8 +69,8 @@ public class ManModel extends BaseUuidModel {
         this.name = RandomStringUtils.randomAlphabetic(4);
     }
 
-    public ManModel(CompanyModel companyModel, String name) {
+    public ManModel(CompanyModel company, String name) {
         this.name = name;
-        this.companyModel = companyModel;
+        this.company = company;
     }
 }

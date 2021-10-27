@@ -7,19 +7,16 @@
  */
 package com.leesky.ezframework.backend.model;
 
-import java.util.List;
-
-import org.apache.commons.lang3.RandomStringUtils;
-
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.join.interfaces.one2many.One2Many;
-import com.leesky.ezframework.model.BaseUuidModel;
-
+import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,7 +36,7 @@ public class DealerOrderModel extends BaseUuidModel {
 	private String orderSn = "SO210"+RandomStringUtils.randomNumeric(5);
 
 	@TableField(exist = false)
-	@One2Many(manyTableName = "cbm_mag_order_item", joinColumn = "order_num", joinField = "orderNum")
+//	@One2Many(manyTableName = "cbm_mag_order_item", joinColumn = "order_num", joinField = "orderNum")
 	private List<DealerOrderItemModel> items;
 
 }

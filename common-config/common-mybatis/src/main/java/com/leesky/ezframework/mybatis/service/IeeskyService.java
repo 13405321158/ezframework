@@ -58,6 +58,13 @@ public interface IeeskyService<T> {
      */
     Page<T> page(QueryFilter<T> filter);
 
+    /**
+     * <li>根据wrapper过滤器 分页查询:
+     *
+     * @作者: 魏来
+     * @日期: 2021年9月25日 上午8:20:12
+     */
+    <E> Page<E> page(QueryFilter<T> filter, Class<E> clz);
 
     /**
      * <li>relation=false 不处理聚合关系</li>

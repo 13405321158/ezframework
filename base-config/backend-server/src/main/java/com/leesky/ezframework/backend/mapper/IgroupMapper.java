@@ -8,8 +8,8 @@
 package com.leesky.ezframework.backend.mapper;
 
 import com.leesky.ezframework.backend.model.GroupModel;
-import com.leesky.ezframework.join.mapper.IbaseMapper;
+import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
 
-public interface IgroupMapper extends IbaseMapper<GroupModel>{
+public interface IgroupMapper extends IeeskyMapper<GroupModel> {
 
 }

@@ -7,8 +7,8 @@
  */
 package com.leesky.ezframework.backend.mapper;
 
-import com.leesky.ezframework.join.mapper.IbaseMapper;
-import  com.leesky.ezframework.backend.model.DealerOrderItemModel;
+import com.leesky.ezframework.backend.model.DealerOrderItemModel;
+import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
 
-public interface IdealerOrderItemMapper extends IbaseMapper<DealerOrderItemModel> {
+public interface IdealerOrderItemMapper extends IeeskyMapper<DealerOrderItemModel> {
 }

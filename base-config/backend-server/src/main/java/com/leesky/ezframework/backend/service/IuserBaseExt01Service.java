@@ -7,8 +7,8 @@
  */
 package com.leesky.ezframework.backend.service;
 
-import com.leesky.ezframework.service.IbaseService;
-import  com.leesky.ezframework.backend.model.UserBaseExt01Model;
+import com.leesky.ezframework.backend.model.UserBaseExt01Model;
+import com.leesky.ezframework.mybatis.service.IeeskyService;
 
-public interface IuserBaseExt01Service extends IbaseService<UserBaseExt01Model> {
+public interface IuserBaseExt01Service extends IeeskyService<UserBaseExt01Model> {
 }

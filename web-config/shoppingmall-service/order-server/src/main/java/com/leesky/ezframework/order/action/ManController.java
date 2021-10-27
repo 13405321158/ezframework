@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
+import com.leesky.ezframework.order.dto.RetDTO;
 import com.leesky.ezframework.order.model.*;
 import com.leesky.ezframework.order.service.IManService;
 import com.leesky.ezframework.query.ParamModel;
@@ -20,39 +21,39 @@ import java.util.Set;
 @RequestMapping(value = "/man")
 public class ManController {
 
-	@Autowired
-	private IManService manService;
+    @Autowired
+    private IManService manService;
 
-	@RequestMapping(value = "man/{id}")
-	public ManModel getMan(@PathVariable("id") Long id) {
-		ManModel manModel = manService.findOne(id);
-		return manModel;
-	}
+    @RequestMapping(value = "man/{id}")
+    public ManModel getMan(@PathVariable("id") Long id) {
+        ManModel manModel = manService.findOne(id);
+        return manModel;
+    }
 
-	@GetMapping(value = "mans")
-	public List<ManModel> listMans() {
-		List<ManModel> list = manService.findAll();
+    @GetMapping(value = "mans")
+    public List<ManModel> listMans() {
+        List<ManModel> list = manService.findAll();
 
-		return list;
-	}
+        return list;
+    }
 
-	@PostMapping("/c01")
-	public AjaxJson index(@RequestBody ParamModel param) {
-		AjaxJson json = new AjaxJson();
-		try {
+    @PostMapping("/c01")
+    public AjaxJson index(@RequestBody ParamModel param) {
+        AjaxJson json = new AjaxJson();
+        try {
 
-			HashSet<TelModel> tels = Sets.newHashSet(new TelModel(), new TelModel());
-			List<ChildModel> c = Lists.newArrayList(new ChildModel(), new ChildModel());
+            HashSet<TelModel> tels = Sets.newHashSet(new TelModel(), new TelModel());
+            List<ChildModel> c = Lists.newArrayList(new ChildModel(), new ChildModel());
 
-			CompanyModel company = new CompanyModel("神化集团");
-			IdCardModel c1 = new IdCardModel(RandomStringUtils.randomNumeric(20), "北京市海淀区王庄路1号");
-			IdCardModel c2 = new IdCardModel(RandomStringUtils.randomNumeric(20), "青岛市市北区湖光山色小区");
+            CompanyModel company = new CompanyModel("神化集团");
+            IdCardModel c1 = new IdCardModel(RandomStringUtils.randomNumeric(20), "北京市海淀区王庄路1号");
+            IdCardModel c2 = new IdCardModel(RandomStringUtils.randomNumeric(20), "青岛市市北区湖光山色小区");
 //
-			WomanModel womanModel = new WomanModel();
-			ManModel manModel = new ManModel(womanModel);
-//			manModel.setCompanyModel(company);
-//			manModel.setIdCard(c2);
-			manModel.setTels(tels);
+            WomanModel womanModel = new WomanModel();
+            ManModel manModel = new ManModel(womanModel);
+			manModel.setCompany(company);
+			manModel.setIdCard(c2);
+            manModel.setTels(tels);
 //			manModel.setChilds(c);
 //
 //			womanModel.setIdCard(c1);
@@ -60,7 +61,7 @@ public class ManController {
 //
 //
 //            this.idCardService.insert(Lists.newArrayList(c1, c2));
-			this.manService.insert(Lists.newArrayList(manModel), true);
+            this.manService.insert(Lists.newArrayList(manModel), true);
 //            this.iwomanService.insert(womanModel,true);
 //
 //            UpdateWrapper<ManModel> filter = new UpdateWrapper<>();
@@ -68,56 +69,50 @@ public class ManController {
 //            filter.set("laoPo_id", womanModel.getId());
 //            this.manService.update(filter);
 
-		} catch (Exception e) {
-			json.setSuccess(false, e.getMessage());
-		}
+        } catch (Exception e) {
+            json.setSuccess(false, e.getMessage());
+        }
 
-		return json;
-	}
+        return json;
+    }
 
-	@PostMapping("/c02")
-	public AjaxJson index03(@RequestBody ParamModel param) {
-		AjaxJson json = new AjaxJson();
-		try {
-			ManModel manModel = new ManModel();
+    @PostMapping("/c02")
+    public AjaxJson index03(@RequestBody ParamModel param) {
+        AjaxJson json = new AjaxJson();
+        try {
+            ManModel manModel = new ManModel();
 //            this.manService.insert(manModel);
 
-			List<ChildModel> c = Lists.newArrayList(new ChildModel(manModel), new ChildModel(manModel));
-			manModel.setChilds(c);
+            List<ChildModel> c = Lists.newArrayList(new ChildModel(manModel), new ChildModel(manModel));
+            manModel.setChilds(c);
 //            this.childService.insert(c);
 
-			Set<TelModel> s = Sets.newHashSet(new TelModel(manModel), new TelModel(manModel), new TelModel(manModel));
-			manModel.setTels(s);
+            Set<TelModel> s = Sets.newHashSet(new TelModel(manModel), new TelModel(manModel), new TelModel(manModel));
+            manModel.setTels(s);
 //            this.telService.insert(Lists.newArrayList(s));
 
-		} catch (Exception e) {
-			json.setSuccess(false, e.getMessage());
-		}
-		return json;
-	}
+        } catch (Exception e) {
+            json.setSuccess(false, e.getMessage());
+        }
+        return json;
+    }
 
-	@PostMapping("/r01")
-	public AjaxJson index02(@RequestBody ParamModel param) {
-		AjaxJson json = new AjaxJson();
-		try {
-			QueryFilter<ManModel> filter = new QueryFilter<>(param);
+    @PostMapping("/r01")
+    public AjaxJson index02(@RequestBody ParamModel param) {
+        AjaxJson json = new AjaxJson();
+        try {
+            param.setSelect("company.id");
+            QueryFilter<ManModel> filter = new QueryFilter<>(param, ManModel.class);
 
-			Page<ManModel> result = this.manService.page(filter);
+            Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
 
-			List<ManModel> data = result.getRecords();
+            json.setCount(data.getTotal());
+            json.setData(data.getRecords());
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.setSuccess(false, e.getMessage());
+        }
 
-//			for (ManModel d : data) {
-//				Set<TelModel> s = d.getTels();
-//				for (TelModel t : s)
-//					System.err.println(t.getTel());
-//			}
-
-			json.setCount(result.getTotal());
-		} catch (Exception e) {
-			e.printStackTrace();
-			json.setSuccess(false, e.getMessage());
-		}
-
-		return json;
-	}
+        return json;
+    }
 }

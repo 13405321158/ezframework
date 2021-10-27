@@ -15,7 +15,6 @@ import java.util.Map;
 @Data
 @JsonInclude(value = Include.NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
-
 public class ParamModel {
 
     private Integer page;// 页码
@@ -29,13 +28,13 @@ public class ParamModel {
     public ParamModel() {
         this.page = 0;
         this.limit = 10;
-
     }
 
     /**
+     * 手动增加查询条件
+     *
      * @author: weilai
      * @date: 2021/5/20 上午10:42
-     * @desc: 手动增加查询条件
      **/
     public void addFilter(Map<String, String> queryMap) {
 
@@ -63,5 +62,9 @@ public class ParamModel {
         return null;
     }
 
-
+    public Integer getPage() {
+        if (this.page <= 0)
+            this.page = 1;
+        return page - 1;
+    }
 }

@@ -2,20 +2,16 @@ package com.leesky.ezframework.mybatis.query;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
 import com.leesky.ezframework.query.ParamModel;
 import com.leesky.ezframework.utils.Hump2underline;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.ResolvableType;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -25,95 +21,61 @@ public class QueryFilter<T> extends QueryWrapper<T> {
 
     private static final long serialVersionUID = -7119777000984779256L;
 
-    public ParamModel param;
+    public String tableName;//表名称,即clz的表名称
+    public ParamModel param;//查询参数对象
+    public List<String> op = Lists.newArrayList();// 原始参数转下划线且带有操作符号
+    public List<String> join = Lists.newArrayList();//left join 字符串
     public Map<String, Object> p1 = Maps.newHashMap();// 原始参数值
     public Map<String, Object> p2 = Maps.newHashMap();// 原始参数转换为下划线格式
-    public List<String> op = Lists.newArrayList();// 原始参数转下划线且带有操作符号
-    public Multimap<String, String> join = ArrayListMultimap.create();//实体类中 关系实体属性
-
-    private T t ;
 
     public QueryFilter() {
-
-    }
-
-    public QueryFilter(ParamModel param) throws NoSuchFieldException {
-        this.param = param;
-        if (StringUtils.equals(getSqlSelect(), null))
-            this.setSelect("*");
-        else
-            this.setSelect(param.getSelect());
-
-        analyzing(this.param.getQueryStr(), Lists.newArrayList());
-
-        ResolvableType s = ResolvableType.forField(getClass().getDeclaredField("t"));
-        if (ObjectUtils.isNotEmpty(s))
-            System.out.println("obj.getName() = " + s.getGeneric(0));
-//        for (Field f : this.getEntityClass().getDeclaredFields()) {
-//
-//            OneToOne o2o = f.getAnnotation(OneToOne.class);
-//            if (ObjectUtils.isNotEmpty(o2o))
-//                join.put("o2o", f.getName());
-//
-//            ManyToMany m2m = f.getAnnotation(ManyToMany.class);
-//            if (ObjectUtils.isNotEmpty(m2m))
-//                join.put("m2m", f.getName());
-//
-//
-//            OneToMany o2m = f.getAnnotation(OneToMany.class);
-//            if (ObjectUtils.isNotEmpty(o2m))
-//                join.put("o2m", f.getName());
-//
-//            ManyToOne m2o = f.getAnnotation(ManyToOne.class);
-//            if (ObjectUtils.isNotEmpty(m2o))
-//                join.put("m2o", f.getName());
-//
-//
-//        }
-    }
-
-    public QueryFilter(ParamModel param, List<String> remove) {
-        this.param = param;
-        this.setSelect(param.getSelect());
-        analyzing(this.param.getQueryStr(), remove);
     }
 
     /**
+     * <li>:单表查询 用
+     *
      * @作者: 魏来
-     * @日期: 2021/8/18 下午2:05
-     * @描述: 带有排序字段
+     * @日期: 2021/10/27  下午2:36
      **/
-    public QueryFilter(ParamModel param, String orderField, String descAsc) {
+    public QueryFilter(ParamModel param) {
         this.param = param;
-
-        this.setSelect(param.getSelect());
-
-        switch (descAsc) {
-
-            case "asc":
-                this.orderByAsc(orderField);
-                break;
-
-            case "desc":
-                this.orderByDesc(orderField);
-                break;
-
-        }
-
-        analyzing(param.getQueryStr(), Lists.newArrayList());
-
+        if (StringUtils.isNotBlank(param.getSelect()))
+            this.select(this.param.getSelect());
+        analyzing(this.param.getQueryStr(), Lists.newArrayList());
     }
 
+    /**
+     * <li>:联合表查询 用
+     *
+     * @作者: 魏来
+     * @日期: 2021/10/27  下午2:35
+     **/
+    public QueryFilter(ParamModel param, Class<T> clz) {
+        this.param = param;
+        this.tableName = clz.getAnnotation(TableName.class).value() + " a";
+        if (StringUtils.isBlank(param.getSelect()))
+            this.select("*");
+        else
+            this.select(Common.buildSelect(param.getSelect()));
 
-    private void setSelect(String str) {
-        if (StringUtils.isNotBlank(str)) {
-            List<String> ret = Lists.newArrayList();
-            String[] array = StringUtils.split(str, ",");
-            Arrays.stream(array).forEach(e -> ret.add(Hump2underline.build(e)));
-            this.select(StringUtils.join(ret, ","));
-        }
+        analyzing(this.param.getQueryStr(), Lists.newArrayList());
 
+        Common.joinQueryStr(clz, this, join);//拼接sql语句
     }
+
+    /**
+     * <li>: 排除查询条件
+     *
+     * @作者: 魏来
+     * @日期: 2021/10/27  下午2:30
+     **/
+    public QueryFilter(ParamModel param, List<String> remove) {
+        this.param = param;
+        if (StringUtils.isNotBlank(param.getSelect()))
+            this.select(this.param.getSelect());
+        analyzing(this.param.getQueryStr(), remove);
+    }
+
 
     /**
      * <li>:str 是model的属性，所以要用驼峰转换为 数据表字段
@@ -126,6 +88,7 @@ public class QueryFilter<T> extends QueryWrapper<T> {
         if (StringUtils.isNotBlank(str)) {
             Map<String, String> params = JSON.parseObject(str, new TypeReference<>() {
             });
+
 
             for (Map.Entry<String, String> map : params.entrySet()) {
                 if (remove.contains(map.getKey()))// 如果是需要排除的参数，则跳过，继续下一个循环
@@ -151,67 +114,74 @@ public class QueryFilter<T> extends QueryWrapper<T> {
             p2.put(Hump2underline.build(array[0]), val);
             String column = Hump2underline.build(array[0]);
 
+            //如果array[0]中还有"."例如laoPo.createDate,则要把 createDate 转换为驼峰
+            String[] a = StringUtils.split(array[0], ".");
+            if (a.length > 1)
+                array[0] = a[0] + "." + Hump2underline.build(a[1]);
+            else
+                array[0] = "a." + array[0];
+
             switch (array[1]) {
 
                 case "EQ":
                     this.eq(column, val);
-                    op.add(Hump2underline.build(array[0]) + "='" + val + "'");
+                    op.add(array[0] + "='" + val + "'");
                     break;
 
                 case "NE":
                     this.ne(column, val);
-                    op.add(Hump2underline.build(array[0]) + " != '" + val + "'");
+                    op.add(array[0] + " != '" + val + "'");
                     break;
 
                 case "GE":
                     this.ge(column, val);
-                    op.add(Hump2underline.build(array[0]) + " >= '" + val + "'");
+                    op.add(array[0] + " >= '" + val + "'");
                     break;
 
                 case "GT":
                     this.gt(column, val);
-                    op.add(Hump2underline.build(array[0]) + " > '" + val + "'");
+                    op.add(array[0] + " > '" + val + "'");
                     break;
 
                 case "LE":
                     this.le(column, val);
-                    op.add(Hump2underline.build(array[0]) + " <= '" + val + "'");
+                    op.add(array[0] + " <= '" + val + "'");
                     break;
 
                 case "LT":
                     this.lt(column, val);
-                    op.add(Hump2underline.build(array[0]) + " < '" + val + "'");
+                    op.add(array[0] + " < '" + val + "'");
                     break;
 
                 case "LK":
                     this.like(column, val);
-                    op.add(Hump2underline.build(array[0]) + " like '%" + val + "%'");
+                    op.add(array[0] + " like '%" + val + "%'");
                     break;
 
                 case "LKLeft":
                     this.likeLeft(column, val);
-                    op.add(Hump2underline.build(array[0]) + " like '" + val + "%'");
+                    op.add(array[0] + " like '" + val + "%'");
                     break;
 
                 case "LKRight":
                     this.likeRight(column, val);
-                    op.add(Hump2underline.build(array[0]) + " like '%" + val + "'");
+                    op.add(array[0] + " like '%" + val + "'");
                     break;
 
                 case "NK":
                     this.notLike(column, val);
-                    op.add(Hump2underline.build(array[0]) + " not like '%" + val + "%'");
+                    op.add(array[0] + " not like '%" + val + "%'");
                     break;
 
                 case "BW":
                     String[] va = StringUtils.split(val.toString(), "~");
                     this.between(column, va[0], va[1]);
-                    op.add(Hump2underline.build(array[0]) + " BETWEEN '" + va[0] + "' to '" + va[1] + "'");
+                    op.add(array[0] + " BETWEEN '" + va[0] + "' to '" + va[1] + "'");
                     break;
 
                 case "IN":
                     this.in(column, (Object) String.valueOf(val).split(","));
-                    op.add(Hump2underline.build(array[0]) + " in('" + StringUtils.join(Lists.newArrayList(StringUtils.split((String) val, ",")), "','") + "')");
+                    op.add(array[0] + " in('" + StringUtils.join(Lists.newArrayList(StringUtils.split((String) val, ",")), "','") + "')");
                     break;
 
             }

@@ -7,8 +7,8 @@
  */
 package com.leesky.ezframework.backend.service;
 
-import com.leesky.ezframework.service.IbaseService;
-import  com.leesky.ezframework.backend.model.DealerOrderModel;
+import com.leesky.ezframework.backend.model.DealerOrderModel;
+import com.leesky.ezframework.mybatis.service.IeeskyService;
 
-public interface IdealerOrderService extends IbaseService<DealerOrderModel> {
+public interface IdealerOrderService extends IeeskyService<DealerOrderModel> {
 }

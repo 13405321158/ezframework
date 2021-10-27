@@ -9,9 +9,7 @@ package com.leesky.ezframework.backend.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.join.interfaces.many2many.Many2Many;
-import com.leesky.ezframework.join.interfaces.one2one.One2One;
-import com.leesky.ezframework.model.BaseUuidModel;
+import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -47,15 +45,15 @@ public class UserBaseModel extends BaseUuidModel {
     private String ext02Id;
 
     @TableField(exist = false)
-    @One2One(otherOneTableName = "cbm_mag_user_ext01", joinField = "ext01Id")
+//    @One2One(otherOneTableName = "cbm_mag_user_ext01", joinField = "ext01Id")
     private UserBaseExt01Model ext01;
 
     @TableField(exist = false)
-    @One2One(otherOneTableName = "cbm_mag_user_ext02", joinField = "ext02Id")
+//    @One2One(otherOneTableName = "cbm_mag_user_ext02", joinField = "ext02Id")
     private UserBaseExt02Model ext02;
 
     @TableField(exist = false)
-    @Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "user_id", otherMiddleTableColumn = "group_id", otherTableName = "cbm_mag_group")
+//    @Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "user_id", otherMiddleTableColumn = "group_id", otherTableName = "cbm_mag_group")
     private Set<GroupModel> groupSet;
 
     public UserBaseModel() {

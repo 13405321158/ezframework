@@ -1,12 +1,13 @@
 package com.leesky.ezframework.mybatis.mapper;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.leesky.ezframework.mybatis.annotation.*;
+import com.leesky.ezframework.mybatis.save.SaveHandler;
+import com.leesky.ezframework.mybatis.utils.MapperUtils;
+import com.leesky.ezframework.utils.Hump2underline;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -23,20 +24,12 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.leesky.ezframework.mybatis.annotation.EntityMapper;
-import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.ManyToMany;
-import com.leesky.ezframework.mybatis.annotation.ManyToOne;
-import com.leesky.ezframework.mybatis.annotation.OneToMany;
-import com.leesky.ezframework.mybatis.annotation.OneToOne;
-import com.leesky.ezframework.mybatis.save.SaveHandler;
-import com.leesky.ezframework.mybatis.utils.MapperUtils;
-import com.leesky.ezframework.utils.Hump2underline;
-
-import lombok.extern.slf4j.Slf4j;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * AutoMapper for one2one/one2many/many2many
@@ -72,7 +65,7 @@ public class AutoMapper {
 					TableName annotation = clazz.getAnnotation(TableName.class);
 					if (ObjectUtils.isNotEmpty(annotation)) {
 						autoMapperBean(clazz.getName());
-						creatMapperXml(clazz);
+						//creatMapperXml(clazz);
 					}
 				}
 			}

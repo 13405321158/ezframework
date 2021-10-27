@@ -7,34 +7,23 @@
  */
 package com.leesky.ezframework.backend.action;
 
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.nacos.shaded.com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import com.leesky.ezframework.backend.model.DealerOrderItemModel;
-import com.leesky.ezframework.backend.model.DealerOrderModel;
-import com.leesky.ezframework.backend.model.GroupModel;
-import com.leesky.ezframework.backend.model.UserBaseExt01Model;
-import com.leesky.ezframework.backend.model.UserBaseExt02Model;
-import com.leesky.ezframework.backend.model.UserBaseModel;
+import com.leesky.ezframework.backend.model.*;
 import com.leesky.ezframework.backend.service.IdealerOrderItemService;
 import com.leesky.ezframework.backend.service.IgroupService;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.query.ParamModel;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -63,7 +52,7 @@ public class TestAction {
 
 //			this.idealerOrderService.insert(order, true);
 
-            this.idealerOrderItemService.insert(list);
+            this.idealerOrderItemService.insert(list,true);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             json.setSuccess(false, e.getLocalizedMessage());
@@ -132,8 +121,8 @@ public class TestAction {
         AjaxJson json = new AjaxJson();
         try {
             ImmutableMap<String, String> param = ImmutableMap.of("ext01_select", "*");
-            List<UserBaseModel> data = this.iuserBaseService.findAll(param);
-            json.setData(data);
+//            List<UserBaseModel> data = this.iuserBaseService.findAll(param);
+//            json.setData(data);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             json.setSuccess(false, e.getMessage());
@@ -147,8 +136,8 @@ public class TestAction {
         AjaxJson json = new AjaxJson();
         try {
 //            ImmutableMap<String, String> param = ImmutableMap.of("ext01_select", "*");
-            GroupModel data = this.igroupService.leek("weilai");
-            json.setData(data);
+//            GroupModel data = this.igroupService.leek("weilai");
+//            json.setData(data);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             json.setSuccess(false, e.getMessage());

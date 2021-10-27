@@ -7,14 +7,13 @@
  */
 package com.leesky.ezframework.backend.service.impl;
 
-import org.springframework.stereotype.Service;
-
 import com.leesky.ezframework.backend.mapper.IgroupMapper;
 import com.leesky.ezframework.backend.model.GroupModel;
 import com.leesky.ezframework.backend.service.IgroupService;
-import com.leesky.ezframework.service.impl.BaseServiceImpl;
+import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
+import org.springframework.stereotype.Service;
 
 @Service
-public class GroupServiceImpl extends BaseServiceImpl<IgroupMapper, GroupModel> implements IgroupService {
+public class GroupServiceImpl extends LeeskyServiceImpl<IgroupMapper, GroupModel> implements IgroupService {
 
 }

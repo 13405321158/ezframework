@@ -2,13 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.leesky.ezframework.mybatis.mapper.IeeskyMapper">
 
- 	<insert id="insertM2M" parameterType="com.leesky.ezframework.mybatis.save.Many2manyDTO">
- 		Insert INTO ${tableName}
- 		(${column01},${column02})
- 		VALUES
- 		<foreach collection="v01" item="v" index="index" separator=",">
- 			('${v}','${v02.get(index)}')
- 		</foreach>
- 	</insert>
+    <insert id="insertM2M" parameterType="com.leesky.ezframework.mybatis.save.Many2manyDTO">
+        Insert INTO ${tableName}
+        (${column01},${column02})
+        VALUES
+        <foreach collection="v01" item="v" index="index" separator=",">
+            ('${v}','${v02.get(index)}')
+        </foreach>
+    </insert>
 
+    <select id="page" resultType="map">
+        select ${filter.getSqlSelect} from ${filter.tableName}
+        <if test="filter.join!=null">
+            <foreach collection="filter.join" item="value" separator="  ">${value}</foreach>
+        </if>
+        where
+        <foreach collection="filter.op" item="value" separator=" and ">${value}</foreach>
+        limit ${filter.param.page}, ${filter.param.limit}
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Long">
+        select count(*) as total from ${tableName}
+        <if test="join!=null">
+            <foreach collection="join" item="value" separator="  ">${value}</foreach>
+        </if>
+        where
+        <foreach collection="op" item="value" separator=" and ">${value}</foreach>
+    </select>
 </mapper>

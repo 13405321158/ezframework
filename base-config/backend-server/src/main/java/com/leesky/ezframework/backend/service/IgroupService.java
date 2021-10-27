@@ -8,8 +8,8 @@
 package com.leesky.ezframework.backend.service;
 
 import com.leesky.ezframework.backend.model.GroupModel;
-import com.leesky.ezframework.service.IbaseService;
+import com.leesky.ezframework.mybatis.service.IeeskyService;
 
-public interface IgroupService extends IbaseService<GroupModel>{
+public interface IgroupService extends IeeskyService<GroupModel> {
 
 }

@@ -56,7 +56,7 @@
 
         <dependency>
             <groupId>com.leesky.ezframework</groupId>
-            <artifactId>common-sql</artifactId>
+            <artifactId>common-mybatis</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

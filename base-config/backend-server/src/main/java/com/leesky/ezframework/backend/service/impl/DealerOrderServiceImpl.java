@@ -7,12 +7,12 @@
  */
 package com.leesky.ezframework.backend.service.impl;
 
-import org.springframework.stereotype.Service;
-import com.leesky.ezframework.service.impl.BaseServiceImpl;
+import com.leesky.ezframework.backend.mapper.IdealerOrderMapper;
 import com.leesky.ezframework.backend.model.DealerOrderModel;
 import com.leesky.ezframework.backend.service.IdealerOrderService;
-import com.leesky.ezframework.backend.mapper.IdealerOrderMapper;
+import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
+import org.springframework.stereotype.Service;
 
 @Service
-public class DealerOrderServiceImpl extends BaseServiceImpl<IdealerOrderMapper,DealerOrderModel>implements IdealerOrderService {
+public class DealerOrderServiceImpl extends LeeskyServiceImpl<IdealerOrderMapper,DealerOrderModel> implements IdealerOrderService {
 }
