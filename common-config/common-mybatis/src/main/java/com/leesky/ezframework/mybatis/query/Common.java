@@ -12,8 +12,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.utils.Hump2underline;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -26,8 +28,10 @@ import java.util.function.Consumer;
  * <li>描述: 多表联合查询时拼接 sql语句
  * <li>描述：约定大于实现：命名必须采用驼峰方式</li>
  */
+@Slf4j
 public class Common {
 
+    private static String table_Name;
     private final static String SPLIT_DOT = ".";// 点号分隔符
     private final static String SPLIT_COMMA = ",";//逗号分隔符
     private final static String SPLIT_PREFIX = "a.";//别名前缀
@@ -36,8 +40,8 @@ public class Common {
     private final static String ON_A = "ON a.";
     private final static String LEFT_JOIN = "LEFT JOIN";
 
-    public static <T> void joinQueryStr(Class<T> clz, QueryFilter<T> self, List<String> join) {
-
+    public static <T> void joinQueryStr(Class<T> clz, QueryFilter<T> self, List<String> join, String tableName) {
+        table_Name = tableName;
         if (ObjectUtils.isNotEmpty(clz)) {
 
             Set<String> include = Sets.newHashSet();
@@ -49,15 +53,15 @@ public class Common {
 
                 OneToOne o2o = f.getAnnotation(OneToOne.class);
                 if (ObjectUtils.isNotEmpty(o2o) && include.contains(f.getName()))
-                    join.add(buildJoinLeft(f));
+                    join.add(buildJoinLeft(f, "OneToOne"));
 
                 OneToMany o2m = f.getAnnotation(OneToMany.class);
                 if (ObjectUtils.isNotEmpty(o2m) && include.contains(f.getName()))
-                    join.add(buildJoinLeft(f));
+                    join.add(buildJoinLeft(f, "OneToMany"));
 
                 ManyToOne m2o = f.getAnnotation(ManyToOne.class);
                 if (ObjectUtils.isNotEmpty(m2o) && include.contains(f.getName()))
-                    join.add(buildJoinLeft(f));
+                    join.add(buildJoinLeft(f, "ManyToOne"));
 
                 ManyToMany m2m = f.getAnnotation(ManyToMany.class);
                 if (ObjectUtils.isNotEmpty(m2m) && include.contains(f.getName()))
@@ -92,14 +96,19 @@ public class Common {
      * @作者: 魏来
      * @日期: 2021/10/27  下午5:32
      **/
-    private static String buildJoinLeft(Field f) {
+    private static String buildJoinLeft(Field f, String aName) {
         List<String> list = Lists.newArrayList();
-        list.add(LEFT_JOIN);
-        list.add(f.getAnnotation(EntityMapper.class).entityClass().getAnnotation(TableName.class).value());
-        list.add(f.getName());
-        list.add(ON_A + f.getAnnotation(JoinColumn.class).name());
-        list.add(SPLIT_EQUAL);
-        list.add(f.getName() + SPLIT_DOT + f.getAnnotation(JoinColumn.class).referencedColumnName());
+        try {
+            list.add(LEFT_JOIN);
+            list.add(f.getAnnotation(EntityMapper.class).entityClass().getAnnotation(TableName.class).value());
+            list.add(f.getName());
+            list.add(ON_A + f.getAnnotation(JoinColumn.class).name());
+            list.add(SPLIT_EQUAL);
+            list.add(f.getName() + SPLIT_DOT + f.getAnnotation(JoinColumn.class).referencedColumnName());
+        } catch (Exception e) {
+            Assert.isTrue(false, "构建Join left时出错：数据表名→" + table_Name + "对应字段→" + f.getName() + ";注解类型：" + aName);
+        }
+
         return StringUtils.join(list, " ");
     }
 
@@ -111,17 +120,22 @@ public class Common {
      **/
     private static String buildJoinLeft_M2M(Field f) {
         List<String> list = Lists.newArrayList();
-        list.add(LEFT_JOIN);
-        list.add(f.getAnnotation(EntityMapper.class).entityClass().getAnnotation(TableName.class).value());
-        list.add("AS m");
-        list.add(ON_A + f.getAnnotation(JoinColumn.class).name());
-        list.add(SPLIT_EQUAL);
-        list.add("m." + f.getAnnotation(JoinColumn.class).referencedColumnName());
-        list.add(LEFT_JOIN);
-        list.add(getCollectType(f));
-        list.add("ON " + f.getName() + SPLIT_DOT + f.getAnnotation(InverseJoinColumn.class).name());
-        list.add(SPLIT_EQUAL);
-        list.add("m." + f.getAnnotation(InverseJoinColumn.class).referencedColumnName());
+        try {
+            list.add(LEFT_JOIN);
+            list.add(f.getAnnotation(EntityMapper.class).entityClass().getAnnotation(TableName.class).value());
+            list.add("AS m");
+            list.add(ON_A + f.getAnnotation(JoinColumn.class).name());
+            list.add(SPLIT_EQUAL);
+            list.add("m." + f.getAnnotation(JoinColumn.class).referencedColumnName());
+            list.add(LEFT_JOIN);
+            list.add(getCollectType(f));
+            list.add("ON " + f.getName() + SPLIT_DOT + f.getAnnotation(InverseJoinColumn.class).name());
+            list.add(SPLIT_EQUAL);
+            list.add("m." + f.getAnnotation(InverseJoinColumn.class).referencedColumnName());
+        } catch (Exception e) {
+            Assert.isTrue(false, "构建Join left时出错：数据表名→" + table_Name + "对应字段→" + f.getName() + ";注解类型：Many2Many");
+        }
+
 
         return StringUtils.join(list, " ");
     }

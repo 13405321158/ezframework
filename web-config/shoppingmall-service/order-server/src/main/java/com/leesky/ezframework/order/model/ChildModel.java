@@ -1,25 +1,19 @@
 package com.leesky.ezframework.order.model;
 
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang3.RandomStringUtils;
-
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.mybatis.annotation.EntityMapper;
-import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
-import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.ManyToMany;
-import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import com.leesky.ezframework.order.mapper.ImanMapper;
 import com.leesky.ezframework.order.mapper.IstudentCourseMapper;
 import com.leesky.ezframework.order.mapper.IstudentTeacherMapper;
 import com.leesky.ezframework.order.mapper.IwomanMapper;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -38,13 +32,13 @@ public class ChildModel extends BaseUuidModel {
 	@ManyToOne
 	@TableField(exist = false)
 	@JoinColumn(name = "lao_han_id")
-    @EntityMapper(targetMapper = ImanMapper.class)
+    @EntityMapper(targetMapper = ImanMapper.class,entityClass = ManModel.class)
 	private ManModel laoHan;
 
 	@ManyToOne
 	@TableField(exist = false)
 	@JoinColumn(name = "lao_ma_id")
-    @EntityMapper(targetMapper = IwomanMapper.class)
+    @EntityMapper(targetMapper = IwomanMapper.class,entityClass = WomanModel.class)
 	private WomanModel laoMa;
 
 

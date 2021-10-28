@@ -51,6 +51,7 @@ public class QueryFilter<T> extends QueryWrapper<T> {
      * @日期: 2021/10/27  下午2:35
      **/
     public QueryFilter(ParamModel param, Class<T> clz) {
+
         this.param = param;
         this.tableName = clz.getAnnotation(TableName.class).value() + " a";
         if (StringUtils.isBlank(param.getSelect()))
@@ -60,7 +61,9 @@ public class QueryFilter<T> extends QueryWrapper<T> {
 
         analyzing(this.param.getQueryStr(), Lists.newArrayList());
 
-        Common.joinQueryStr(clz, this, join);//拼接sql语句
+        Common.joinQueryStr(clz, this, join, this.tableName);//拼接sql语句
+
+
     }
 
     /**

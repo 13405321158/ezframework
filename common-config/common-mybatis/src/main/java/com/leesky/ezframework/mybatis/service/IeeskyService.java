@@ -49,7 +49,13 @@ public interface IeeskyService<T> {
      * @日期: 2021年9月25日 上午8:15:49
      */
     List<T> findAll(QueryFilter<T> filter);
-
+    /**
+     * <li>根据wrapper过滤器 查询
+     *
+     * @作者: 魏来
+     * @日期: 2021年9月25日 上午8:15:49
+     */
+    <E> List<E> findAll(QueryFilter<T> filter, Class<E> clz);
     /**
      * <li>根据wrapper过滤器 分页查询
      *
@@ -59,7 +65,7 @@ public interface IeeskyService<T> {
     Page<T> page(QueryFilter<T> filter);
 
     /**
-     * <li>根据wrapper过滤器 分页查询:
+     * <li>根据wrapper过滤器 多表联合查询:
      *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:20:12

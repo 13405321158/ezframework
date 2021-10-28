@@ -11,15 +11,33 @@
         </foreach>
     </insert>
 
-    <select id="page" resultType="map">
+    <select id="findAll" resultType="map">
         select ${filter.getSqlSelect} from ${filter.tableName}
+
         <if test="filter.join!=null">
             <foreach collection="filter.join" item="value" separator="  ">${value}</foreach>
         </if>
+
         <if test="filter.op.size>0">
             where
             <foreach collection="filter.op" item="value" separator=" and ">${value}</foreach>
         </if>
+
+    </select>
+
+
+    <select id="page" resultType="map">
+        select ${filter.getSqlSelect} from ${filter.tableName}
+
+        <if test="filter.join!=null">
+            <foreach collection="filter.join" item="value" separator="  ">${value}</foreach>
+        </if>
+
+        <if test="filter.op.size>0">
+            where
+            <foreach collection="filter.op" item="value" separator=" and ">${value}</foreach>
+        </if>
+
         limit ${filter.param.page}, ${filter.param.limit}
     </select>
 

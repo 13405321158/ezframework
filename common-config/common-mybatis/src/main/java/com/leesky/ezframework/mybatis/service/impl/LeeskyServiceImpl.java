@@ -100,6 +100,12 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
         return this.baseMapper.selectList(filter);
     }
 
+    @Override
+    public <E> List<E> findAll(QueryFilter<T> filter, Class<E> clz) {
+        List<Map<String, Object>> data = this.baseMapper.findAll(filter);
+        return JSON.parseArray(JSONObject.toJSONString(data), clz);
+    }
+
     /**
      * 描述:根据wrapper过滤器 分页查询
      *

@@ -17,9 +17,15 @@ import java.util.List;
 import java.util.Map;
 
 public interface IeeskyMapper<T> extends BaseMapper<T> {
-
     /**
-     * <li>根据wrapper过滤器 分页查询:
+     * <li>根据wrapper过滤器 查询
+     *
+     * @作者: 魏来
+     * @日期: 2021年9月25日 上午8:15:49
+     */
+    List<Map<String, Object>>findAll(QueryFilter<T> filter);
+    /**
+     * <li>根据wrapper过滤器  多表联合的分页查询:
      *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:20:12
