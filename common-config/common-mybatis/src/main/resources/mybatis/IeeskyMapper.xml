@@ -16,8 +16,10 @@
         <if test="filter.join!=null">
             <foreach collection="filter.join" item="value" separator="  ">${value}</foreach>
         </if>
-        where
-        <foreach collection="filter.op" item="value" separator=" and ">${value}</foreach>
+        <if test="filter.op.size>0">
+            where
+            <foreach collection="filter.op" item="value" separator=" and ">${value}</foreach>
+        </if>
         limit ${filter.param.page}, ${filter.param.limit}
     </select>
 
@@ -26,7 +28,9 @@
         <if test="join!=null">
             <foreach collection="join" item="value" separator="  ">${value}</foreach>
         </if>
-        where
-        <foreach collection="op" item="value" separator=" and ">${value}</foreach>
+        <if test="op.size>0">
+            where
+            <foreach collection="op" item="value" separator=" and ">${value}</foreach>
+        </if>
     </select>
 </mapper>

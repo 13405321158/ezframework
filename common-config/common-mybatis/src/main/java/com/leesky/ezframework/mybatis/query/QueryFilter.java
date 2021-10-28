@@ -23,10 +23,10 @@ public class QueryFilter<T> extends QueryWrapper<T> {
 
     public String tableName;//表名称,即clz的表名称
     public ParamModel param;//查询参数对象
-    public List<String> op = Lists.newArrayList();// 原始参数转下划线且带有操作符号
+    public List<String> op = Lists.newArrayList();// where原始参数转下划线且带有操作符号
     public List<String> join = Lists.newArrayList();//left join 字符串
-    public Map<String, Object> p1 = Maps.newHashMap();// 原始参数值
-    public Map<String, Object> p2 = Maps.newHashMap();// 原始参数转换为下划线格式
+    public Map<String, Object> p1 = Maps.newHashMap();// where原始参数值
+    public Map<String, Object> p2 = Maps.newHashMap();// where原始参数转换为下划线格式
 
     public QueryFilter() {
     }

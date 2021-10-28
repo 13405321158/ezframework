@@ -54,8 +54,8 @@ public class ManController {
 			manModel.setCompany(company);
 			manModel.setIdCard(c2);
             manModel.setTels(tels);
-//			manModel.setChilds(c);
-//
+			manModel.setChilds(c);
+
 //			womanModel.setIdCard(c1);
 //			womanModel.setLaoGong(manModel);
 //
@@ -101,7 +101,7 @@ public class ManController {
     public AjaxJson index02(@RequestBody ParamModel param) {
         AjaxJson json = new AjaxJson();
         try {
-            param.setSelect("company.id");
+            param.setSelect("tels.lao_han_id");
             QueryFilter<ManModel> filter = new QueryFilter<>(param, ManModel.class);
 
             Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
