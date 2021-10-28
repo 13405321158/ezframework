@@ -32,17 +32,18 @@ public class Common {
     private final static String SPLIT_COMMA = ",";//逗号分隔符
     private final static String SPLIT_PREFIX = "a.";//别名前缀
     private final static String SPLIT_EQUAL = "=";//等号
-    private final static String LEFT_JOIN = "LEFT JOIN";
-    private final static String ON_A = "ON a.";
 
-    public static <T> void joinQueryStr(Class<T> clz, QueryFilter<T> slf, List<String> join) {
+    private final static String ON_A = "ON a.";
+    private final static String LEFT_JOIN = "LEFT JOIN";
+
+    public static <T> void joinQueryStr(Class<T> clz, QueryFilter<T> self, List<String> join) {
 
         if (ObjectUtils.isNotEmpty(clz)) {
 
             Set<String> include = Sets.newHashSet();
             Consumer consumer = (e) -> include.add(StringUtils.substringBefore((String) e, SPLIT_DOT));
-            slf.p1.keySet().forEach(consumer);//判断where条件中是否需要 left jon
-            Arrays.stream(StringUtils.split(slf.getSqlSelect(), SPLIT_COMMA)).forEach(consumer);//判断 select 中内容 是否需要left join
+            self.p1.keySet().forEach(consumer);//判断where条件中是否需要 left jon
+            Arrays.stream(StringUtils.split(self.getSqlSelect(), SPLIT_COMMA)).forEach(consumer);//判断 select 中内容 是否需要left join
 
             for (Field f : clz.getDeclaredFields()) {
 
