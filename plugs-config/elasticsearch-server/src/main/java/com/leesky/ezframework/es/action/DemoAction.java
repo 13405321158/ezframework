@@ -7,6 +7,18 @@
  */
 package com.leesky.ezframework.es.action;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.es.config.ElasticsearchService;
@@ -15,17 +27,13 @@ import com.leesky.ezframework.es.model.backend.Demo01Model;
 import com.leesky.ezframework.es.repo.backend.Idem01Repo;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.query.ParamModel;
-import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.reindex.BulkByScrollResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/book")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class DemoAction {
 
     private final Idem01Repo bookRepo;
@@ -41,9 +49,9 @@ public class DemoAction {
 
 
     @PostMapping("/c01")
-    public AjaxJson add(@RequestBody Demo01Model book) {
+    public AjaxJson<Demo01Model> add(@RequestBody Demo01Model book) {
 
-        AjaxJson json = new AjaxJson();
+        AjaxJson<Demo01Model> json = new AjaxJson<>();
         try {
             Demo01Model b = this.bookRepo.save(book);
             json.setData(b);
@@ -57,9 +65,9 @@ public class DemoAction {
 
 
     @PostMapping("/u01")
-    public AjaxJson xxx(@RequestBody ParamModel param) {
+    public AjaxJson<Demo01Model> xxx(@RequestBody ParamModel param) {
 
-        AjaxJson json = new AjaxJson();
+        AjaxJson<Demo01Model> json = new AjaxJson<>();
         try {
             Demo01Model book = new Demo01Model("西游记", new BigDecimal("3.48"), Lists.newArrayList("名著,小说,最爱,战争"));
 
@@ -75,8 +83,8 @@ public class DemoAction {
 
 
     @GetMapping("/r01")
-    public AjaxJson list() {
-        AjaxJson json = new AjaxJson();
+    public AjaxJson<Object> list() {
+        AjaxJson<Object> json = new AjaxJson<>();
         try {
 
             QueryResult result = this.service.findAll("book");
@@ -91,7 +99,8 @@ public class DemoAction {
     }
 
 
-    @GetMapping("/r02")
+
+	@GetMapping("/r02")
     public AjaxJson list(@RequestBody ParamModel param) {
         AjaxJson json = new AjaxJson();
         try {

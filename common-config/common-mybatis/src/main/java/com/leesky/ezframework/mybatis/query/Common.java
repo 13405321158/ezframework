@@ -7,16 +7,6 @@
  */
 package com.leesky.ezframework.mybatis.query;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.leesky.ezframework.mybatis.annotation.*;
-import com.leesky.ezframework.utils.Hump2underline;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Assert;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
@@ -24,11 +14,27 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.leesky.ezframework.mybatis.annotation.EntityMapper;
+import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.annotation.ManyToMany;
+import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.OneToMany;
+import com.leesky.ezframework.mybatis.annotation.OneToOne;
+import com.leesky.ezframework.utils.Hump2underline;
+
 /**
  * <li>描述: 多表联合查询时拼接 sql语句
  * <li>描述：约定大于实现：命名必须采用驼峰方式</li>
  */
-@Slf4j
+
 public class Common {
 
     private static String table_Name;
@@ -40,7 +46,8 @@ public class Common {
     private final static String ON_A = "ON a.";
     private final static String LEFT_JOIN = "LEFT JOIN";
 
-    public static <T> void joinQueryStr(Class<T> clz, QueryFilter<T> self, List<String> join, String tableName) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static <T> void joinQueryStr(Class<T> clz, QueryFilter<T> self, List<String> join, String tableName) {
         table_Name = tableName;
         if (ObjectUtils.isNotEmpty(clz)) {
 

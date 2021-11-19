@@ -1,24 +1,36 @@
 package com.leesky.ezframework.order.action;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.leesky.ezframework.json.AjaxJson;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.order.dto.RetDTO;
-import com.leesky.ezframework.order.model.*;
+import com.leesky.ezframework.order.model.ChildModel;
+import com.leesky.ezframework.order.model.CompanyModel;
+import com.leesky.ezframework.order.model.IdCardModel;
+import com.leesky.ezframework.order.model.ManModel;
+import com.leesky.ezframework.order.model.TelModel;
+import com.leesky.ezframework.order.model.WomanModel;
 import com.leesky.ezframework.order.service.IManService;
 import com.leesky.ezframework.query.ParamModel;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/man")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ManController {
 
     @Autowired
@@ -46,7 +58,7 @@ public class ManController {
             List<ChildModel> c = Lists.newArrayList(new ChildModel(), new ChildModel());
 
             CompanyModel company = new CompanyModel("神化集团");
-            IdCardModel c1 = new IdCardModel(RandomStringUtils.randomNumeric(20), "北京市海淀区王庄路1号");
+//            IdCardModel c1 = new IdCardModel(RandomStringUtils.randomNumeric(20), "北京市海淀区王庄路1号");
             IdCardModel c2 = new IdCardModel(RandomStringUtils.randomNumeric(20), "青岛市市北区湖光山色小区");
 //
             WomanModel womanModel = new WomanModel();
