@@ -25,52 +25,57 @@ import lombok.Setter;
 @ApiModel(value = "基本用户信息")
 public class UserBaseModel extends BaseUuidModel {
 
-    private static final long serialVersionUID = 8547824568011487339L;
-    @ApiModelProperty("登录名")
-    private String username;
+	private static final long serialVersionUID = 8547824568011487339L;
+	@ApiModelProperty("登录名")
+	private String username;
 
-    @ApiModelProperty("密码")
-    private String password;
+	@ApiModelProperty("密码")
+	private String password;
 
-    @ApiModelProperty("随机数")
-    private String randomKey;
+	@ApiModelProperty("随机数")
+	private String randomKey;
 
-    @ApiModelProperty("修改密码时间")
-    private Date editPwdDate;
+	@ApiModelProperty("修改密码时间")
+	private Date editPwdDate;
 
-    @ApiModelProperty("扩展表01主键")
-    private String ext01Id;
+	@ApiModelProperty("扩展表01主键")
+	private String ext01Id;
 
-    @ApiModelProperty("扩展表02主键")
-    private String ext02Id;
+	@ApiModelProperty("扩展表02主键")
+	private String ext02Id;
 
-    @TableField(exist = false)
+	@TableField(exist = false)
 //    @One2One(otherOneTableName = "cbm_mag_user_ext01", joinField = "ext01Id")
-    private UserBaseExt01Model ext01;
+	private UserBaseExt01Model ext01;
 
-    @TableField(exist = false)
+	@TableField(exist = false)
 //    @One2One(otherOneTableName = "cbm_mag_user_ext02", joinField = "ext02Id")
-    private UserBaseExt02Model ext02;
+	private UserBaseExt02Model ext02;
 
-    @TableField(exist = false)
+	@TableField(exist = false)
 //    @Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "user_id", otherMiddleTableColumn = "group_id", otherTableName = "cbm_mag_group")
-    private Set<GroupModel> groupSet;
+	private Set<GroupModel> groupSet;
 
-    public UserBaseModel() {
+	public UserBaseModel() {
 
-    }
+	}
 
-    public UserBaseModel(UserBaseExt01Model ext01, UserBaseExt02Model ext02) {
+	public UserBaseModel(String username, String pwd) {
+		this.username = username;
+		this.password = pwd;
 
-        this.ext01 = ext01;
-        this.ext02 = ext02;
-    }
+	}
 
-    public UserBaseModel(UserBaseExt01Model ext01, UserBaseExt02Model ext02, Set<GroupModel> group) {
-        this.ext01 = ext01;
-        this.ext02 = ext02;
-        this.groupSet = group;
-    }
+	public UserBaseModel(UserBaseExt01Model ext01, UserBaseExt02Model ext02) {
 
+		this.ext01 = ext01;
+		this.ext02 = ext02;
+	}
+
+	public UserBaseModel(UserBaseExt01Model ext01, UserBaseExt02Model ext02, Set<GroupModel> group) {
+		this.ext01 = ext01;
+		this.ext02 = ext02;
+		this.groupSet = group;
+	}
 
 }

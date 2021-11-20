@@ -1,13 +1,13 @@
-package com.leesky.ezframework.auth.model;
-
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.utils.MD5Util;
-import lombok.Getter;
-import lombok.Setter;
+package com.leesky.ezframework.backend.model;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author weilai
@@ -64,7 +64,6 @@ public class OauthClientDetailsModel implements Serializable {
 		this.scope = "read,write";
 		this.clientIdOriginal = clientId;
 		this.clientSecret = clientSecret;
-		this.clientId = MD5Util.encrypt(clientId);
 		this.authorizedGrantTypes = "password,refresh_token";
 		this.modifyDate = new Date();
 

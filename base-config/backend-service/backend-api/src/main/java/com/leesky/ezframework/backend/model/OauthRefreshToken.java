@@ -5,14 +5,15 @@
  * @Deparment:Domestic Sales, Tech Center
  * @Desc: <li> 刷新token
  */
-package com.leesky.ezframework.auth.model;
-
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+package com.leesky.ezframework.backend.model;
 
 import java.io.Serializable;
 import java.sql.Blob;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import lombok.Data;
 
 
 @Data
