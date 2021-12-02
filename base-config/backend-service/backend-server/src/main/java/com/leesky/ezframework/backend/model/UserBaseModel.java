@@ -32,8 +32,12 @@ public class UserBaseModel extends BaseUuidModel {
     @ApiModelProperty("密码")
     private String password;
 
+    @ApiModelProperty("状态")
+    private String status;
+
     @ApiModelProperty("随机数")
     private String randomKey;
+
 
     @ApiModelProperty("修改密码时间")
     private Date editPwdDate;

@@ -11,6 +11,9 @@ import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
 import com.leesky.ezframework.backend.api.IbackendServerClient;
+import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
+import com.leesky.ezframework.backend.dto.UserAuthDTO;
+import com.leesky.ezframework.json.AjaxJson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,14 +23,25 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
-
 public class BackendFeignFallback implements FallbackFactory<IbackendServerClient> {
 	
 	
 	@Override
 	public IbackendServerClient create(Throwable cause) {
 
-		return null;
+		return new IbackendServerClient() {
+			@Override
+			public AjaxJson<OauthClientDetailsDTO> getOAuth2ClientById(String clientId) {
+				log.error(cause.getMessage());
+				return new AjaxJson<OauthClientDetailsDTO>(false,"远程调用backend-server服务降级，获取oauthClient失败:"+clientId);
+			}
+
+			@Override
+			public AjaxJson<UserAuthDTO> getUserByUsername(String username) {
+				log.error(cause.getMessage());
+				return new AjaxJson<UserAuthDTO>(false,"远程调用backend-server服务降级，获取username失败:"+username);
+			}
+		};
 	}
 
 }

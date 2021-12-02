@@ -16,11 +16,18 @@
         <poi.version>5.0.0</poi.version>
         <p6spy.version>3.9.1</p6spy.version>
         <beanutils.version>1.9.4</beanutils.version>
+        <baomidou.version>3.4.3.4</baomidou.version>
     </properties>
 
 
     <dependencies>
-
+		<!-- mybatis plus 起步依赖 -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>${baomidou.version}</version>
+		</dependency>
+		
         <!-- mysql 驱动 -->
         <dependency>
             <groupId>mysql</groupId>

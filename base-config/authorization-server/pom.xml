@@ -31,8 +31,8 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--3、spring oauth2 服务起步依赖 等待 spring-authorization-server 成熟再切换-->
-        <!-- OAuth2 认证服务器-->
+        <!--3、spring oauth2 服务起步依赖 等待 spring-authorization-server 成熟再切换 -->
+        <!-- OAuth2 认证服务器 -->
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
@@ -43,11 +43,6 @@
             <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
 
-        <!--4、 alibaba seata 分布式事务管理 起步依赖 -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
-        </dependency>
 
         <!--5、 配置中心：从NACOS配置服务器中读取配置参数 -->
         <dependency>
@@ -61,12 +56,12 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
-        <!--7、流量哨兵：阿里Sentinel起步依赖：限流、熔断、流控等 -->
+        <!-- 7、流量哨兵：阿里Sentinel起步依赖：限流、熔断、流控等 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
-        <!--7.1、流量哨兵：阿里Sentinel图表监控起步依赖 -->
+        <!-- 7.1、流量哨兵：阿里Sentinel图表监控起步依赖 -->
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-transport-simple-http</artifactId>
@@ -75,15 +70,18 @@
 
         <dependency>
             <groupId>com.leesky.ezframework</groupId>
-            <artifactId>common-mybatis</artifactId>
+            <artifactId>backend-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-
         <dependency>
-        	<groupId>com.leesky.ezframework</groupId>
-        	<artifactId>backend-api</artifactId>
-        	<version>1.0-SNAPSHOT</version>
+            <groupId>com.leesky.ezframework</groupId>
+            <artifactId>common-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.leesky.ezframework</groupId>
+            <artifactId>common-redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

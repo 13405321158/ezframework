@@ -12,16 +12,15 @@
 	<properties>
 		<swagger.version>1.6.2</swagger.version>
 		<baomidou.version>3.4.3.4</baomidou.version>
-
 	</properties>
 
 
 
 	<dependencies>
-		<!-- mybatis plus 起步依赖 -->
+
 		<dependency>
 			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<artifactId>mybatis-plus-annotation</artifactId>
 			<version>${baomidou.version}</version>
 		</dependency>
 

@@ -19,10 +19,7 @@ spring:
                refresh: true
             -  dataId: common-redis-dev.yaml
                refresh: true
-            -  dataId: common-seata-dev.yaml
-               refresh: true
-            - dataId: mybatis-dev.yaml
-              refresh: true
+
 
 logging:
   level:

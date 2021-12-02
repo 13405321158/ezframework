@@ -10,11 +10,16 @@ package com.leesky.ezframework.auth.details.userdetails.menber;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * 类功能说明：
  * <li>商城会员
  */
+@Service
+@RequiredArgsConstructor
 public class MemberUserDetailsServiceImpl implements UserDetailsService {
 
 	@Override

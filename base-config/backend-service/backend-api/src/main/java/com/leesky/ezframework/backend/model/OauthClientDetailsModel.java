@@ -1,13 +1,12 @@
 package com.leesky.ezframework.backend.model;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author weilai
@@ -54,15 +53,13 @@ public class OauthClientDetailsModel implements Serializable {
 
 	private Date modifyDate = new Date();
 
-	private String clientIdOriginal;// 未加密的clentid
-
 	public OauthClientDetailsModel() {
 
 	}
 
 	public OauthClientDetailsModel(String clientId, String clientSecret) {
-		this.scope = "read,write";
-		this.clientIdOriginal = clientId;
+		this.scope = "all";
+		this.clientId = clientId;
 		this.clientSecret = clientSecret;
 		this.authorizedGrantTypes = "password,refresh_token";
 		this.modifyDate = new Date();
