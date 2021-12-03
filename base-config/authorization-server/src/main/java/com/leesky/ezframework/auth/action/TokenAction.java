@@ -10,8 +10,10 @@ package com.leesky.ezframework.auth.action;
 import java.security.Principal;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
+import org.springframework.util.Assert;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,11 +37,14 @@ public class TokenAction {
 	private final TokenEndpoint tokenEndpoint;
 
 	@PostMapping("/token")
-	public AjaxJson<OAuth2AccessToken> getToken(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
-
+	public AjaxJson<OAuth2AccessToken> getToken(Principal principal, @RequestParam Map<String, String> map) throws HttpRequestMethodNotSupportedException {
+		Assert.isTrue(StringUtils.isNotBlank(map.get("password")), "参数password不允许空值");
+		Assert.isTrue(StringUtils.isNotBlank(map.get("grant_type")), "参数grant_type不允许空值");
+		Assert.isTrue(StringUtils.isNotBlank(map.get("client_secret")), "参数client_secret不允许空值");
+		
 		AjaxJson<OAuth2AccessToken> json = new AjaxJson<>();
 
-		OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
+		OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
 		json.setData(accessToken);
 
 		return json;
