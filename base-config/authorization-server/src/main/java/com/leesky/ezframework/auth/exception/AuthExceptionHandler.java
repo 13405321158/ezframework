@@ -12,6 +12,7 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.common.exceptions.UnsupportedGrantTypeException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -59,6 +60,15 @@ public class AuthExceptionHandler {
 	@ExceptionHandler({ InvalidTokenException.class })
 	public AjaxJson handleInvalidTokenException(InvalidTokenException e) {
 		return new AjaxJson(false, "无效或已过期");
+	}
+
+	/**
+	 * 不支持的认证类型
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler({ UnsupportedGrantTypeException.class })
+	public AjaxJson handleException(UnsupportedGrantTypeException e) {
+		return new AjaxJson(false, "认证类型不支持,参数grant_type值不在允许范围内【password】");
 	}
 
 	/**

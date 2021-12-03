@@ -12,7 +12,6 @@ public class OauthClientDetailsDTO  {
 
 	private String scope;// 指定client的权限范围，比如读写权限，比如移动端还是web端权限
 
-
 	private String resourceIds;
 
 	private String authorizedGrantTypes;

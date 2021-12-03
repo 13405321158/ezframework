@@ -34,6 +34,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/oauth")
 public class TokenAction {
 
+
 	private final TokenEndpoint tokenEndpoint;
 
 	@PostMapping("/token")
@@ -41,11 +42,12 @@ public class TokenAction {
 		Assert.isTrue(StringUtils.isNotBlank(map.get("password")), "参数password不允许空值");
 		Assert.isTrue(StringUtils.isNotBlank(map.get("grant_type")), "参数grant_type不允许空值");
 		Assert.isTrue(StringUtils.isNotBlank(map.get("client_secret")), "参数client_secret不允许空值");
-		
+
 		AjaxJson<OAuth2AccessToken> json = new AjaxJson<>();
 
 		OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
 		json.setData(accessToken);
+
 
 		return json;
 

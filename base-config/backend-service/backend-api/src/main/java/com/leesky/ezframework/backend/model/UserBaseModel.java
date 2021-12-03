@@ -32,8 +32,8 @@ public class UserBaseModel extends BaseUuidModel {
 	@ApiModelProperty("密码")
 	private String password;
 
-	@ApiModelProperty("随机数")
-	private String randomKey;
+	@ApiModelProperty("账户状态")
+	private String status;
 
 	@ApiModelProperty("修改密码时间")
 	private Date editPwdDate;
@@ -56,26 +56,6 @@ public class UserBaseModel extends BaseUuidModel {
 //    @Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "user_id", otherMiddleTableColumn = "group_id", otherTableName = "cbm_mag_group")
 	private Set<GroupModel> groupSet;
 
-	public UserBaseModel() {
 
-	}
-
-	public UserBaseModel(String username, String pwd) {
-		this.username = username;
-		this.password = pwd;
-
-	}
-
-	public UserBaseModel(UserBaseExt01Model ext01, UserBaseExt02Model ext02) {
-
-		this.ext01 = ext01;
-		this.ext02 = ext02;
-	}
-
-	public UserBaseModel(UserBaseExt01Model ext01, UserBaseExt02Model ext02, Set<GroupModel> group) {
-		this.ext01 = ext01;
-		this.ext02 = ext02;
-		this.groupSet = group;
-	}
 
 }

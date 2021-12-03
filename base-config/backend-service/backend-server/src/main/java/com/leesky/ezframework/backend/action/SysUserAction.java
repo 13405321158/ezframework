@@ -1,11 +1,16 @@
 package com.leesky.ezframework.backend.action;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.leesky.ezframework.backend.dto.UserAuthDTO;
+import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.AjaxJson;
@@ -16,10 +21,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * desc：TODO
+ * desc TODO
  *
- * @author： 魏来
- * @date： 2021/12/1 下午6:39
+ * @author 魏来
+ * @date 2021/12/1 下午6:39
  */
 
 @Slf4j
@@ -28,25 +33,57 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SysUserAction {
 
-    private final IuserBaseService service;
+	private final IuserBaseService service;
 
-    @GetMapping("/{username}")
-    public AjaxJson<UserAuthDTO> getUserByUsername(@PathVariable String username) {
-        AjaxJson<UserAuthDTO> json = new AjaxJson<>();
-        try {
+	/**
+	 * <li>登录获取token时使用</li>
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年12月3日 上午9:05:39
+	 */
+	@GetMapping("/{username}")
+	public AjaxJson<UserAuthDTO> getUserByUsername(@PathVariable String username) {
+		AjaxJson<UserAuthDTO> json = new AjaxJson<>();
+		try {
 
-            QueryFilter<UserBaseModel> filter = new QueryFilter<>();
-            filter.select("id,username,status,password");
-            filter.eq("username", username);
-            UserBaseModel user = this.service.findOne(filter);
+			QueryFilter<UserBaseModel> filter = new QueryFilter<>();
+			filter.eq("username", username);
+			filter.select("id,username,status,password");
+			UserBaseModel user = this.service.findOne(filter);
 
-            UserAuthDTO dto = Po2DtoUtil.convertor(user, UserAuthDTO.class);
-            json.setData(dto);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            json.setSuccess(false, e.getMessage());
-        }
+			UserAuthDTO dto = Po2DtoUtil.convertor(user, UserAuthDTO.class);
+			json.setData(dto);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			json.setSuccess(false, e.getMessage());
+		}
 
-        return json;
-    }
+		return json;
+	}
+
+	/**
+	 * <li>新增用户，同时新增client</li>
+	 * 
+	 * @作者: 魏来
+	 * @日期: 2021年12月3日 上午9:26:01
+	 */
+	@PostMapping("/c01")
+	public AjaxJson<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) {
+
+		AjaxJson<UserBaseDTO> json = new AjaxJson<>();
+		try {
+			QueryFilter<UserBaseModel> filter = new QueryFilter<>();
+			filter.eq("username", dto.getUsername());
+			filter.select("id");
+			UserBaseModel user = this.service.findOne(filter);
+			Assert.isTrue(ObjectUtils.isEmpty(user), "账户名已存在");
+
+			this.service.addUser(dto);
+
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			json.setSuccess(false, e.getMessage());
+		}
+		return json;
+	}
 }

@@ -15,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.leesky.ezframework.auth.enums.PasswordEncoderTypeEnum;
 import com.leesky.ezframework.backend.dto.UserAuthDTO;
 
 import lombok.Data;
@@ -46,9 +47,9 @@ public class SysUserDetails implements UserDetails {
 	 * 系统管理用户
 	 */
 	public SysUserDetails(UserAuthDTO user) {
-		this.setUserId(user.getUserId());
+		this.setUserId(user.getId());
 		this.setUsername(user.getUsername());
-		this.setPassword("{bcrypt}" + user.getPassword());
+		this.setPassword(PasswordEncoderTypeEnum.BCRYPT.getPrefix() + user.getPassword());
 		this.setEnabled(user.getStatus().equals(0));
 		if (CollectionUtils.isNotEmpty(user.getRoles())) {
 			authorities = new ArrayList<>();

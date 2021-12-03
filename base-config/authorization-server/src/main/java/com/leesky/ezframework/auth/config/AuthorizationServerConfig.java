@@ -82,9 +82,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	 * <li>因为使用了【配置2】，所以注释了【配置1】
 	 * <li>【配置1】实际是启用【配置2】，所以来这两个配置如果同时使用，则【配置1】覆盖【配置2】
 	 * 
-	 * @作者： 魏来
-	 * 
-	 * @日期: 2021/12/1 下午7:15
+	 * @作者 魏来
+	 * @日期 2021/12/1 下午7:15
 	 */
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) {
@@ -98,8 +97,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	 * 查询 登录时查询 client 的有效性 入口方法在此定义
 	 * <li>对应数据表oauth_client_details</li>
 	 *
-	 * @作者： 魏来
-	 * 
+	 * @作者 魏来
 	 * @日期: 2021/12/1 上午9:16
 	 */
 	@Override
@@ -111,7 +109,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	/**
 	 * 授权服务器 各类参数配置入口
 	 *
-	 * @作者: 魏来
+	 * @作者 魏来
 	 * @日期: 2021/12/1 上午9:21
 	 */
 	@Override
@@ -132,6 +130,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	public DefaultTokenServices tokenService() {
 		DefaultTokenServices services = new DefaultTokenServices();
 
+		services.setReuseRefreshToken(true);//
 		services.setSupportRefreshToken(true);// 是否生成刷新token
 		services.setTokenStore(tokenStore());// token存储方式：数据表中或缓存(redis)
 
@@ -174,7 +173,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public RedisTokenStore tokenStore() {
 		RedisTokenStore redis = new RedisTokenStore(redisConnectionFactory);
-		redis.setPrefix("auth-token:");
+		redis.setPrefix(RedisGlobal.AUTH_TOKEN);
 		return redis;
 	}
 
