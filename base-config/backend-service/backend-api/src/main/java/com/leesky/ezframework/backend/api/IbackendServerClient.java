@@ -31,7 +31,7 @@ public interface IbackendServerClient {
      * @author： 魏来
      * @date: 2021/12/1 下午6:18
      */
-    @GetMapping("/client/r01")
+    @GetMapping("/client/r01/public")
     AjaxJson<OauthClientDetailsDTO> getOAuth2ClientById(@RequestParam String clientId);
 
     /**
@@ -40,6 +40,6 @@ public interface IbackendServerClient {
      * @author： 魏来
      * @date: 2021/12/1 下午6:46
      */
-    @GetMapping("/user/{username}")
+    @GetMapping("/user/{username}/public")
     public AjaxJson<UserAuthDTO> getUserByUsername(@PathVariable String username);
 }

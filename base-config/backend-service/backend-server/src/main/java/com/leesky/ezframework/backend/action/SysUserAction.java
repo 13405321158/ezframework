@@ -41,7 +41,7 @@ public class SysUserAction {
 	 * @作者: 魏来
 	 * @日期: 2021年12月3日 上午9:05:39
 	 */
-	@GetMapping("/{username}")
+	@GetMapping("/{username}/public")
 	public AjaxJson<UserAuthDTO> getUserByUsername(@PathVariable String username) {
 		AjaxJson<UserAuthDTO> json = new AjaxJson<>();
 		try {

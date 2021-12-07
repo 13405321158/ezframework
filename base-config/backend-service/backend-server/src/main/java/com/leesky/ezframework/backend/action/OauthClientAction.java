@@ -34,7 +34,7 @@ public class OauthClientAction {
      * @author： 魏来
      * @date: 2021/12/1 下午6:14
      */
-    @GetMapping("/r01")
+    @GetMapping("/r01/public")
     public AjaxJson<OauthClientDetailsDTO> getOAuth2ClientById(@RequestParam String clientId) {
         AjaxJson<OauthClientDetailsDTO> json = new AjaxJson<>();
         try {

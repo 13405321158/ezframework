@@ -1,0 +1,8 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+#          public-key-location: classpath:public.txt
+          jwk-set-uri: http://localhost:10002/oauth/public-key
+

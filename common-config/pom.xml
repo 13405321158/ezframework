@@ -14,12 +14,12 @@
     <modules>
         <module>common-service</module>
         <module>common-gateway</module>
-        <module>common-security</module>
         <module>common-nosql</module>
         <module>common-feign</module>
         <module>common-mybatis</module>
         <module>common-mybatis-api</module>
         <module>common-redis</module>
+        <module>common-security</module>
     </modules>
 
 

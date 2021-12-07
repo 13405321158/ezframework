@@ -7,12 +7,19 @@
  */
 package com.leesky.ezframework.auth.config;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.leesky.ezframework.auth.details.clientdetails.ClientDetailsServiceImpl;
+import com.leesky.ezframework.auth.details.userdetails.menber.MemberUserDetails;
+import com.leesky.ezframework.auth.details.userdetails.user.SysUserDetails;
+import com.leesky.ezframework.auth.exception.TokenEndpointFilter;
+import com.leesky.ezframework.auth.ext.captcha.CaptchaTokenGranter;
+import com.leesky.ezframework.auth.ext.sms.SmsCodeTokenGranter;
+import com.leesky.ezframework.auth.ext.webchat.WebchatTokenGranter;
+import com.leesky.ezframework.json.AjaxJson;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -39,20 +46,11 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.leesky.ezframework.auth.details.clientdetails.ClientDetailsServiceImpl;
-import com.leesky.ezframework.auth.details.userdetails.menber.MemberUserDetails;
-import com.leesky.ezframework.auth.details.userdetails.user.SysUserDetails;
-import com.leesky.ezframework.auth.exception.TokenEndpointFilter;
-import com.leesky.ezframework.auth.ext.captcha.CaptchaTokenGranter;
-import com.leesky.ezframework.auth.ext.sms.SmsCodeTokenGranter;
-import com.leesky.ezframework.auth.ext.webchat.WebchatTokenGranter;
-import com.leesky.ezframework.json.AjaxJson;
-
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import javax.servlet.http.HttpServletResponse;
+import java.security.KeyPair;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 类功能说明：
@@ -155,12 +153,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	 */
 	@Bean
 	public JwtAccessTokenConverter jwtTokenConverter() {
-		KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("leesky.jks"), "pwd123".toCharArray());
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setKeyPair(keyStoreKeyFactory.getKeyPair("keyPair"));
+		converter.setKeyPair(keyPair());
 		return converter;
 	}
-
+	/**
+	 * 密钥库中获取密钥对(公钥+私钥)
+	 */
+	@Bean
+	public KeyPair keyPair() {
+		KeyStoreKeyFactory factory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "123456".toCharArray());
+		KeyPair keyPair = factory.getKeyPair("jwt", "123456".toCharArray());
+		return keyPair;
+	}
 	/**
 	 * token 存储到redis中
 	 * <li>token 存储方式有三：1数据表、2jwt、3redis</li>
@@ -249,4 +254,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 			mapper.writeValue(response.getOutputStream(), json);
 		};
 	}
+
+
 }

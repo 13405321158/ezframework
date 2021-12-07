@@ -1,14 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.leesky.ezframework</groupId>
-    <artifactId>backend-service</artifactId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>backend-server</artifactId>
-  
-  
-  
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.leesky.ezframework</groupId>
+		<artifactId>backend-service</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>backend-server</artifactId>
+
+
+
 	<dependencies>
 
 		<!-- 1、springcloud 2020.xx.xx 起步依赖,没有它不识别bootstrap.yml配置文件，不读取配置服务器中相关配置 -->
@@ -52,18 +54,22 @@
 			<artifactId>sentinel-transport-simple-http</artifactId>
 		</dependency>
 
-        <dependency>
-            <groupId>com.leesky.ezframework</groupId>
-            <artifactId>common-mybatis</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+		<dependency>
+			<groupId>com.leesky.ezframework</groupId>
+			<artifactId>common-mybatis</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 
-
-        <dependency>
-        	<groupId>com.leesky.ezframework</groupId>
-        	<artifactId>backend-api</artifactId>
-        	<version>1.0-SNAPSHOT</version>
-        </dependency>
+		<dependency>
+			<groupId>com.leesky.ezframework</groupId>
+			<artifactId>common-security</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.leesky.ezframework</groupId>
+			<artifactId>backend-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -74,6 +80,6 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	
+
+
 </project>
