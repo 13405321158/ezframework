@@ -7,6 +7,7 @@
  */
 package com.leesky.ezframework.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final String AUTHORITY_PREFIX = "ROLE_";
@@ -26,17 +28,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final String[] WHITE_URL = new String[]{"/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
 
+
+    private final AnonymousDeniedHandler anonymousDeniedHandler;
+    private final LoginUserDeniedHandler loginUserDeniedHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(WHITE_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .oauth2ResourceServer().jwt()
-                ;
+                .oauth2ResourceServer().jwt();
 
-
+        http.oauth2ResourceServer().authenticationEntryPoint(anonymousDeniedHandler).accessDeniedHandler(loginUserDeniedHandler);
     }
-
 
 }
