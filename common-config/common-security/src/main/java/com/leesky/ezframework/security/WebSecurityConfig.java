@@ -40,7 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2ResourceServer().jwt();
 
-        http.oauth2ResourceServer().authenticationEntryPoint(anonymousDeniedHandler).accessDeniedHandler(loginUserDeniedHandler);
+        http.oauth2ResourceServer()
+                .authenticationEntryPoint(anonymousDeniedHandler)
+                .accessDeniedHandler(loginUserDeniedHandler);
     }
 
 }
