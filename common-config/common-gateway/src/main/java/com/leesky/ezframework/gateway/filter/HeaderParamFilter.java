@@ -58,18 +58,18 @@ public class HeaderParamFilter implements GlobalFilter {
 
             //2、验签
             Boolean serverSign = SHAUtil.disEncode(uid + random + timestamp, sign);
-            Assert.isTrue(serverSign, "验签失败,判为重放攻击");
+            Assert.isTrue(serverSign, "验签失败,系统判定：重放攻击");
 
             //3、是否超时
             long currTime = System.currentTimeMillis();
             long clientTimes = Long.parseLong(timestamp);
-            Assert.isTrue((currTime - clientTimes) < 60000, "访问时间戳超时>60秒:" + (currTime - clientTimes) + ",系统判定：重放攻击");
+            Assert.isTrue((currTime - clientTimes) < 60000, "访问超时,系统判定：重放攻击");
 
             //4、url是否使用过
             String key = "[nonce" + random + "]_" + uid;
             String value = (String) this.cache.get(key);
             this.cache.add(key, "used", 3 * 60L);
-            Assert.isTrue(StringUtils.isBlank(value), "nonce[" + random + "] 被使用过,系统判定：重放攻击");
+            Assert.isTrue(StringUtils.isBlank(value), "url已使用,系统判定：重放攻击");
 
             //5、获取token并增加到head参数中
             Object token = this.cache.get("auth-token-id_" + uid);
