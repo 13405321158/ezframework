@@ -16,7 +16,7 @@ AuthenticationEntryPoint提供了一些内置实现：
 7、 AuthenticationEntryPoint 用来解决匿名用户访问无权限资源时的异常   ——  也就是未授权的问题
     AccessDeineHandler 用来解决认证过的用户访问无权限资源时的异常  ——  也就是权限不足的问题
  */
-package com.leesky.ezframework.security;
+package com.leesky.ezframework.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

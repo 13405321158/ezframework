@@ -5,7 +5,7 @@
  * @部门: 国内市场替换部IT组
  * @描述:
  */
-package com.leesky.ezframework.security;
+package com.leesky.ezframework.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @author： 魏来
      * @date: 2021/12/8 上午10:30
      */
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()

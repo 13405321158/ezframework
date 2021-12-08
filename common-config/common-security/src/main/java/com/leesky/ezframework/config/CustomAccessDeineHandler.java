@@ -1,4 +1,4 @@
-package com.leesky.ezframework.security;
+package com.leesky.ezframework.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
