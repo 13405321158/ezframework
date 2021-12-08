@@ -7,12 +7,9 @@
  */
 package com.leesky.ezframework.auth.utils;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Map;
-
+import com.google.common.collect.ImmutableMap;
+import com.leesky.ezframework.constant.RedisGlobal;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -21,10 +18,11 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.store.redis.JdkSerializationStrategy;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStoreSerializationStrategy;
 
-import com.google.common.collect.ImmutableMap;
-import com.leesky.ezframework.auth.config.RedisGlobal;
-
-import lombok.RequiredArgsConstructor;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 /**
  * 类功能说明：

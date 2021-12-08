@@ -5,7 +5,7 @@
  * @部门: 国内市场替换部IT组
  * @描述:  
  */
-package com.leesky.ezframework.auth.config;
+package com.leesky.ezframework.constant;
 
 /**
  * 类功能说明：
@@ -13,6 +13,8 @@ package com.leesky.ezframework.auth.config;
  */
 public class RedisGlobal {
 	
-	public static final String AUTH_TOKEN="auth-token:";
+	public static final String AUTH_TOKEN="auth-token:";//登录成功后 获取的token存储在这个地方
+
+	public static final String AUTH_TOKEN_ID ="auth-token-id_";//登录用户id和token对应关系
 
 }

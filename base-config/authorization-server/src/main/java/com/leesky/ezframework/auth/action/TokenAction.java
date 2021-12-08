@@ -7,7 +7,10 @@
  */
 package com.leesky.ezframework.auth.action;
 
+
+import com.leesky.ezframework.constant.RedisGlobal;
 import com.leesky.ezframework.json.AjaxJson;
+import com.leesky.ezframework.redis.service.RedisService;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import lombok.AllArgsConstructor;
@@ -28,14 +31,19 @@ import java.util.Map;
  * <li></li>
  */
 
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/oauth")
 public class TokenAction {
 
     private final KeyPair keyPair;
-
+    private final RedisService cache;
     private final TokenEndpoint tokenEndpoint;
+
+//    @Value("${access.token.validity:360}") // 默认值过期时间360
+//    private  String accessTokenValiditySeconds="360";
+
 
     @PostMapping("/token")
     public AjaxJson<OAuth2AccessToken> getToken(Principal principal, @RequestParam Map<String, String> map) throws HttpRequestMethodNotSupportedException {
@@ -46,6 +54,9 @@ public class TokenAction {
         AjaxJson<OAuth2AccessToken> json = new AjaxJson<>();
 
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
+
+        this.cache.add(RedisGlobal.AUTH_TOKEN_ID + accessToken.getAdditionalInformation().get("userId"), accessToken.getValue(), Long.valueOf(360));
+
         json.setData(accessToken);
 
 

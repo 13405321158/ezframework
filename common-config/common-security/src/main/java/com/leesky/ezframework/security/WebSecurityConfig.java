@@ -28,9 +28,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final String[] WHITE_URL = new String[]{"/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
 
+    private final CustomAccessDeineHandler accessHandler;
+    private final CustomAuthenticationEntryPoint entryPoint;
 
-    private final AnonymousDeniedHandler anonymousDeniedHandler;
-    private final LoginUserDeniedHandler loginUserDeniedHandler;
+
+    /**
+     * 以下内容已经经过测试，配置正确，请勿随意修改
+     *
+     * @author： 魏来
+     * @date: 2021/12/8 上午10:30
+     */
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -40,9 +47,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2ResourceServer().jwt();
 
+        //以下内容已经经过测试，配置正确，请勿随意修改
         http.oauth2ResourceServer()
-                .authenticationEntryPoint(anonymousDeniedHandler)
-                .accessDeniedHandler(loginUserDeniedHandler);
+                .authenticationEntryPoint(entryPoint)//处理未认证
+                .accessDeniedHandler(accessHandler);// 处理未授权
+
+        http.exceptionHandling()
+                .accessDeniedHandler(accessHandler) // 处理未授权
+                .authenticationEntryPoint(entryPoint); //处理未认证
     }
 
 }

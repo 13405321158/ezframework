@@ -14,27 +14,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * desc：TODO
+ * 　　AuthenticationEntryPoint 用来解决匿名用户访问无权限资源时的异常   ——  也就是未授权的问题
+ *
+ * 　　AccessDeineHandler 用来解决认证过的用户访问无权限资源时的异常  ——  也就是权限不足的问题
  *
  * @author： 魏来
  * @date： 2021/12/7 下午12:54
  */
 @Slf4j
 @Configuration
-public class LoginUserDeniedHandler implements AccessDeniedHandler {
+public class CustomAccessDeineHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-        log.info("已经登录状态异常拦截：{}", request.getRequestURI());
+        log.info("AccessDeniedHandler状态异常拦截：{}", request.getRequestURI());
         Map<String, Object> map = new HashMap<>();
-        map.put("code", response.SC_UNAUTHORIZED);//
+        map.put("code", response.getStatus());//
         map.put("success", false);
         map.put("msg", accessDeniedException.getMessage());
         map.put("path", request.getServletPath());
         map.put("timestamp", LocalDateTime.now().toString());
         map.put("tips", "Sentury Tire Co., Ltd");
         response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_OK);
+        response.setStatus(response.getStatus());
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), map);
