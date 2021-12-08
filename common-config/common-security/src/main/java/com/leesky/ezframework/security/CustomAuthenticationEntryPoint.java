@@ -52,7 +52,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         map.put("msg", authException.getMessage());
         map.put("path", request.getServletPath());
         map.put("timestamp", LocalDateTime.now().toString());
-        map.put("tips", "Sentury Tire Co., Ltd");
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

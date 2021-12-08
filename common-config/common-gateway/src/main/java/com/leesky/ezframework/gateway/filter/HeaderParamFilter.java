@@ -99,7 +99,6 @@ public class HeaderParamFilter implements GlobalFilter {
         map.put("msg", ex);
         map.put("path", path);
         map.put("success", false);
-        map.put("Tips", "Sentury Tire Co., Ltd");
         map.put("timestamp", LocalDateTime.now().toString());
         map.put("statusCode", exchange.getResponse().getStatusCode());
 

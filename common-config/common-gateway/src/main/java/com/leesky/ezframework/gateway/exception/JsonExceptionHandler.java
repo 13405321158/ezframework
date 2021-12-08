@@ -7,7 +7,6 @@
  */
 package com.leesky.ezframework.gateway.exception;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -53,14 +52,11 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         // 封装响应体,此body可修改为自己的jsonBody
         Map<String, Object> result = Maps.newHashMap();
 
-        result.put("code", httpStatus.value());
         result.put("success", false);
-        result.put("msg", "[网关层提示异常]:" + split(ex.getMessage()));
+        result.put("code", httpStatus.value());
         result.put("httpStatus", httpStatus);
-        result.put("Tips", "Sentury Tire Co., Ltd");
         result.put("timestamp", LocalDateTime.now().toString());
-
-        result.put("body", JSON.toJSONString(result));
+        result.put("msg", "[网关层提示异常]:" + split(ex.getMessage()));
 
         // 错误记录
         ServerHttpRequest request = exchange.getRequest();

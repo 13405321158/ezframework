@@ -28,13 +28,14 @@ public class CustomAccessDeineHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         log.info("AccessDeniedHandler状态异常拦截：{}", request.getRequestURI());
+
         Map<String, Object> map = new HashMap<>();
-        map.put("code", response.getStatus());//
         map.put("success", false);
-        map.put("msg", accessDeniedException.getMessage());
+        map.put("code", response.getStatus());
         map.put("path", request.getServletPath());
+        map.put("msg", accessDeniedException.getMessage());
         map.put("timestamp", LocalDateTime.now().toString());
-        map.put("tips", "Sentury Tire Co., Ltd");
+
         response.setContentType("application/json");
         response.setStatus(response.getStatus());
 
