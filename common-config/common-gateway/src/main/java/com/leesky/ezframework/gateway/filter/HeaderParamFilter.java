@@ -41,18 +41,12 @@ public class HeaderParamFilter implements GlobalFilter {
         String path = exchange.getRequest().getURI().getPath();
 
         try {
-            //登录者id
-            String uuid01 = "uid1";
-            String uid = exchange.getRequest().getHeaders().getFirst(uuid01);//用户id
-            //随机数
-            String uuid02 = "uid2";
-            String random = exchange.getRequest().getHeaders().getFirst(uuid02);//随机数
-            //时间戳
-            String uuid03 = "uid3";
-            String timestamp = exchange.getRequest().getHeaders().getFirst(uuid03);//时间戳
-            //签名
-            String uuid04 = "uid4";
-            String sign = exchange.getRequest().getHeaders().getFirst(uuid04);//签名
+
+            String uid = exchange.getRequest().getHeaders().getFirst("uid1");//用户id
+            String random = exchange.getRequest().getHeaders().getFirst("uid2");//随机数
+            String timestamp = exchange.getRequest().getHeaders().getFirst("uid3");//时间戳
+             String sign = exchange.getRequest().getHeaders().getFirst("uid4");//签名
+
             //1、检查头部参数是否齐全
             checkParam(exchange, uid, random, timestamp, sign);
 
