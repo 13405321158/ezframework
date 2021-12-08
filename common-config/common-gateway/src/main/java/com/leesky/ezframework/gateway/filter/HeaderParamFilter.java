@@ -45,35 +45,35 @@ public class HeaderParamFilter implements GlobalFilter {
             String uid = exchange.getRequest().getHeaders().getFirst("uid1");//用户id
             String random = exchange.getRequest().getHeaders().getFirst("uid2");//随机数
             String timestamp = exchange.getRequest().getHeaders().getFirst("uid3");//时间戳
-             String sign = exchange.getRequest().getHeaders().getFirst("uid4");//签名
+            String sign = exchange.getRequest().getHeaders().getFirst("uid4");//签名
 
             //1、检查头部参数是否齐全
             checkParam(exchange, uid, random, timestamp, sign);
 
             //2、验签
             Boolean serverSign = SHAUtil.disEncode(uid + random + timestamp, sign);
-            Assert.isTrue(serverSign, "验签失败,系统判定：重放攻击");
+            Assert.isTrue(serverSign, "验签失败,系统判定：重放攻击" + uid);
 
             //3、是否超时
             long currTime = System.currentTimeMillis();
             long clientTimes = Long.parseLong(timestamp);
-            Assert.isTrue((currTime - clientTimes) < 60000, "访问超时,系统判定：重放攻击");
+            Assert.isTrue((currTime - clientTimes) < 60000, "访问超时,系统判定：重放攻击" + uid);
 
             //4、url是否使用过
             String key = "[nonce" + random + "]_" + uid;
             String value = (String) this.cache.get(key);
             this.cache.add(key, "used", 3 * 60L);
-            Assert.isTrue(StringUtils.isBlank(value), "url已使用,系统判定：重放攻击");
+            Assert.isTrue(StringUtils.isBlank(value), "url已使用,系统判定：重放攻击" + uid);
 
             //5、获取token并增加到head参数中
             Object token = this.cache.get("auth-token-id_" + uid);
-            Assert.isTrue(ObjectUtils.isNotEmpty(token), "令牌已失效或用户未登录,请登录重试");
+            Assert.isTrue(ObjectUtils.isNotEmpty(token), "令牌已失效或用户未登录,请登录重试" + uid);
 
             //6、url头部增加参数 Authorization
             ServerHttpRequest request = exchange.getRequest().mutate().header("Authorization", "bearer " + token).build();
             return chain.filter(exchange.mutate().request(request).build());
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
             return exchange.getResponse().writeWith(Mono.just(data(exchange, path, e.getMessage())));
         }
 
@@ -108,10 +108,10 @@ public class HeaderParamFilter implements GlobalFilter {
      * @date: 2021/12/8 上午11:17
      */
     private void checkParam(ServerWebExchange exchange, String uid, String random, String stamp, String sign) {
-        Assert.isTrue(StringUtils.isNotBlank(uid), ":header参数uid1缺失");
-        Assert.isTrue(StringUtils.isNotBlank(random), ":header参数uid2缺失");
-        Assert.isTrue(StringUtils.isNotBlank(stamp), ":header参数uid3缺失");
-        Assert.isTrue(StringUtils.isNotBlank(sign), ":header参数uid4缺失");
+        Assert.isTrue(StringUtils.isNotBlank(uid), "header参数uid1缺失");
+        Assert.isTrue(StringUtils.isNotBlank(random), "header参数uid2缺失" + uid);
+        Assert.isTrue(StringUtils.isNotBlank(stamp), "header参数uid3缺失" + uid);
+        Assert.isTrue(StringUtils.isNotBlank(sign), "header参数uid4缺失" + uid);
     }
 
 }
