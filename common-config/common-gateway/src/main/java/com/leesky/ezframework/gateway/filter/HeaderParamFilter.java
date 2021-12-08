@@ -4,10 +4,10 @@ import com.alibaba.nacos.shaded.com.google.gson.Gson;
 import com.google.common.collect.Maps;
 import com.leesky.ezframework.gateway.utils.SHAUtil;
 import com.leesky.ezframework.redis.service.RedisService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -30,16 +30,10 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class HeaderParamFilter implements GlobalFilter {
 
-    private String uuid01 = "uid1";//登录者id
-    private String uuid02 = "uid2";//随机数
-    private String uuid03 = "uid3";//时间戳
-    private String uuid04 = "uid4";//签名
-
-
-    private final RedisService cache;
+    @Autowired
+    private RedisService cache;
 
 
     @Override
@@ -47,9 +41,17 @@ public class HeaderParamFilter implements GlobalFilter {
         String path = exchange.getRequest().getURI().getPath();
 
         try {
+            //登录者id
+            String uuid01 = "uid1";
             String uid = exchange.getRequest().getHeaders().getFirst(uuid01);//用户id
+            //随机数
+            String uuid02 = "uid2";
             String random = exchange.getRequest().getHeaders().getFirst(uuid02);//随机数
+            //时间戳
+            String uuid03 = "uid3";
             String timestamp = exchange.getRequest().getHeaders().getFirst(uuid03);//时间戳
+            //签名
+            String uuid04 = "uid4";
             String sign = exchange.getRequest().getHeaders().getFirst(uuid04);//签名
             //1、检查头部参数是否齐全
             checkParam(exchange, uid, random, timestamp, sign);
@@ -73,8 +75,8 @@ public class HeaderParamFilter implements GlobalFilter {
             Object token = this.cache.get("auth-token-id_" + uid);
             Assert.isTrue(ObjectUtils.isNotEmpty(token), "令牌已失效或用户未登录,请登录重试");
 
+            //6、url头部增加参数 Authorization
             ServerHttpRequest request = exchange.getRequest().mutate().header("Authorization", "bearer " + token).build();
-
             return chain.filter(exchange.mutate().request(request).build());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
