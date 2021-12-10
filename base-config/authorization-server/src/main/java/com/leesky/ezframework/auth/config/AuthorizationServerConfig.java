@@ -9,10 +9,7 @@ package com.leesky.ezframework.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.leesky.ezframework.auth.details.clientdetails.ClientDetailsServiceImpl;
-import com.leesky.ezframework.auth.details.userdetails.menber.MemberUserDetails;
-import com.leesky.ezframework.auth.details.userdetails.user.SysUserDetails;
 import com.leesky.ezframework.auth.exception.TokenEndpointFilter;
 import com.leesky.ezframework.auth.ext.captcha.CaptchaTokenGranter;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeTokenGranter;
@@ -21,14 +18,12 @@ import com.leesky.ezframework.constant.RedisGlobal;
 import com.leesky.ezframework.json.AjaxJson;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -40,7 +35,6 @@ import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
@@ -51,7 +45,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 类功能说明：
@@ -75,6 +68,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	private final LettuceConnectionFactory redisConnectionFactory;// token 存储在redis中
 
+	private final  JwtEnhancer jwtEnhancer;
 	/**
 	 * <li>配置1=security.allowFormAuthenticationForClients();spring自带
 	 * <li>配置2=ClientCredentialsTokenEndpointFilter;自定义错误返回格式
@@ -90,6 +84,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		endpointFilter.afterPropertiesSet();
 		endpointFilter.setAuthenticationEntryPoint(authenticationEntryPoint());
 		security.addTokenEndpointAuthenticationFilter(endpointFilter);
+
+		security.checkTokenAccess("permitAll()");//允许/oauth/check_token,测试环境开启，线上环境禁用
 	}
 
 	/**
@@ -138,7 +134,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		services.setRefreshTokenValiditySeconds(refreshTokenValiditySeconds);
 
 		TokenEnhancerChain extJWT = new TokenEnhancerChain();// jwt 内容扩展
-		extJWT.setTokenEnhancers(Arrays.asList(jwtTokenConverter(), jwtEnhancer()));
+		extJWT.setTokenEnhancers(Arrays.asList(jwtTokenConverter(), jwtEnhancer));
 		services.setTokenEnhancer(extJWT);
 
 		return services;
@@ -163,13 +159,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public KeyPair keyPair() {
 		KeyStoreKeyFactory factory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "123456".toCharArray());
-		KeyPair keyPair = factory.getKeyPair("jwt", "123456".toCharArray());
-		return keyPair;
+		return factory.getKeyPair("jwt", "123456".toCharArray());
 	}
 	/**
 	 * token 存储到redis中
-	 * <li>token 存储方式有三：1数据表、2jwt、3redis</li>
-	 * <li>这里采用存储到redis中，好处时发放的token可以收回</li>
 	 *
 	 * @author： 魏来
 	 * @date: 2021/12/1 上午9:31
@@ -179,42 +172,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		RedisTokenStore redisStore = new RedisTokenStore(redisConnectionFactory);
 		redisStore.setPrefix(RedisGlobal.AUTH_TOKEN);
 		return redisStore;
-	}
-//	@Bean
-//	public JwtTokenStore tokenStore(){
-//		return new JwtTokenStore(jwtTokenConverter());
-//	}
-
-	/**
-	 * 扩展jwt内容
-	 */
-	@Bean
-	public TokenEnhancer jwtEnhancer() {
-		return (accessToken, authentication) -> {
-			Map<String, Object> additionalInfo = Maps.newHashMap();
-			Object principal = authentication.getUserAuthentication().getPrincipal();
-
-			if (principal instanceof SysUserDetails) {
-				SysUserDetails sysUserDetails = (SysUserDetails) principal;
-				additionalInfo.put("userId", sysUserDetails.getUserId());
-				additionalInfo.put("username", sysUserDetails.getUsername());
-				if (StringUtils.isNotBlank(sysUserDetails.getAuthenticationMethod()))
-					additionalInfo.put("authenticationMethod", sysUserDetails.getAuthenticationMethod());
-
-			}
-
-			if (principal instanceof MemberUserDetails) {
-				MemberUserDetails memberUserDetails = (MemberUserDetails) principal;
-				additionalInfo.put("userId", memberUserDetails.getUserId());
-				additionalInfo.put("username", memberUserDetails.getUsername());
-				if (StringUtils.isNotBlank(memberUserDetails.getAuthenticationMethod()))
-					additionalInfo.put("authenticationMethod", memberUserDetails.getAuthenticationMethod());
-
-			}
-
-			((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
-			return accessToken;
-		};
 	}
 
 	/**
