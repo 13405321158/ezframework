@@ -67,7 +67,7 @@ public class HeaderParamFilter implements GlobalFilter {
 
             //5、获取token并增加到head参数中
             Object token = this.cache.get("auth-token-id_" + uid);
-            Assert.isTrue(ObjectUtils.isNotEmpty(token), "令牌已失效或用户未登录,请登录重试" + uid);
+            Assert.isTrue(ObjectUtils.isNotEmpty(token), "令牌已失效或用户未登录,请登录重试，登录Id：" + uid);
 
             //6、url头部增加参数 Authorization
             ServerHttpRequest request = exchange.getRequest().mutate().header("Authorization", "bearer " + token).build();
