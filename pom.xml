@@ -35,7 +35,6 @@
         <lang3.version>3.12.0</lang3.version>
         <guava.version>30.1.1-jre</guava.version>
         <fastjson.version>1.2.78</fastjson.version>
-        <seata.all.version>1.4.2</seata.all.version>
         <common.io.version>2.11.0</common.io.version>
         <collections4.version>4.4</collections4.version>
         <nacos.client.version>2.0.3</nacos.client.version>
@@ -68,12 +67,6 @@
                 <groupId>com.alibaba.nacos</groupId>
                 <artifactId>nacos-client</artifactId>
                 <version>${nacos.client.version}</version>
-            </dependency>
-            <!-- 强制更改 seata-all 版本 起步依赖 -->
-            <dependency>
-                <groupId>io.seata</groupId>
-                <artifactId>seata-all</artifactId>
-                <version>${seata.all.version}</version>
             </dependency>
 
             <!-- dozer 对象复制工具类 起步依赖 -->
