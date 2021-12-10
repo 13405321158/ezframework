@@ -38,7 +38,7 @@
         <fastjson.version>1.2.78</fastjson.version>
         <collections4.version>4.4</collections4.version>
         <nacos.client.version>2.0.3</nacos.client.version>
-
+        <seata.all.version>1.4.2</seata.all.version>
 
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
@@ -68,6 +68,13 @@
                 <artifactId>nacos-client</artifactId>
                 <version>${nacos.client.version}</version>
             </dependency>
+            <!-- 强制更改 seata-all 版本 起步依赖 -->
+            <dependency>
+                <groupId>io.seata</groupId>
+                <artifactId>seata-all</artifactId>
+                <version>${seata.all.version}</version>
+            </dependency>
+
             <!-- dozer 对象复制工具类 起步依赖 -->
             <dependency>
                 <groupId>com.github.dozermapper</groupId>
@@ -117,5 +124,5 @@
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
-    
+
 </project>

@@ -7,9 +7,10 @@
  */
 package com.leesky.ezframework.backend.dto;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 类功能说明：
@@ -42,6 +43,6 @@ public class UserAuthDTO {
     /**
      * 用户角色编码集合 ["ROOT","ADMIN"]
      */
-    private List<String> roles;
+    private List<String> roles= Lists.newArrayList("ROLE_rose01","role02");
 
 }

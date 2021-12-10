@@ -113,7 +113,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	 */
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-
 		endpoints.tokenServices(tokenService());// 设置token属性
 		endpoints.authenticationManager(authenticationManager);// 用户名和密码验证方式
 		endpoints.tokenGranter(compositeTokenGranter(endpoints));// 授权方式结合点. 如果不扩展授权方式,使用系统默认,则此处可以不加
@@ -173,7 +172,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	 * <li>这里采用存储到redis中，好处时发放的token可以收回</li>
 	 *
 	 * @author： 魏来
-	 * 
 	 * @date: 2021/12/1 上午9:31
 	 */
 	@Bean
@@ -182,6 +180,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		redisStore.setPrefix(RedisGlobal.AUTH_TOKEN);
 		return redisStore;
 	}
+//	@Bean
+//	public JwtTokenStore tokenStore(){
+//		return new JwtTokenStore(jwtTokenConverter());
+//	}
 
 	/**
 	 * 扩展jwt内容
