@@ -70,8 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter granted = new JwtGrantedAuthoritiesConverter();
-        granted.setAuthorityPrefix("ROLE_");
-        granted.setAuthoritiesClaimName("authorities");
+        granted.setAuthorityPrefix(AUTHORITY_PREFIX);
+        granted.setAuthoritiesClaimName(JWT_AUTHORITIES_KEY);
 
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(granted);
