@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import com.leesky.ezframework.auth.enums.PasswordEncoderTypeEnum;
 import com.leesky.ezframework.backend.api.IbackendServerClient;
 import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
-import com.leesky.ezframework.json.AjaxJson;
+import com.leesky.ezframework.json.Result;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +37,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Cacheable(cacheNames = "auth", key = "'oauth-client:'+#clientId")
     public ClientDetails loadClientByClientId(String clientId) {
         try {
-            AjaxJson<OauthClientDetailsDTO> ret = this.client.getOAuth2ClientById(clientId);
+            Result<OauthClientDetailsDTO> ret = this.client.getOAuth2ClientById(clientId);
 
             if (!ret.isSuccess())
                 throw new BadCredentialsException("No client with requested id: " + clientId);

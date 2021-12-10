@@ -3,7 +3,7 @@ package com.leesky.ezframework.backend.action;
 import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
 import com.leesky.ezframework.backend.model.OauthClientDetailsModel;
 import com.leesky.ezframework.backend.service.IoauthCientService;
-import com.leesky.ezframework.json.AjaxJson;
+import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.utils.Po2DtoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,17 +35,12 @@ public class OauthClientAction {
      * @date: 2021/12/1 下午6:14
      */
     @GetMapping("/r01/public")
-    public AjaxJson<OauthClientDetailsDTO> getOAuth2ClientById(@RequestParam String clientId) {
-        AjaxJson<OauthClientDetailsDTO> json = new AjaxJson<>();
-        try {
-            OauthClientDetailsModel client = this.service.findOne(clientId);
-            Assert.isTrue(client != null, "OAuth2 客户端不存在");
-            OauthClientDetailsDTO dto = Po2DtoUtil.convertor(client, OauthClientDetailsDTO.class);
-            json.setData(dto);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            json.setSuccess(false, e.getMessage());
-        }
-        return json;
+    public Result<OauthClientDetailsDTO> getOAuth2ClientById(@RequestParam String clientId) {
+
+        OauthClientDetailsModel client = this.service.findOne(clientId);
+        Assert.isTrue(client != null, "OAuth2 客户端不存在");
+        OauthClientDetailsDTO dto = Po2DtoUtil.convertor(client, OauthClientDetailsDTO.class);
+
+        return Result.success(dto);
     }
 }

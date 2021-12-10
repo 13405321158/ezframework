@@ -9,7 +9,7 @@ package com.leesky.ezframework.auth.details.userdetails.user;
 
 import com.leesky.ezframework.backend.api.IbackendServerClient;
 import com.leesky.ezframework.backend.dto.UserAuthDTO;
-import com.leesky.ezframework.json.AjaxJson;
+import com.leesky.ezframework.json.Result;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -33,7 +33,7 @@ public class SysUserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUserDetails userDetails = null;
-        AjaxJson<UserAuthDTO> ret = this.client.getUserByUsername(username);
+        Result<UserAuthDTO> ret = this.client.getUserByUsername(username);
 
         if (!ret.isSuccess())
             throw new UsernameNotFoundException("该账户不存在：" + username);

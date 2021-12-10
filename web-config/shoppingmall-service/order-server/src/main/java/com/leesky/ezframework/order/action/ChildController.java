@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.leesky.ezframework.json.AjaxJson;
+import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.order.dto.RetDTO;
 import com.leesky.ezframework.order.model.ChildModel;
@@ -48,8 +48,8 @@ public class ChildController {
     }
 
     @PostMapping("/c01")
-    public AjaxJson index01() {
-        AjaxJson json = new AjaxJson();
+    public Result index01() {
+        Result json = new Result();
         try {
             ChildModel child = new ChildModel("魏浩然");
             List<CourseModel> c = Lists.newArrayList(new CourseModel("语文"), new CourseModel("数学"), new CourseModel("化学", "00b429e6-3e1e-48e7-a6e4-f2428fa5ae0b"));
@@ -65,9 +65,9 @@ public class ChildController {
     }
 
     @PostMapping("/r01")
-    public AjaxJson index02(@RequestBody ParamModel param) {
+    public Result index02(@RequestBody ParamModel param) {
 
-        AjaxJson json = new AjaxJson();
+        Result json = new Result();
         try {
             param.setSelect("cours.name");
             QueryFilter<ChildModel> filter = new QueryFilter<>(param, ChildModel.class);

@@ -9,7 +9,7 @@ package com.leesky.ezframework.auth.action;
 
 
 import com.leesky.ezframework.constant.RedisGlobal;
-import com.leesky.ezframework.json.AjaxJson;
+import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.redis.service.RedisService;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -46,21 +46,17 @@ public class TokenAction {
 
 
     @PostMapping("/token")
-    public AjaxJson<OAuth2AccessToken> getToken(Principal principal, @RequestParam Map<String, String> map) throws HttpRequestMethodNotSupportedException {
+    public Result<OAuth2AccessToken> getToken(Principal principal, @RequestParam Map<String, String> map) throws HttpRequestMethodNotSupportedException {
         Assert.isTrue(StringUtils.isNotBlank(map.get("password")), "参数password不允许空值");
         Assert.isTrue(StringUtils.isNotBlank(map.get("grant_type")), "参数grant_type不允许空值");
         Assert.isTrue(StringUtils.isNotBlank(map.get("client_secret")), "参数client_secret不允许空值");
 
-        AjaxJson<OAuth2AccessToken> json = new AjaxJson<>();
 
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
 
         this.cache.add(RedisGlobal.AUTH_TOKEN_ID + accessToken.getAdditionalInformation().get("userId"), accessToken.getValue(), Long.valueOf(360));
 
-        json.setData(accessToken);
-
-
-        return json;
+        return Result.success(accessToken);
 
     }
 

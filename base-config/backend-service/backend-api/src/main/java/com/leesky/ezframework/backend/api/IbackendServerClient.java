@@ -11,7 +11,7 @@ import com.leesky.ezframework.backend.api.callback.BackendFeignFallback;
 import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
 import com.leesky.ezframework.backend.dto.UserAuthDTO;
 import com.leesky.ezframework.feign.FeignErrorDecoder;
-import com.leesky.ezframework.json.AjaxJson;
+import com.leesky.ezframework.json.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +32,7 @@ public interface IbackendServerClient {
      * @date: 2021/12/1 下午6:18
      */
     @GetMapping("/client/r01/public")
-    AjaxJson<OauthClientDetailsDTO> getOAuth2ClientById(@RequestParam String clientId);
+    Result<OauthClientDetailsDTO> getOAuth2ClientById(@RequestParam String clientId);
 
     /**
      * 登录时查询用户名
@@ -41,5 +41,5 @@ public interface IbackendServerClient {
      * @date: 2021/12/1 下午6:46
      */
     @GetMapping("/user/{username}/public")
-    public AjaxJson<UserAuthDTO> getUserByUsername(@PathVariable String username);
+    public Result<UserAuthDTO> getUserByUsername(@PathVariable String username);
 }

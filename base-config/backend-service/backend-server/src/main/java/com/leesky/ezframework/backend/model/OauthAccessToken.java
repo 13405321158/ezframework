@@ -1,12 +1,11 @@
 package com.leesky.ezframework.backend.model;
 
-import java.io.Serializable;
-import java.sql.Blob;
-
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
 import lombok.Data;
+
+import java.io.Serializable;
+import java.sql.Blob;
 
 /**
  * @author: weilai

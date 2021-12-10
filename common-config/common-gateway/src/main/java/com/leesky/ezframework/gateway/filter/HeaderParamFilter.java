@@ -32,6 +32,8 @@ import java.util.Map;
 @Component
 public class HeaderParamFilter implements GlobalFilter {
 
+    public final String URL_SUFFIX = "/public";
+
     @Autowired
     private RedisService cache;
 
@@ -41,7 +43,11 @@ public class HeaderParamFilter implements GlobalFilter {
         String path = exchange.getRequest().getURI().getPath();
 
         try {
+            //如果是白名单，则直接放行
+            if (StringUtils.endsWith(path, URL_SUFFIX))
+                return chain.filter(exchange);
 
+            
             String uid = exchange.getRequest().getHeaders().getFirst("uid1");//用户id
             String random = exchange.getRequest().getHeaders().getFirst("uid2");//随机数
             String timestamp = exchange.getRequest().getHeaders().getFirst("uid3");//时间戳

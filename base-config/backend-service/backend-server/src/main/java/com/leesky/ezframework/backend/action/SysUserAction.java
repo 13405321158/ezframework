@@ -4,9 +4,8 @@ import com.leesky.ezframework.backend.dto.UserAuthDTO;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
-import com.leesky.ezframework.json.AjaxJson;
+import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
-import com.leesky.ezframework.utils.JwtUtils;
 import com.leesky.ezframework.utils.Po2DtoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,23 +35,18 @@ public class SysUserAction {
      * @日期: 2021年12月3日 上午9:05:39
      */
     @GetMapping("/{username}/public")
-    public AjaxJson<UserAuthDTO> getUserByUsername(@PathVariable String username) {
-        AjaxJson<UserAuthDTO> json = new AjaxJson<>();
-        try {
+    public Result<UserAuthDTO> getUserByUsername(@PathVariable String username) {
 
-            QueryFilter<UserBaseModel> filter = new QueryFilter<>();
-            filter.eq("username", username);
-            filter.select("id,username,status,password");
-            UserBaseModel user = this.service.findOne(filter);
 
-            UserAuthDTO dto = Po2DtoUtil.convertor(user, UserAuthDTO.class);
-            json.setData(dto);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            json.setSuccess(false, e.getMessage());
-        }
+        QueryFilter<UserBaseModel> filter = new QueryFilter<>();
+        filter.eq("username", username);
+        filter.select("id,username,status,by_time,password");
+        UserBaseModel user = this.service.findOne(filter);
 
-        return json;
+        UserAuthDTO dto = Po2DtoUtil.convertor(user, UserAuthDTO.class);
+
+
+        return Result.success(dto);
     }
 
     /**
@@ -62,24 +56,18 @@ public class SysUserAction {
      * @日期: 2021年12月3日 上午9:26:01
      */
     @PostMapping("/c01")
-    public AjaxJson<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) {
+    public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) {
 
-        AjaxJson<UserBaseDTO> json = new AjaxJson<>();
-        try {
-           JwtUtils.getRoles();
+//        JwtUtils.getRoles();
 
-            QueryFilter<UserBaseModel> filter = new QueryFilter<>();
-            filter.eq("username", dto.getUsername());
-            filter.select("id");
-            UserBaseModel user = this.service.findOne(filter);
-            Assert.isTrue(ObjectUtils.isEmpty(user), "账户名已存在");
+        QueryFilter<UserBaseModel> filter = new QueryFilter<>();
+        filter.eq("username", dto.getUsername());
+        filter.select("id");
+        UserBaseModel user = this.service.findOne(filter);
+        Assert.isTrue(ObjectUtils.isEmpty(user), "账户名已存在");
 
-            this.service.addUser(dto);
+        this.service.addUser(dto);
 
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            json.setSuccess(false, e.getMessage());
-        }
-        return json;
+        return Result.success();
     }
 }
