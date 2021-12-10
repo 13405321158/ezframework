@@ -12,7 +12,6 @@
     <artifactId>common-mybatis</artifactId>
 
     <properties>
-        <io.version>2.11.0</io.version>
         <poi.version>5.0.0</poi.version>
         <p6spy.version>3.9.1</p6spy.version>
         <beanutils.version>1.9.4</beanutils.version>
@@ -41,11 +40,7 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${io.version}</version>
-        </dependency>
+
 
 
         <dependency>
