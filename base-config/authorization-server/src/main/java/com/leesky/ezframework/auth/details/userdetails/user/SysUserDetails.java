@@ -9,8 +9,10 @@ package com.leesky.ezframework.auth.details.userdetails.user;
 
 import com.leesky.ezframework.auth.enums.PasswordEncoderTypeEnum;
 import com.leesky.ezframework.backend.dto.UserAuthDTO;
+import com.leesky.ezframework.enums.StatusEnum;
 import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,7 +50,7 @@ public class SysUserDetails implements UserDetails {
     public SysUserDetails(UserAuthDTO user) {
         this.setUserId(user.getId());
         this.setUsername(user.getUsername());
-        this.setEnabled(user.getStatus().equals(0));
+        this.setEnabled(StringUtils.equals(user.getStatus(), StatusEnum.ENABLE.getKey()));
         this.setPassword(PasswordEncoderTypeEnum.BCRYPT.getPrefix() + user.getPassword());
         this.setByTime(user.getByTime().getTime() > System.currentTimeMillis() ? true : false);
         if (CollectionUtils.isNotEmpty(user.getRoles())) {

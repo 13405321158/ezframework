@@ -1,5 +1,6 @@
 package com.leesky.ezframework.order.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -9,7 +10,7 @@ import lombok.Data;
 @TableName("cbm_l_student_teacher")
 public class StudentTeacherModel {
 
-    @TableId
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 
     private String studentId;

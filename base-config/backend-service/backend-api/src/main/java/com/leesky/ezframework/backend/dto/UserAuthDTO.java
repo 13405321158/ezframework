@@ -7,17 +7,19 @@
  */
 package com.leesky.ezframework.backend.dto;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * 类功能说明：
  * <li></li>
  */
 @Data
+@NoArgsConstructor
 public class UserAuthDTO {
 
 
@@ -39,7 +41,7 @@ public class UserAuthDTO {
     /**
      * 用户状态：1-有效；0-禁用
      */
-    private Integer status;
+    private String status;
     /*
      * 有效期至
      */
@@ -48,6 +50,13 @@ public class UserAuthDTO {
     /**
      * 用户角色编码集合 ["ROOT","ADMIN"]
      */
-    private List<String> roles = Lists.newArrayList("ROLE_rose01", "role02");
+    private Set<String> roles = Sets.newHashSet();
 
+    public UserAuthDTO(String id, String username, String password, String status, Date byTime) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.status = status;
+        this.byTime = byTime;
+    }
 }

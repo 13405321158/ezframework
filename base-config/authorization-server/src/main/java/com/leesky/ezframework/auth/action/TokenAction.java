@@ -13,8 +13,9 @@ import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.redis.service.RedisService;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.util.Assert;
@@ -33,7 +34,7 @@ import java.util.Map;
 
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/oauth")
 public class TokenAction {
 
@@ -41,8 +42,8 @@ public class TokenAction {
     private final RedisService cache;
     private final TokenEndpoint tokenEndpoint;
 
-//    @Value("${access.token.validity:360}") // 默认值过期时间360
-//    private  String accessTokenValiditySeconds="360";
+    @Value("${access.token.validity:420}") // 默认值7分钟
+    private String accessTokenValiditySeconds;
 
 
     @PostMapping("/token")
@@ -54,7 +55,8 @@ public class TokenAction {
 
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
 
-        this.cache.add(RedisGlobal.AUTH_TOKEN_ID + accessToken.getAdditionalInformation().get("userId"), accessToken.getValue(), Long.valueOf(360));
+        Map<String, String> ext = (Map<String, String>) accessToken.getAdditionalInformation().get("user_info");
+        this.cache.add(RedisGlobal.AUTH_TOKEN_ID + ext.get("userId"), accessToken.getValue(), Long.valueOf(accessTokenValiditySeconds));
 
         return Result.success(accessToken);
 

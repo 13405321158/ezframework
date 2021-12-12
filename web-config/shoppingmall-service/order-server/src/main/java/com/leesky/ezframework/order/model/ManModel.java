@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import com.leesky.ezframework.order.mapper.*;
+import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@ApiModel("老公表")
 @TableName("cbm_man")
 public class ManModel extends BaseUuidModel {
 

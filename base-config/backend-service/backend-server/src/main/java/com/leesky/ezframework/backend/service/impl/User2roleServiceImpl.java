@@ -39,7 +39,7 @@ public class User2roleServiceImpl extends LeeskyServiceImpl<Iuser2roleMapper, Us
 
         List<User2RoleModel> list = Lists.newArrayList();
         for (String uid : dto.getCid())
-            list.add(new User2RoleModel());
+            list.add(new User2RoleModel(uid, dto.getPid()));
 
         //2、再插入新数据
         this.insert(list, false);

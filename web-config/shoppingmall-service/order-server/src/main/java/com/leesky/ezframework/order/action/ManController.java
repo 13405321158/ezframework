@@ -26,7 +26,7 @@ public class ManController {
     private IManService manService;
 
     @RequestMapping(value = "man/{id}")
-    public ManModel getMan(@PathVariable("id") Long id) {
+    public ManModel getMan(@PathVariable("id") String id) {
         ManModel manModel = manService.findOne(id);
         return manModel;
     }

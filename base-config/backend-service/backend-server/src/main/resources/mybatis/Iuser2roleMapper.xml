@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leesky.ezframework.backend.mapper.Iuser2roleMapper">
+
+    <resultMap type="com.leesky.ezframework.backend.model.RoleModel" id="roleResult"/>
+    <resultMap type="com.leesky.ezframework.backend.model.UserBaseModel" id="userResult"/>
+
+    <select id="getRoleCodes" parameterType="String" resultMap="roleResult">
+        SELECT b.id,b.name,b.code
+        FROM cbm_mag_l_user_role a
+                 LEFT JOIN cbm_mag_role b ON a.role_id = b.id
+        WHERE a.user_id = #{id}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings
+        xmlns="http://dozermapper.github.io/schema/bean-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping http://dozermapper.github.io/schema/bean-mapping.xsd">
+
+    <!--全局配置，配置日期的映射格式 -->
+    <configuration>
+        <date-format>yyyy-MM-dd HH:mm:ss</date-format>
+    </configuration>
+
+<!--    <mapping wildcard="false">-->
+<!--        <class-a>com.leesky.ezframework.backend.model.UserBaseModel</class-a>-->
+<!--        <class-b>com.leesky.ezframework.backend.dto.UserAuthDTO</class-b>-->
+
+<!--        <field>-->
+<!--            <a>roles.code</a>-->
+<!--            <b>roles</b>-->
+<!--            <a-hint>com.leesky.ezframework.backend.model.RoleModel.code</a-hint>-->
+<!--            <b-hint>java.lang.String</b-hint>-->
+<!--        </field>-->
+<!--    </mapping>-->
+
+</mappings>

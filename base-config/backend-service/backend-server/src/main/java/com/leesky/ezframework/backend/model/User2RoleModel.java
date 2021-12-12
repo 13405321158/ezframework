@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
  * @date： 2021/12/10 下午1:27
  */
 @Data
+@NoArgsConstructor
 @ApiModel(value = "用户角色关系表")
 @TableName("cbm_mag_l_user_role")
 public class User2RoleModel implements Serializable {
@@ -27,4 +29,9 @@ public class User2RoleModel implements Serializable {
 
     @ApiModelProperty("角色Id")
     private String roleId;
+
+    public User2RoleModel(String userId, String roleId) {
+        this.userId = userId;
+        this.roleId = roleId;
+    }
 }

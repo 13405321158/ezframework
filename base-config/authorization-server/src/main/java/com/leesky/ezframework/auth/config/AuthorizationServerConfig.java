@@ -59,7 +59,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Value("${access.token.validity:360}") // 默认值过期时间360
     private int accessTokenValiditySeconds;
 
-    @Value("${access.refresh.validity:420}") // 默认值7分钟
+    @Value("${access.token.validity:420}") // 默认值7分钟
     private int refreshTokenValiditySeconds;
 
     private final AuthenticationManager authenticationManager;// 在WebSecurityConfig中定义了
