@@ -35,6 +35,7 @@ public class SysUserAction {
 
     private final IroleService roleService;
 
+    private final JwtUtils JwtUtils;
     /**
      * <li>登录获取token时使用</li>
      *
@@ -69,8 +70,8 @@ public class SysUserAction {
     @PostMapping("/c01")
     public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) {
 
-        String id = JwtUtils.getUserId();
-        System.out.println(id);
+        List<String> uid = this.JwtUtils.getRoles();
+        System.err.println(uid);
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
         filter.select("id");

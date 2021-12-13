@@ -12,14 +12,12 @@ package com.leesky.ezframework.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+
 
 /**
  * 类功能说明：
@@ -39,10 +37,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomAccessDeineHandler accessHandler;
     private final CustomAuthenticationEntryPoint entryPoint;
 
-
+    private final LettuceConnectionFactory redisConnectionFactory;// token 存储在redis中
     /**
      * 以下内容已经经过测试，配置正确，请勿随意修改
-     *  JwtDecoder需要的公钥配置(jwkSetUri)已经在yml中设置
+     * JwtDecoder需要的公钥配置(jwkSetUri)已经在yml中设置
+     *
      * @author： 魏来
      * @date: 2021/12/8 上午10:30
      */
@@ -52,9 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(WHITE_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .oauth2ResourceServer().jwt()
-                .jwtAuthenticationConverter(jwtAuthenticationConverter());
-
+                .oauth2ResourceServer().jwt();
 
         //以下内容已经经过测试，配置正确，请勿随意修改
         http.oauth2ResourceServer()
@@ -64,18 +61,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling()
                 .accessDeniedHandler(accessHandler) // 处理未授权
                 .authenticationEntryPoint(entryPoint); //处理未认证
+
     }
 
 
+    /**
+     * token 存储到redis中
+     *
+     * @author： 魏来
+     * @date: 2021/12/1 上午9:31
+     */
     @Bean
-    public Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter granted = new JwtGrantedAuthoritiesConverter();
-        granted.setAuthorityPrefix(AUTHORITY_PREFIX);
-        granted.setAuthoritiesClaimName(JWT_AUTHORITIES_KEY);
-
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(granted);
-        return converter;
+    public RedisTokenStore tokenStore() {
+        RedisTokenStore redisStore = new RedisTokenStore(redisConnectionFactory);
+        redisStore.setPrefix("auth-token:");
+        return redisStore;
     }
-
 }
