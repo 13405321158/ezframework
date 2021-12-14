@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.endpoint.CheckTokenEndpoint;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.util.Assert;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -43,7 +42,6 @@ public class TokenAction {
     private final KeyPair keyPair;
     private final RedisService cache;
     private final TokenEndpoint tokenEndpoint;
-    private final CheckTokenEndpoint checkTokenEndpoint;
 
     @Value("${access.token.validity:420}") // 默认值7分钟
     private String accessTokenValiditySeconds;
