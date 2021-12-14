@@ -126,6 +126,7 @@ public class RedisService {
     public void addHash(String redisKey, Object mapKey, Object mapValue) {
         HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
         hash.put(redisKey, mapKey, mapValue);
+
     }
 
     /**

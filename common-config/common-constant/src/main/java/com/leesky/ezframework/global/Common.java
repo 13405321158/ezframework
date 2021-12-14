@@ -1,24 +1,29 @@
-/*
- * @作者: 魏来
- * @日期: 2021/5/28  下午4:49
- * @组织: 森麒麟轮胎股份有限公司.
- * @部门: 国内市场替换部IT组
- * @Desc:
+package com.leesky.ezframework.global;
+
+/**
+ * desc：TODO
+ *
+ * @author： 魏来
+ * @date： 2021/12/14 下午12:38
  */
-package com.leesky.ezframework.constant;
+public class Common {
+
+    public final static String USER_ID = "userId";//系统用户id
+    public final static String USER_NAME = "userName";//系统用户登录名称
+    public final static String LOGIN_USER_EXT_INFO="userInfo";//登录用户经常使用的扩展信息
 
 
-public class Global {
+    public final static String TOKEN_TYPE = "bearer ";//接口认证方式
+    public final static String ROLE_LIST = "authorities";//jwt 中用户权限部分
+    public final static String URL_HEADER_PARAM = "Authorization";//http请求时头部参数名
+
+
+
+
     /**
-     * spring security中使用BCryptPasswordEncoder方法加密,得到密码字符串在最前面增加{bcrypt}标志，存放到数据表中
-     * // 登陆时进行密码比对,需要删除{bcrypt}
+     * 白名单
      */
-
-    public static final String PASSWORD_TYPE_PREFIX = "{bcrypt}";
-    /**
-     * 白名单前缀
-     */
-    public static final String WHITE_LIST_PREFIX = "white";
+    public static final String WHITE_LIST_PREFIX = "public";
 
 
     /**
@@ -36,8 +41,7 @@ public class Global {
     /**
      * 不需要token访问路径
      */
-    public static final String[] WHITE_LIST = new String[]{"/**/" + WHITE_LIST_PREFIX, "/stomp/**", "/v3/api-docs","/swagger-resources","/error"};
-
+    public static final String[] WHITE_LIST = new String[]{"/**/" + WHITE_LIST_PREFIX, "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
 
 
     public static String RSA_PUBLIC = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjs6szHA2vWPv17BY1YqWYnVls1ny92GGXpQbaitFU0EDlgpxL+x4HG3z9ygPjX9rETh5u81kjQriDIdJ77r2MsSxOGjXtoFUAYzwvyWEalijW3jhb1RD+H4xnnmXfm9SeAalhVprBrfWALAmWwD24fw8BZ2fsXvVfOp9OdNruIZ2We/VXa+o6sNpLhkR8NOZgCq4/0N1JC+D6LptBNqbdTqNVTjscE4Swg8mCo9otujaZMbzG2iTEXs8ZMcadeU63JjkpohodqwaKeoIYhv0csBCI+hOvIyFBUItKuHZ9LewtROeSqLrha+f+SoCgMkomxfjsrUzKtuzFqR1V7+A2wIDAQAB";

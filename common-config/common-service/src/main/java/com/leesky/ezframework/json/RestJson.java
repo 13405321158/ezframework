@@ -8,7 +8,7 @@
 package com.leesky.ezframework.json;
 
 import com.alibaba.fastjson.JSON;
-import com.leesky.ezframework.constant.Global;
+import com.leesky.ezframework.global.Common;
 import com.leesky.ezframework.utils.RsaTool;
 import lombok.Data;
 
@@ -52,7 +52,7 @@ public class RestJson<T> {
     public void setData(T data, Boolean sec) {
         if (sec) {
             this.rsa = true;
-            this.data = (T) RsaTool.encryptByPrivateKey(JSON.toJSONString(data), Global.RSA_PRIVATE);
+            this.data = (T) RsaTool.encryptByPrivateKey(JSON.toJSONString(data), Common.RSA_PRIVATE);
         }
     }
 

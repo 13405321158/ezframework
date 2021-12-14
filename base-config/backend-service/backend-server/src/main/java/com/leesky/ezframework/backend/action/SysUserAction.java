@@ -70,7 +70,7 @@ public class SysUserAction {
     @PostMapping("/c01")
     public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) {
 
-        List<String> uid = this.JwtUtils.getRoles();
+        String uid = this.JwtUtils.getUserName();
         System.err.println(uid);
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();

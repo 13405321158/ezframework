@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final String white_name = "/oauth/**";
     private final SysUserDetailsServiceImpl sysUserDetailsService;
 
     /**
@@ -36,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests().antMatchers("/oauth/**").permitAll()
+                .authorizeRequests().antMatchers(white_name).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();

@@ -14,7 +14,7 @@ import com.leesky.ezframework.auth.exception.TokenEndpointFilter;
 import com.leesky.ezframework.auth.ext.captcha.CaptchaTokenGranter;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeTokenGranter;
 import com.leesky.ezframework.auth.ext.webchat.WebchatTokenGranter;
-import com.leesky.ezframework.constant.RedisGlobal;
+import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.json.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -85,8 +85,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpointFilter.afterPropertiesSet();
         endpointFilter.setAuthenticationEntryPoint(authenticationEntryPoint());
         security.addTokenEndpointAuthenticationFilter(endpointFilter);
-
-        security.checkTokenAccess("permitAll()");//允许/oauth/check_token,测试环境开启，线上环境禁用
+//
+//        security.checkTokenAccess("permitAll()");//允许/oauth/check_token,测试环境开启，线上环境禁用
     }
 
     /**
@@ -172,7 +172,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public RedisTokenStore tokenStore() {
         RedisTokenStore redisStore = new RedisTokenStore(redisConnectionFactory);
-        redisStore.setPrefix(RedisGlobal.AUTH_TOKEN);
+        redisStore.setPrefix(Redis.AUTH_TOKEN);
         return redisStore;
     }
 

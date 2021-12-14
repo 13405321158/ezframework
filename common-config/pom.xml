@@ -20,6 +20,7 @@
         <module>common-mybatis-api</module>
         <module>common-redis</module>
         <module>common-security</module>
+        <module>common-constant</module>
     </modules>
 
 

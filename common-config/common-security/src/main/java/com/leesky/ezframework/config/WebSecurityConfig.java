@@ -10,13 +10,11 @@ spring.security.oauth2.resource.jwt.jwk.set-uri =https://example.com/oauth2/defa
 package com.leesky.ezframework.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 
 /**
@@ -38,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomAuthenticationEntryPoint entryPoint;
 
     private final LettuceConnectionFactory redisConnectionFactory;// token 存储在redis中
+
     /**
      * 以下内容已经经过测试，配置正确，请勿随意修改
      * JwtDecoder需要的公钥配置(jwkSetUri)已经在yml中设置
@@ -64,17 +63,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-
-    /**
-     * token 存储到redis中
-     *
-     * @author： 魏来
-     * @date: 2021/12/1 上午9:31
-     */
-    @Bean
-    public RedisTokenStore tokenStore() {
-        RedisTokenStore redisStore = new RedisTokenStore(redisConnectionFactory);
-        redisStore.setPrefix("auth-token:");
-        return redisStore;
-    }
 }

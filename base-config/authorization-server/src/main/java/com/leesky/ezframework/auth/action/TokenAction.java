@@ -8,7 +8,8 @@
 package com.leesky.ezframework.auth.action;
 
 
-import com.leesky.ezframework.constant.RedisGlobal;
+import com.leesky.ezframework.global.Common;
+import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.redis.service.RedisService;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -48,7 +49,7 @@ public class TokenAction {
     private String accessTokenValiditySeconds;
 
     @PostMapping("/check_token")
-    public Result check(String token){
+    public Result check(String token) {
 
         this.checkTokenEndpoint.checkToken(token);
         return Result.success();
@@ -60,16 +61,27 @@ public class TokenAction {
         Assert.isTrue(StringUtils.isNotBlank(map.get("grant_type")), "参数grant_type不允许空值");
         Assert.isTrue(StringUtils.isNotBlank(map.get("client_secret")), "参数client_secret不允许空值");
 
-
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
-
-        Map<String, String> ext = (Map<String, String>) accessToken.getAdditionalInformation().get("user_info");
-        this.cache.add(RedisGlobal.AUTH_TOKEN_ID + ext.get("userId"), accessToken.getValue(), Long.valueOf(accessTokenValiditySeconds));
+        add2Cache(accessToken);
 
         return Result.success(accessToken);
-
     }
 
+    /**
+     * 登录用户id、登录用户username、登录用户token缓存到redis中
+     *
+     * @author： 魏来
+     * @date: 2021/12/14 下午12:25
+     */
+    private void add2Cache(OAuth2AccessToken accessToken) {
+        String token01 = StringUtils.split(accessToken.getValue(), ".")[0];//token的第一部分值
+        Long expr = Long.valueOf(accessTokenValiditySeconds);//1、有效期时长
+        Map<String, String> ext = (Map<String, String>) accessToken.getAdditionalInformation().get(Common.LOGIN_USER_EXT_INFO);
+
+        this.cache.add(Redis.AUTH_TOKEN_ID + ext.get(Common.USER_ID), accessToken.getValue(), expr);//2、登录用户id和token之间关系
+        this.cache.add(Common.USER_ID + "_" + token01, ext.get(Common.USER_ID), expr);
+        this.cache.add(Common.USER_NAME + "_" + token01, ext.get(Common.USER_NAME), expr);
+    }
 
     /**
      * 用途:资源服务器调用，验证token的合法性，因为授权服务器发放的jwt内容使用rsa非对称算法加密了
