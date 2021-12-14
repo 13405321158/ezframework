@@ -48,13 +48,6 @@ public class TokenAction {
     @Value("${access.token.validity:420}") // 默认值7分钟
     private String accessTokenValiditySeconds;
 
-    @PostMapping("/check_token")
-    public Result check(String token) {
-
-        this.checkTokenEndpoint.checkToken(token);
-        return Result.success();
-    }
-
     @PostMapping("/token")
     public Result<OAuth2AccessToken> getToken(Principal principal, @RequestParam Map<String, String> map) throws HttpRequestMethodNotSupportedException {
         Assert.isTrue(StringUtils.isNotBlank(map.get("password")), "参数password不允许空值");
@@ -66,6 +59,22 @@ public class TokenAction {
 
         return Result.success(accessToken);
     }
+
+
+
+    /**
+     * 用途:资源服务器调用，验证token的合法性，因为授权服务器发放的jwt内容使用rsa非对称算法加密了
+     *
+     * @author： 魏来
+     * @date: 2021/12/7 上午10:54
+     */
+    @GetMapping("/public-key")
+    public Map<String, Object> getPublicKey() {
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        RSAKey key = new RSAKey.Builder(publicKey).build();
+        return new JWKSet(key).toJSONObject();
+    }
+
 
     /**
      * 登录用户id、登录用户username、登录用户token缓存到redis中
@@ -81,18 +90,5 @@ public class TokenAction {
         this.cache.add(Redis.AUTH_TOKEN_ID + ext.get(Common.USER_ID), accessToken.getValue(), expr);//2、登录用户id和token之间关系
         this.cache.add(Common.USER_ID + "_" + token01, ext.get(Common.USER_ID), expr);
         this.cache.add(Common.USER_NAME + "_" + token01, ext.get(Common.USER_NAME), expr);
-    }
-
-    /**
-     * 用途:资源服务器调用，验证token的合法性，因为授权服务器发放的jwt内容使用rsa非对称算法加密了
-     *
-     * @author： 魏来
-     * @date: 2021/12/7 上午10:54
-     */
-    @GetMapping("/public-key")
-    public Map<String, Object> getPublicKey() {
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        RSAKey key = new RSAKey.Builder(publicKey).build();
-        return new JWKSet(key).toJSONObject();
     }
 }
