@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * desc：通用异常捕获
+ * desc：控制器抛出的异常捕获
  *
  * @author： 魏来
  * @date： 2021/12/10 下午6:02
@@ -27,9 +27,4 @@ public class HandlerException {
         return Result.failed(e.getMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public Result<?> exceptionHandler(Exception e) {
-        log.error(e.getMessage(), e);
-        return Result.failed(e.getMessage());
-    }
 }
