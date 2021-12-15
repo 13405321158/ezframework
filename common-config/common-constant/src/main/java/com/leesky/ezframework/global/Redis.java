@@ -8,8 +8,13 @@ package com.leesky.ezframework.global;
  */
 public class Redis {
 
-    public static final String AUTH_TOKEN="auth-token:";//登录成功后 获取的token存储在这个地方
+    public static final String AUTH_TOKEN = "auth-token:";//登录成功后 获取的token存储在这个地方
 
-    public static final String AUTH_TOKEN_ID ="auth-token-id_";//登录用户id和token对应关系
+    public static final String AUTH_TOKEN_ID = "auth-token-id_";//登录用户id和token对应关系
+
+
+    public static final String URL_ROLES_KEY = "system:roles_rule:url:";
+
+    public static final String BTN_ROLES_KEY = "system:roles_rule:btn:";
 
 }

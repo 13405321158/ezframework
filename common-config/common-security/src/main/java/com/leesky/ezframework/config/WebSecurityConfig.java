@@ -10,6 +10,7 @@ spring.security.oauth2.resource.jwt.jwk.set-uri =https://example.com/oauth2/defa
 package com.leesky.ezframework.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,6 +26,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("${spring.security.brac:false}")
+    private Boolean config;
 
     private final String AUTHORITY_PREFIX = "ROLE_";
 
@@ -46,11 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(WHITE_URL).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .oauth2ResourceServer().jwt();
+        config(http);
 
         //以下内容已经经过测试，配置正确，请勿随意修改
         http.oauth2ResourceServer()
@@ -61,6 +61,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(accessHandler) // 处理未授权
                 .authenticationEntryPoint(entryPoint); //处理未认证
 
+
+    }
+
+    /**
+     * 是否启用 基于角色控制
+     *
+     * @author： 魏来
+     * @date: 2021/12/15 上午9:08
+     */
+    private void config(HttpSecurity http) throws Exception {
+        if (config) {
+            http.authorizeRequests()
+                    .antMatchers(WHITE_URL).permitAll()
+                    .anyRequest().access("@roleChecker.check(authentication,request)")
+                    .and()
+                    .oauth2ResourceServer().jwt();
+        } else {
+            http.authorizeRequests()
+                    .antMatchers(WHITE_URL).permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                    .oauth2ResourceServer().jwt();
+        }
     }
 
 }

@@ -52,7 +52,7 @@ public class JwtUtils {
     }
 
     /**
-     * JWT获取用户角色列表
+     * 解析JWT获取用户角色列表
      */
     @SneakyThrows
     public List<String> getRoles() {

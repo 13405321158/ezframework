@@ -21,12 +21,6 @@ public class Common {
 
 
     /**
-     * 白名单
-     */
-    public static final String WHITE_LIST_PREFIX = "public";
-
-
-    /**
      * 静态资源
      */
     public static final String[] STATIC_RESOURCES = new String[]{
@@ -41,7 +35,7 @@ public class Common {
     /**
      * 不需要token访问路径
      */
-    public static final String[] WHITE_LIST = new String[]{"/**/" + WHITE_LIST_PREFIX, "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
+    public static final String[] WHITE_LIST = new String[]{"/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
 
 
     public static String RSA_PUBLIC = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjs6szHA2vWPv17BY1YqWYnVls1ny92GGXpQbaitFU0EDlgpxL+x4HG3z9ygPjX9rETh5u81kjQriDIdJ77r2MsSxOGjXtoFUAYzwvyWEalijW3jhb1RD+H4xnnmXfm9SeAalhVprBrfWALAmWwD24fw8BZ2fsXvVfOp9OdNruIZ2We/VXa+o6sNpLhkR8NOZgCq4/0N1JC+D6LptBNqbdTqNVTjscE4Swg8mCo9otujaZMbzG2iTEXs8ZMcadeU63JjkpohodqwaKeoIYhv0csBCI+hOvIyFBUItKuHZ9LewtROeSqLrha+f+SoCgMkomxfjsrUzKtuzFqR1V7+A2wIDAQAB";

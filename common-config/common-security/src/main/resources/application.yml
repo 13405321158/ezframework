@@ -5,4 +5,3 @@ spring:
         jwt:
 #          public-key-location: classpath:public.txt #方法01,访问本地公钥
           jwk-set-uri: http://localhost:10002/oauth/public-key #方法02 访问远程授权服务器，获取公钥
-
