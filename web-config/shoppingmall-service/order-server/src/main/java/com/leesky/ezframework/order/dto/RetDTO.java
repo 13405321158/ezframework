@@ -18,5 +18,11 @@ public class RetDTO {
     private String id;
     private String name;
 
+    private String laopoId;
 
+    private String companyId;
+
+    private WomanDTO laoPo;
+
+    private CompanyDTO company;
 }

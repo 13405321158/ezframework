@@ -2,6 +2,7 @@ package com.leesky.ezframework.mybatis.service;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 
 import java.io.Serializable;
@@ -27,6 +28,18 @@ public interface IeeskyService<T> {
     T findOne(QueryFilter<T> filter);
 
     /**
+     /**
+     * <li>1、构造filter时带有xxxModel.class 参数，xxxModel中含有o2o,o2m,m2o,m2m注解
+     * <li>2、如果filter 的select，或者 where 条件中含有"." 则需采用left join查询(此时 ship不起作用)</li>
+     * <li>3、依据ship内容做子查询，并把结果赋值给查询结果（如果xxxModel中带有多个o2o,o2m,m2o,m2m的属性值；
+     * <li>比如你仅需要查询所有o2o(o2o有多个,你可能需要其中一个)，o2m,m2o,m2m关系不需要查询，则ship中只包含o2o对应的属性值即可
+     *
+     * @author： 魏来
+     * @date: 2021/12/15 下午3:22
+     */
+    T findOne(QueryFilter<T> filter, ImmutableMap<String,String> ship);
+
+    /**
      * <li>查询全部
      *
      * @作者: 魏来
@@ -49,6 +62,7 @@ public interface IeeskyService<T> {
      * @日期: 2021年9月25日 上午8:15:49
      */
     List<T> findAll(QueryFilter<T> filter);
+
     /**
      * <li>根据wrapper过滤器 查询
      *
@@ -56,6 +70,7 @@ public interface IeeskyService<T> {
      * @日期: 2021年9月25日 上午8:15:49
      */
     <E> List<E> findAll(QueryFilter<T> filter, Class<E> clz);
+
     /**
      * <li>根据wrapper过滤器 分页查询
      *
@@ -66,11 +81,12 @@ public interface IeeskyService<T> {
 
     /**
      * <li>根据wrapper过滤器 多表联合查询:
+     * <li> clz: 返回类型
      *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:20:12
      */
-    <E> Page<E> page(QueryFilter<T> filter, Class<E> clz);
+    <E> Page<E> page(QueryFilter<T> filter, Class<E> retClz);
 
     /**
      * <li>relation=false 不处理聚合关系</li>

@@ -45,7 +45,8 @@ public class QueryFilter<T> extends QueryWrapper<T> {
     }
 
     /**
-     * <li>:联合表查询 用
+     * <li>联合表查询用(left join)。clz=实体类(此实体类含有 o2o,o2m,m2o,m2m关系)
+     * <li>如果缺少 clz参数，系统提示：缺少实体类参数,请按照此格式构造：new QueryFilter<>(ParamModel,xxxModel.class)
      *
      * @作者: 魏来
      * @日期: 2021/10/27  下午2:35
@@ -54,6 +55,7 @@ public class QueryFilter<T> extends QueryWrapper<T> {
 
         this.param = param;
         this.tableName = clz.getAnnotation(TableName.class).value() + " a";
+
         if (StringUtils.isBlank(param.getSelect()))
             this.select("*");
         else

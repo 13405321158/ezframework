@@ -20,7 +20,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -32,7 +31,7 @@ import java.util.UUID;
  * <li>fields是entity中带有one2one注解的属性集合
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class One2oneHandler<T> {
 
     private final ObjectFactory<SqlSession> factory;

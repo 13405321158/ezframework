@@ -17,13 +17,29 @@ import java.util.List;
 import java.util.Map;
 
 public interface IeeskyMapper<T> extends BaseMapper<T> {
+
+    /**
+     /**
+     * <li>1、支持 o2o,o2m,m2o,m2m 方式查询
+     * <li>2、retClz 返回结果集类型
+     * <li>3、ship=需要 left join的表。（如果T中带有的o2o,o2m,m2o,m2m的属性值；比如你就需要联合查询o2o，其它关系不需要查询，则ship中只包含o2o对应的属性值即可
+     * <li>4、如果ship=null，这里retClz类型就是T</li>
+     * @author： 魏来
+     * @date: 2021/12/15 下午3:22
+     *
+     * @author： 魏来
+     * @date: 2021/12/15 下午4:13
+     */
+    Map<String, Object> findByShip(@Param("filter") QueryFilter<T> filter);
+
     /**
      * <li>根据wrapper过滤器 查询
      *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:15:49
      */
-    List<Map<String, Object>>findAll(QueryFilter<T> filter);
+    List<Map<String, Object>> findAll(QueryFilter<T> filter);
+
     /**
      * <li>根据wrapper过滤器  多表联合的分页查询:
      *

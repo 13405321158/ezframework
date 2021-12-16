@@ -1,6 +1,7 @@
 package com.leesky.ezframework.order.action;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.leesky.ezframework.json.Result;
@@ -9,6 +10,7 @@ import com.leesky.ezframework.order.dto.RetDTO;
 import com.leesky.ezframework.order.model.*;
 import com.leesky.ezframework.order.service.IManService;
 import com.leesky.ezframework.query.ParamModel;
+import com.leesky.ezframework.utils.Po2DtoUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -94,12 +96,27 @@ public class ManController {
     @PostMapping("/r01")
     public Result index02(@RequestBody ParamModel param) {
 
-        param.setSelect("tels.lao_han_id");
+        param.setSelect("id,name");
         QueryFilter<ManModel> filter = new QueryFilter<>(param, ManModel.class);
 
         Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
 
 
         return Result.success(data.getRecords(), data.getTotal());
+    }
+
+
+    @PostMapping("/r02")
+    public Result index04(@RequestBody ParamModel param) {
+
+        param.setSelect("id,name,laopoId,companyId");
+        QueryFilter<ManModel> filter = new QueryFilter<>(param, ManModel.class);
+
+//        Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
+//        return Result.success(data.getRecords(), data.getTotal());
+        ManModel s = this.manService.findOne(filter, ImmutableMap.of("laoPo", "id,name", "company", "id,name"));
+
+        RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
+        return Result.success(ret);
     }
 }
