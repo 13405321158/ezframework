@@ -55,5 +55,18 @@ public class JoinUtil {
         return fields;
     }
 
-
+    /**
+     * 在实体类中 查找 fieldName的字段
+     *
+     * @author： 魏来
+     * @date: 2021/12/16 下午6:16
+     */
+    public static  Field getField(Object model, String fieldName) {
+        List<Field> fs = getAllField(model);
+        for (Field f : fs) {
+            if (f.getName().equals(fieldName))
+                return f;
+        }
+        return null;
+    }
 }

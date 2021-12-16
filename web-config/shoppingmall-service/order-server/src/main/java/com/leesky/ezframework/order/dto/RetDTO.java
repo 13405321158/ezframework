@@ -9,6 +9,8 @@ package com.leesky.ezframework.order.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * <li>描述:
  */
@@ -22,7 +24,15 @@ public class RetDTO {
 
     private String companyId;
 
+
+    private String laopname;
+
     private WomanDTO laoPo;
 
     private CompanyDTO company;
+
+    private IdCardDTO idCard;
+
+    private List<ChildDTO> childs;
+
 }

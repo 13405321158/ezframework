@@ -109,12 +109,12 @@ public class ManController {
     @PostMapping("/r02")
     public Result index04(@RequestBody ParamModel param) {
 
-        param.setSelect("id,name,laopoId,companyId");
+        param.setSelect("id,name,laopoId,companyId,cardId");
         QueryFilter<ManModel> filter = new QueryFilter<>(param, ManModel.class);
 
 //        Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
 //        return Result.success(data.getRecords(), data.getTotal());
-        ManModel s = this.manService.findOne(filter, ImmutableMap.of("laoPo", "id,name", "company", "id,name"));
+        ManModel s = this.manService.findOne(filter, ImmutableMap.of("laoPo", "id,name", "company", "id,name", "childs", "id,name","idCard","id,card_no"));
 
         RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
         return Result.success(ret);

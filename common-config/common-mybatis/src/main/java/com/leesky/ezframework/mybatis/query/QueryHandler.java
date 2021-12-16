@@ -1,10 +1,10 @@
 package com.leesky.ezframework.mybatis.query;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
+import com.leesky.ezframework.mybatis.utils.JoinUtil;
 import com.leesky.ezframework.utils.Hump2underline;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * desc：TODO
@@ -43,35 +44,44 @@ public class QueryHandler<T> {
             try {
                 //1、获取 k对应的字段，即o2o、o2m、m2o、m2m注解所在的字段
                 Field f = retClz.getClass().getDeclaredField(k);
+                OneToOne o2o = f.getAnnotation(OneToOne.class);
+                ManyToOne m2o = f.getAnnotation(ManyToOne.class);
+                OneToMany o2m = f.getAnnotation(OneToMany.class);
+                ManyToMany m2m = f.getAnnotation(ManyToMany.class);
+
+                FieldCondition<T> fc = new FieldCondition(retClz.getClass(), f, false, factory);
+                IeeskyMapper objectMapper = (IeeskyMapper) factory.getObject().getMapper(fc.getEntityMapper().targetMapper());
 
                 //2、获取关系注解在对应字段的值，为下一步查询做准备。比如当前查询老公的媳妇，下面4行代码获取媳妇的id值
                 String shipId = Hump2underline.lineToHump(f.getAnnotation(JoinColumn.class).name());
-                Field shipField = retClz.getClass().getDeclaredField(shipId);
+                Field shipField = JoinUtil.getField(retClz, shipId);
                 shipField.setAccessible(true);
                 Object entityShipValue = shipField.get(retClz);
 
-                //2、如果是null值，则不用下面的查询了。比如当前查询老公的媳妇，而在老公数据表中老婆的id=null，那还查个毛
-                if (ObjectUtils.isNotEmpty(entityShipValue)) {
-                    FieldCondition<T> fc = new FieldCondition(retClz.getClass(), f, false, factory);
-                    IeeskyMapper objectMapper = (IeeskyMapper) factory.getObject().getMapper(fc.getEntityMapper().targetMapper());
 
-                    //2.1 一对一、多对一 使用 selectOne方法查询
-                    if (ObjectUtils.isNotEmpty(f.getAnnotation(OneToOne.class)) || ObjectUtils.isNotEmpty(f.getAnnotation(ManyToOne.class))) {
-                        QueryWrapper<?> filter = new QueryWrapper<>();
-                        filter.select(v);//select 内容
-                        filter.eq(f.getAnnotation(JoinColumn.class).referencedColumnName(), entityShipValue);
+                //3. 一对一、多对一 使用 selectOne方法查询
+                if (ObjectUtils.isNotEmpty(o2o) || ObjectUtils.isNotEmpty(m2o)) {
+
+                    //3.1、如果是null值，则不用下面的查询了。比如当前查询老公的媳妇，而在老公数据表中老婆的id=null，那还查个毛
+                    if (ObjectUtils.isNotEmpty(entityShipValue)) {
+                        QueryFilter filter = common(v, f, entityShipValue);
                         Object obj = objectMapper.selectOne(filter);
                         BeanUtils.setProperty(retClz, k, obj);//把查询结果赋值
                     }
-                    //2.2 一对多 使用findAll 方法查询
-                    if (ObjectUtils.isNotEmpty(f.getAnnotation(OneToMany.class))) {
-
-                    }
-                    //2.3 多对多 需要联合中间表查询
-                    if (ObjectUtils.isNotEmpty(f.getAnnotation(ManyToMany.class))) {
-
-                    }
                 }
+
+
+                //4. 一对多 使用selectList 方法查询
+                if (ObjectUtils.isNotEmpty(o2m)) {
+                    QueryFilter filter = common(v, f, entityShipValue);
+                    List obj = objectMapper.selectList(filter);
+                    BeanUtils.setProperty(retClz, k, obj);//把查询结果赋值
+                }
+                //5. 多对多 需要联合中间表查询
+                if (ObjectUtils.isNotEmpty(m2m)) {
+
+                }
+
             } catch (NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
@@ -79,5 +89,12 @@ public class QueryHandler<T> {
         });
 
 
+    }
+
+    private QueryFilter<?> common(String v, Field f, Object entityShipValue) {
+        QueryFilter<?> filter = new QueryFilter<>();
+        filter.select(v);//select 内容
+        filter.eq(f.getAnnotation(JoinColumn.class).referencedColumnName(), entityShipValue);
+        return filter;
     }
 }
