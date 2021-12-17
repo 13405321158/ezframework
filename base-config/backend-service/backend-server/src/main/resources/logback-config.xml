@@ -173,7 +173,7 @@
     <logger name="io.seata.core" level="error"/>
     <logger name="com.netflix.config" level="error"/>
     <logger name="org.springframework" level="error"/>
-    <logger name="com.github.dozermapper.core" level="error"/>
+    <logger name="com.github.dozermapper" level="error"/>
 
 
     <root level="info">

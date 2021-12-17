@@ -5,6 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.apache.commons.collections4.MapUtils;
@@ -28,6 +29,12 @@ public class ParamModel {
     public ParamModel() {
         this.page = 0;
         this.limit = 10;
+    }
+
+    public ParamModel(ImmutableMap<String, String> map) {
+        this.page = 0;
+        this.limit = 10;
+        addFilter(map);
     }
 
     /**

@@ -7,6 +7,7 @@ import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
 import com.leesky.ezframework.mybatis.utils.JoinUtil;
 import com.leesky.ezframework.utils.Hump2underline;
+import com.leesky.ezframework.utils.Po2DtoUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -84,11 +85,12 @@ public class QueryHandler<T> {
                 if (ObjectUtils.isNotEmpty(m2m)) {
                     M2mParam param = getParam(retClz, fc, f, v, entityShipValue);
                     List obj = objectMapper.findM2M(param);
+                    List c = Po2DtoUtil.convertor(obj, fc.getFieldClass());//转换为对象，否则就是map结构
 
                     if (f.getType().getTypeName().equals("java.util.Set"))
-                        BeanUtils.setProperty(retClz, k, Sets.newHashSet(obj));//把查询结果赋值
+                        BeanUtils.setProperty(retClz, k, Sets.newHashSet(c));//把查询结果赋值
                     else
-                        BeanUtils.setProperty(retClz, k, obj);//把查询结果赋值
+                        BeanUtils.setProperty(retClz, k, c);//把查询结果赋值
                 }
 
             } catch (NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {

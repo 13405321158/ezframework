@@ -11,6 +11,7 @@ import com.leesky.ezframework.utils.Hump2underline;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class QueryFilter<T> extends QueryWrapper<T> {
     public List<String> join = Lists.newArrayList();//left join 字符串
     public Map<String, Object> p1 = Maps.newHashMap();// where原始参数值
     public Map<String, Object> p2 = Maps.newHashMap();// where原始参数转换为下划线格式
+    public List<String> remove = Lists.newArrayList();//需要排除的条件
 
     public QueryFilter() {
     }
@@ -41,17 +43,21 @@ public class QueryFilter<T> extends QueryWrapper<T> {
         this.param = param;
         if (StringUtils.isNotBlank(param.getSelect()))
             this.select(this.param.getSelect());
-        analyzing(this.param.getQueryStr(), Lists.newArrayList());
+        analyzing(this.param.getQueryStr());
     }
 
     /**
      * <li>联合表查询用(left join)。clz=实体类(此实体类含有 o2o,o2m,m2o,m2m关系)
      * <li>如果缺少 clz参数，系统提示：缺少实体类参数,请按照此格式构造：new QueryFilter<>(ParamModel,xxxModel.class)
+     * <li>查询条件构造需要在 param</li>
      *
      * @作者: 魏来
      * @日期: 2021/10/27  下午2:35
      **/
     public QueryFilter(ParamModel param, Class<T> clz) {
+        boolean filterStr = this.expression.getNormal().size() == 0;//使用QueryWrapper构造查询条件
+        boolean paramStr = StringUtils.isNotBlank(param.getQueryStr());//使用ParamModel构造查询条件
+        Assert.isTrue(filterStr && paramStr, "查询条件请使用ParamModel的queryStr构造");
 
         this.param = param;
         this.tableName = clz.getAnnotation(TableName.class).value() + " a";
@@ -61,24 +67,11 @@ public class QueryFilter<T> extends QueryWrapper<T> {
         else
             this.select(Common.buildSelect(param.getSelect()));
 
-        analyzing(this.param.getQueryStr(), Lists.newArrayList());
+        analyzing(this.param.getQueryStr());
 
         Common.joinQueryStr(clz, this, join, this.tableName);//拼接sql语句
 
 
-    }
-
-    /**
-     * <li>: 排除查询条件
-     *
-     * @作者: 魏来
-     * @日期: 2021/10/27  下午2:30
-     **/
-    public QueryFilter(ParamModel param, List<String> remove) {
-        this.param = param;
-        if (StringUtils.isNotBlank(param.getSelect()))
-            this.select(this.param.getSelect());
-        analyzing(this.param.getQueryStr(), remove);
     }
 
 
@@ -88,7 +81,7 @@ public class QueryFilter<T> extends QueryWrapper<T> {
      * @作者: 魏来
      * @日期: 2021/10/21  上午11:36
      **/
-    private void analyzing(String str, List<String> remove) {
+    private void analyzing(String str) {
 
         if (StringUtils.isNotBlank(str)) {
             Map<String, String> params = JSON.parseObject(str, new TypeReference<>() {

@@ -11,7 +11,6 @@ import com.leesky.ezframework.order.model.*;
 import com.leesky.ezframework.order.service.IChildService;
 import com.leesky.ezframework.order.service.IManService;
 import com.leesky.ezframework.query.ParamModel;
-import com.leesky.ezframework.utils.Po2DtoUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -113,23 +112,23 @@ public class ManController {
     @PostMapping("/r02")
     public Result index04(@RequestBody ParamModel param) {
 
-        param.setSelect("id,name,laopoId,companyId,cardId");
+        param.setSelect("id,name");
         QueryFilter<ManModel> filter = new QueryFilter<>(param, ManModel.class);
-
-//        Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
-//        return Result.success(data.getRecords(), data.getTotal());
-        ManModel s = this.manService.findOne(filter, ImmutableMap.of("laoPo", "id,name", "company", "id,name", "childs", "id,name", "idCard", "id,card_no"));
-
-        RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
-        return Result.success(ret);
+//filter.select("id,name");
+        Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
+        return Result.success(data.getRecords(), data.getTotal());
+//        ManModel s = this.manService.findOne(filter, ImmutableMap.of("laoPo", "id,name", "company", "id,name", "childs", "id,name", "idCard", "id,card_no"));
+//
+//        RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
+//        return Result.success(ret);
     }
 
     @PostMapping("/r03")
     public Result index05(@RequestBody ParamModel param) {
 
-        param.setSelect("id,name");
+//        param.setSelect("id,name");
         QueryFilter<ChildModel> filter = new QueryFilter<>(param, ChildModel.class);
-
+    filter.select("id,name");
 
         ChildModel s = this.childService.findOne(filter, ImmutableMap.of("cours", "id,name","teacher","name"));
 

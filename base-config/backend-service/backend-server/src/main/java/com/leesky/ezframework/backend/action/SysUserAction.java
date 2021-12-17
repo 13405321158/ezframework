@@ -1,22 +1,20 @@
 package com.leesky.ezframework.backend.action;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.backend.dto.UserAuthDTO;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
-import com.leesky.ezframework.backend.model.RoleModel;
 import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IroleService;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
+import com.leesky.ezframework.query.ParamModel;
 import com.leesky.ezframework.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * desc TODO
@@ -36,6 +34,7 @@ public class SysUserAction {
     private final IroleService roleService;
 
     private final JwtUtils JwtUtils;
+
     /**
      * <li>登录获取token时使用</li>
      *
@@ -45,16 +44,13 @@ public class SysUserAction {
     @GetMapping("/{username}/public")
     public Result<UserAuthDTO> getUserByUsername(@PathVariable String username) {
 
-        QueryFilter<UserBaseModel> filter = new QueryFilter<>();
-        filter.eq("username", username);
-        filter.select("id,username,status,by_time,password");
+        ParamModel param = new ParamModel(ImmutableMap.of("Q_username_EQ", username));
 
-        UserBaseModel user = this.service.findOne(filter);
+        param.setSelect("id,username,status,by_time,password");
 
-        if (ObjectUtils.isNotEmpty(user)) {//查询用户的角色
-            List<RoleModel> codes = this.roleService.getRoleCodes(user.getId());
-            user.setRoles(Sets.newHashSet(codes));
-        }
+        QueryFilter<UserBaseModel> filter = new QueryFilter<>(param, UserBaseModel.class);
+
+        UserBaseModel user = this.service.findOne(filter, ImmutableMap.of("roles", "code"));
 
         UserAuthDTO dto = buildUserAuthDTO(user);
 
