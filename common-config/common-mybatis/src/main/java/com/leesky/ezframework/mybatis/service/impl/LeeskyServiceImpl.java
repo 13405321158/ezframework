@@ -37,9 +37,10 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     @Autowired
     private AutoMapper autoMapper;
     @Autowired
-    private QueryHandler<T> queryHandler;
-    @Autowired
     private SaveHandler<T> saveHandler;
+    @Autowired
+    private QueryHandler<T> queryHandler;
+
 
 
     private Class<T> entityClass = currentModelClass();
@@ -72,6 +73,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     }
 
     /**
+     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；clz=返回值类型
      * <li>1、构造filter时带有xxxModel.class 参数，xxxModel中含有o2o,o2m,m2o,m2m注解
      * <li>2、如果filter 的select，或者 where 条件中含有"." 则需采用left join查询(此时 ship不起作用)</li>
      * <li>3、依据ship内容做子查询，并把结果赋值给查询结果（如果xxxModel中带有多个o2o,o2m,m2o,m2m的属性值；
@@ -85,7 +87,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     public T findOne(QueryFilter<T> filter, ImmutableMap<String, String> ship) {
         Assert.isTrue(StringUtils.isNotBlank(filter.getTableName()), this.msg);//检查构造filter时带有xxxModel.class参数了吗，
         Boolean isJoin = isJoinQuery(filter, ship);
-        Map<String, Object> data = this.baseMapper.findByShip(filter);
+        Map<String, Object> data = this.baseMapper.findOne(filter);
         T result = JSON.parseObject(JSONObject.toJSONString(data), this.entityClass);
 
         if (isJoin)//查询 ship中的数据，并赋值给result
@@ -94,7 +96,6 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
         return result;
     }
 
-
     /**
      * 描述: 查询全部
      *
@@ -102,19 +103,8 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
      * @日期: 2021/8/21 下午12:39
      **/
     @Override
-    public List<T> findAll() {
+    public List<T> findList() {
         return this.baseMapper.selectList(Wrappers.emptyWrapper());
-    }
-
-    /**
-     * 描述: 根据主键集合查询
-     *
-     * @作者: 魏来
-     * @日期: 2021/8/21 下午12:39
-     **/
-    @Override
-    public List<T> findAll(Collection<? extends Serializable> idList) {
-        return this.baseMapper.selectBatchIds(idList);
     }
 
     /**
@@ -124,16 +114,32 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
      * @日期: 2021年9月25日 上午8:15:49
      */
     @Override
-    public List<T> findAll(QueryFilter<T> filter) {
+    public List<T> findList(QueryFilter<T> filter) {
         return this.baseMapper.selectList(filter);
     }
-
+    /**
+     * 描述: 根据主键集合查询
+     *
+     * @作者: 魏来
+     * @日期: 2021/8/21 下午12:39
+     **/
     @Override
-    public <E> List<E> findAll(QueryFilter<T> filter, Class<E> clz) {
-        List<Map<String, Object>> data = this.baseMapper.findAll(filter);
-        return JSON.parseArray(JSONObject.toJSONString(data), clz);
+    public List<T> findList(Collection<? extends Serializable> keys) {
+        return this.baseMapper.selectBatchIds(keys);
     }
 
+
+    /**
+     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；clz=返回值类型
+     *
+     * @作者: 魏来
+     * @日期: 2021年9月25日 上午8:15:49
+     */
+    @Override
+    public <E> List<E> findList(QueryFilter<T> filter, Class<E> clz) {
+        List<Map<String, Object>> data = this.baseMapper.findList(filter);
+        return JSON.parseArray(JSONObject.toJSONString(data), clz);
+    }
     /**
      * 描述:根据wrapper过滤器 分页查询
      *
@@ -150,7 +156,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     }
 
     /**
-     * 描述:根据wrapper过滤器 分页查询
+     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；retClz=返回值类型
      *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:20:12

@@ -7,8 +7,12 @@
  */
 package com.leesky.ezframework.mybatis.utils;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -61,12 +65,59 @@ public class JoinUtil {
      * @author： 魏来
      * @date: 2021/12/16 下午6:16
      */
-    public static  Field getField(Object model, String fieldName) {
+    public static Field getField(Object model, String fieldName) {
         List<Field> fs = getAllField(model);
         for (Field f : fs) {
             if (f.getName().equals(fieldName))
                 return f;
         }
         return null;
+    }
+
+    /**
+     * 返回实体类的 数据表名称
+     *
+     * @author： 魏来
+     * @date: 2021/12/17 上午11:23
+     */
+    public static String getTableName(Class<?> obj) {
+        TableName tb = obj.getAnnotation(TableName.class);
+        Assert.isTrue(ObjectUtils.isNotEmpty(tb), "在" + obj.getName() + "上未发现TableName注解");
+        return tb.value();
+    }
+
+    /**
+     * 返回实体类中的主键 name
+     *
+     * @author： 魏来
+     * @date: 2021/12/17 下午12:54
+     */
+    public static String getTableKeyName(Class<?> clazz) {
+        List<Field> fields = getAllField(clazz);
+        for (Field f : fields) {
+            TableId td = f.getAnnotation(TableId.class);
+            if (ObjectUtils.isNotEmpty(td))
+                return td.value();
+        }
+
+        return null;
+    }
+
+
+    /**
+     * @author: weilai
+     * @Data:2021年1月30日下午3:15:20
+     * @Desc:获取类所有属性，包括父类，爷爷等类
+     */
+    public static List<Field> getAllField(Class<?> clazz) {
+
+        List<Field> fields = Lists.newArrayList();
+        while (clazz != null) {
+            Field[] fs = clazz.getDeclaredFields();
+            fields.addAll(Arrays.asList(fs));
+
+            clazz = clazz.getSuperclass();
+        }
+        return fields;
     }
 }

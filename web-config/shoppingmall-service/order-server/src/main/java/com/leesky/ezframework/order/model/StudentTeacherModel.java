@@ -10,8 +10,8 @@ import lombok.Data;
 @TableName("cbm_l_student_teacher")
 public class StudentTeacherModel {
 
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     private String studentId;
 

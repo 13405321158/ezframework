@@ -1,16 +1,5 @@
 package com.leesky.ezframework.order.action;
 
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -22,6 +11,11 @@ import com.leesky.ezframework.order.model.CourseModel;
 import com.leesky.ezframework.order.model.TeacherModel;
 import com.leesky.ezframework.order.service.IChildService;
 import com.leesky.ezframework.query.ParamModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/child")
@@ -42,7 +36,7 @@ public class ChildController {
     @RequestMapping(value = "childs")
     public List<ChildModel> list() {
 
-        List<ChildModel> childModels = childService.findAll();
+        List<ChildModel> childModels = childService.findList();
 
         return childModels;
     }

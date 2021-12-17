@@ -2,16 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.leesky.ezframework.mybatis.mapper.IeeskyMapper">
 
-    <insert id="insertM2M" parameterType="com.leesky.ezframework.mybatis.save.Many2manyDTO">
-        Insert INTO ${tableName}
-        (${column01},${column02})
-        VALUES
-        <foreach collection="v01" item="v" index="index" separator=",">
-            ('${v}','${v02.get(index)}')
-        </foreach>
-    </insert>
 
-    <select id="findByShip" resultType="map">
+    <!--leeskyService.findOne( QueryFilter<T> filter, ImmutableMap<String,String> ship) 调用-->
+    <select id="findOne" resultType="map">
         select ${filter.getSqlSelect} from ${filter.tableName}
 
         <if test="filter.join!=null">
@@ -25,7 +18,7 @@
 
     </select>
 
-    <select id="findAll" resultType="map">
+    <select id="findList" resultType="map">
         select ${filter.getSqlSelect} from ${filter.tableName}
 
         <if test="filter.join!=null">
@@ -39,6 +32,15 @@
 
     </select>
 
+    <!--m2m 通过中间表查询结果-->
+    <select id="findM2M" resultType="map">
+
+        SELECT ${selectContent}
+        FROM ${mainName} a
+                 LEFT JOIN ${middleName} l ON a.${mainKey} = l.${joinCol}
+                 LEFT JOIN ${resultName} r ON r.${resultId} = l.${inverseCol}
+        where a.${mainKey} = #{condition}
+    </select>
 
     <select id="page" resultType="map">
         select ${filter.getSqlSelect} from ${filter.tableName}
@@ -65,4 +67,14 @@
             <foreach collection="op" item="value" separator=" and ">${value}</foreach>
         </if>
     </select>
+
+
+    <insert id="insertM2M" parameterType="com.leesky.ezframework.mybatis.save.Many2manyDTO">
+        Insert INTO ${tableName}
+        (${column01},${column02})
+        VALUES
+        <foreach collection="v01" item="v" index="index" separator=",">
+            ('${v}','${v02.get(index)}')
+        </foreach>
+    </insert>
 </mapper>

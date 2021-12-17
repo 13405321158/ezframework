@@ -1,6 +1,7 @@
 package com.leesky.ezframework.mybatis.query;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
@@ -77,9 +78,17 @@ public class QueryHandler<T> {
                     List obj = objectMapper.selectList(filter);
                     BeanUtils.setProperty(retClz, k, obj);//把查询结果赋值
                 }
+
+
                 //5. 多对多 需要联合中间表查询
                 if (ObjectUtils.isNotEmpty(m2m)) {
+                    M2mParam param = getParam(retClz, fc, f, v, entityShipValue);
+                    List obj = objectMapper.findM2M(param);
 
+                    if (f.getType().getTypeName().equals("java.util.Set"))
+                        BeanUtils.setProperty(retClz, k, Sets.newHashSet(obj));//把查询结果赋值
+                    else
+                        BeanUtils.setProperty(retClz, k, obj);//把查询结果赋值
                 }
 
             } catch (NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
@@ -96,5 +105,19 @@ public class QueryHandler<T> {
         filter.select(v);//select 内容
         filter.eq(f.getAnnotation(JoinColumn.class).referencedColumnName(), entityShipValue);
         return filter;
+    }
+
+    private M2mParam getParam(Object retClz, FieldCondition<T> fc, Field f, String v, Object shipId) {
+        String mainName = JoinUtil.getTableName(retClz.getClass());//主表
+        String resultName = JoinUtil.getTableName(fc.getFieldClass());//结果表
+        String middleName = JoinUtil.getTableName(f.getAnnotation(EntityMapper.class).entityClass());//中间表
+
+        String mainKey = JoinUtil.getTableKeyName(retClz.getClass());//主表主键
+        String joinColumn = f.getAnnotation(JoinColumn.class).referencedColumnName();//主表 在中间表的名称
+        String inverseColumn = f.getAnnotation(InverseJoinColumn.class).referencedColumnName();//结果表在中间表的名称
+
+        String rid = JoinUtil.getTableKeyName(fc.getFieldClass());//结果表主键
+
+        return new M2mParam(v, mainName, middleName, resultName, shipId, mainKey, joinColumn, inverseColumn, rid);
     }
 }

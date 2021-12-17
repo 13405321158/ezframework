@@ -3,11 +3,12 @@
  * @日期: 2021年8月25日  下午1:08:40
  * @组织: 森麒麟轮胎股份有限公司.
  * @部门: 国内市场替换部IT组
- * @描述:
+ * @描述: 扩展方法
  */
 package com.leesky.ezframework.mybatis.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.leesky.ezframework.mybatis.query.M2mParam;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.mybatis.save.Many2manyDTO;
 import org.apache.ibatis.annotations.Param;
@@ -19,29 +20,35 @@ import java.util.Map;
 public interface IeeskyMapper<T> extends BaseMapper<T> {
 
     /**
-     /**
-     * <li>1、支持 o2o,o2m,m2o,m2m 方式查询
-     * <li>2、retClz 返回结果集类型
-     * <li>3、ship=需要 left join的表。（如果T中带有的o2o,o2m,m2o,m2m的属性值；比如你就需要联合查询o2o，其它关系不需要查询，则ship中只包含o2o对应的属性值即可
-     * <li>4、如果ship=null，这里retClz类型就是T</li>
-     * @author： 魏来
-     * @date: 2021/12/15 下午3:22
+     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；clz=返回值类型
+     * <li>1、构造filter时带有xxxModel.class 参数，xxxModel中含有o2o,o2m,m2o,m2m注解
+     * <li>2、如果filter 的select，或者 where 条件中含有"." 则需采用left join查询(此时 ship不起作用)</li>
+     * <li>3、依据ship内容做子查询，并把结果赋值给查询结果（如果xxxModel中带有多个o2o,o2m,m2o,m2m的属性值；
+     * <li>比如你仅需要查询所有o2o(o2o有多个,你可能需要其中一个)，o2m,m2o,m2m关系不需要查询，则ship中只包含o2o对应的属性值即可
      *
      * @author： 魏来
      * @date: 2021/12/15 下午4:13
      */
-    Map<String, Object> findByShip(@Param("filter") QueryFilter<T> filter);
+    Map<String, Object> findOne(@Param("filter") QueryFilter<T> filter);
 
     /**
-     * <li>根据wrapper过滤器 查询
+     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；
      *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:15:49
      */
-    List<Map<String, Object>> findAll(QueryFilter<T> filter);
+    List<Map<String, Object>> findList(QueryFilter<T> filter);
 
     /**
-     * <li>根据wrapper过滤器  多表联合的分页查询:
+     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；多对多查询，联合中间表
+     *
+     * @作者: 魏来
+     * @日期: 2021年9月25日 上午8:15:49
+     */
+    List<Map<String, Object>> findM2M(M2mParam param);
+
+    /**
+     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；
      *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:20:12

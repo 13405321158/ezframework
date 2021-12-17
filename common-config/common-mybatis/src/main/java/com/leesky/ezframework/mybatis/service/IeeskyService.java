@@ -28,7 +28,7 @@ public interface IeeskyService<T> {
     T findOne(QueryFilter<T> filter);
 
     /**
-     /**
+     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；clz=返回值类型
      * <li>1、构造filter时带有xxxModel.class 参数，xxxModel中含有o2o,o2m,m2o,m2m注解
      * <li>2、如果filter 的select，或者 where 条件中含有"." 则需采用left join查询(此时 ship不起作用)</li>
      * <li>3、依据ship内容做子查询，并把结果赋值给查询结果（如果xxxModel中带有多个o2o,o2m,m2o,m2m的属性值；
@@ -37,7 +37,7 @@ public interface IeeskyService<T> {
      * @author： 魏来
      * @date: 2021/12/15 下午3:22
      */
-    T findOne(QueryFilter<T> filter, ImmutableMap<String,String> ship);
+    T findOne(QueryFilter<T> filter, ImmutableMap<String, String> ship);
 
     /**
      * <li>查询全部
@@ -45,7 +45,7 @@ public interface IeeskyService<T> {
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:39
      **/
-    List<T> findAll();
+    List<T> findList();
 
     /**
      * <li>根据主键集合查询
@@ -53,7 +53,7 @@ public interface IeeskyService<T> {
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:39
      **/
-    List<T> findAll(Collection<? extends Serializable> idList);
+    List<T> findList(Collection<? extends Serializable> idList);
 
     /**
      * <li>根据wrapper过滤器 查询
@@ -61,15 +61,15 @@ public interface IeeskyService<T> {
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:15:49
      */
-    List<T> findAll(QueryFilter<T> filter);
+    List<T> findList(QueryFilter<T> filter);
 
     /**
-     * <li>根据wrapper过滤器 查询
+     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；retClz=返回值类型
      *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:15:49
      */
-    <E> List<E> findAll(QueryFilter<T> filter, Class<E> clz);
+    <E> List<E> findList(QueryFilter<T> filter, Class<E> retClz);
 
     /**
      * <li>根据wrapper过滤器 分页查询
@@ -80,13 +80,14 @@ public interface IeeskyService<T> {
     Page<T> page(QueryFilter<T> filter);
 
     /**
-     * <li>根据wrapper过滤器 多表联合查询:
-     * <li> clz: 返回类型
+     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；retClz=返回值类型
+     * <li> retClz: 返回类型
      *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:20:12
      */
     <E> Page<E> page(QueryFilter<T> filter, Class<E> retClz);
+
 
     /**
      * <li>relation=false 不处理聚合关系</li>

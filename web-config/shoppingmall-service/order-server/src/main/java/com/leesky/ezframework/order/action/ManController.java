@@ -8,6 +8,7 @@ import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.order.dto.RetDTO;
 import com.leesky.ezframework.order.model.*;
+import com.leesky.ezframework.order.service.IChildService;
 import com.leesky.ezframework.order.service.IManService;
 import com.leesky.ezframework.query.ParamModel;
 import com.leesky.ezframework.utils.Po2DtoUtil;
@@ -26,6 +27,8 @@ public class ManController {
 
     @Autowired
     private IManService manService;
+    @Autowired
+    private IChildService childService;
 
     @RequestMapping(value = "man/{id}")
     public ManModel getMan(@PathVariable("id") String id) {
@@ -35,7 +38,7 @@ public class ManController {
 
     @GetMapping(value = "mans")
     public List<ManModel> listMans() {
-        List<ManModel> list = manService.findAll();
+        List<ManModel> list = manService.findList();
 
         return list;
     }
@@ -76,18 +79,19 @@ public class ManController {
     }
 
     @PostMapping("/c02")
-    public Result index03(@RequestBody ParamModel param) {
-
+    public Result index03() {
+        List<CourseModel> course = Lists.newArrayList(new CourseModel("语文"), new CourseModel("数学"), new CourseModel("英语"));
+        Set<TeacherModel> teacher = Sets.newHashSet(new TeacherModel("张老师"), new TeacherModel("王老师"), new TeacherModel("孙老师"));
         ManModel manModel = new ManModel();
-//            this.manService.insert(manModel);
+        WomanModel womanModel = new WomanModel();
+        ChildModel c = new ChildModel();
 
-        List<ChildModel> c = Lists.newArrayList(new ChildModel(manModel), new ChildModel(manModel));
-        manModel.setChilds(c);
-//            this.childService.insert(c);
+        c.setCours(course);
+        c.setTeacher(teacher);
+        c.setLaoHan(manModel);
+        c.setLaoMa(womanModel);
 
-        Set<TelModel> s = Sets.newHashSet(new TelModel(manModel), new TelModel(manModel), new TelModel(manModel));
-        manModel.setTels(s);
-//            this.telService.insert(Lists.newArrayList(s));
+        this.childService.insert(c, true);
 
 
         return Result.success();
@@ -114,9 +118,22 @@ public class ManController {
 
 //        Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
 //        return Result.success(data.getRecords(), data.getTotal());
-        ManModel s = this.manService.findOne(filter, ImmutableMap.of("laoPo", "id,name", "company", "id,name", "childs", "id,name","idCard","id,card_no"));
+        ManModel s = this.manService.findOne(filter, ImmutableMap.of("laoPo", "id,name", "company", "id,name", "childs", "id,name", "idCard", "id,card_no"));
 
         RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
         return Result.success(ret);
+    }
+
+    @PostMapping("/r03")
+    public Result index05(@RequestBody ParamModel param) {
+
+        param.setSelect("id,name");
+        QueryFilter<ChildModel> filter = new QueryFilter<>(param, ChildModel.class);
+
+
+        ChildModel s = this.childService.findOne(filter, ImmutableMap.of("cours", "id,name","teacher","name"));
+
+//        RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
+        return Result.success(s);
     }
 }
