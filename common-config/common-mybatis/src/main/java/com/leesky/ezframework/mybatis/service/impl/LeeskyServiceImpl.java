@@ -42,11 +42,12 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     private QueryHandler<T> queryHandler;
 
 
-
     private Class<T> entityClass = currentModelClass();
     private Class<M> mapperClass = currentMapperClass();
 
-    private final String msg = "缺少实体类参数,请按照此格式构造：new QueryFilter<>(ParamModel,xxxModel.class)";
+    private final String msg = "构造QueryFiilter时未实例化tableName参数,请使用：" +
+            " QueryFilter<返回类型Model> filter =new QueryFilter<>(param, 返回类型Model.class)" +
+            "或者 filter.buildQuery(ImmutableMap.of('Q_查询条件_EQ', 条件值),返回类型Model.class)";
 
     /**
      * 描述: 根据记录主键查询
@@ -117,6 +118,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     public List<T> findList(QueryFilter<T> filter) {
         return this.baseMapper.selectList(filter);
     }
+
     /**
      * 描述: 根据主键集合查询
      *
@@ -140,6 +142,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
         List<Map<String, Object>> data = this.baseMapper.findList(filter);
         return JSON.parseArray(JSONObject.toJSONString(data), clz);
     }
+
     /**
      * 描述:根据wrapper过滤器 分页查询
      *

@@ -8,7 +8,6 @@ import com.leesky.ezframework.backend.service.IroleService;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
-import com.leesky.ezframework.query.ParamModel;
 import com.leesky.ezframework.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,11 +43,10 @@ public class SysUserAction {
     @GetMapping("/{username}/public")
     public Result<UserAuthDTO> getUserByUsername(@PathVariable String username) {
 
-        ParamModel param = new ParamModel(ImmutableMap.of("Q_username_EQ", username));
+        QueryFilter<UserBaseModel> filter = new QueryFilter<>();
 
-        param.setSelect("id,username,status,by_time,password");
-
-        QueryFilter<UserBaseModel> filter = new QueryFilter<>(param, UserBaseModel.class);
+        filter.select("id,username,status,by_time,password");
+        filter.buildQuery(ImmutableMap.of("Q_username_EQ", username),UserBaseModel.class);
 
         UserBaseModel user = this.service.findOne(filter, ImmutableMap.of("roles", "code"));
 

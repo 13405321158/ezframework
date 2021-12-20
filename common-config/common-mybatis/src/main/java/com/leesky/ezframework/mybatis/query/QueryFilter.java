@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.leesky.ezframework.query.ParamModel;
@@ -11,7 +12,6 @@ import com.leesky.ezframework.utils.Hump2underline;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -54,10 +54,7 @@ public class QueryFilter<T> extends QueryWrapper<T> {
      * @作者: 魏来
      * @日期: 2021/10/27  下午2:35
      **/
-    public QueryFilter(ParamModel param, Class<T> clz) {
-        boolean filterStr = this.expression.getNormal().size() == 0;//使用QueryWrapper构造查询条件
-        boolean paramStr = StringUtils.isNotBlank(param.getQueryStr());//使用ParamModel构造查询条件
-        Assert.isTrue(filterStr && paramStr, "查询条件请使用ParamModel的queryStr构造");
+    public  QueryFilter(ParamModel param, Class<T> clz) {
 
         this.param = param;
         this.tableName = clz.getAnnotation(TableName.class).value() + " a";
@@ -71,9 +68,22 @@ public class QueryFilter<T> extends QueryWrapper<T> {
 
         Common.joinQueryStr(clz, this, join, this.tableName);//拼接sql语句
 
-
     }
 
+    public QueryFilter buildQuery(ImmutableMap<String, String> map, Class<T> clz) {
+        this.param = new ParamModel(map);
+        this.tableName = clz.getAnnotation(TableName.class).value() + " a";
+
+        if (StringUtils.isBlank(this.getSqlSelect()))
+            this.select("*");
+        else
+            this.select(Common.buildSelect(this.getSqlSelect()));
+
+        analyzing(this.param.getQueryStr());
+
+        Common.joinQueryStr(clz, this, join, this.tableName);//拼接sql语句
+        return this;
+    }
 
     /**
      * <li>:str 是model的属性，所以要用驼峰转换为 数据表字段

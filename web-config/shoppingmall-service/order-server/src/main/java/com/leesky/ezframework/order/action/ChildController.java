@@ -63,8 +63,10 @@ public class ChildController {
 
         Result json = new Result();
         try {
-            param.setSelect("cours.name");
+
             QueryFilter<ChildModel> filter = new QueryFilter<>(param, ChildModel.class);
+            filter.select("cours.name");
+
             Page<RetDTO> data = this.childService.page(filter, RetDTO.class);
 
             json.setCount(data.getTotal());
