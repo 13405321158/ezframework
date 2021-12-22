@@ -1,14 +1,11 @@
 package com.leesky.ezframework.mybatis.mapper;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.leesky.ezframework.mybatis.annotation.ManyToMany;
-import com.leesky.ezframework.mybatis.annotation.ManyToOne;
-import com.leesky.ezframework.mybatis.annotation.OneToMany;
-import com.leesky.ezframework.mybatis.annotation.OneToOne;
-import com.leesky.ezframework.mybatis.save.SaveHandler;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -23,11 +20,16 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.leesky.ezframework.mybatis.annotation.ManyToMany;
+import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.OneToMany;
+import com.leesky.ezframework.mybatis.annotation.OneToOne;
+import com.leesky.ezframework.mybatis.save.SaveHandler;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * AutoMapper for one2one/one2many/many2many
@@ -39,8 +41,7 @@ public class AutoMapper {
 	ObjectFactory<SqlSession> factory;
 
 	protected Map<String, String[]> entityMap = Maps.newHashMap();
-	
-	private List<String> list03 = Lists.newArrayList();
+
 	/**
 	 * <li>平台中的model包命名规范必须是com.leesky.ezframework.**.model</li>
 	 * <li>平台中的model类 必须包含注解：TableName，否则无法自动映射 o2o,o2m,m2o,m2m关系</li>

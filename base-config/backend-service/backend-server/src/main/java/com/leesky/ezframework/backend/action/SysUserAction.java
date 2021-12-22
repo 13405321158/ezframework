@@ -1,19 +1,24 @@
 package com.leesky.ezframework.backend.action;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.backend.dto.UserAuthDTO;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.model.UserBaseModel;
-import com.leesky.ezframework.backend.service.IroleService;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.utils.JwtUtils;
+
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * desc TODO
@@ -22,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2021/12/1 下午6:39
  */
 
-@Slf4j
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -30,7 +35,7 @@ public class SysUserAction {
 
     private final IuserBaseService service;
 
-    private final IroleService roleService;
+
 
     private final JwtUtils JwtUtils;
 

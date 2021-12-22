@@ -1,23 +1,31 @@
 package com.leesky.ezframework.mybatis.query;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
-import com.leesky.ezframework.mybatis.annotation.*;
-import com.leesky.ezframework.mybatis.condition.FieldCondition;
-import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
-import com.leesky.ezframework.mybatis.utils.JoinUtil;
-import com.leesky.ezframework.utils.Hump2underline;
-import com.leesky.ezframework.utils.Po2DtoUtil;
-import lombok.RequiredArgsConstructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
+import com.leesky.ezframework.mybatis.annotation.EntityMapper;
+import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.annotation.ManyToMany;
+import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.OneToMany;
+import com.leesky.ezframework.mybatis.annotation.OneToOne;
+import com.leesky.ezframework.mybatis.condition.FieldCondition;
+import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
+import com.leesky.ezframework.mybatis.utils.JoinUtil;
+import com.leesky.ezframework.utils.Hump2underline;
+import com.leesky.ezframework.utils.Po2DtoUtil;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * desc：TODO
@@ -28,7 +36,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-@SuppressWarnings("ALL")
 public class QueryHandler<T> {
 
     private final ObjectFactory<SqlSession> factory;
@@ -39,7 +46,8 @@ public class QueryHandler<T> {
      * @author： 魏来
      * @date: 2021/12/16 上午8:43
      */
-    public void query(Object retClz, ImmutableMap<String, String> ship) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public void query(Object retClz, ImmutableMap<String, String> ship) {
         // 比如当前查询 媳妇信息，这里retClz是上一步查询出来的数据，entity=老公实体类，ship中有个value=laopo（laop是entity的属性，其上面标注@One2one注解）
         ship.forEach((k, v) -> {
 
