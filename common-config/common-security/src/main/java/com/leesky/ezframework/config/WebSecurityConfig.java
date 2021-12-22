@@ -9,13 +9,13 @@ spring.security.oauth2.resource.jwt.jwk.set-uri =https://example.com/oauth2/defa
  */
 package com.leesky.ezframework.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import lombok.RequiredArgsConstructor;
 
 
 /**
@@ -30,16 +30,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${spring.security.brac:false}")
     private Boolean config;
 
-    private final String AUTHORITY_PREFIX = "ROLE_";
 
-    private final String JWT_AUTHORITIES_KEY = "authorities";
 
     private final String[] WHITE_URL = new String[]{"/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
 
     private final CustomAccessDeineHandler accessHandler;
     private final CustomAuthenticationEntryPoint entryPoint;
 
-    private final LettuceConnectionFactory redisConnectionFactory;// token 存储在redis中
 
     /**
      * 以下内容已经经过测试，配置正确，请勿随意修改

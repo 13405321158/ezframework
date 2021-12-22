@@ -1,22 +1,21 @@
 package com.leesky.ezframework.exception;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 /**
  * desc：TODO
  *
  * @author： 魏来
  * @date： 2021/12/15 上午10:53
  */
-@Slf4j
+
 @RestController
 @RequestMapping("${server.error.path:/error}")
 public class NotFoundException implements ErrorController {

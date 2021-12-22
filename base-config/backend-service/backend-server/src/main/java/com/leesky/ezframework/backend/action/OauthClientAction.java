@@ -1,17 +1,18 @@
 package com.leesky.ezframework.backend.action;
 
-import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
-import com.leesky.ezframework.backend.model.OauthClientDetailsModel;
-import com.leesky.ezframework.backend.service.IoauthCientService;
-import com.leesky.ezframework.json.Result;
-import com.leesky.ezframework.utils.Po2DtoUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
+import com.leesky.ezframework.backend.model.OauthClientDetailsModel;
+import com.leesky.ezframework.backend.service.IoauthCientService;
+import com.leesky.ezframework.json.Result;
+import com.leesky.ezframework.utils.Po2DtoUtil;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * desc：oauth Client 控制器
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date： 2021/12/1 下午5:02
  */
 
-@Slf4j
+
 @RestController
 @RequestMapping("/client")
 @RequiredArgsConstructor

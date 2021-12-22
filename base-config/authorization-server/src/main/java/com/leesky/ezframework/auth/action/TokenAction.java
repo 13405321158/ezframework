@@ -8,25 +8,31 @@
 package com.leesky.ezframework.auth.action;
 
 
-import com.leesky.ezframework.global.Common;
-import com.leesky.ezframework.global.Redis;
-import com.leesky.ezframework.json.Result;
-import com.leesky.ezframework.redis.service.RedisService;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import lombok.RequiredArgsConstructor;
+import java.security.KeyPair;
+import java.security.Principal;
+import java.security.interfaces.RSAPublicKey;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.util.Assert;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.security.KeyPair;
-import java.security.Principal;
-import java.security.interfaces.RSAPublicKey;
-import java.util.Map;
+import com.leesky.ezframework.global.Common;
+import com.leesky.ezframework.global.Redis;
+import com.leesky.ezframework.json.Result;
+import com.leesky.ezframework.redis.service.RedisService;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * 类功能说明：
@@ -80,7 +86,8 @@ public class TokenAction {
      * @author： 魏来
      * @date: 2021/12/14 下午12:25
      */
-    private void add2Cache(OAuth2AccessToken accessToken) {
+    @SuppressWarnings("unchecked")
+	private void add2Cache(OAuth2AccessToken accessToken) {
         String token01 = StringUtils.split(accessToken.getValue(), ".")[0];//token的第一部分值
         Long expr = Long.valueOf(accessTokenValiditySeconds);//1、有效期时长
         Map<String, String> ext = (Map<String, String>) accessToken.getAdditionalInformation().get(Common.LOGIN_USER_EXT_INFO);
