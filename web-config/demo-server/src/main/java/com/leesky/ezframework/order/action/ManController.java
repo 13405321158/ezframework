@@ -110,7 +110,7 @@ public class ManController {
 
 
     @PostMapping("/r02")
-    public Result index04(@RequestBody ParamModel param) {
+    public Result<?> index04(@RequestBody ParamModel param) {
 
         QueryFilter<ManModel> filter = new QueryFilter<>();
         filter.buildQuery(param, ManModel.class);
@@ -124,7 +124,7 @@ public class ManController {
     }
 
     @PostMapping("/r03")
-    public Result index05(@RequestBody ParamModel param) {
+    public Result<ChildModel> index05(@RequestBody ParamModel param) {
 
 //        param.setSelect("id,name");
         QueryFilter<ChildModel> filter = new QueryFilter<>();
