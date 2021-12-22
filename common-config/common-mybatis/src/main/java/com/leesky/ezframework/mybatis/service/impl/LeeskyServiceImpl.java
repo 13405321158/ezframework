@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.mybatis.mapper.AutoMapper;
 import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
+import com.leesky.ezframework.mybatis.query.Common;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.mybatis.query.QueryHandler;
 import com.leesky.ezframework.mybatis.save.SaveHandler;
@@ -45,9 +46,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     private Class<T> entityClass = currentModelClass();
     private Class<M> mapperClass = currentMapperClass();
 
-    private final String msg = "构造QueryFiilter时未实例化tableName参数,请使用：" +
-            " QueryFilter<返回类型Model> filter =new QueryFilter<>(param, 返回类型Model.class)" +
-            "或者 filter.buildQuery(ImmutableMap.of('Q_查询条件_EQ', 条件值),返回类型Model.class)";
+    private final String msg = "QueryFilter的tableName参数=null,请执行：filter.buildQuery(参数01,xxxModel.class)";
 
     /**
      * 描述: 根据记录主键查询
@@ -167,6 +166,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     @Override
     public <E> Page<E> page(QueryFilter<T> filter, Class<E> retClz) {
         Assert.isTrue(StringUtils.isNotBlank(filter.getTableName()), this.msg);
+        filter.select(Common.buildSelect(filter.getSqlSelect()));//防止select 内容是通过 filter.select 设置，而不是通过param.select 设置
 
         Page<E> page = new Page<>();
         Long total = this.baseMapper.getTotal(filter);

@@ -48,19 +48,19 @@ public class QueryFilter<T> extends QueryWrapper<T> {
 
     /**
      * <li>联合表查询用(left join)。clz=实体类(此实体类含有 o2o,o2m,m2o,m2m关系)
-     * <li>如果缺少 clz参数，系统提示：缺少实体类参数,请按照此格式构造：new QueryFilter<>(ParamModel,xxxModel.class)
-     * <li>查询条件构造需要在 param</li>
+     * <li>如果此方法未调用，系统提示：QueryFilter的tableName参数=null,请执行：filter.buildQuery(参数01,xxxModel.class)
+     * <li>select 的内容 需要在param.setSelect设定</li>
      *
      * @作者: 魏来
      * @日期: 2021/10/27  下午2:35
      **/
-    public  QueryFilter(ParamModel param, Class<T> clz) {
+    public QueryFilter buildQuery(ParamModel param, Class<T> clz) {
 
         this.param = param;
         this.tableName = clz.getAnnotation(TableName.class).value() + " a";
 
         if (StringUtils.isBlank(param.getSelect()))
-            this.select("*");
+            this.select("a.*");
         else
             this.select(Common.buildSelect(param.getSelect()));
 
@@ -68,14 +68,22 @@ public class QueryFilter<T> extends QueryWrapper<T> {
 
         Common.joinQueryStr(clz, this, join, this.tableName);//拼接sql语句
 
+        return this;
     }
-
+    /**
+     * <li>联合表查询用(left join)。clz=实体类(此实体类含有 o2o,o2m,m2o,m2m关系)
+     * <li>如果此方法未调用，系统提示：QueryFilter的tableName参数=null,请执行：filter.buildQuery(参数01,xxxModel.class)
+     * <li>select 的内容 需要在param.setSelect设定</li>
+     *
+     * @作者: 魏来
+     * @日期: 2021/10/27  下午2:35
+     **/
     public QueryFilter buildQuery(ImmutableMap<String, String> map, Class<T> clz) {
         this.param = new ParamModel(map);
         this.tableName = clz.getAnnotation(TableName.class).value() + " a";
 
         if (StringUtils.isBlank(this.getSqlSelect()))
-            this.select("*");
+            this.select("a.*");
         else
             this.select(Common.buildSelect(this.getSqlSelect()));
 

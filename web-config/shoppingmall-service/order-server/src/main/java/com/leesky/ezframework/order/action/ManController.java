@@ -100,7 +100,7 @@ public class ManController {
     public Result index02(@RequestBody ParamModel param) {
 
         param.setSelect("id,name");
-        QueryFilter<ManModel> filter = new QueryFilter<>(param, ManModel.class);
+        QueryFilter<ManModel> filter = new QueryFilter<>();
 
         Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
 
@@ -112,9 +112,9 @@ public class ManController {
     @PostMapping("/r02")
     public Result index04(@RequestBody ParamModel param) {
 
-        param.setSelect("id,name");
-        QueryFilter<ManModel> filter = new QueryFilter<>(param, ManModel.class);
-//filter.select("id,name");
+        QueryFilter<ManModel> filter = new QueryFilter<>();
+        filter.buildQuery(param, ManModel.class);
+
         Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
         return Result.success(data.getRecords(), data.getTotal());
 //        ManModel s = this.manService.findOne(filter, ImmutableMap.of("laoPo", "id,name", "company", "id,name", "childs", "id,name", "idCard", "id,card_no"));
@@ -127,10 +127,10 @@ public class ManController {
     public Result index05(@RequestBody ParamModel param) {
 
 //        param.setSelect("id,name");
-        QueryFilter<ChildModel> filter = new QueryFilter<>(param, ChildModel.class);
-    filter.select("id,name");
+        QueryFilter<ChildModel> filter = new QueryFilter<>();
+        filter.select("id,name");
 
-        ChildModel s = this.childService.findOne(filter, ImmutableMap.of("cours", "id,name","teacher","name"));
+        ChildModel s = this.childService.findOne(filter, ImmutableMap.of("cours", "id,name", "teacher", "name"));
 
 //        RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
         return Result.success(s);

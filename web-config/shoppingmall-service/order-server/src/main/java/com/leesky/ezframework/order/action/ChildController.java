@@ -64,7 +64,7 @@ public class ChildController {
         Result json = new Result();
         try {
 
-            QueryFilter<ChildModel> filter = new QueryFilter<>(param, ChildModel.class);
+            QueryFilter<ChildModel> filter = new QueryFilter<>();
             filter.select("cours.name");
 
             Page<RetDTO> data = this.childService.page(filter, RetDTO.class);
