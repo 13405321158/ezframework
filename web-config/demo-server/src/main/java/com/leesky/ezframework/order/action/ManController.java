@@ -30,7 +30,7 @@ public class ManController {
     private IChildService childService;
 
     /*
-     * 主表查询示例，返回值类型是主表
+     * 例1 查询一条记录：主表查询示例，返回值类型是主表
      */
     @RequestMapping(value = "/r01")
     public Result<ManModel> r01(@RequestBody ParamModel param) {
@@ -41,7 +41,7 @@ public class ManController {
     }
 
     /*
-     * 主表查询示例(根据ship内容同时查询子表)，返回值类型是主表
+     * 例2 查询一条记录：主表查询示例(根据ship内容同时查询子表)，返回值类型是主表
      */
     @RequestMapping(value = "/r02")
     public Result<ManModel> r02(@RequestBody ParamModel param) {
@@ -54,10 +54,7 @@ public class ManController {
     }
 
     /**
-     * 主表和子表 left join 联合查询，返回值类型自定义
-     *
-     * @author： 魏来
-     * @date: 2021/12/25 下午12:26
+     * 例3 查询一条记录：主表和子表 left join 联合查询，返回值类型自定义
      */
     @RequestMapping(value = "/r03")
     public Result<ManDTO> r03(@RequestBody ParamModel param) {
@@ -65,6 +62,44 @@ public class ManController {
         filter.select("id,name,laoPo.name as laopoId");
 
         ManDTO data = this.manService.findOne(filter, ManDTO.class);
+        return Result.success(data);
+    }
+
+    /**
+     * 例4 查询多条记录：主表
+     *
+     * @author： 魏来
+     * @date: 2021/12/25 下午3:26
+     */
+    @RequestMapping(value = "/r04")
+    public Result<List<ManModel>> r04(@RequestBody ParamModel param) {
+        QueryFilter<ManModel> filter = new QueryFilter<>(param);
+        filter.select("id");
+        List<ManModel> data = this.manService.findList(filter);
+
+        return Result.success(data);
+    }
+
+    /**
+     * 例5 查询多条记录：主表(根据ship内容同时查询子表)
+     */
+    @RequestMapping(value = "/r05")
+    public Result<List<ManModel>> r05(@RequestBody ParamModel param) {
+        QueryFilter<ManModel> filter = new QueryFilter<>(param);
+        filter.select("id");
+        List<ManModel> data = this.manService.findList(filter, ImmutableMap.of("laoPo", "id,name"));
+
+        return Result.success(data);
+    }
+
+    /**
+     * 例6 查询多条记录：主表(根据ship内容同时查询子表)
+     */
+    @RequestMapping(value = "/r06")
+    public Result<List<ManDTO>> r06(@RequestBody ParamModel param) {
+        QueryFilter<ManModel> filter = new QueryFilter<>(param);
+//        filter.select("id");
+        List<ManDTO> data = this.manService.findList(filter, ManDTO.class);
         return Result.success(data);
     }
 

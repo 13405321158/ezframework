@@ -7,21 +7,20 @@
  */
 package com.leesky.ezframework.json;
 
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSON;
 import com.leesky.ezframework.global.Common;
 import com.leesky.ezframework.utils.RsaTool;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
 
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class Result<T> {
     private T data;// 返回数据
     private Long count;
@@ -45,7 +44,7 @@ public class Result<T> {
         this.msg = msg;
     }
 
-	public Result ok() {
+    public Result ok() {
         this.code = 0;
         this.msg = StringUtils.isNotBlank(msg) ? msg : "操作成功";
         this.success = true;
@@ -59,12 +58,16 @@ public class Result<T> {
         return this;
     }
 
-	public static <T> Result<T> success() {
+    public static <T> Result<T> success() {
         return new Result<>().ok();
     }
 
     public static <T> Result<T> success(T data) {
-        return new Result<>(data).ok();
+        Result result = new Result<>(data).ok();
+        if (data instanceof List) {
+            result.setCount(Long.valueOf(((List) data).size()));
+        }
+        return result;
     }
 
     public static <T> Result<T> success(T data, Long total) {
@@ -86,6 +89,5 @@ public class Result<T> {
             this.data = (T) RsaTool.encryptByPrivateKey(JSON.toJSONString(data), Common.RSA_PRIVATE);
         }
     }
-
 
 }

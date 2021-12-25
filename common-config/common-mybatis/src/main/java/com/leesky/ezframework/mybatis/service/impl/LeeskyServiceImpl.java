@@ -18,7 +18,9 @@ import com.leesky.ezframework.mybatis.service.IeeskyService;
 import com.leesky.ezframework.utils.Hump2underline;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,7 +89,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     @Override
     @Transactional(readOnly = true)
     public <E> E findOne(QueryFilter<T> filter, Class<E> retClz) {
-        CommonCode.makeLeftJoin(filter,this.getEntityClass());
+        CommonCode.makeLeftJoin(filter, this.getEntityClass());
 
         Map<String, Object> data = this.baseMapper.findOne(filter);
         return JSON.parseObject(JSONObject.toJSONString(data), retClz);
@@ -110,7 +112,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
 
         T data = this.baseMapper.selectOne(filter);// 查询主表
 
-        if (MapUtils.isNotEmpty(ship) && data != null)
+        if (MapUtils.isNotEmpty(ship) && ObjectUtils.isNotEmpty(data))
             this.queryItem.query(data, ship);// 查询子表并赋值给主表
 
         return data;
@@ -151,15 +153,38 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     }
 
     /**
+     * 依据ship内容做子表查询，并把结果赋值给查询主表
+     * <li>注意：filter.select 查询的字段中需要包含 ship指定的属性，否则无法查询子表
+     * <li>例如丈夫是主表，wifeId是妻子在丈夫表中的映射值，wife是o2o属性；即使ship含有wife，但select不包含wifeId，妻子相关属性也无法查询</li>
+     *
+     * @author： 魏来
+     * @date: 2021/12/15 下午3:22
+     */
+    @Override
+    public List<T> findList(QueryFilter<T> filter, ImmutableMap<String, String> ship) {
+        filter.select(buildSelect(filter.getSqlSelect())); //select的字段由 驼峰→下划线
+        filter.p1.keySet().forEach(e -> Assert.isTrue(StringUtils.containsNone(e, "."), "不支持的查询参数：" + e));
+
+        List<T> data = this.baseMapper.selectList(filter);// 查询主表
+
+        if (MapUtils.isNotEmpty(ship) && CollectionUtils.isNotEmpty(data))
+            data.forEach(e -> this.queryItem.query(e, ship));// 查询子表并赋值给主表
+
+        return data;
+    }
+
+    /**
      * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；clz=返回值类型
      *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:15:49
      */
     @Override
-    public <E> List<E> findList(QueryFilter<T> filter, Class<E> clz) {
+    public <E> List<E> findList(QueryFilter<T> filter, Class<E> retClz) {
+        CommonCode.makeLeftJoin(filter, this.getEntityClass());
+
         List<Map<String, Object>> data = this.baseMapper.findList(filter);
-        return JSON.parseArray(JSONObject.toJSONString(data), clz);
+        return JSON.parseArray(JSONObject.toJSONString(data), retClz);
     }
 
     /**

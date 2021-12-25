@@ -26,12 +26,10 @@ public interface IeeskyMapper<T> extends BaseMapper<T> {
     Map<String, Object> findOne(@Param("filter") QueryFilter<T> filter);
 
     /**
-     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；
-     *
      * @作者: 魏来
      * @日期: 2021年9月25日 上午8:15:49
      */
-    List<Map<String, Object>> findList(QueryFilter<T> filter);
+    List<Map<String, Object>> findList(@Param("filter") QueryFilter<T> filter);
 
     /**
      * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；多对多查询，联合中间表
