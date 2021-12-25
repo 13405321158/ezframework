@@ -7,13 +7,15 @@ import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.leesky.ezframework.mybatis.mapper.AutoMapper;
 import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
-import com.leesky.ezframework.mybatis.query.Common;
+import com.leesky.ezframework.mybatis.query.QueryAssociative;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
-import com.leesky.ezframework.mybatis.query.QueryHandler;
+import com.leesky.ezframework.mybatis.query.QueryItem;
 import com.leesky.ezframework.mybatis.save.SaveHandler;
 import com.leesky.ezframework.mybatis.service.IeeskyService;
+import com.leesky.ezframework.utils.Hump2underline;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.MapUtils;
@@ -22,8 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -37,16 +39,19 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     private M baseMapper;
     @Autowired
     private AutoMapper autoMapper;
+
+    @Autowired
+    private QueryItem<T> queryItem;
+
     @Autowired
     private SaveHandler<T> saveHandler;
-    @Autowired
-    private QueryHandler<T> queryHandler;
 
+    @Autowired
+    private QueryAssociative<T> CommonCode;
 
     private Class<T> entityClass = currentModelClass();
     private Class<M> mapperClass = currentMapperClass();
 
-    private final String msg = "QueryFilter的tableName参数=null,请执行：filter.buildQuery(参数01,xxxModel.class)";
 
     /**
      * 描述: 根据记录主键查询
@@ -61,7 +66,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     }
 
     /**
-     * 描述: 自定义查询条件，返回一条记录
+     * 描述: 返回一条记录：单表查询
      *
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:39
@@ -73,28 +78,44 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     }
 
     /**
-     * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；clz=返回值类型
-     * <li>1、构造filter时带有xxxModel.class 参数，xxxModel中含有o2o,o2m,m2o,m2m注解
-     * <li>2、如果filter 的select，或者 where 条件中含有"." 则需采用left join查询(此时 ship不起作用)</li>
-     * <li>3、依据ship内容做子查询，并把结果赋值给查询结果（如果xxxModel中带有多个o2o,o2m,m2o,m2m的属性值；
-     * <li>比如你仅需要查询所有o2o(o2o有多个,你可能需要其中一个)，o2m,m2o,m2m关系不需要查询，则ship中只包含o2o对应的属性值即可
+     * <li>主表和子表left join查询；retClz=返回值类型
+     * <li>findOne(filter)方法在leeskyMapper.xml定义</li>
      *
      * @author： 魏来
      * @date: 2021/12/15 下午3:22
      */
     @Override
     @Transactional(readOnly = true)
-    public T findOne(QueryFilter<T> filter, ImmutableMap<String, String> ship) {
-        Assert.isTrue(StringUtils.isNotBlank(filter.getTableName()), this.msg);//检查构造filter时带有xxxModel.class参数了吗，
-        Boolean isJoin = isJoinQuery(filter, ship);
+    public <E> E findOne(QueryFilter<T> filter, Class<E> retClz) {
+        CommonCode.makeLeftJoin(filter,this.getEntityClass());
+
         Map<String, Object> data = this.baseMapper.findOne(filter);
-        T result = JSON.parseObject(JSONObject.toJSONString(data), this.entityClass);
-
-        if (isJoin)//查询 ship中的数据，并赋值给result
-            this.queryHandler.query(result, ship);
-
-        return result;
+        return JSON.parseObject(JSONObject.toJSONString(data), retClz);
     }
+
+    /**
+     * 依据ship内容做子表查询，并把结果赋值给查询主表
+     * <li>注意：filter.select 查询的字段中需要包含 ship指定的属性，否则无法查询子表
+     * <li>例如丈夫是主表，wifeId是妻子在丈夫表中的映射值，wife是o2o属性；即使ship含有wife，但select不包含wifeId，妻子相关属性也无法查询
+     *
+     * @author： 魏来
+     * @date: 2021/12/24 下午6:32
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public T findOne(QueryFilter<T> filter, ImmutableMap<String, String> ship) {
+
+        filter.select(buildSelect(filter.getSqlSelect())); //select的字段由 驼峰→下划线
+        filter.p1.keySet().forEach(e -> Assert.isTrue(StringUtils.containsNone(e, "."), "不支持的查询参数：" + e));
+
+        T data = this.baseMapper.selectOne(filter);// 查询主表
+
+        if (MapUtils.isNotEmpty(ship) && data != null)
+            this.queryItem.query(data, ship);// 查询子表并赋值给主表
+
+        return data;
+    }
+
 
     /**
      * 描述: 查询全部
@@ -128,7 +149,6 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     public List<T> findList(Collection<? extends Serializable> keys) {
         return this.baseMapper.selectBatchIds(keys);
     }
-
 
     /**
      * <li>个性化扩展，最终实现于leeskyMapper.xml,支持多表联合查询；clz=返回值类型
@@ -165,8 +185,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
      */
     @Override
     public <E> Page<E> page(QueryFilter<T> filter, Class<E> retClz) {
-        Assert.isTrue(StringUtils.isNotBlank(filter.getTableName()), this.msg);
-        filter.select(Common.buildSelect(filter.getSqlSelect()));//防止select 内容是通过 filter.select 设置，而不是通过param.select 设置
+        filter.select(CommonCode.makeSelect(filter.getSqlSelect()));// 防止select 内容是通过 filter.select 设置，而不是通过param.select 设置
 
         Page<E> page = new Page<>();
         Long total = this.baseMapper.getTotal(filter);
@@ -283,13 +302,12 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
     }
 
     /**
-     * 判断 s1,或者s2的keySet 中是否还有"."。 含有. 则说明需要left join 查询
+     * 判断 select 或者 where 中是否有 “.” 如有则需要left join 查询，ship则不起作用了 @author： 魏来
      *
-     * @author： 魏来
      * @date: 2021/12/15 下午5:15
      */
     private Boolean isJoinQuery(QueryFilter<T> filter, ImmutableMap<String, String> ship) {
-        String s1 = filter.getSqlSelect();//select 内容
+        String s1 = filter.getSqlSelect();// select 内容
         Map<String, Object> s2 = filter.getP1();// where 内容
 
         s1 = s1.replace("a.", "");
@@ -300,5 +318,22 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
                 return false;
 
         return !MapUtils.isEmpty(ship);
+    }
+
+    /**
+     * 参数s 是以逗号相隔的字符串，本方法是驼峰个数转换为下划线
+     *
+     * @author： 魏来
+     * @date: 2021/12/25 上午8:58
+     */
+    private String buildSelect(String s) {
+        List<String> selectContent = Lists.newArrayList();
+        if (StringUtils.isNotBlank(s)) {
+            String[] a = StringUtils.split(s, ",");
+            Arrays.stream(a).forEach(e -> selectContent.add(Hump2underline.build(e)));
+        } else {
+            selectContent.add("*");
+        }
+        return StringUtils.join(selectContent, ",");
     }
 }

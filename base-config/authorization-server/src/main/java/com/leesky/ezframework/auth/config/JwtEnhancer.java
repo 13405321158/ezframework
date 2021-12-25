@@ -33,8 +33,9 @@ public class JwtEnhancer implements TokenEnhancer {
             SysUserDetails sysUserDetails = (SysUserDetails) principal;
             extMap.put(Common.USER_ID, sysUserDetails.getUserId());
             extMap.put(Common.USER_NAME, sysUserDetails.getUsername());
-            if (StringUtils.isNotBlank(sysUserDetails.getAuthenticationMethod()))
+            if (StringUtils.isNotBlank(sysUserDetails.getAuthenticationMethod())) {
                 extMap.put("authenticationMethod", sysUserDetails.getAuthenticationMethod());
+            }
 
         }
 
@@ -42,8 +43,9 @@ public class JwtEnhancer implements TokenEnhancer {
             MemberUserDetails memberUserDetails = (MemberUserDetails) principal;
             extMap.put(Common.USER_ID, memberUserDetails.getUserId());
             extMap.put(Common.USER_NAME, memberUserDetails.getUsername());
-            if (StringUtils.isNotBlank(memberUserDetails.getAuthenticationMethod()))
+            if (StringUtils.isNotBlank(memberUserDetails.getAuthenticationMethod())) {
                 extMap.put("authenticationMethod", memberUserDetails.getAuthenticationMethod());
+            }
 
         }
 

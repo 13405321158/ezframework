@@ -35,20 +35,24 @@ public class SysUserDetailsServiceImpl implements UserDetailsService {
         SysUserDetails userDetails = null;
         Result<UserAuthDTO> ret = this.client.getUserByUsername(username);
 
-        if (!ret.isSuccess())
+        if (!ret.isSuccess()) {
             throw new UsernameNotFoundException("该账户不存在：" + username);
+        }
 
         UserAuthDTO data = ret.getData();
         if (ObjectUtils.isNotEmpty(data)) {
             userDetails = new SysUserDetails(data);
 
-            if (!userDetails.isEnabled())
+            if (!userDetails.isEnabled()) {
                 throw new DisabledException("该账户已被禁用!");
-            if (!userDetails.isAccountNonLocked())
+            }
+            if (!userDetails.isAccountNonLocked()) {
                 throw new LockedException("该账号已被锁定!");
+            }
 
-            if (!userDetails.isAccountNonExpired())
+            if (!userDetails.isAccountNonExpired()) {
                 throw new AccountExpiredException("该账号已过期!");
+            }
         }
 
         return userDetails;

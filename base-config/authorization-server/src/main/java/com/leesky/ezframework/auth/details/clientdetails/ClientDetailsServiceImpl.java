@@ -39,8 +39,9 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
         try {
             Result<OauthClientDetailsDTO> ret = this.client.getOAuth2ClientById(clientId);
 
-            if (!ret.isSuccess())
+            if (!ret.isSuccess()) {
                 throw new BadCredentialsException("No client with requested id: " + clientId);
+            }
 
 
             OauthClientDetailsDTO client = ret.getData();

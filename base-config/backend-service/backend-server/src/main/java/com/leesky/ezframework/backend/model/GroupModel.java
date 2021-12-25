@@ -9,6 +9,7 @@ package com.leesky.ezframework.backend.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.google.common.base.Objects;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -35,5 +36,18 @@ public class GroupModel extends BaseUuidModel {
 
 	public GroupModel() {
 //		this.groupName=RandomStringUtils.randomAlphanumeric(5);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof GroupModel)) return false;
+		GroupModel that = (GroupModel) o;
+		return Objects.equal(getGroupName(), that.getGroupName()) && Objects.equal(getUserSet(), that.getUserSet());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(getGroupName(), getUserSet());
 	}
 }

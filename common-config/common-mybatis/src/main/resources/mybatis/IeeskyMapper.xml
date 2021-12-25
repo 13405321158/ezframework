@@ -2,8 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.leesky.ezframework.mybatis.mapper.IeeskyMapper">
 
-
-    <!--leeskyService.findOne( QueryFilter<T> filter, ImmutableMap<String,String> ship) 调用-->
     <select id="findOne" resultType="map">
         select ${filter.getSqlSelect} from ${filter.tableName}
 

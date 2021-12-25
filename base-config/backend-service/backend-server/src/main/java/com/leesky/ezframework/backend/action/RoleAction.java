@@ -95,12 +95,15 @@ public class RoleAction {
         UpdateWrapper<RoleModel> filter = new UpdateWrapper<>();
         filter.eq("id", dto.getId());
 
-        if (StringUtils.isNotBlank(dto.getName()))
+        if (StringUtils.isNotBlank(dto.getName())) {
             filter.set("name", dto.getName());
-        if (ObjectUtils.isNotEmpty(dto.getSortNo()))
+        }
+        if (ObjectUtils.isNotEmpty(dto.getSortNo())) {
             filter.set("sort_no", dto.getSortNo());
-        if (StringUtils.isNotBlank(dto.getDescription()))
+        }
+        if (StringUtils.isNotBlank(dto.getDescription())) {
             filter.set("description", dto.getDescription());
+        }
 
         this.service.update(filter);
 

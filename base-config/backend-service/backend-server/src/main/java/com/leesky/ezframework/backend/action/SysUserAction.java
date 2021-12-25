@@ -48,10 +48,9 @@ public class SysUserAction {
     @GetMapping("/{username}/public")
     public Result<UserAuthDTO> getUserByUsername(@PathVariable String username) {
 
-        QueryFilter<UserBaseModel> filter = new QueryFilter<>();
+        QueryFilter<UserBaseModel> filter = new QueryFilter<>(ImmutableMap.of("Q_username_EQ", username));
 
         filter.select("id,username,status,by_time,password");
-        filter.buildQuery(ImmutableMap.of("Q_username_EQ", username),UserBaseModel.class);
 
         UserBaseModel user = this.service.findOne(filter, ImmutableMap.of("roles", "code"));
 

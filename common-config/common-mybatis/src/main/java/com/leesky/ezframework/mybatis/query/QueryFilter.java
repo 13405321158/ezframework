@@ -1,43 +1,40 @@
 package com.leesky.ezframework.mybatis.query;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.leesky.ezframework.query.ParamModel;
 import com.leesky.ezframework.utils.Hump2underline;
-
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
-@SuppressWarnings("rawtypes")
+@NoArgsConstructor
 public class QueryFilter<T> extends QueryWrapper<T> {
 
     private static final long serialVersionUID = -7119777000984779256L;
 
-    public String tableName;//表名称,即clz的表名称
-    public ParamModel param;//查询参数对象
-    public List<String> op = Lists.newArrayList();// where原始参数转下划线且带有操作符号
+    private Class<T> clz;
+    private String tableName;//表名称,即clz的表名称
+    private ParamModel param;//查询参数对象
+    private List<String> op = Lists.newArrayList();// where原始参数转下划线且带有操作符号
     public List<String> join = Lists.newArrayList();//left join 字符串
     public Map<String, Object> p1 = Maps.newHashMap();// where原始参数值
-    public Map<String, Object> p2 = Maps.newHashMap();// where原始参数转换为下划线格式
-    public List<String> remove = Lists.newArrayList();//需要排除的条件
+    private Map<String, Object> p2 = Maps.newHashMap();// where原始参数转换为下划线格式
+    private List<String> remove = Lists.newArrayList();//需要排除的条件
 
-    public QueryFilter() {
-    }
 
     /**
-     * <li>:单表查询 用
+     * <li>:单表查询用、noSQL查询用
      *
      * @作者: 魏来
      * @日期: 2021/10/27  下午2:36
@@ -50,52 +47,14 @@ public class QueryFilter<T> extends QueryWrapper<T> {
     }
 
     /**
-     * <li>联合表查询用(left join)。clz=实体类(此实体类含有 o2o,o2m,m2o,m2m关系)
-     * <li>如果此方法未调用，系统提示：QueryFilter的tableName参数=null,请执行：filter.buildQuery(参数01,xxxModel.class)
-     * <li>select 的内容 需要在param.setSelect设定</li>
-     *
      * @作者: 魏来
      * @日期: 2021/10/27  下午2:35
      **/
-
-	public QueryFilter buildQuery(ParamModel param, Class<T> clz) {
-
-        this.param = param;
-        this.tableName = clz.getAnnotation(TableName.class).value() + " a";
-
-        if (StringUtils.isBlank(param.getSelect()))
-            this.select("a.*");
-        else
-            this.select(Common.buildSelect(param.getSelect()));
-
-        analyzing(this.param.getQueryStr());
-
-        Common.joinQueryStr(clz, this, join, this.tableName);//拼接sql语句
-
-        return this;
-    }
-    /**
-     * <li>联合表查询用(left join)。clz=实体类(此实体类含有 o2o,o2m,m2o,m2m关系)
-     * <li>如果此方法未调用，系统提示：QueryFilter的tableName参数=null,请执行：filter.buildQuery(参数01,xxxModel.class)
-     * <li>select 的内容 需要在param.setSelect设定</li>
-     *
-     * @作者: 魏来
-     * @日期: 2021/10/27  下午2:35
-     **/
-    public QueryFilter buildQuery(ImmutableMap<String, String> map, Class<T> clz) {
+    public QueryFilter(ImmutableMap<String, String> map) {
         this.param = new ParamModel(map);
-        this.tableName = clz.getAnnotation(TableName.class).value() + " a";
-
-        if (StringUtils.isBlank(this.getSqlSelect()))
-            this.select("a.*");
-        else
-            this.select(Common.buildSelect(this.getSqlSelect()));
-
         analyzing(this.param.getQueryStr());
-
-        Common.joinQueryStr(clz, this, join, this.tableName);//拼接sql语句
-        return this;
     }
+
 
     /**
      * <li>:str 是model的属性，所以要用驼峰转换为 数据表字段

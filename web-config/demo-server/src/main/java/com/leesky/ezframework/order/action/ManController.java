@@ -1,36 +1,22 @@
 package com.leesky.ezframework.order.action;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
-import com.leesky.ezframework.order.dto.RetDTO;
-import com.leesky.ezframework.order.model.ChildModel;
-import com.leesky.ezframework.order.model.CompanyModel;
-import com.leesky.ezframework.order.model.CourseModel;
-import com.leesky.ezframework.order.model.IdCardModel;
-import com.leesky.ezframework.order.model.ManModel;
-import com.leesky.ezframework.order.model.TeacherModel;
-import com.leesky.ezframework.order.model.TelModel;
-import com.leesky.ezframework.order.model.WomanModel;
+import com.leesky.ezframework.order.dto.ManDTO;
+import com.leesky.ezframework.order.model.*;
 import com.leesky.ezframework.order.service.IChildService;
 import com.leesky.ezframework.order.service.IManService;
 import com.leesky.ezframework.query.ParamModel;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/man")
@@ -39,13 +25,47 @@ public class ManController {
 
     @Autowired
     private IManService manService;
+
     @Autowired
     private IChildService childService;
 
-    @RequestMapping(value = "man/{id}")
-    public ManModel getMan(@PathVariable("id") String id) {
-        ManModel manModel = manService.findOne(id);
-        return manModel;
+    /*
+     * 主表查询示例，返回值类型是主表
+     */
+    @RequestMapping(value = "/r01")
+    public Result<ManModel> r01(@RequestBody ParamModel param) {
+        QueryFilter<ManModel> filter = new QueryFilter<>(param);
+
+        ManModel manModel = manService.findOne(filter);
+        return Result.success(manModel);
+    }
+
+    /*
+     * 主表查询示例(根据ship内容同时查询子表)，返回值类型是主表
+     */
+    @RequestMapping(value = "/r02")
+    public Result<ManModel> r02(@RequestBody ParamModel param) {
+
+        QueryFilter<ManModel> filter = new QueryFilter<>(param);
+        filter.select("id,name,laopoId");//如果不查询laopoId则无法查询laoPo属性，即使下面已经指定了laoPo
+
+        ManModel manModel = manService.findOne(filter, ImmutableMap.of("laoPo", "id,name"));
+        return Result.success(manModel);
+    }
+
+    /**
+     * 主表和子表 left join 联合查询，返回值类型自定义
+     *
+     * @author： 魏来
+     * @date: 2021/12/25 下午12:26
+     */
+    @RequestMapping(value = "/r03")
+    public Result<ManDTO> r03(@RequestBody ParamModel param) {
+        QueryFilter<ManModel> filter = new QueryFilter<>(param);
+        filter.select("id,name,laoPo.name as laopoId");
+
+        ManDTO data = this.manService.findOne(filter, ManDTO.class);
+        return Result.success(data);
     }
 
     @GetMapping(value = "mans")
@@ -57,7 +77,6 @@ public class ManController {
 
     @PostMapping("/c01")
     public Result index(@RequestBody ParamModel param) {
-
 
         HashSet<TelModel> tels = Sets.newHashSet(new TelModel(), new TelModel());
         List<ChildModel> c = Lists.newArrayList(new ChildModel(), new ChildModel());
@@ -86,7 +105,6 @@ public class ManController {
 //            filter.set("laoPo_id", womanModel.getId());
 //            this.manService.update(filter);
 
-
         return Result.success();
     }
 
@@ -105,47 +123,44 @@ public class ManController {
 
         this.childService.insert(c, true);
 
-
         return Result.success();
     }
-
-    @PostMapping("/r01")
-    public Result index02(@RequestBody ParamModel param) {
-
-        param.setSelect("id,name");
-        QueryFilter<ManModel> filter = new QueryFilter<>();
-
-        Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
-
-
-        return Result.success(data.getRecords(), data.getTotal());
-    }
-
-
-    @PostMapping("/r02")
-    public Result<?> index04(@RequestBody ParamModel param) {
-
-        QueryFilter<ManModel> filter = new QueryFilter<>();
-        filter.buildQuery(param, ManModel.class);
-
-        Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
-        return Result.success(data.getRecords(), data.getTotal());
-//        ManModel s = this.manService.findOne(filter, ImmutableMap.of("laoPo", "id,name", "company", "id,name", "childs", "id,name", "idCard", "id,card_no"));
 //
-//        RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
-//        return Result.success(ret);
-    }
-
-    @PostMapping("/r03")
-    public Result<ChildModel> index05(@RequestBody ParamModel param) {
-
-//        param.setSelect("id,name");
-        QueryFilter<ChildModel> filter = new QueryFilter<>();
-        filter.select("id,name");
-
-        ChildModel s = this.childService.findOne(filter, ImmutableMap.of("cours", "id,name", "teacher", "name"));
-
-//        RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
-        return Result.success(s);
-    }
+//	@PostMapping("/r01")
+//	public Result index02(@RequestBody ParamModel param) {
+//
+//		param.setSelect("id,name");
+//		QueryFilter<ManModel> filter = new QueryFilter<>();
+//
+//		Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
+//
+//		return Result.success(data.getRecords(), data.getTotal());
+//	}
+//
+//	@PostMapping("/r02")
+//	public Result<?> index04(@RequestBody ParamModel param) {
+//
+//		QueryFilter<ManModel> filter = new QueryFilter<>();
+//		filter.buildQuery(param, ManModel.class);
+//
+//		Page<RetDTO> data = this.manService.page(filter, RetDTO.class);
+//		return Result.success(data.getRecords(), data.getTotal());
+////        ManModel s = this.manService.findOne(filter, ImmutableMap.of("laoPo", "id,name", "company", "id,name", "childs", "id,name", "idCard", "id,card_no"));
+////
+////        RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
+////        return Result.success(ret);
+//	}
+//
+//	@PostMapping("/r03")
+//	public Result<ChildModel> index05(@RequestBody ParamModel param) {
+//
+////        param.setSelect("id,name");
+//		QueryFilter<ChildModel> filter = new QueryFilter<>();
+//		filter.select("id,name");
+//
+//		ChildModel s = this.childService.findOne(filter, ImmutableMap.of("cours", "id,name", "teacher", "name"));
+//
+////        RetDTO ret = Po2DtoUtil.convertor(s, RetDTO.class);
+//		return Result.success(s);
+//	}
 }

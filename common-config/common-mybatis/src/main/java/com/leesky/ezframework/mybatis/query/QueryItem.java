@@ -1,34 +1,29 @@
 package com.leesky.ezframework.mybatis.query;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import com.leesky.ezframework.mybatis.annotation.EntityMapper;
-import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
-import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.ManyToMany;
-import com.leesky.ezframework.mybatis.annotation.ManyToOne;
-import com.leesky.ezframework.mybatis.annotation.OneToMany;
-import com.leesky.ezframework.mybatis.annotation.OneToOne;
+import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
 import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
 import com.leesky.ezframework.mybatis.utils.JoinUtil;
 import com.leesky.ezframework.utils.Hump2underline;
 import com.leesky.ezframework.utils.Po2DtoUtil;
-
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
- * desc：TODO
+ * 查询子表，并把查询结果赋值给主表entity
  *
  * @author： 魏来
  * @date： 2021/12/16 上午8:29
@@ -36,37 +31,38 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class QueryHandler<T> {
+public class QueryItem<T> {
 
     private final ObjectFactory<SqlSession> factory;
 
     /**
-     * 在t中查询 带有ship内容的 field,然后根据 field的注解,查询数据表
+     * t是主表，ship是需要查询的子表
      *
      * @author： 魏来
      * @date: 2021/12/16 上午8:43
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	public void query(Object retClz, ImmutableMap<String, String> ship) {
-        // 比如当前查询 媳妇信息，这里retClz是上一步查询出来的数据，entity=老公实体类，ship中有个value=laopo（laop是entity的属性，其上面标注@One2one注解）
-        ship.forEach((k, v) -> {
-
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public void query(T entity, ImmutableMap<String, String> ship) {
+        // 比如当前查询 媳妇信息，这里entity是上一步查询出来的数据，entity=老公实体类，ship中有个value=wife（wife是entity的属性，其上面标注@One2one注解）
+        for (Map.Entry<String, String> entry : ship.entrySet()) {
+            String k = entry.getKey();
+            String v = StringUtils.isBlank(entry.getValue()) ? "*" : entry.getValue();
             try {
                 //1、获取 k对应的字段，即o2o、o2m、m2o、m2m注解所在的字段
-                Field f = retClz.getClass().getDeclaredField(k);
+                Field f = entity.getClass().getDeclaredField(k);
                 OneToOne o2o = f.getAnnotation(OneToOne.class);
                 ManyToOne m2o = f.getAnnotation(ManyToOne.class);
                 OneToMany o2m = f.getAnnotation(OneToMany.class);
                 ManyToMany m2m = f.getAnnotation(ManyToMany.class);
 
-                FieldCondition<T> fc = new FieldCondition(retClz.getClass(), f, false, factory);
+                FieldCondition<T> fc = new FieldCondition(entity.getClass(), f, false, factory);
                 IeeskyMapper objectMapper = (IeeskyMapper) factory.getObject().getMapper(fc.getEntityMapper().targetMapper());
 
                 //2、获取关系注解在对应字段的值，为下一步查询做准备。比如当前查询老公的媳妇，下面4行代码获取媳妇的id值
                 String shipId = Hump2underline.lineToHump(f.getAnnotation(JoinColumn.class).name());
-                Field shipField = JoinUtil.getField(retClz, shipId);
-                shipField.setAccessible(true);
-                Object entityShipValue = shipField.get(retClz);
+                Field shipField = JoinUtil.getField(entity, shipId);
+                Objects.requireNonNull(shipField).setAccessible(true);
+                Object entityShipValue = shipField.get(entity);
 
 
                 //3. 一对一、多对一 使用 selectOne方法查询
@@ -76,7 +72,7 @@ public class QueryHandler<T> {
                     if (ObjectUtils.isNotEmpty(entityShipValue)) {
                         QueryFilter filter = common(v, f, entityShipValue);
                         Object obj = objectMapper.selectOne(filter);
-                        BeanUtils.setProperty(retClz, k, obj);//把查询结果赋值
+                        BeanUtils.setProperty(entity, k, obj);//把查询结果赋值
                     }
                 }
 
@@ -85,44 +81,43 @@ public class QueryHandler<T> {
                 if (ObjectUtils.isNotEmpty(o2m)) {
                     QueryFilter filter = common(v, f, entityShipValue);
                     List obj = objectMapper.selectList(filter);
-                    BeanUtils.setProperty(retClz, k, obj);//把查询结果赋值
+                    BeanUtils.setProperty(entity, k, obj);//把查询结果赋值
                 }
 
 
                 //5. 多对多 需要联合中间表查询
                 if (ObjectUtils.isNotEmpty(m2m)) {
-                    M2mParam param = getParam(retClz, fc, f, v, entityShipValue);
+                    M2mParam param = getParam(entity, fc, f, v, entityShipValue);
                     List obj = objectMapper.findM2M(param);
                     List c = Po2DtoUtil.convertor(obj, fc.getFieldClass());//转换为对象，否则就是map结构
 
                     if (f.getType().getTypeName().equals("java.util.Set"))
-                        BeanUtils.setProperty(retClz, k, Sets.newHashSet(c));//把查询结果赋值
+                        BeanUtils.setProperty(entity, k, Sets.newHashSet(c));//把查询结果赋值
                     else
-                        BeanUtils.setProperty(retClz, k, c);//把查询结果赋值
+                        BeanUtils.setProperty(entity, k, c);//把查询结果赋值
                 }
 
             } catch (NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
 
-        });
+        }
 
 
     }
 
     private QueryFilter<?> common(String v, Field f, Object entityShipValue) {
         QueryFilter<?> filter = new QueryFilter<>();
-        filter.select(v);//select 内容
-        filter.eq(f.getAnnotation(JoinColumn.class).referencedColumnName(), entityShipValue);
+        filter.select(v).eq(f.getAnnotation(JoinColumn.class).referencedColumnName(), entityShipValue);
         return filter;
     }
 
-    private M2mParam getParam(Object retClz, FieldCondition<T> fc, Field f, String v, Object shipId) {
-        String mainName = JoinUtil.getTableName(retClz.getClass());//主表
+    private M2mParam getParam(T entity, FieldCondition<T> fc, Field f, String v, Object shipId) {
+        String mainName = JoinUtil.getTableName(entity.getClass());//主表
         String resultName = JoinUtil.getTableName(fc.getFieldClass());//结果表
         String middleName = JoinUtil.getTableName(f.getAnnotation(EntityMapper.class).entityClass());//中间表
 
-        String mainKey = JoinUtil.getTableKeyName(retClz.getClass());//主表主键
+        String mainKey = JoinUtil.getTableKeyName(entity.getClass());//主表主键
         String joinColumn = f.getAnnotation(JoinColumn.class).referencedColumnName();//主表 在中间表的名称
         String inverseColumn = f.getAnnotation(InverseJoinColumn.class).referencedColumnName();//结果表在中间表的名称
 
