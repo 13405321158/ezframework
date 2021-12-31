@@ -1,14 +1,5 @@
 package com.leesky.ezframework.backend.action;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.backend.dto.UserAuthDTO;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
@@ -17,8 +8,10 @@ import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.utils.JwtUtils;
-
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * desc TODO
@@ -34,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 public class SysUserAction {
 
     private final IuserBaseService service;
-
 
 
     private final JwtUtils JwtUtils;
@@ -69,7 +61,6 @@ public class SysUserAction {
     public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) {
 
         String uid = this.JwtUtils.getUserName();
-        System.err.println(uid);
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
         filter.select("id");
@@ -88,4 +79,5 @@ public class SysUserAction {
         u.getRoles().forEach(e -> dto.getRoles().add(e.getCode()));
         return dto;
     }
+
 }

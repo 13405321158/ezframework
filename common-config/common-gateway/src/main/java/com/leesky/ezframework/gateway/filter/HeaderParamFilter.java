@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.Assert;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -32,8 +33,11 @@ import java.util.Map;
 @Component
 public class HeaderParamFilter implements GlobalFilter {
 
-    public final String URL_SUFFIX = "/public";
+    private final String URL_SUFFIX = "*/**/public";
+    private final String OAUTH_PREFIX = "/oauth/*";
 
+
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
     @Autowired
     private RedisService cache;
 
@@ -44,10 +48,11 @@ public class HeaderParamFilter implements GlobalFilter {
 
         try {
             //如果是白名单，则直接放行
-            if (StringUtils.endsWith(path, URL_SUFFIX))
+            boolean b1 = pathMatcher.match(URL_SUFFIX, path);
+            boolean b2 = pathMatcher.match(OAUTH_PREFIX, path);
+            if (b1 || b2)
                 return chain.filter(exchange);
 
-            
             String uid = exchange.getRequest().getHeaders().getFirst("uid1");//用户id
             String random = exchange.getRequest().getHeaders().getFirst("uid2");//随机数
             String timestamp = exchange.getRequest().getHeaders().getFirst("uid3");//时间戳
