@@ -40,9 +40,4 @@ public class MybatisPlusConfig {
 	}
 
 
-	@Bean
-	public CustomizeInjector customizedSqlInjector() {
-
-		return new CustomizeInjector();
-	}
 }

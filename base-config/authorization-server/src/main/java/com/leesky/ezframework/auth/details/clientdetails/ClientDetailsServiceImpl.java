@@ -34,7 +34,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 
 
     @Override
-    @Cacheable(cacheNames = "auth", key = "'oauth-client:'+#clientId")
+    @Cacheable(cacheNames = "auth-token", key = "'oauth-client:'+#clientId")
     public ClientDetails loadClientByClientId(String clientId) {
         try {
             Result<OauthClientDetailsDTO> ret = this.client.getOAuth2ClientById(clientId);

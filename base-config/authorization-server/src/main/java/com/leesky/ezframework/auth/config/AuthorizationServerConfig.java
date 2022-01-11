@@ -212,7 +212,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             response.setStatus(HttpServletResponse.SC_OK);// 固定返回200(网络层正常[response.getStatus()实际状态])
 
             ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(response.getOutputStream(), Result.failed("Client名称和密码不匹配"));
+            mapper.writeValue(response.getOutputStream(), Result.failed("登录名和密码不匹配"));
         };
     }
 

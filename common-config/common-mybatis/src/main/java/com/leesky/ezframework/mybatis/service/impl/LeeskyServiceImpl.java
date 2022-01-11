@@ -210,7 +210,8 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
      */
     @Override
     public <E> Page<E> page(QueryFilter<T> filter, Class<E> retClz) {
-        filter.select(CommonCode.makeSelect(filter.getSqlSelect()));// 防止select 内容是通过 filter.select 设置，而不是通过param.select 设置
+        filter.select(CommonCode.makeSelect(filter.getSqlSelect()));
+        CommonCode.makeLeftJoin(filter, this.getEntityClass());
 
         Page<E> page = new Page<>();
         Long total = this.baseMapper.getTotal(filter);

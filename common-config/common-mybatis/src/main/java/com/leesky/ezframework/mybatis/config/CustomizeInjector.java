@@ -7,12 +7,14 @@
  */
 package com.leesky.ezframework.mybatis.config;
 
-import java.util.List;
-
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+
+@Component
 public class CustomizeInjector extends DefaultSqlInjector {
 
 	@Override

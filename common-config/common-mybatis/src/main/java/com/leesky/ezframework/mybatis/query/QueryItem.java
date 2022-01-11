@@ -10,6 +10,7 @@ import com.leesky.ezframework.utils.Hump2underline;
 import com.leesky.ezframework.utils.Po2DtoUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -89,12 +90,14 @@ public class QueryItem<T> {
                 if (ObjectUtils.isNotEmpty(m2m)) {
                     M2mParam param = getParam(entity, fc, f, v, entityShipValue);
                     List obj = objectMapper.findM2M(param);
-                    List c = Po2DtoUtil.convertor(obj, fc.getFieldClass());//转换为对象，否则就是map结构
+                    if (CollectionUtils.isNotEmpty(obj)) {
+                        List c = Po2DtoUtil.convertor(obj, fc.getFieldClass());//转换为对象，否则就是map结构
 
-                    if (f.getType().getTypeName().equals("java.util.Set"))
-                        BeanUtils.setProperty(entity, k, Sets.newHashSet(c));//把查询结果赋值
-                    else
-                        BeanUtils.setProperty(entity, k, c);//把查询结果赋值
+                        if (f.getType().getTypeName().equals("java.util.Set"))
+                            BeanUtils.setProperty(entity, k, Sets.newHashSet(c));//把查询结果赋值
+                        else
+                            BeanUtils.setProperty(entity, k, c);//把查询结果赋值
+                    }
                 }
 
             } catch (NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {

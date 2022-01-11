@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Set;
+
 /**
  * desc：TODO
  *
@@ -42,9 +43,10 @@ public class Po2DtoUtil {
 
         Assert.isTrue(null != source, "List<T> is null");
         List<T> map = Lists.newArrayList();
-        for (S s : source)
-            map.add(pd.mapper.map(s, clz));
-
+        for (S s : source) {
+            if (ObjectUtils.isNotEmpty(s))
+                map.add(pd.mapper.map(s, clz));
+        }
         return map;
     }
 
@@ -65,7 +67,6 @@ public class Po2DtoUtil {
 
     /**
      * 实体类 深度转换器
-     *
      */
     public static <T, S> T convertor(S source, Class<T> clz) {
         Assert.isTrue(ObjectUtils.isNotEmpty(source), "source is null");

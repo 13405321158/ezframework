@@ -51,6 +51,8 @@ public class QueryAssociative<T> {
      * @日期: 2021/10/27  下午4:20
      **/
     public String makeSelect(String s) {
+        if(StringUtils.isBlank(s))
+            return "*";
         List<String> list = Lists.newArrayList();
         String[] a = StringUtils.split(s, SPLIT_COMMA);
         for (String str : a) {

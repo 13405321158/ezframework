@@ -3,13 +3,17 @@
  * @日期: 2021年12月3日  上午9:16:48
  * @组织: 森麒麟轮胎股份有限公司.
  * @部门: 国内市场替换部IT组
- * @描述:  
+ * @描述:
  */
 package com.leesky.ezframework.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
+import lombok.SneakyThrows;
+import org.apache.commons.lang3.time.DateUtils;
+
+import java.util.Date;
 
 /**
  * 类功能说明：
@@ -19,20 +23,23 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserBaseDTO {
 
-	// 基本信息表属性 开始
-	private String id;
+    // 基本信息表属性 开始
+    private String id;
 
-	private String status;
+    private String status;
 
-	private String username;
+    private String username;
 
-	private String password;
+    private String password;
 
-	// 扩展信息01表属性 开始
+    private Date byTime;//账户到期时间
 
-	// 扩展信息02表属性 开始
+    // 扩展信息01表属性 开始
 
-	public UserBaseDTO() {
-		this.status = "1";//新增用户默认是停用状态，必须审核通过后才启用
-	}
+    // 扩展信息02表属性 开始
+    @SneakyThrows
+    public UserBaseDTO() {
+        this.status = "1";//新增用户默认是停用状态，必须审核通过后才启用
+        this.byTime = DateUtils.parseDate("2100-12-31 00:00:00", "yyyy-MM-dd HH:mm:ss");
+    }
 }
