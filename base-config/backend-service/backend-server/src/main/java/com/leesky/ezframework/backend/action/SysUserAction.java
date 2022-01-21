@@ -9,7 +9,6 @@ import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.query.ParamModel;
-import com.leesky.ezframework.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.ObjectUtils;
@@ -18,27 +17,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * desc TODO
- *
- * @author 魏来
- * @date 2021/12/1 下午6:39
- */
-
-
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class SysUserAction {
 
-    private final JwtUtils JwtUtils;
     private final IuserBaseService service;
 
     /**
      * <li>登录获取token时使用</li>
      *
-     * @作者: 魏来
-     * @日期: 2021年12月3日 上午9:05:39
+     * @author: 魏来
+     * @date: 2021年12月3日 上午9:05:39
      */
     @GetMapping("/{username}/public")
     public Result<UserAuthDTO> getUserByUsername(@PathVariable String username) {
@@ -73,8 +63,8 @@ public class SysUserAction {
     /**
      * <li>新增用户，同时新增client</li>
      *
-     * @作者: 魏来
-     * @日期: 2021年12月3日 上午9:26:01
+     * @author： 魏来
+     * @date: 2021年12月3日 上午9:26:01
      */
     @PostMapping("/c01/public")
     public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) {
