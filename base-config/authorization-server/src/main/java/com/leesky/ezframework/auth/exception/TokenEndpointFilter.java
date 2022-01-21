@@ -3,15 +3,9 @@
  * @日期: 2021年12月2日  下午3:34:37
  * @组织: 森麒麟轮胎股份有限公司.
  * @部门: 国内市场替换部IT组
- * @描述:  
+ * @描述:
  */
 package com.leesky.ezframework.auth.exception;
-
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -21,6 +15,11 @@ import org.springframework.security.oauth2.provider.client.ClientCredentialsToke
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 类功能说明：
@@ -57,7 +56,7 @@ public class TokenEndpointFilter extends ClientCredentialsTokenEndpointFilter {
 		});
 		setAuthenticationSuccessHandler(new AuthenticationSuccessHandler() {
 			@Override
-			public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+			public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication)  {
 
 			}
 		});

@@ -18,6 +18,7 @@ import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.json.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -203,16 +204,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     /**
-     * 自定义认证异常响应数据
+     * 自定义认证异常响应数据: 1、client_id 不存在; 2、client_secret 错误 都走下面的方法
      */
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, e) -> {
+            String msg;
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_OK);// 固定返回200(网络层正常[response.getStatus()实际状态])
 
             ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(response.getOutputStream(), Result.failed(e.getMessage()));
+            //这里处理一下，目的是让错误信息更加具体
+            if (StringUtils.startsWith(e.getMessage(), "backend-server服务降级,获取oauthClient异常"))
+                msg = e.getMessage();
+            else
+                msg = "client密码错误";
+            mapper.writeValue(response.getOutputStream(), Result.failed(msg));
         };
     }
 

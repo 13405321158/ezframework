@@ -35,7 +35,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public Result handleUsernameNotFoundException(UsernameNotFoundException e) {
         log.error(e.getMessage(), e);
-        return Result.failed("用户不存在");
+        return Result.failed(e.getMessage());
     }
 
     /**
@@ -45,7 +45,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler(InvalidGrantException.class)
     public Result handleInvalidGrantException(InvalidGrantException e) {
         log.error(e.getMessage(), e);
-        return Result.failed("用户和密码不匹配");
+        return Result.failed("密码错误");
     }
 
     /**
