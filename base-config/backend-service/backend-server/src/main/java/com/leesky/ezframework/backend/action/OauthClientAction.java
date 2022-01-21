@@ -39,7 +39,7 @@ public class OauthClientAction {
     public Result<OauthClientDetailsDTO> getOAuth2ClientById(@RequestParam String clientId) {
 
         OauthClientDetailsModel client = this.service.findOne(clientId);
-        Assert.isTrue(client != null, "OAuth2 客户端不存在");
+        Assert.isTrue(client != null, clientId + "暂未注册😉");
         OauthClientDetailsDTO dto = Po2DtoUtil.convertor(client, OauthClientDetailsDTO.class);
 
         return Result.success(dto);

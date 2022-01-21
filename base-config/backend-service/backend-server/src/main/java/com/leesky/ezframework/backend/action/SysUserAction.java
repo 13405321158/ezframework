@@ -11,6 +11,7 @@ import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.query.ParamModel;
 import com.leesky.ezframework.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -59,9 +60,10 @@ public class SysUserAction {
      * @author： 魏来
      * @date: 2022/1/7 下午3:31
      */
+    @SneakyThrows
     @PostMapping(value = "/r01")
-    public Result<List<UserBaseDTO>> r01(@RequestBody ParamModel params) {
-        QueryFilter<UserBaseModel> filter = new QueryFilter<>(params);
+    public Result<List<UserBaseDTO>> r01(@RequestBody ParamModel param) {
+        QueryFilter<UserBaseModel> filter = new QueryFilter<>(param);
 
         Page<UserBaseDTO> data = this.service.page(filter, UserBaseDTO.class);
 
@@ -74,7 +76,7 @@ public class SysUserAction {
      * @作者: 魏来
      * @日期: 2021年12月3日 上午9:26:01
      */
-    @PostMapping("/c01")
+    @PostMapping("/c01/public")
     public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) {
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();

@@ -32,14 +32,14 @@ import java.util.Map;
 @Slf4j
 @Component
 public class HeaderParamFilter implements GlobalFilter {
-
-    private final String URL_SUFFIX = "*/**/public";
-    private final String OAUTH_PREFIX = "/oauth/*";
-
-
-    private final AntPathMatcher pathMatcher = new AntPathMatcher();
     @Autowired
     private RedisService cache;
+
+    private final String URL_SUFFIX = "/**/public";
+    private final String OAUTH_PREFIX = "/oauth/*";
+
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+
 
 
     @Override

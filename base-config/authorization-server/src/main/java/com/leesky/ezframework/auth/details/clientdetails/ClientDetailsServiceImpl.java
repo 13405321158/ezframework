@@ -7,20 +7,17 @@
  */
 package com.leesky.ezframework.auth.details.clientdetails;
 
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.NoSuchClientException;
-import org.springframework.security.oauth2.provider.client.BaseClientDetails;
-import org.springframework.stereotype.Service;
-
 import com.leesky.ezframework.auth.enums.PasswordEncoderTypeEnum;
 import com.leesky.ezframework.backend.api.IbackendServerClient;
 import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
 import com.leesky.ezframework.json.Result;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.BaseClientDetails;
+import org.springframework.stereotype.Service;
 
 /**
  * 类功能说明：
@@ -36,31 +33,29 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Override
     @Cacheable(cacheNames = "auth-token", key = "'oauth-client:'+#clientId")
     public ClientDetails loadClientByClientId(String clientId) {
-        try {
-            Result<OauthClientDetailsDTO> ret = this.client.getOAuth2ClientById(clientId);
 
-            if (!ret.isSuccess()) {
-                throw new BadCredentialsException("No client with requested id: " + clientId);
-            }
+        Result<OauthClientDetailsDTO> ret = this.client.getOAuth2ClientById(clientId);
 
-
-            OauthClientDetailsDTO client = ret.getData();
-            BaseClientDetails clientDetails = new BaseClientDetails(
-                    client.getClientId(),
-                    client.getResourceIds(),
-                    client.getScope(),
-                    client.getAuthorizedGrantTypes(),
-                    client.getAuthorities(),
-                    client.getWebServerRedirectUri()
-            );
-            clientDetails.setClientSecret(PasswordEncoderTypeEnum.BCRYPT.getPrefix() + client.getClientSecret());
-            clientDetails.setAccessTokenValiditySeconds(client.getAccessTokenValidity());
-            clientDetails.setRefreshTokenValiditySeconds(client.getRefreshTokenValidity());
-
-            return clientDetails;
-        } catch (Exception e) {
-            throw new NoSuchClientException("No client with requested id: " + clientId);
+        if (!ret.isSuccess()) {
+            throw new BadCredentialsException(ret.getMsg());
         }
+
+
+        OauthClientDetailsDTO client = ret.getData();
+        BaseClientDetails clientDetails = new BaseClientDetails(
+                client.getClientId(),
+                client.getResourceIds(),
+                client.getScope(),
+                client.getAuthorizedGrantTypes(),
+                client.getAuthorities(),
+                client.getWebServerRedirectUri()
+        );
+        clientDetails.setClientSecret(PasswordEncoderTypeEnum.BCRYPT.getPrefix() + client.getClientSecret());
+        clientDetails.setAccessTokenValiditySeconds(client.getAccessTokenValidity());
+        clientDetails.setRefreshTokenValiditySeconds(client.getRefreshTokenValidity());
+
+        return clientDetails;
+
 
     }
 

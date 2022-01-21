@@ -30,13 +30,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${spring.security.brac:false}")
     private Boolean config;
 
-
-
-    private final String[] WHITE_URL = new String[]{"/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
-
     private final CustomAccessDeineHandler accessHandler;
     private final CustomAuthenticationEntryPoint entryPoint;
 
+    private final String[] WHITE_URL = new String[]{"/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
 
     /**
      * 以下内容已经经过测试，配置正确，请勿随意修改
@@ -58,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(accessHandler) // 处理未授权
                 .authenticationEntryPoint(entryPoint); //处理未认证
 
-
+        http.csrf().disable();
     }
 
     /**
