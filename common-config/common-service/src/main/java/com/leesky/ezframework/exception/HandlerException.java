@@ -21,7 +21,7 @@ public class HandlerException {
     /**
      * Exception 类异常信息
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({Exception.class})
     public Result<?> handleException(Exception e) {
         log.error(e.getMessage(), e);
@@ -30,7 +30,7 @@ public class HandlerException {
     /**
      * BadSqlGrammarException 类异常信息(sql语句异常)
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({BadSqlGrammarException.class})
     public Result<?> handleException(BadSqlGrammarException e) {
         String s = e.getCause().getMessage();
@@ -41,7 +41,7 @@ public class HandlerException {
     /**
      * IllegalArgumentException 类异常信息（参数异常）
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({IllegalArgumentException.class})
     public Result<?> handleException(IllegalArgumentException e) {
         log.error(e.getMessage(), e);
