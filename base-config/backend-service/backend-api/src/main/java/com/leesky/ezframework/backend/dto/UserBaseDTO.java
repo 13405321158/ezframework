@@ -20,6 +20,7 @@ public class UserBaseDTO {
     private String id;
     private String username;
     private String password;
+    private String nickName;//昵称
     private String mobile;//手机号
     private String status;//账号状态
     private Date byTime; //账户有效期至
