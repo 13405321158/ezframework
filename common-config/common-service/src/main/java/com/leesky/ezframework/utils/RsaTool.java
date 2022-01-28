@@ -6,7 +6,6 @@
  */
 package com.leesky.ezframework.utils;
 
-import com.google.common.collect.Maps;
 import org.springframework.util.Assert;
 
 import javax.crypto.BadPaddingException;
@@ -14,13 +13,13 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import java.util.Map;
 
 @SuppressWarnings("all")
 public class RsaTool {
@@ -34,34 +33,34 @@ public class RsaTool {
     private static final String KEY_RSA_PRIVATE = "RSAPrivateKey";
 
     //生成一对 公钥和私钥
-    public static void main(String[] args) {
-        Map<String, String> map = RsaTool.init(2048);
-        System.out.println("公钥=" + map.get(KEY_RSA_PUBLIC));
-        System.out.println("私钥=" + map.get(KEY_RSA_PRIVATE));
-    }
+//    public static void main(String[] args) {
+//        Map<String, String> map = RsaTool.init(2048);
+//        System.out.println("公钥=" + map.get(KEY_RSA_PUBLIC));
+//        System.out.println("私钥=" + map.get(KEY_RSA_PRIVATE));
+//    }
 
     /**
      * 生成公私密钥对
      */
-    public static Map<String, String> init(Integer length) {
-        Assert.isTrue(length == 1024 || length == 2048, "参数取值范围[1024,2048]");
-        Map<String, String> map = Maps.newHashMap();
-        try {
-            KeyPairGenerator generator = KeyPairGenerator.getInstance(KEY_RSA);
-
-            generator.initialize(length, new SecureRandom());
-            KeyPair keyPair = generator.generateKeyPair();
-            RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-            RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-
-            map.put(KEY_RSA_PUBLIC, encryptBase64(publicKey.getEncoded()));
-            map.put(KEY_RSA_PRIVATE, encryptBase64(privateKey.getEncoded()));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        return map;
-    }
+//    public static Map<String, String> init(Integer length) {
+//        Assert.isTrue(length == 1024 || length == 2048, "参数取值范围[1024,2048]");
+//        Map<String, String> map = Maps.newHashMap();
+//        try {
+//            KeyPairGenerator generator = KeyPairGenerator.getInstance(KEY_RSA);
+//
+//            generator.initialize(length, new SecureRandom());
+//            KeyPair keyPair = generator.generateKeyPair();
+//            RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+//            RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+//
+//            map.put(KEY_RSA_PUBLIC, encryptBase64(publicKey.getEncoded()));
+//            map.put(KEY_RSA_PRIVATE, encryptBase64(privateKey.getEncoded()));
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return map;
+//    }
 
 //↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓公钥加密，私钥解密↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 

@@ -35,6 +35,7 @@ public class Common {
      */
     public static final String[] WHITE_LIST = new String[]{"/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
 
+    //加密长度2048
     //登录成功后 传递给登录者
     // 作用：1、解密后端传输的加密字符串
     // 作用：2、加密字符串饼并传递后端
@@ -46,7 +47,7 @@ public class Common {
             "gU7LamY8XCErxV6WZjxpa4Eit/3uWAtVWcVtDQUT1MOv9VDenEsmNSpd9/Kin5x1dwxYya/kT" +
             "w+VIvtpBTTbdWs32q0FmQIDAQAB";
 
-
+    //加密长度2048
     //Result.setData方法中 私钥加密
     public static String RSA_PRIVATE = "" +
             "MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQDBa794phFTQ18o0nkO/dl5h" +
