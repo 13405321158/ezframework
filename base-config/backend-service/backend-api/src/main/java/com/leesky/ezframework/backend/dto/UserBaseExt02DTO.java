@@ -7,5 +7,18 @@
  */
 package com.leesky.ezframework.backend.dto;
 
+import lombok.Data;
+
+@Data
 public class UserBaseExt02DTO {
+
+    private String id;
+
+    private String pda;
+
+    private String iosId;
+
+    private String wxOpenId;
+
+
 }

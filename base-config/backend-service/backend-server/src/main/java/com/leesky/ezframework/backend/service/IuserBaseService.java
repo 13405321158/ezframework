@@ -21,7 +21,7 @@ public interface IuserBaseService extends IeeskyService<UserBaseModel> {
      * @作者: 魏来
      * @日期: 2021年12月3日 上午9:32:05
      */
-    void addUser(UserBaseDTO dto);
+    void addUser(UserBaseDTO dto) throws Exception;
 
     /**
      * 删除用户：cbm_mag_user、cbm_mag_user_ext01、cbm_mag_user_ext02、oauth_client_details

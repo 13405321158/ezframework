@@ -231,7 +231,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
      * @日期: 2021/8/21 下午4:48
      **/
     @Override
-    public void insert(T entity, Boolean withRelation) {
+    public void insert(T entity, Boolean withRelation) throws Exception {
 
         if (withRelation)
             this.autoMapper.insert(entity, this.baseMapper, saveHandler);
@@ -246,7 +246,7 @@ public class LeeskyServiceImpl<M extends IeeskyMapper<T>, T> implements IeeskySe
      * @日期: 2021/8/21 下午12:51
      **/
     @Override
-    public void insert(List<T> entityList, Boolean withRelation) {
+    public void insert(List<T> entityList, Boolean withRelation) throws Exception {
         if (withRelation)
             this.autoMapper.insert(entityList, this.baseMapper, saveHandler);
         else

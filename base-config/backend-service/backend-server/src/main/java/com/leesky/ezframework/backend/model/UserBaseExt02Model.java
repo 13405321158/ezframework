@@ -9,6 +9,10 @@ package com.leesky.ezframework.backend.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.leesky.ezframework.backend.mapper.IuserBaseMapper;
+import com.leesky.ezframework.mybatis.annotation.EntityMapper;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.annotation.OneToOne;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -31,10 +35,13 @@ public class UserBaseExt02Model extends BaseUuidModel {
     @TableField(value = "ios_userid")
     private String iosId;
 
-    private String ordersn;
+    @ApiModelProperty("用户id")
+    private String userId;
 
+    @OneToOne
     @TableField(exist = false)
-//    @One2One(otherOneTableName = "cbm_mag_user", otherOneTableColumn = "ext02_id")
+    @JoinColumn(name = "user_id")
+    @EntityMapper(targetMapper = IuserBaseMapper.class, entityClass = UserBaseModel.class)
     private UserBaseModel userBaseModel;
 
 

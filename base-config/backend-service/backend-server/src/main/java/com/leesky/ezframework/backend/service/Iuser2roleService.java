@@ -11,5 +11,5 @@ public interface Iuser2roleService extends IeeskyService<User2RoleModel> {
      * @author： 魏来
      * @date: 2021/12/10 下午3:34
      */
-    void addUser2role(CommonDTO dto);
+    void addUser2role(CommonDTO dto) throws Exception;
 }

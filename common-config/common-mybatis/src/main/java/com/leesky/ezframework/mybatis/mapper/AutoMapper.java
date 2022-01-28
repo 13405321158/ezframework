@@ -1,11 +1,14 @@
 package com.leesky.ezframework.mybatis.mapper;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.leesky.ezframework.mybatis.annotation.ManyToMany;
+import com.leesky.ezframework.mybatis.annotation.ManyToOne;
+import com.leesky.ezframework.mybatis.annotation.OneToMany;
+import com.leesky.ezframework.mybatis.annotation.OneToOne;
+import com.leesky.ezframework.mybatis.save.SaveHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -20,16 +23,11 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.leesky.ezframework.mybatis.annotation.ManyToMany;
-import com.leesky.ezframework.mybatis.annotation.ManyToOne;
-import com.leesky.ezframework.mybatis.annotation.OneToMany;
-import com.leesky.ezframework.mybatis.annotation.OneToOne;
-import com.leesky.ezframework.mybatis.save.SaveHandler;
-
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * AutoMapper for one2one/one2many/many2many
@@ -79,7 +77,7 @@ public class AutoMapper {
 	 * @日期: 2021年9月26日 上午11:15:34
 	 */
 
-	public <T> void insert(T t, IeeskyMapper ibaseMapper, SaveHandler<T> saveHandler) {
+	public <T> void insert(T t, IeeskyMapper ibaseMapper, SaveHandler<T> saveHandler) throws Exception {
 
 		if (ObjectUtils.isNotEmpty(t))
 			saveHandler.relationship(Lists.newArrayList(t), ibaseMapper, entityMap);
@@ -92,7 +90,7 @@ public class AutoMapper {
 	 * @作者: 魏来
 	 * @日期: 2021年9月26日 上午11:15:49
 	 */
-	public <T> void insert(List<T> t, IeeskyMapper ibaseMapper, SaveHandler<T> saveHandler) {
+	public <T> void insert(List<T> t, IeeskyMapper ibaseMapper, SaveHandler<T> saveHandler) throws Exception {
 
 		if (CollectionUtils.isNotEmpty(t))
 			saveHandler.relationship(t, ibaseMapper, entityMap);

@@ -69,8 +69,8 @@ public class SysUserAction {
      * @author： 魏来
      * @date: 2021年12月3日 上午9:26:01
      */
-    @PostMapping("/c01")
-    public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) {
+    @PostMapping("/c01/public")
+    public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) throws Exception {
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
         filter.select("id").eq("username", dto.getUsername());
@@ -80,7 +80,8 @@ public class SysUserAction {
 
         this.service.addUser(dto);
 
-        return success();
+
+        return Result.success();
     }
 
     /**

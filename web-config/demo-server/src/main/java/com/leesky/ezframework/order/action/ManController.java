@@ -111,7 +111,7 @@ public class ManController {
     }
 
     @PostMapping("/c01")
-    public Result index(@RequestBody ParamModel param) {
+    public Result index(@RequestBody ParamModel param) throws Exception {
 
         HashSet<TelModel> tels = Sets.newHashSet(new TelModel(), new TelModel());
         List<ChildModel> c = Lists.newArrayList(new ChildModel(), new ChildModel());
@@ -144,7 +144,7 @@ public class ManController {
     }
 
     @PostMapping("/c02")
-    public Result index03() {
+    public Result index03() throws Exception {
         List<CourseModel> course = Lists.newArrayList(new CourseModel("语文"), new CourseModel("数学"), new CourseModel("英语"));
         Set<TeacherModel> teacher = Sets.newHashSet(new TeacherModel("张老师"), new TeacherModel("王老师"), new TeacherModel("孙老师"));
         ManModel manModel = new ManModel();

@@ -112,7 +112,7 @@ public interface IeeskyService<T> {
      * @作者: 魏来
      * @日期: 2021/8/21 下午4:48
      **/
-    void insert(T entity, Boolean withRelation);
+    void insert(T entity, Boolean withRelation) throws Exception;
 
     /**
      * 描述: 批量插入数据
@@ -120,7 +120,7 @@ public interface IeeskyService<T> {
      * @作者: 魏来
      * @日期: 2021/8/21 下午12:51
      **/
-    void insert(List<T> entityList, Boolean withRelation);
+    void insert(List<T> entityList, Boolean withRelation) throws Exception;
 
     /**
      * <li>:根据Id更新

@@ -59,7 +59,7 @@ public class RoleAction {
      * @date: 2021/12/10 下午2:45
      */
     @PostMapping("/c01")
-    public Result<?> addRole01(@RequestBody RoleDTO dto) {
+    public Result<?> addRole01(@RequestBody RoleDTO dto) throws Exception {
 
         RoleModel model = Po2DtoUtil.convertor(dto, RoleModel.class);
         this.service.insert(model, false);
@@ -73,7 +73,7 @@ public class RoleAction {
      * @date: 2021/12/10 下午2:45
      */
     @PostMapping("/c02")
-    public Result<?> addRole02(@RequestBody CommonDTO dto) {
+    public Result<?> addRole02(@RequestBody CommonDTO dto) throws Exception {
         Assert.isTrue(StringUtils.isNotBlank(dto.getPid()), "增加或修改【用户-角色】关联关系时，角色id不能是空值");
         Assert.isTrue(CollectionUtils.isNotEmpty(dto.getCid()), "增加或修改【用户-角色】关联关系时，没有选择任何用户");
 

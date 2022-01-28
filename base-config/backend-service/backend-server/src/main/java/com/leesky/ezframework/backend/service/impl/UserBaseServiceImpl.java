@@ -48,12 +48,12 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
      */
     @Override
     @Transactional
-    public void addUser(UserBaseDTO dto) {
+    public void addUser(UserBaseDTO dto) throws Exception {
         String pwd = passwordEncoder.encode(dto.getPassword());
 
         UserBaseModel model = Po2DtoUtil.convertor(dto, UserBaseModel.class);
         model.setPassword(pwd);
-        this.insert(model, false);
+        this.insert(model, true);
 
         OauthClientDetailsModel client = new OauthClientDetailsModel(dto.getUsername(), pwd, accessTokenValiditySeconds, refreshTokenValiditySeconds);
         this.clientMapper.insert(client);

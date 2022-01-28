@@ -45,6 +45,24 @@ public class UserBaseExt01Model extends BaseUuidModel {
 	@ApiModelProperty("邮箱")
 	private String email;
 
+	@ApiModelProperty("头像")
+	private String portrait;
+
+	@ApiModelProperty("身份证正面")
+	private String idCardImg01;
+
+	@ApiModelProperty("身份证反面")
+	private String idCardImg02;
+
+	@ApiModelProperty("紧急联系人")
+	private String contact;
+
+	@ApiModelProperty("紧急联系人电话")
+	private String contactTel;
+
+	@ApiModelProperty("当前居住地址")
+	private String curAddress;
+
 	@ApiModelProperty("用户id")
 	private String userId;
 

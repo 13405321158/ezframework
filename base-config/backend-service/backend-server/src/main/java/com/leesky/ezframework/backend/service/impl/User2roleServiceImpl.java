@@ -30,7 +30,7 @@ public class User2roleServiceImpl extends LeeskyServiceImpl<Iuser2roleMapper, Us
      */
     @Override
     @Transactional
-    public void addUser2role(CommonDTO dto) {
+    public void addUser2role(CommonDTO dto) throws Exception {
 
         //1、先删除当前角色 已有的用户关系
         QueryFilter<User2RoleModel> filter = new QueryFilter<>();
