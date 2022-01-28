@@ -49,7 +49,7 @@ public class RoleAction {
 
         List<RoleDTO> ret = Po2DtoUtil.convertor(data.getRecords(), RoleDTO.class);
 
-        return Result.success(ret, data.getTotal());
+        return Result.success(ret, data.getTotal(),false);
     }
 
     /**

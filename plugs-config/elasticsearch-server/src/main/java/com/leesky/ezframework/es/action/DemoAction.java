@@ -7,18 +7,6 @@
  */
 package com.leesky.ezframework.es.action;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-
-import org.elasticsearch.index.reindex.BulkByScrollResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.es.config.ElasticsearchService;
@@ -27,6 +15,12 @@ import com.leesky.ezframework.es.model.backend.Demo01Model;
 import com.leesky.ezframework.es.repo.backend.Idem01Repo;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.query.ParamModel;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.Optional;
 
 
 @RestController
@@ -51,7 +45,7 @@ public class DemoAction {
 
         Demo01Model b = this.bookRepo.save(book);
 
-        return Result.success(b);
+        return Result.success(b,false);
 
     }
 
@@ -74,7 +68,7 @@ public class DemoAction {
         QueryResult result = this.service.findAll("book");
 
 
-        return Result.success(result.getContent(), result.getTotal());
+        return Result.success(result.getContent(), result.getTotal(),false);
     }
 
 
@@ -91,7 +85,7 @@ public class DemoAction {
         QueryResult result = this.service.page("book", param, ImmutableMap.of("price", false));
 
 
-        return Result.success(result.getContent(), result.getTotal());
+        return Result.success(result.getContent(), result.getTotal(),false);
     }
 
 
@@ -119,7 +113,7 @@ public class DemoAction {
 
         BulkByScrollResponse result = this.service.delete("book", param);
 
-        return Result.success(result.getDeleted() + "个文档被删除");
+        return Result.success(result.getDeleted() + "个文档被删除",false);
 
     }
 }

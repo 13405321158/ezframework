@@ -42,6 +42,6 @@ public class OauthClientAction {
         Assert.isTrue(client != null, clientId + "暂未注册😉");
         OauthClientDetailsDTO dto = Po2DtoUtil.convertor(client, OauthClientDetailsDTO.class);
 
-        return Result.success(dto);
+        return Result.success(dto,false);
     }
 }

@@ -37,7 +37,7 @@ public class ManController {
         QueryFilter<ManModel> filter = new QueryFilter<>(param);
 
         ManModel manModel = manService.findOne(filter);
-        return Result.success(manModel);
+        return Result.success(manModel,false);
     }
 
     /*
@@ -50,7 +50,7 @@ public class ManController {
         filter.select("id,name,laopoId");//如果不查询laopoId则无法查询laoPo属性，即使下面已经指定了laoPo
 
         ManModel manModel = manService.findOne(filter, ImmutableMap.of("laoPo", "id,name"));
-        return Result.success(manModel);
+        return Result.success(manModel,false);
     }
 
     /**
@@ -62,7 +62,7 @@ public class ManController {
         filter.select("id,name,laoPo.name as laopoId");
 
         ManDTO data = this.manService.findOne(filter, ManDTO.class);
-        return Result.success(data);
+        return Result.success(data,false);
     }
 
     /**
@@ -77,7 +77,7 @@ public class ManController {
         filter.select("id");
         List<ManModel> data = this.manService.findList(filter);
 
-        return Result.success(data);
+        return Result.success(data,false);
     }
 
     /**
@@ -89,7 +89,7 @@ public class ManController {
         filter.select("id");
         List<ManModel> data = this.manService.findList(filter, ImmutableMap.of("laoPo", "id,name"));
 
-        return Result.success(data);
+        return Result.success(data,false);
     }
 
     /**
@@ -100,7 +100,7 @@ public class ManController {
         QueryFilter<ManModel> filter = new QueryFilter<>(param);
 //        filter.select("id");
         List<ManDTO> data = this.manService.findList(filter, ManDTO.class);
-        return Result.success(data);
+        return Result.success(data,false);
     }
 
     @GetMapping(value = "mans")

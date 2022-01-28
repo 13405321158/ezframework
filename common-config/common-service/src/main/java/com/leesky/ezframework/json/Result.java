@@ -35,42 +35,34 @@ public class Result<T> {
         this.count = count;
     }
 
-    public Result(T data) {
-        this.data = data;
-    }
 
     public Result(String msg) {
         this.msg = msg;
     }
 
-    public Result ok() {
-        this.code = 0;
-        this.msg = StringUtils.isNotBlank(msg) ? msg : "操作成功";
-        this.success = true;
-        return this;
-    }
-
-    public Result no() {
-        this.code = 0;
-        this.msg = StringUtils.isNotBlank(msg) ? msg : "操作失败";
-        this.success = false;
-        return this;
-    }
 
     public static <T> Result<T> success() {
         return new Result<>().ok();
     }
 
-    public static <T> Result<T> success(T data) {
-        Result result = new Result<>(data).ok();
+    public static <T> Result<T> success(T data, Boolean rsa) {
+        T d = data;
+        if (rsa)
+            d = (T) RsaTool.encryptByPrivateKey(JSON.toJSONString(data), Common.RSA_PRIVATE);
+
+        Result result = new Result<>(d).ok();
         if (data instanceof List) {
             result.setCount(Long.valueOf(((List) data).size()));
         }
         return result;
     }
 
-    public static <T> Result<T> success(T data, Long total) {
-        return new Result<>(data, total).ok();
+    public static <T> Result<T> success(T data, Long total, Boolean rsa) {
+        T d = data;
+        if (rsa)
+            d = (T) RsaTool.encryptByPrivateKey(JSON.toJSONString(data), Common.RSA_PRIVATE);
+
+        return new Result<>(d, total).ok();
     }
 
 
@@ -86,4 +78,21 @@ public class Result<T> {
         }
     }
 
+    private Result(T data) {
+        this.data = data;
+    }
+
+    private Result ok() {
+        this.code = 0;
+        this.success = true;
+        this.msg = StringUtils.isNotBlank(msg) ? msg : "操作成功";
+        return this;
+    }
+
+    private Result no() {
+        this.code = 0;
+        this.success = false;
+        this.msg = StringUtils.isNotBlank(msg) ? msg : "操作失败";
+        return this;
+    }
 }

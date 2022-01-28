@@ -44,7 +44,7 @@ public class SysUserAction {
 
         UserAuthDTO dto = buildUserAuthDTO(user);
 
-        return success(dto);
+        return success(dto,false);
     }
 
     /**
@@ -60,7 +60,7 @@ public class SysUserAction {
         filter.select("id,username,status");
         Page<UserBaseDTO> data = this.service.page(filter, UserBaseDTO.class);
 
-        return success(data.getRecords(), data.getTotal());
+        return success(data.getRecords(), data.getTotal(),false);
     }
 
     /**

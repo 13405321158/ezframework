@@ -61,7 +61,7 @@ public class TokenAction {
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
         add2Cache(accessToken);
 
-        return Result.success(accessToken);
+        return Result.success(accessToken,false);
     }
 
 

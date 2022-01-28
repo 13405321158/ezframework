@@ -45,6 +45,6 @@ public class MenuAction {
 
         dto.setChildren(Lists.newArrayList(dto01, dto02));
         menu.add(dto);
-        return Result.success(menu);
+        return Result.success(menu,false);
     }
 }
