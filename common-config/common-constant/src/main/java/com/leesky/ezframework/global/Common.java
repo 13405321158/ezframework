@@ -35,7 +35,9 @@ public class Common {
      */
     public static final String[] WHITE_LIST = new String[]{"/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
 
-    //登录成功后 附带公钥，app或html记录这个值
+    //登录成功后 传递给登录者
+    // 作用：1、解密后端传输的加密字符串
+    // 作用：2、加密字符串饼并传递后端
     public static String RSA_PUBLIC = "" +
             "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwWu/eKYRU0NfKNJ5Dv3ZeYc5PyDMC" +
             "jhYKGerhCo8JYt1aSlVB4GNLYYdSzKvcccn3hi9Zt7p2m0R3643ejyEp1LFBZXHUuafCAbx+E" +
