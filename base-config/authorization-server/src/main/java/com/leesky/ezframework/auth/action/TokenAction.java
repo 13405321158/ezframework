@@ -43,7 +43,7 @@ public class TokenAction {
     private final RedisService cache;
     private final TokenEndpoint tokenEndpoint;
 
-    @Value("${access.token.validity:420}") // 默认值7分钟
+    @Value("${access.token.validity:600}") // 默认值10分钟
     private String accessTokenValiditySeconds;
 
     /**

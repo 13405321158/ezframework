@@ -31,6 +31,7 @@ public class JwtEnhancer implements TokenEnhancer {
 
         if (principal instanceof SysUserDetails) {
             SysUserDetails sysUserDetails = (SysUserDetails) principal;
+            extMap.put("pubKey", Common.RSA_PUBLIC);
             extMap.put(Common.USER_ID, sysUserDetails.getUserId());
             extMap.put(Common.USER_NAME, sysUserDetails.getUsername());
             if (StringUtils.isNotBlank(sysUserDetails.getAuthenticationMethod())) {

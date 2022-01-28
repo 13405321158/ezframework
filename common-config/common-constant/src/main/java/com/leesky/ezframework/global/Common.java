@@ -10,14 +10,12 @@ public class Common {
 
     public final static String USER_ID = "userId";//系统用户id
     public final static String USER_NAME = "userName";//系统用户登录名称
-    public final static String LOGIN_USER_EXT_INFO="userInfo";//登录用户经常使用的扩展信息
+    public final static String LOGIN_USER_EXT_INFO = "userInfo";//登录用户经常使用的扩展信息
 
 
     public final static String TOKEN_TYPE = "bearer ";//接口认证方式
     public final static String ROLE_LIST = "authorities";//jwt 中用户权限部分
     public final static String URL_HEADER_PARAM = "Authorization";//http请求时头部参数名
-
-
 
 
     /**
@@ -37,9 +35,40 @@ public class Common {
      */
     public static final String[] WHITE_LIST = new String[]{"/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
 
+    //登录成功后 附带公钥，app或html记录这个值
+    public static String RSA_PUBLIC = "" +
+            "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwWu/eKYRU0NfKNJ5Dv3ZeYc5PyDMC" +
+            "jhYKGerhCo8JYt1aSlVB4GNLYYdSzKvcccn3hi9Zt7p2m0R3643ejyEp1LFBZXHUuafCAbx+E" +
+            "pQF1kjzqNBae5v+zao9/He24qd4A53bYhLGR3T+r5WN5ZPYRxdGopXrmon+yTAjsDcc6DR1MM" +
+            "yE8+SukeMy5NF8gnwmBbvEuLmWYwzIoOJHOdGDpMumixndErxAK0mrOe8qesQS/qvNFd4MubL" +
+            "gU7LamY8XCErxV6WZjxpa4Eit/3uWAtVWcVtDQUT1MOv9VDenEsmNSpd9/Kin5x1dwxYya/kT" +
+            "w+VIvtpBTTbdWs32q0FmQIDAQAB";
 
-    public static String RSA_PUBLIC = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjs6szHA2vWPv17BY1YqWYnVls1ny92GGXpQbaitFU0EDlgpxL+x4HG3z9ygPjX9rETh5u81kjQriDIdJ77r2MsSxOGjXtoFUAYzwvyWEalijW3jhb1RD+H4xnnmXfm9SeAalhVprBrfWALAmWwD24fw8BZ2fsXvVfOp9OdNruIZ2We/VXa+o6sNpLhkR8NOZgCq4/0N1JC+D6LptBNqbdTqNVTjscE4Swg8mCo9otujaZMbzG2iTEXs8ZMcadeU63JjkpohodqwaKeoIYhv0csBCI+hOvIyFBUItKuHZ9LewtROeSqLrha+f+SoCgMkomxfjsrUzKtuzFqR1V7+A2wIDAQAB";
 
-    public static String RSA_PRIVATE = "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCOzqzMcDa9Y+/XsFjVipZidWWzWfL3YYZelBtqK0VTQQOWCnEv7HgcbfP3KA+Nf2sROHm7zWSNCuIMh0nvuvYyxLE4aNe2gVQBjPC/JYRqWKNbeOFvVEP4fjGeeZd+b1J4BqWFWmsGt9YAsCZbAPbh/DwFnZ+xe9V86n0502u4hnZZ79Vdr6jqw2kuGRHw05mAKrj/Q3UkL4Poum0E2pt1Oo1VOOxwThLCDyYKj2i26NpkxvMbaJMRezxkxxp15TrcmOSmiGh2rBop6ghiG/RywEIj6E68jIUFQi0q4dn0t7C1E55KouuFr5/5KgKAySibF+OytTMq27MWpHVXv4DbAgMBAAECggEAVzjsWcF/7ZUIfJh86ZBH4cMKZszdlTK/uyyCwgnDweHHqvCdyUOI6PRPOfoB5c6ZOl9gGtCMRYkMH9LR2dY7YS65f1apyhKbmIbY1Ca6Bao1vDzMlA7HpRKOg9iIKvUbTavhlN1w2R2XW7w68QJZyBUjI9ruGp0j+7PM4HC9Lmof/a+IzhRwRqq2JWNn1yFEab1vR5YiPoYSLKV7v9iN4W/QRfzu3Gy3Q5MxM8w4qXvu5xlXGqtfL6fy55oDj+unJQ05nZxB1SzTiLhTP8YP395Y71aICG598rkshBu1c/uZTZQ9InVYGiIO31jpuTO5/yCN4gMuXEv4F5rTCRnfwQKBgQD6GbFcS7xHOs9l1KKeozfhY7OAXuy5xxeMY6svghUyb4D3bXw5Qp8mQUq8yusyKx8BO/ygdTluuZ/hh7eGZG1iftLRQGwZ89itvapPBHSnU59mMugIdg3DGf5Ap7zE8YllLc38moAZJM8ancxbusBg1z1sI1s6/ZnQTU5YksPUyQKBgQCSLQ98/9sxAqQW5L9M42Jkg+hqWfQTXKGRiDvg5Shtb3Hkw2cfVLLdj6p3Rifhk7cRjGfKyFiStebz7I7HJK9w6GaWGvA7eANiqorOxwSM3B1ZaSngATpwJp8T5oej0EqUom4pb1in3UTY8z+CR6zRXZxsixKKtt/GrKpwjSGugwKBgCzzXzhKeG2I+WvA+vVuOoXtCH8jEIMXcHkQFN12EN8+wTw3VmNoQPh8NbWW9wzOSUVMhcxFJWxsOnsrjGXAORTB3Jw1aviDJkeb1jdbgqfsVLLmpWOX7ENLsbHnM/tluh8QS3yCPFHIltyezfMSrq75IJYGCMiiefnBWzp6Lm5ZAoGAFpptKLEPndaAtSGOCz+l+VEEYV2jhlLukOh2CeKli7aN8AffLFMWjXgnreXlSNZkmowRiKPOPnFuUw2jTlv33QeyxUdJGokGTP1+FVdk9rsatraySPcnqCvwsU0WcFhHEBDF5BZZqStn9/w1N9oJeR52j7o5lcWNeNU+TcUlDi0CgYASTQAfsg8fLYUVcXNEXANC8QcZhbpAes+tBakP4xTLru7TR3SHF0344YjjWFyrLnOUvlgnUmZkeBhHFniYTUXscZJlylcYJMyboj//tuVO9mHZ5Dv+MY8Jn5KqH/CAxzgjJt7QB4dqJcYW2WYxomsMOBnSma6aW2g4K7u4/hQ2aA==";
+    //Result.setData方法中 私钥加密
+    public static String RSA_PRIVATE = "" +
+            "MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQDBa794phFTQ18o0nkO/dl5h" +
+            "zk/IMwKOFgoZ6uEKjwli3VpKVUHgY0thh1LMq9xxyfeGL1m3unabRHfrjd6PISnUsUFlcdS5p" +
+            "8IBvH4SlAXWSPOo0Fp7m/7Nqj38d7bip3gDndtiEsZHdP6vlY3lk9hHF0aileuaif7JMCOwNx" +
+            "zoNHUwzITz5K6R4zLk0XyCfCYFu8S4uZZjDMig4kc50YOky6aLGd0SvEArSas57yp6xBL+q80" +
+            "V3gy5suBTstqZjxcISvFXpZmPGlrgSK3/e5YC1VZxW0NBRPUw6/1UN6cSyY1Kl338qKfnHV3D" +
+            "FjJr+RPD5Ui+2kFNNt1azfarQWZAgMBAAECggEBAIYa7bt58OM4//5ux66kRKelIQTq+W1QmZ" +
+            "cSIfJV0jP52GMcXC8DHN5mcWMU9l29xp+PqapsfdmK6+yZfy+KTDMzCRWRPoz1B2hqYFRVOei" +
+            "mTlRUDuOihRO5VzfqBClVl5akkRtpdyAn9TSRyXdrCQh8wPTI3Hg6dBQF7FhN0ct8jJYtKix/" +
+            "VAXHaKa/++fUZyq6Cm3+niUzZJVBAlOTQuN3yajLm+z3xugbR5I8soOCqh5ywOvepz+4tSTre" +
+            "rGvV1LdYqujT06ZCm25rOGmMSSLvKi6nBoZs0dA9XgSTKqs+BhH6gLBirzkukAka62SagmPV5" +
+            "opYnxyUUYd9EqkZc0CgYEA8zOu86uKfH6YPqtMVxro1SvCyVWBO3JWM46mTSfKaibtYSFRtij" +
+            "dDp9od1FkwAXwTWOZj84WPSfrfq+zDwD8PX8VQjE3L9fweKut4oRnA7KObKcLUUcBm+StjKmf" +
+            "9T4kt9rJUwWTA7McAuRpkhUlqiq9vzeN4xWEdlQwGi4Q0F8CgYEAy5lva9jJrxvw2Q1cQ9RFb" +
+            "GYbkKSxgVNoT38worYcYKRHbCA1Y5rs9U4SjOz2FADWP/3Vh11JudaDXDOVnqWVjSiMZZB98Z" +
+            "RC0aa/fTtl0W4yfrLmbnm8p07jIT6nzCC5uFj+OkjuGCnaQ0bWvpqLY9Dw6Jw0IHEp1f3nqIN" +
+            "tjQcCgYEA5eMb5C9pt6Z+yPZpMgk4v5AfDutpPkUk4JVd857CQjdLub2iHJth4dmjCO6CWtUC" +
+            "QlT8qid3dBWREG6Kxor65DKFaM1Wyj3HjHlT48OeEKuu31vDYe/JwI+X0Vfh4RL96GDCX1zsi" +
+            "9m5h65bcH/W25SNSfv8fgQv8x4/Xe/faucCgYEAsoA5UcJlQKMsi//MrqNCooD7FdtuzMXFpD" +
+            "0M9PrY8lnVTJUIeeVwbrkeRnPSY0NAlCYFuYIui0HpNUL8oHToIzQzsy/1W4Hy+0BIjpEu+Wi" +
+            "12KMcqCsPHVhqhdEa6Dqg2WEcsxkRthmrhGRtDfsMzlx3eljI0tCkLztGiVWBDK0CgYEAs5Jf" +
+            "uORtZklSu6naHIy48mPRwstD75+aHCzVAk68GWcoQsOC+o2CVqH/cxJgz0+osQhwNkJDGOvF0" +
+            "6um+95vVSJvet4lXwJ5Eho0KpeYppgVMdXAb/pVno+nZb0JSJQmG7lYPOMPIaqzNjOrzAozYb" +
+            "Vlor59Hl11ARoMESHhigI=";
 
 }

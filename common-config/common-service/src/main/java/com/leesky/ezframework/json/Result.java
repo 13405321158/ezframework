@@ -1,7 +1,6 @@
 /*
-  @author leesky
+  @author 魏来
  * @data:Nov 9, 20192:58:33 PM
- * @Org:Sentury Co., ltd.
  * @Department Domestic Sales, Tech Center
  * @Desc: <li>控制器返回值包装类型
  */
@@ -74,9 +73,6 @@ public class Result<T> {
         return new Result<>(data, total).ok();
     }
 
-    public static <T> Result<T> failed() {
-        return new Result<>().no();
-    }
 
     public static <T> Result<T> failed(String msg) {
         return new Result<>(msg).no();

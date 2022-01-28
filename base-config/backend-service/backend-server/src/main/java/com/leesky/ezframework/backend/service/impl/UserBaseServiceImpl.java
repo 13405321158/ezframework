@@ -7,10 +7,15 @@
  */
 package com.leesky.ezframework.backend.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.mapper.IoauthClientMapper;
+import com.leesky.ezframework.backend.mapper.IuserBaseExt01Mapper;
+import com.leesky.ezframework.backend.mapper.IuserBaseExt02Mapper;
 import com.leesky.ezframework.backend.mapper.IuserBaseMapper;
 import com.leesky.ezframework.backend.model.OauthClientDetailsModel;
+import com.leesky.ezframework.backend.model.UserBaseExt01Model;
+import com.leesky.ezframework.backend.model.UserBaseExt02Model;
 import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
@@ -38,13 +43,15 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
 
     private final IuserBaseMapper repo;
     private final IoauthClientMapper clientMapper;
+    private final IuserBaseExt01Mapper ext01Mapper;
+    private final IuserBaseExt02Mapper ext02Mapper;
 
     /**
      * <li>新增账户，同时新增对应client</li>
      * <li>控制器中已经验证了 数据表中无重重复账户信息
      *
-     * @作者: 魏来
-     * @日期: 2021年12月3日 上午9:32:05
+     * @author： 魏来
+     * @date: 2022/1/28  14:52
      */
     @Override
     @Transactional
@@ -53,6 +60,8 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
 
         UserBaseModel model = Po2DtoUtil.convertor(dto, UserBaseModel.class);
         model.setPassword(pwd);
+
+
         this.insert(model, true);
 
         OauthClientDetailsModel client = new OauthClientDetailsModel(dto.getUsername(), pwd, accessTokenValiditySeconds, refreshTokenValiditySeconds);
@@ -71,6 +80,15 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
     public void delUser(List<UserBaseDTO> list) {
         List<String> ids = list.stream().map(UserBaseDTO::getId).collect(Collectors.toList());
         this.repo.deleteBatchIds(ids);
+
+        QueryWrapper<UserBaseExt01Model> e1 = new QueryWrapper<>();
+        e1.in("user_id", list);
+        this.ext01Mapper.delete(e1);
+
+        QueryWrapper<UserBaseExt02Model> e2 = new QueryWrapper<>();
+        e1.in("user_id", list);
+        this.ext02Mapper.delete(e2);
+
 
         List<String> clients = list.stream().map(UserBaseDTO::getUsername).collect(Collectors.toList());
         this.clientMapper.deleteBatchIds(clients);
