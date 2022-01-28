@@ -10,10 +10,9 @@ package com.leesky.ezframework.backend.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.backend.mapper.Iuser2roleMapper;
-import com.leesky.ezframework.mybatis.annotation.EntityMapper;
-import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
-import com.leesky.ezframework.mybatis.annotation.JoinColumn;
-import com.leesky.ezframework.mybatis.annotation.ManyToMany;
+import com.leesky.ezframework.backend.mapper.IuserBaseExt01Mapper;
+import com.leesky.ezframework.backend.mapper.IuserBaseExt02Mapper;
+import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,9 +28,16 @@ import java.util.Set;
 @ApiModel(value = "基本用户信息")
 public class UserBaseModel extends BaseUuidModel {
 
-    private static final long serialVersionUID = 8547824568011487339L;
+    private static final long serialVersionUID = 3074985087761682444L;
+
     @ApiModelProperty("登录名")
     private String username;
+
+    @ApiModelProperty("昵称")
+    private String nickName;
+
+    @ApiModelProperty("手机号")
+    private String mobile;
 
     @ApiModelProperty("密码")
     private String password;
@@ -51,16 +57,25 @@ public class UserBaseModel extends BaseUuidModel {
     @ApiModelProperty("扩展表02主键")
     private String ext02Id;
 
+    @ApiModelProperty("备注")
+    private String remake;
+
+    @ApiModelProperty("审核")
+    private String auditStep;
+
+    @OneToOne
     @TableField(exist = false)
-//    @One2One(otherOneTableName = "cbm_mag_user_ext01", joinField = "ext01Id")
+    @JoinColumn(name = "ext01_id")
+    @EntityMapper(targetMapper = IuserBaseExt01Mapper.class, entityClass = UserBaseExt01Model.class)
     private UserBaseExt01Model ext01;
 
+    @OneToOne
     @TableField(exist = false)
-//    @One2One(otherOneTableName = "cbm_mag_user_ext02", joinField = "ext02Id")
+    @JoinColumn(name = "ext02_id")
+    @EntityMapper(targetMapper = IuserBaseExt02Mapper.class, entityClass = UserBaseExt02Model.class)
     private UserBaseExt02Model ext02;
 
     @TableField(exist = false)
-//    @Many2Many(middleTableName = "cbm_mag_l_group_user", middleTableColumn = "user_id", otherMiddleTableColumn = "group_id", otherTableName = "cbm_mag_group")
     private Set<GroupModel> groupSet;
 
     @ManyToMany

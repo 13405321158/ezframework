@@ -12,10 +12,13 @@ import com.leesky.ezframework.query.ParamModel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.leesky.ezframework.json.Result.success;
 
 @RestController
 @RequestMapping("/user")
@@ -41,7 +44,7 @@ public class SysUserAction {
 
         UserAuthDTO dto = buildUserAuthDTO(user);
 
-        return Result.success(dto);
+        return success(dto);
     }
 
     /**
@@ -54,10 +57,10 @@ public class SysUserAction {
     @PostMapping(value = "/r01")
     public Result<List<UserBaseDTO>> r01(@RequestBody ParamModel param) {
         QueryFilter<UserBaseModel> filter = new QueryFilter<>(param);
-
+        filter.select("id,username,status");
         Page<UserBaseDTO> data = this.service.page(filter, UserBaseDTO.class);
 
-        return Result.success(data.getRecords(), data.getTotal());
+        return success(data.getRecords(), data.getTotal());
     }
 
     /**
@@ -70,15 +73,34 @@ public class SysUserAction {
     public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) {
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
-        filter.select("id");
-        filter.eq("username", dto.getUsername());
+        filter.select("id").eq("username", dto.getUsername());
 
         UserBaseModel user = this.service.findOne(filter);
         Assert.isTrue(ObjectUtils.isEmpty(user), "账户名已存在");
 
         this.service.addUser(dto);
 
-        return Result.success();
+        return success();
+    }
+
+    /**
+     * 删除用户
+     *
+     * @author： 魏来
+     * @date: 2022/1/25  17:05
+     */
+    @PostMapping(value = "/d01")
+    public Result<?> d01(@RequestBody List<UserBaseDTO> list) {
+
+        list.forEach(e -> {
+            Assert.isTrue(StringUtils.isNotBlank(e.getId()), "参数userId不允许空值");
+            Assert.isTrue(StringUtils.isNotBlank(e.getUsername()), "参数loginName不允许空值");
+        });
+
+
+        this.service.delUser(list);
+
+        return success();
     }
 
     private UserAuthDTO buildUserAuthDTO(UserBaseModel u) {

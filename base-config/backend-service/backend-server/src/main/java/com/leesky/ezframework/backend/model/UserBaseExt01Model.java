@@ -9,8 +9,13 @@ package com.leesky.ezframework.backend.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.leesky.ezframework.backend.mapper.IuserBaseMapper;
+import com.leesky.ezframework.mybatis.annotation.EntityMapper;
+import com.leesky.ezframework.mybatis.annotation.JoinColumn;
+import com.leesky.ezframework.mybatis.annotation.OneToOne;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,26 +25,33 @@ import lombok.Setter;
 @ApiModel(value = "基本用户扩展表01")
 public class UserBaseExt01Model extends BaseUuidModel {
 
-	private static final long serialVersionUID = -73195295975819428L;
+	private static final long serialVersionUID = 4876391008588060464L;
 
-	private String idCard;// 身份证号码：中文名称
+	@ApiModelProperty("身份证号码")
+	private String idCard;
 
-	private String idName;// 身份证上的姓名
+	@ApiModelProperty("身份证上的姓名")
+	private String idName;
 
-	private String idAddress;// 身份证上的地址
+	@ApiModelProperty("身份证上的地址")
+	private String idAddress;
 
-	private String companyName;// 所在公司名称
+	@ApiModelProperty("公司编码")
+	private String companyCode;
 
-	private String nickName;// 昵称
+	@ApiModelProperty("公司名称")
+	private String companyName;
 
-	private String mobile;// 手机
+	@ApiModelProperty("邮箱")
+	private String email;
 
-	private String email;// 邮箱
+	@ApiModelProperty("用户id")
+	private String userId;
 
-	private String ordersn;
-
+	@OneToOne
 	@TableField(exist = false)
-//    @One2One(otherOneTableName = "cbm_mag_user", otherOneTableColumn = "ext01_id")
+	@JoinColumn(name = "user_id")
+	@EntityMapper(targetMapper = IuserBaseMapper.class, entityClass = UserBaseModel.class)
 	private UserBaseModel userBaseModel;
 
 }
