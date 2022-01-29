@@ -114,7 +114,7 @@ public class IdCardUtil {
         String checkCode = getCheckCodeBySum(sum17);
         Assert.isTrue(StringUtils.isNotBlank(checkCode), "身份证前17位校验失败");
 
-        Assert.isTrue(StringUtils.equalsIgnoreCase(idcard18Code, checkCode), "身份证末尾校验错误,当前是：" + idcard18Code + ";应该是：" + checkCode);
+        Assert.isTrue(StringUtils.equalsIgnoreCase(idcard18Code, checkCode), "身份证末尾校验错误,当前是" + idcard18Code + "应该是：" + checkCode);
 
         return true;
     }
