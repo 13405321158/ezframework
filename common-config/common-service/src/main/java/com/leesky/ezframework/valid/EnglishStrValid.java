@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class EnglishStrValid implements ConstraintValidator<EnglishStr, String> {
 
-    private static final Pattern pattern = Pattern.compile("^[A-Za-z0-9()]$");//英文字母和数字
+    private static final Pattern pattern = Pattern.compile("^[A-Za-z0-9()]+$");//英文字母和数字
 
 
     @Override

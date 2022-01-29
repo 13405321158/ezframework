@@ -10,8 +10,10 @@ import com.leesky.ezframework.backend.vo.UserBaseVO;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.query.ParamModel;
+import com.leesky.ezframework.utils.Po2DtoUtil;
 import com.leesky.ezframework.utils.ValidatorUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
@@ -70,7 +72,7 @@ public class SysUserAction {
      * @date: 2021年12月3日 上午9:26:01
      */
     @PostMapping("/c01")
-    public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) throws Exception {
+    public Result<UserBaseDTO> add(@RequestBody UserBaseDTO dto) throws Exception {
         ValidatorUtils.valid(dto);
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
@@ -81,7 +83,28 @@ public class SysUserAction {
 
         this.service.addUser(dto);
 
-        return Result.success();
+        return success();
+    }
+
+    /**
+     * 编辑用户信息
+     *
+     * @author： 魏来
+     * @date: 2022/1/29  16:06
+     */
+    @PostMapping(value = "/c02")
+    public Result<?> edit(@RequestBody UserBaseDTO dto) throws Exception {
+        ValidatorUtils.valid(dto);
+
+        QueryFilter<UserBaseModel> filter = new QueryFilter<>();
+        filter.eq("id", dto.getId());
+        UserBaseModel origin = this.service.findOne(filter,ImmutableMap.of("ext01","*","ext02","*"));
+
+        UserBaseModel dest = Po2DtoUtil.convertor(dto, UserBaseModel.class);
+        BeanUtils.copyProperties(origin,dest);
+
+        this.service.editUser(dest);
+        return success();
     }
 
     /**

@@ -8,6 +8,7 @@
 package com.leesky.ezframework.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.mapper.IoauthClientMapper;
 import com.leesky.ezframework.backend.mapper.IuserBaseExt01Mapper;
@@ -73,6 +74,34 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
         OauthClientDetailsModel client = new OauthClientDetailsModel(dto.getUsername(), pwd, accessTokenValiditySeconds, refreshTokenValiditySeconds);
         this.clientMapper.insert(client);
 
+    }
+
+    /**
+     * 编辑用户
+     *
+     * @author： 魏来
+     * @date: 2022/1/29  16:17
+     */
+    @Override
+    @Transactional
+    public void editUser(UserBaseModel model) throws Exception {
+        UpdateWrapper<UserBaseModel> filter = new UpdateWrapper<>();
+        filter.eq("id", model.getId());
+        this.repo.update(model, filter);
+
+        UpdateWrapper<UserBaseExt01Model> filter01 = new UpdateWrapper<>();
+        filter01.eq("id", model.getExt01Id());
+        this.ext01Mapper.update(model.getExt01(), filter01);
+
+
+        UpdateWrapper<UserBaseExt02Model> filter02 = new UpdateWrapper<>();
+        filter02.eq("id", model.getExt02Id());
+        this.ext02Mapper.update(model.getExt02(), filter02);
+
+
+        UpdateWrapper<OauthClientDetailsModel> filter04 = new UpdateWrapper<>();
+        filter04.eq("client_id", model.getUsername()).set("client_secret", model.getPassword());
+        this.clientMapper.update(new OauthClientDetailsModel(), filter04);
     }
 
     /**
