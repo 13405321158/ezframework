@@ -19,13 +19,17 @@ import com.leesky.ezframework.backend.model.UserBaseExt02Model;
 import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
+import com.leesky.ezframework.utils.MD5Util;
 import com.leesky.ezframework.utils.Po2DtoUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,7 +60,9 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
     @Override
     @Transactional
     public void addUser(UserBaseDTO dto) throws Exception {
-        String pwd = passwordEncoder.encode(dto.getPassword());
+
+        String p = StringUtils.isNotBlank(dto.getPassword()) ? dto.getPassword() : MD5Util.encrypt("Pwd" + DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDateTime.now()));
+        String pwd = passwordEncoder.encode(p);
 
         UserBaseModel model = Po2DtoUtil.convertor(dto, UserBaseModel.class);
         model.setPassword(pwd);

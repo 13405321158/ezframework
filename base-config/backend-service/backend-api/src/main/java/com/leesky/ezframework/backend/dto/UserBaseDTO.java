@@ -9,11 +9,11 @@ package com.leesky.ezframework.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.leesky.ezframework.valid.ChinaStr;
+import com.leesky.ezframework.valid.EnglishStr;
 import com.leesky.ezframework.valid.Mobile;
 import lombok.Data;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 
@@ -22,19 +22,30 @@ import java.util.Set;
 public class UserBaseDTO {
 
     private String id;
+
+    @EnglishStr
     private String username;
-    @NotNull(message = "密码不能为空")
+
     private String password;
+
     @ChinaStr
     private String nickName;//昵称
+
     @Mobile
     private String mobile;//手机号
+
     private String status;//账号状态
+
     private Date byTime; //账户有效期至
+
     private Date editPwdDate;//修改密码时间
+
     private String ext01Id;//扩展表01主键
+
     private String ext02Id;//扩展表02主键
+
     private String remake;//备注
+
     private String auditStep;//审核
 
     private Set<RoleDTO> roles;

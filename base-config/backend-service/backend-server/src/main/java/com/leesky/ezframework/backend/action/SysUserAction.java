@@ -72,6 +72,7 @@ public class SysUserAction {
     @PostMapping("/c01")
     public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) throws Exception {
         ValidatorUtils.valid(dto);
+
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
         filter.select("id").eq("username", dto.getUsername());
 
