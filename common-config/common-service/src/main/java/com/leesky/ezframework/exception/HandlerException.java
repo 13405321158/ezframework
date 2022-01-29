@@ -38,7 +38,15 @@ public class HandlerException {
         log.error(e.getMessage(), e);
         return Result.failed(e.getMessage());
     }
-
+    /**
+     * Exception 类异常信息
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler({RuntimeException.class})
+    public Result<?> handleException(RuntimeException e) {
+        log.error(e.getMessage(), e);
+        return Result.failed(e.getMessage());
+    }
     /**
      * BadSqlGrammarException 类异常信息(sql语句异常)
      */

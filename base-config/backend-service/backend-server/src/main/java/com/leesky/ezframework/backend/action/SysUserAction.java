@@ -6,11 +6,12 @@ import com.leesky.ezframework.backend.dto.UserAuthDTO;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
+import com.leesky.ezframework.backend.vo.UserBaseVO;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.query.ParamModel;
+import com.leesky.ezframework.utils.ValidatorUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
@@ -44,7 +45,7 @@ public class SysUserAction {
 
         UserAuthDTO dto = buildUserAuthDTO(user);
 
-        return success(dto,false);
+        return success(dto, false);
     }
 
     /**
@@ -53,14 +54,13 @@ public class SysUserAction {
      * @author： 魏来
      * @date: 2022/1/7 下午3:31
      */
-    @SneakyThrows
     @PostMapping(value = "/r01")
-    public Result<List<UserBaseDTO>> r01(@RequestBody ParamModel param) {
+    public Result<List<UserBaseVO>> r01(@RequestBody ParamModel param) {
         QueryFilter<UserBaseModel> filter = new QueryFilter<>(param);
-        filter.select("id,username,status");
-        Page<UserBaseDTO> data = this.service.page(filter, UserBaseDTO.class);
+        filter.select("id,username,status,ext01.idCard");
+        Page<UserBaseVO> data = this.service.page(filter, UserBaseVO.class);
 
-        return success(data.getRecords(), data.getTotal(),false);
+        return success(data.getRecords(), data.getTotal(), false);
     }
 
     /**
@@ -71,7 +71,7 @@ public class SysUserAction {
      */
     @PostMapping("/c01")
     public Result<UserBaseDTO> addUser(@RequestBody UserBaseDTO dto) throws Exception {
-
+        ValidatorUtils.validate(dto);
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
         filter.select("id").eq("username", dto.getUsername());
 
@@ -79,7 +79,6 @@ public class SysUserAction {
         Assert.isTrue(ObjectUtils.isEmpty(user), "账户名已存在");
 
         this.service.addUser(dto);
-
 
         return Result.success();
     }

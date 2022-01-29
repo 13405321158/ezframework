@@ -39,7 +39,7 @@ public interface IeeskyService<T> {
      * 依据ship内容做子表查询，并把结果赋值给查询主表
      * <li>注意：filter.select 查询的字段中需要包含 ship指定的属性，否则无法查询子表
      * <li>例如丈夫是主表，wifeId是妻子在丈夫表中的映射值，wife是o2o属性；即使ship含有wife，但select不包含wifeId，妻子相关属性也无法查询</li>
-     *
+     *<li>ship.key</li>
      * @author： 魏来
      * @date: 2021/12/15 下午3:22
      */

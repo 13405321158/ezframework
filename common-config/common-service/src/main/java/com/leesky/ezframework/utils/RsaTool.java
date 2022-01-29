@@ -6,6 +6,10 @@
  */
 package com.leesky.ezframework.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
+import com.leesky.ezframework.global.Common;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.util.Assert;
 
 import javax.crypto.BadPaddingException;
@@ -20,6 +24,7 @@ import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.List;
 
 @SuppressWarnings("all")
 public class RsaTool {
@@ -32,16 +37,18 @@ public class RsaTool {
     private static final String KEY_RSA_PUBLIC = "RSAPublicKey";
     private static final String KEY_RSA_PRIVATE = "RSAPrivateKey";
 
-    //生成一对 公钥和私钥
+//    private static String str="加密过的字符串";
 //    public static void main(String[] args) {
-//        Map<String, String> map = RsaTool.init(2048);
+//        Map<String, String> map = RsaTool.init(1024);
 //        System.out.println("公钥=" + map.get(KEY_RSA_PUBLIC));
 //        System.out.println("私钥=" + map.get(KEY_RSA_PRIVATE));
+//        String r = RsaTool.decryptByPublicKey(str, Common.RSA_PUBLIC2048, 2048);
+//        System.out.println(r);
 //    }
-
-    /**
-     * 生成公私密钥对
-     */
+//
+//    /**
+//     * 生成公私密钥对
+//     */
 //    public static Map<String, String> init(Integer length) {
 //        Assert.isTrue(length == 1024 || length == 2048, "参数取值范围[1024,2048]");
 //        Map<String, String> map = Maps.newHashMap();
@@ -227,6 +234,26 @@ public class RsaTool {
     }
 
 //↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+    /**
+     * 使用私钥(2048位)解密str，饼返回 clz
+     */
+    public static <T> T decryptString(String str, Class<T> clz) {
+        String w = decryptByPrivateKey(str, Common.RSA_PRIVATE2048, 2048);
+        return JSON.parseObject(w, clz);
+    }
+
+    /**
+     * 使用私钥(2048位)解密str，饼返回 List<clz>
+     */
+    public static <T> List<T> decryptString(List<String> source, Class<T> clz) {
+        List<T> result = Lists.newArrayList();
+        for (String s : source) {
+            if (ObjectUtils.isNotEmpty(s))
+                result.add(decryptString(s, clz));
+        }
+        return result;
+    }
 
     /**
      * BASE64 解码

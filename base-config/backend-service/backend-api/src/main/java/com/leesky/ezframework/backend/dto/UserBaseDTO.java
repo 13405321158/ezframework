@@ -10,6 +10,8 @@ package com.leesky.ezframework.backend.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 
@@ -19,6 +21,7 @@ public class UserBaseDTO {
 
     private String id;
     private String username;
+    @NotNull(message = "密码不能为空")
     private String password;
     private String nickName;//昵称
     private String mobile;//手机号
@@ -32,6 +35,7 @@ public class UserBaseDTO {
 
     private Set<RoleDTO> roles;
 
+    @Valid
     private UserBaseExt01DTO ext01;
 
     private UserBaseExt02DTO ext02;

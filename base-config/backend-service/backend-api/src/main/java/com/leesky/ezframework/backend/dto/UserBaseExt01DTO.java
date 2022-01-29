@@ -9,6 +9,8 @@ package com.leesky.ezframework.backend.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 public class UserBaseExt01DTO {
 
@@ -17,7 +19,7 @@ public class UserBaseExt01DTO {
     private String idCard;//身份证号码
 
     private String idName;//身份证上的姓名
-
+    @NotNull(message = "地址不能为空")
     private String idAddress;//身份证上的地址
 
     private String curAddress;//当前居住地址

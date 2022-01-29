@@ -39,7 +39,7 @@ public class Common {
     //登录成功后 传递给登录者
     // 作用：1、解密后端传输的加密字符串
     // 作用：2、加密字符串饼并传递后端
-    public static String RSA_PUBLIC = "" +
+    public static String RSA_PUBLIC2048 = "" +
             "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwWu/eKYRU0NfKNJ5Dv3ZeYc5PyDMC" +
             "jhYKGerhCo8JYt1aSlVB4GNLYYdSzKvcccn3hi9Zt7p2m0R3643ejyEp1LFBZXHUuafCAbx+E" +
             "pQF1kjzqNBae5v+zao9/He24qd4A53bYhLGR3T+r5WN5ZPYRxdGopXrmon+yTAjsDcc6DR1MM" +
@@ -49,7 +49,7 @@ public class Common {
 
     //加密长度2048
     //Result.setData方法中 私钥加密
-    public static String RSA_PRIVATE = "" +
+    public static String RSA_PRIVATE2048 = "" +
             "MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQDBa794phFTQ18o0nkO/dl5h" +
             "zk/IMwKOFgoZ6uEKjwli3VpKVUHgY0thh1LMq9xxyfeGL1m3unabRHfrjd6PISnUsUFlcdS5p" +
             "8IBvH4SlAXWSPOo0Fp7m/7Nqj38d7bip3gDndtiEsZHdP6vlY3lk9hHF0aileuaif7JMCOwNx" +
@@ -74,4 +74,22 @@ public class Common {
             "6um+95vVSJvet4lXwJ5Eho0KpeYppgVMdXAb/pVno+nZb0JSJQmG7lYPOMPIaqzNjOrzAozYb" +
             "Vlor59Hl11ARoMESHhigI=";
 
+    public static String RSA_PUBLIC1024 = "" +
+            "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQClbBKcTGYmj9ntGiqYay4lHnQ0w5XHLpYTk" +
+            "cGcEnGE6qnhsZE9txhIdJ+rS4ujN4uUE7mzXp4DSL3BH9hYpUmUgWbH+KnB+Dw96vhiubh7KM" +
+            "qkPxaXyVFGwBv92k37tSsx+lnX5O25mLdCao4Yxbex2JboajQh7oFtYtd+rInm6QIDAQAB";
+
+    public static String RSA_PRIVATE1024 = "" +
+            "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKVsEpxMZiaP2e0aKphrLiUed" +
+            "DTDlcculhORwZwScYTqqeGxkT23GEh0n6tLi6M3i5QTubNengNIvcEf2FilSZSBZsf4qcH4PD" +
+            "3q+GK5uHsoyqQ/FpfJUUbAG/3aTfu1KzH6Wdfk7bmYt0JqjhjFt7HYluhqNCHugW1i136sieb" +
+            "pAgMBAAECgYBrO0JZJUE2kBtxknu4MApKr5IevgZyhqVsbBi4RlBmHAQhtIx1GCJanZb/YEpV" +
+            "dGU7iQng113QvS+caDtDQ2oNGNYWY+zr+pr80EYe0ETP9CT1M2SdSwzTFAVmVWw8y5ehpzGx9" +
+            "OsMFoU8eJC60B6SthmoBpC1XPHUzyEcrOlTAQJBAOY7AMWGr+a7xWXcANAsNHokAufiwRjER2" +
+            "O14xuipFCsyrArwBXkejDoQ3nJ2BgMtTcFQnCtPNhXu26LZ3JgjMkCQQC38A9ILwhbfpsymqZ" +
+            "EqZQzPwe7NclyWCMeqo6YNVP7nyvKan12b8wNtO8IgGeBIkcBV8+EJjWHaD1mmo/LRzkhAkEA" +
+            "ziYi6LtTIe0cMbqu17fdPUileXDmqgCGU9f3hTU6oCo4S0rBcljkuIogcRq07cPjN2L0PORBy" +
+            "Q21fKRCen3NUQJBAJfqvbRwpAZtWuFAuXKcXLq2pDwLAIZgJSF+3Kb55JM9s31K1rSrQW1Qst" +
+            "visZoGJX8Gd2494JglkBDeN0U9XgECQDGjS+sMPXE4xEfBWb1QAxdCh6cCh17v5SwOzD1ewzL" +
+            "SPFe9FELI+OK0rtU5e/I0HRxmZe+8i+AysaKDTwUKPQQ=";
 }
