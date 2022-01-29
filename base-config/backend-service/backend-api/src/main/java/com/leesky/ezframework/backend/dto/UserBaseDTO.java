@@ -8,6 +8,8 @@
 package com.leesky.ezframework.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.leesky.ezframework.valid.ChinaStr;
+import com.leesky.ezframework.valid.Mobile;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -23,7 +25,9 @@ public class UserBaseDTO {
     private String username;
     @NotNull(message = "密码不能为空")
     private String password;
+    @ChinaStr
     private String nickName;//昵称
+    @Mobile
     private String mobile;//手机号
     private String status;//账号状态
     private Date byTime; //账户有效期至

@@ -30,12 +30,12 @@ public class ValidatorUtils {
     /**
      * 校验对象
      */
-    public static void validate(Object object, Class<?>... groups) {
+    public static void valid(Object object, Class<?>... groups) {
         List<String> error = Lists.newArrayList();
         Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object, groups);
 
         if (CollectionUtils.isNotEmpty(constraintViolations)) {
-            constraintViolations.forEach(o -> error.add(o.getMessage()));
+            constraintViolations.forEach(o -> error.add(o.getPropertyPath() + ":" + o.getMessage()));
             throw new ApiException(StringUtils.join(error, ","));
         }
     }
