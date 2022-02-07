@@ -3,7 +3,7 @@
  * @日期: 2021年12月3日  下午3:17:46
  * @组织: 森麒麟轮胎股份有限公司.
  * @部门: 国内市场替换部IT组
- * @描述:
+ * @描述: 从redis中获取token
  */
 package com.leesky.ezframework.auth.utils;
 
@@ -17,16 +17,13 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.store.redis.JdkSerializationStrategy;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStoreSerializationStrategy;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
-/**
- * 类功能说明：
- * <li></li>
- */
+
 @Deprecated
 //@Configuration
 @RequiredArgsConstructor
@@ -36,7 +33,7 @@ public class TokenHandle {
 
     private static final String AUTH_TO_ACCESS = "auth_to_access:";
 
-    private RedisTokenStoreSerializationStrategy serializationStrategy = new JdkSerializationStrategy();
+    private final RedisTokenStoreSerializationStrategy serializationStrategy = new JdkSerializationStrategy();
 
     public OAuth2AccessToken getAccessToken(String username) {
         byte[] bytes;
@@ -66,9 +63,9 @@ public class TokenHandle {
 
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
-            byte[] bytes = digest.digest(values.toString().getBytes("UTF-8"));
+            byte[] bytes = digest.digest(values.toString().getBytes(StandardCharsets.UTF_8));
             return String.format("%032x", new BigInteger(1, bytes));
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return null;
