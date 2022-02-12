@@ -12,6 +12,7 @@ import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.query.CommonDTO;
 import com.leesky.ezframework.query.ParamModel;
+import com.leesky.ezframework.utils.I18nUtil;
 import com.leesky.ezframework.utils.Po2DtoUtil;
 import com.leesky.ezframework.utils.ValidatorUtils;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import static com.leesky.ezframework.json.Result.success;
 @RequiredArgsConstructor
 public class SysUserAction {
 
+    private final I18nUtil i18n;
     private final IuserBaseService service;
 
     /**
@@ -58,7 +60,7 @@ public class SysUserAction {
      * @author： 魏来
      * @date: 2022/1/7 下午3:31
      */
-    @SysLogger(module="用户管理",action = "系统用户列表")
+    @SysLogger(module = "用户管理", action = "系统用户列表")
     @PostMapping(value = "/r01")
     public Result<List<UserBaseVO>> r01(@RequestBody ParamModel param) {
         QueryFilter<UserBaseModel> filter = new QueryFilter<>(param);
@@ -82,7 +84,7 @@ public class SysUserAction {
         filter.select("id").eq("username", dto.getUsername());
 
         UserBaseModel user = this.service.findOne(filter);
-        Assert.isTrue(ObjectUtils.isEmpty(user), "账户名已存在");
+        Assert.isTrue(ObjectUtils.isEmpty(user), i18n.getMsg("username.registered", dto.getUsername()));
 
         this.service.addUser(dto);
 
@@ -102,7 +104,7 @@ public class SysUserAction {
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
         filter.eq("id", dto.getId());
         UserBaseModel origin = this.service.findOne(filter, ImmutableMap.of("ext01", "*", "ext02", "*"));
-        Assert.isTrue(ObjectUtils.isNotEmpty(origin), "账户不存在：" + dto.getId());
+        Assert.isTrue(ObjectUtils.isNotEmpty(origin), this.i18n.getMsg("username.not.registered", dto.getUsername()));
 
         UserBaseModel dest = Po2DtoUtil.convertor(dto, UserBaseModel.class);
         BeanUtils.copyProperties(origin, dest);

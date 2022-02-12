@@ -9,7 +9,7 @@ package com.leesky.ezframework.json;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.leesky.ezframework.global.Common;
-import com.leesky.ezframework.utils.RsaTool;
+import com.leesky.ezframework.utils.RsaToolUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +51,7 @@ public class Result<T> {
 
         if (encrypt) {
             rsa = true;
-            data = (T) RsaTool.encryptByPrivateKey(JSON.toJSONString(data), Common.RSA_PRIVATE2048);
+            data = (T) RsaToolUtil.encryptByPrivateKey(JSON.toJSONString(data), Common.RSA_PRIVATE2048);
         }
         Result result = new Result<>(data).ok();
         if (data instanceof List)
@@ -63,7 +63,7 @@ public class Result<T> {
     public static <T> Result<T> success(T data, Long total, Boolean encrypt) {
         if (encrypt) {
             rsa = true;
-            data = (T) RsaTool.encryptByPrivateKey(JSON.toJSONString(data), Common.RSA_PRIVATE2048);
+            data = (T) RsaToolUtil.encryptByPrivateKey(JSON.toJSONString(data), Common.RSA_PRIVATE2048);
         }
         return new Result<>(data, total).ok();
     }

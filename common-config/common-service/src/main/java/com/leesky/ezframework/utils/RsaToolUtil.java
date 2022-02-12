@@ -27,7 +27,7 @@ import java.util.Base64;
 import java.util.List;
 
 @SuppressWarnings("all")
-public class RsaTool {
+public class RsaToolUtil {
 
 
     private final static int MAX_ENCRYPT_BLOCK = 117;
