@@ -5,7 +5,7 @@ spring:
    application:
       name: backend-server
    profiles:
-      active: dev1
+      active: dev
    cloud:
       nacos:
          discovery:
@@ -13,11 +13,11 @@ spring:
          config:
             server-addr: 127.0.0.1:8848
             file-extension: yaml
-            prefix: backend-provider
+            prefix: backend-config
             extension-configs: #配置公共配置列表
-            -  dataId: common-dev.yaml
+            -  dataId: common-config-dev.yaml
                refresh: true
-            -  dataId: common-mq-dev.yaml
+            -  dataId: common-stream-dev.yaml
                refresh: true
             -  dataId: common-redis-dev.yaml
                refresh: true
@@ -25,7 +25,8 @@ spring:
                refresh: true
             - dataId: mybatis-dev.yaml
               refresh: true
-
+   main:
+     allow-circular-references: true
 logging:
   level:
     com.alibaba.*: warn

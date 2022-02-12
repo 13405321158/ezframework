@@ -15,24 +15,69 @@ import java.util.Map;
 
 
 public interface IbaseService<E, ObjectId> {
+    /**
+     * 查询全部数据
+     *
+     * @author: 魏来
+     * @date: 2022/2/12 下午3:32
+     */
+    List<E> list();
 
-	List<E> list();
+    /**
+     * 根据Id查询数据
+     *
+     * @author: 魏来
+     * @date: 2022/2/12 下午3:34
+     */
+    E findById(ObjectId pk);
 
-	List<E> list(ParamModel model);
+    /**
+     * 根据queryStr 查询数据
+     *
+     * @author: 魏来
+     * @date: 2022/2/12 下午3:33
+     */
+    List<E> list(ParamModel model);
 
-	E findById(ObjectId pk);
+    /**
+     * 根据Id批量查询
+     *
+     * @author: 魏来
+     * @date: 2022/2/12 下午3:35
+     */
+    List<E> findById(List<ObjectId> pk);
 
-	List<E> findById(List<ObjectId> pk);
+    /**
+     * 分页查询
+     *
+     * @author: 魏来
+     * @date: 2022/2/12 下午3:35
+     */
+    Page<E> page(ParamModel model);
 
-	Page<E> page(ParamModel model);
-
-
-
+    /**
+     * 存储数据
+     *
+     * @author: 魏来
+     * @date: 2022/2/12 下午3:36
+     */
     E save(E entity);
 
+    /**
+     * 批量存储
+     *
+     * @author: 魏来
+     * @date: 2022/2/12 下午3:36
+     */
     void saveBatch(List<E> list);
 
-    void update(ObjectId id, E t);
+    /**
+     * 根据调解更新
+     *
+     * @author: 魏来
+     * @date: 2022/2/12 下午3:37
+     */
+    void update(ObjectId id, E t) throws IllegalAccessException;
 
     /**
      * 根据id修改
@@ -50,8 +95,12 @@ public interface IbaseService<E, ObjectId> {
      */
     void update(Map<String, Object> queryFieldMap, Map<String, Object> updateFieldMap);
 
-
-
+    /**
+     * 根据主键 删除数据
+     *
+     * @author: 魏来
+     * @date: 2022/2/12 下午3:37
+     */
     void deleteById(ObjectId pk);
 
 }

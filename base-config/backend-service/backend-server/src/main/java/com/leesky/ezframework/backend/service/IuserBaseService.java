@@ -30,7 +30,7 @@ public interface IuserBaseService extends IeeskyService<UserBaseModel> {
      * @date: 2022/1/29  16:17
      */
     void editUser(UserBaseModel dto) throws Exception;
-
+void editPwd(String uid,String username,String pwd);
     /**
      * 删除用户：cbm_mag_user、cbm_mag_user_ext01、cbm_mag_user_ext02、oauth_client_details
      *

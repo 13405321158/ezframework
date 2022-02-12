@@ -7,8 +7,10 @@ import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.backend.vo.UserBaseVO;
+import com.leesky.ezframework.es.annotation.SysLogger;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
+import com.leesky.ezframework.query.CommonDTO;
 import com.leesky.ezframework.query.ParamModel;
 import com.leesky.ezframework.utils.Po2DtoUtil;
 import com.leesky.ezframework.utils.ValidatorUtils;
@@ -56,10 +58,11 @@ public class SysUserAction {
      * @author： 魏来
      * @date: 2022/1/7 下午3:31
      */
+    @SysLogger(module="用户管理",action = "系统用户列表")
     @PostMapping(value = "/r01")
     public Result<List<UserBaseVO>> r01(@RequestBody ParamModel param) {
         QueryFilter<UserBaseModel> filter = new QueryFilter<>(param);
-        filter.select("id,username,status,ext01.idCard");
+//        filter.select("id,username,status,ext01.idCard");
         Page<UserBaseVO> data = this.service.page(filter, UserBaseVO.class);
 
         return success(data.getRecords(), data.getTotal(), false);
@@ -98,12 +101,32 @@ public class SysUserAction {
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
         filter.eq("id", dto.getId());
-        UserBaseModel origin = this.service.findOne(filter,ImmutableMap.of("ext01","*","ext02","*"));
+        UserBaseModel origin = this.service.findOne(filter, ImmutableMap.of("ext01", "*", "ext02", "*"));
+        Assert.isTrue(ObjectUtils.isNotEmpty(origin), "账户不存在：" + dto.getId());
 
         UserBaseModel dest = Po2DtoUtil.convertor(dto, UserBaseModel.class);
-        BeanUtils.copyProperties(origin,dest);
+        BeanUtils.copyProperties(origin, dest);
 
         this.service.editUser(dest);
+
+        return success();
+    }
+
+    /**
+     * 用户修改密码
+     *
+     * @author： 魏来
+     * @date: 2022/2/9  下午5:48
+     */
+    @PostMapping(value = "/c03")
+    public Result<?> editPwd(@RequestBody CommonDTO dto) {
+        Object pwd = dto.getObj().get("pwd");
+        Object userId = dto.getObj().get("uid");
+        Object client = dto.getObj().get("client");
+
+        Assert.isTrue(ObjectUtils.isNotEmpty(pwd) && ObjectUtils.isNotEmpty(userId) && ObjectUtils.isNotEmpty(client), "修改密码时参数：用户Id、用户名和新密码不允许空");
+        this.service.editPwd((String) userId, (String) client, (String) pwd);
+
         return success();
     }
 

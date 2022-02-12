@@ -118,9 +118,8 @@ public class BaseServiceImpl<E, ObjectId> implements IbaseService<E, ObjectId> {
 
 
     @Override
-    public void update(ObjectId id, E t) {
+    public void update(ObjectId id, E t) throws IllegalAccessException {
         this.repo.update(id, t);
-
     }
 
     @Override

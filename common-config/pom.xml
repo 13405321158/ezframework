@@ -21,6 +21,8 @@
         <module>common-redis</module>
         <module>common-security</module>
         <module>common-constant</module>
+        <module>common-stream</module>
+        <module>common-log</module>
     </modules>
 
 

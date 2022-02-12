@@ -7,12 +7,14 @@
  */
 package com.leesky.ezframework.backend.dto;
 
+import com.leesky.ezframework.mybatis.model.BaseDTO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class UserBaseExt02DTO {
+@EqualsAndHashCode(callSuper = true)
+public class UserBaseExt02DTO extends BaseDTO {
 
-    private String id;
 
     private String pda;
 

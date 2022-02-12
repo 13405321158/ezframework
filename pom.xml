@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.4</version>
+        <version>2.6.1</version>
     </parent>
 
 
@@ -40,7 +40,7 @@
         <nacos.client.version>2.0.3</nacos.client.version>
 
 
-        <spring-cloud.version>2020.0.3</spring-cloud.version>
+        <spring-cloud.version>2021.0.0</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
 
     </properties>

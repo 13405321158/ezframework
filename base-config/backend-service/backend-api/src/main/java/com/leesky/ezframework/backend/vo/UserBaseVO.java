@@ -47,4 +47,6 @@ public class UserBaseVO {
     private String pda;//是否有pda使用权限
     private String iosId;//苹果系统id
     private String wxOpenId;//微信openid
+
+
 }

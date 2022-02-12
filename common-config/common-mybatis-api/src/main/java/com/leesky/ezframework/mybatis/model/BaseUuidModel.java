@@ -18,10 +18,10 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class BaseUuidModel extends SuperModel implements Serializable {
-	private static final long serialVersionUID = 7655518457578105527L;
+    private static final long serialVersionUID = 7655518457578105527L;
 
-	@ApiModelProperty(value = "数据表主键")
-	@TableId(value = "id", type = IdType.ASSIGN_UUID)
-	protected String id;
+    @ApiModelProperty(value = "数据表主键")
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
+    protected String id;
 
 }

@@ -8,6 +8,7 @@
 package com.leesky.ezframework.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.leesky.ezframework.mybatis.model.BaseDTO;
 import com.leesky.ezframework.valid.ChinaStr;
 import com.leesky.ezframework.valid.EnglishStr;
 import com.leesky.ezframework.valid.Mobile;
@@ -19,9 +20,8 @@ import java.util.Set;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserBaseDTO {
+public class UserBaseDTO extends BaseDTO {
 
-    private String id;
 
     @EnglishStr
     private String username;
@@ -54,5 +54,6 @@ public class UserBaseDTO {
     private UserBaseExt01DTO ext01;
 
     private UserBaseExt02DTO ext02;
+
 
 }

@@ -14,7 +14,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -25,9 +25,9 @@ public class BaseModel {
 	protected ObjectId id;
 
 	@Field("create_date")
-	protected Date createDate;
+	protected LocalDateTime createDate;
 
 	@Field("modify_date")
-	protected Date modifyDate;
+	protected LocalDateTime modifyDate;
 
 }

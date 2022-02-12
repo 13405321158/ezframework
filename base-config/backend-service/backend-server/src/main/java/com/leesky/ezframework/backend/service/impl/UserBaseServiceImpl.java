@@ -63,7 +63,7 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
     public void addUser(UserBaseDTO dto) throws Exception {
 
         String p = StringUtils.isNotBlank(dto.getPassword()) ? dto.getPassword() : MD5Util.encrypt("Pwd" + DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDateTime.now()));
-        String pwd = passwordEncoder.encode(p);
+        String pwd = this.passwordEncoder.encode(p);
 
         UserBaseModel model = Po2DtoUtil.convertor(dto, UserBaseModel.class);
         model.setPassword(pwd);
@@ -84,7 +84,8 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
      */
     @Override
     @Transactional
-    public void editUser(UserBaseModel model) throws Exception {
+    public void editUser(UserBaseModel model) {
+
         UpdateWrapper<UserBaseModel> filter = new UpdateWrapper<>();
         filter.eq("id", model.getId());
         this.repo.update(model, filter);
@@ -102,6 +103,27 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
         UpdateWrapper<OauthClientDetailsModel> filter04 = new UpdateWrapper<>();
         filter04.eq("client_id", model.getUsername()).set("client_secret", model.getPassword());
         this.clientMapper.update(new OauthClientDetailsModel(), filter04);
+    }
+
+    /**
+     * <li>修改密码</li>
+     *
+     * @author: 魏来
+     * @date: 2022/2/10 上午10:40
+     */
+    @Override
+    @Transactional
+    public void editPwd(String uid, String username, String pwd) {
+        pwd = this.passwordEncoder.encode(pwd);
+        //1、更新client
+        UpdateWrapper<OauthClientDetailsModel> filter01 = new UpdateWrapper<>();
+        filter01.eq("client_id", username).set("client_secret", pwd);
+        this.clientMapper.update(new OauthClientDetailsModel(), filter01);
+
+        //2、更新用户密码
+        UpdateWrapper<UserBaseModel> filter = new UpdateWrapper<>();
+        filter.eq("id", uid).set("password", pwd).set("modify_date", LocalDateTime.now());
+        this.repo.update(new UserBaseModel(), filter);
     }
 
     /**

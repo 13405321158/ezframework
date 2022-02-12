@@ -1,3 +1,10 @@
+/**
+ * @author weilai
+ * @param <T>
+ * @data 2018年12月6日 上午11:27:03
+ *
+ * @desc
+ */
 package com.leesky.ezframework.nosql.dao;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -5,24 +12,15 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.Map;
 
-/**
- * @author weilai
- * @param <T>
- * @data 2018年12月6日 上午11:27:03
- *
- * @desc 类描述
- *       <li>
- */
+
 @NoRepositoryBean
 public interface IbaseDao<T, ObjectId> extends MongoRepository<T, ObjectId> {
 
 	 
 	  /**
 	   * 根据传入的对象 修改
-	   * @param id
-	   * @param t
 	   */
-	  void update(ObjectId id, T t);
+	  void update(ObjectId id, T t) throws IllegalAccessException;
 	 
 	  /**
 	   * 根据id修改

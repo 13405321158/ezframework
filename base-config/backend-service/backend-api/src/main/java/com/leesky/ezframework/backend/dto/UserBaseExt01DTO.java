@@ -7,18 +7,19 @@
  */
 package com.leesky.ezframework.backend.dto;
 
+import com.leesky.ezframework.mybatis.model.BaseDTO;
 import com.leesky.ezframework.valid.ChinaName;
 import com.leesky.ezframework.valid.ChinaStr;
 import com.leesky.ezframework.valid.IdCard;
 import com.leesky.ezframework.valid.Mobile;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.Email;
 
 @Data
-public class UserBaseExt01DTO {
-
-    private String id;
+@EqualsAndHashCode(callSuper = true)
+public class UserBaseExt01DTO extends BaseDTO {
 
     @IdCard
     private String idCard;//身份证号码

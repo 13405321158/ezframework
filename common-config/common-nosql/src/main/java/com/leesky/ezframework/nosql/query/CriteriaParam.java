@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Maps;
 import com.leesky.ezframework.query.ParamModel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -18,7 +19,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import java.util.Date;
 import java.util.Map;
 
-
+@NoArgsConstructor
 public class CriteriaParam {
 
     private ParamModel model = null;
@@ -64,9 +65,7 @@ public class CriteriaParam {
 
     }
 
-    public CriteriaParam() {
 
-    }
 
     public CriteriaParam(ParamModel model) {
         this.model = model;
