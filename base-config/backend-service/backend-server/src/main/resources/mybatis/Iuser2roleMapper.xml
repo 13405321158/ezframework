@@ -8,7 +8,7 @@
     <select id="getRoleCodes" parameterType="String" resultMap="roleResult">
         SELECT b.id,b.name,b.code
         FROM cbm_mag_l_user_role a
-                 LEFT JOIN cbm_mag_role b ON a.role_id = b.id
+        LEFT JOIN cbm_mag_role b ON a.role_id = b.id
         WHERE a.user_id = #{id}
     </select>
 
