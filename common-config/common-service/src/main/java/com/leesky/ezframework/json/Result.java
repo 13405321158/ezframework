@@ -22,6 +22,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class Result<T> {
+    private Integer code = 200;//有些前端框架 读取返回值需要这个标志位
     private T data;// 返回数据
     private Long count;//记录总数
     private String msg;// 提示信息

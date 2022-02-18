@@ -8,13 +8,16 @@ import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.backend.vo.UserBaseVO;
 import com.leesky.ezframework.es.annotation.SysLogger;
+import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.query.CommonDTO;
 import com.leesky.ezframework.query.ParamModel;
+import com.leesky.ezframework.redis.service.RedisService;
 import com.leesky.ezframework.utils.I18nUtil;
 import com.leesky.ezframework.utils.Po2DtoUtil;
 import com.leesky.ezframework.utils.ValidatorUtils;
+import com.wf.captcha.ArithmeticCaptcha;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -23,6 +26,8 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.leesky.ezframework.json.Result.success;
 
@@ -32,6 +37,7 @@ import static com.leesky.ezframework.json.Result.success;
 public class SysUserAction {
 
     private final I18nUtil i18n;
+    private final RedisService cache;
     private final IuserBaseService service;
 
     /**
@@ -52,6 +58,28 @@ public class SysUserAction {
         UserAuthDTO dto = buildUserAuthDTO(user);
 
         return success(dto, false);
+    }
+
+    /**
+     * 图片登录验证码
+     *
+     * @author： 魏来
+     * @date: 2022/2/16  下午4:14
+     */
+    @GetMapping(value = "/img/code/public")
+    public Result<Map<String, String>> ValidateCode() {
+
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        ArithmeticCaptcha captcha = new ArithmeticCaptcha(120, 40);//图片size
+
+        captcha.getArithmeticString();  // 获取运算的公式：3+2=?
+        String text = captcha.text();// 获取运算的结果：5
+
+        this.cache.add(Redis.LOGIN_IMG_CODE + uuid, text, 30L);
+
+        ImmutableMap<String, String> data = ImmutableMap.of("key", uuid, "codeUrl", captcha.toBase64());
+
+        return Result.success(data, false);
     }
 
     /**
