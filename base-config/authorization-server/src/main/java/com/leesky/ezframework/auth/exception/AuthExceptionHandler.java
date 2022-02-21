@@ -75,7 +75,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler({UnsupportedGrantTypeException.class})
     public Result handleException(UnsupportedGrantTypeException e) {
         log.error(e.getMessage(), e);
-        return Result.failed("认证类型错误,参数在允许范围内");
+        return Result.failed("认证类型错误,取值范围:password,sms_code,wechat,captcha");
     }
 
     /**
