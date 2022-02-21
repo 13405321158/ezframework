@@ -63,6 +63,11 @@
             <artifactId>sentinel-transport-simple-http</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>4.2.6.B</version>
+        </dependency>
 
         <dependency>
             <groupId>com.leesky.ezframework</groupId>

@@ -75,7 +75,7 @@ public class SysUserAction {
         captcha.getArithmeticString();  // 获取运算的公式：3+2=?
         String text = captcha.text();// 获取运算的结果：5
 
-        this.cache.add(Redis.LOGIN_IMG_CODE + uuid, text, 30L);
+        this.cache.add(Redis.LOGIN_IMG_CODE + uuid, text, 130L);
 
         ImmutableMap<String, String> data = ImmutableMap.of("key", uuid, "codeUrl", captcha.toBase64());
 

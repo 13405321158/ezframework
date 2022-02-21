@@ -27,4 +27,11 @@ public class MemberUserDetailsServiceImpl implements UserDetailsService {
 		return null;
 	}
 
+	public UserDetails loadUserByMobile(String mobile) throws UsernameNotFoundException {
+		return null;
+	}
+
+	public UserDetails loadUserByOpenId(String openId) throws UsernameNotFoundException {
+		return null;
+	}
 }

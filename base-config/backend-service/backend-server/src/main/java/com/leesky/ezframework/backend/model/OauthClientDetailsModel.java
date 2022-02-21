@@ -56,7 +56,7 @@ public class OauthClientDetailsModel implements Serializable {
 		this.clientSecret = clientSecret;
 		this.accessTokenValidity = accessTokenValidity;
 		this.refreshTokenValidity = refreshTokenValidity;
-		this.authorizedGrantTypes = "password,refresh_token,sms_code,wechat";
+		this.authorizedGrantTypes = "password,refresh_token,sms_code,wechat,captcha";
 	}
 
 }

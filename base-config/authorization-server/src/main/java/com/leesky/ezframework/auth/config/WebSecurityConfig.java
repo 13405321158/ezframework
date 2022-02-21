@@ -1,5 +1,12 @@
 package com.leesky.ezframework.auth.config;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import com.leesky.ezframework.auth.details.userdetails.user.SysUserDetailsServiceImpl;
+import com.leesky.ezframework.auth.ext.sms.SmsCodeAuthenticationProvider;
+import com.leesky.ezframework.auth.ext.webchat.WechatAuthenticationProvider;
+import com.leesky.ezframework.backend.api.IbackendServerClient;
+import com.leesky.ezframework.redis.service.RedisService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,10 +18,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.leesky.ezframework.auth.details.userdetails.user.SysUserDetailsServiceImpl;
-
-import lombok.RequiredArgsConstructor;
-
 /**
  * 类功能说明：
  * <li>weilai</li>
@@ -25,6 +28,11 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final String white_name = "/oauth/**";
+
+    private final RedisService cache;
+    private final WxMaService wxMaService;
+    private final IbackendServerClient client;
+
     private final SysUserDetailsServiceImpl sysUserDetailsService;
 
     /**
@@ -83,28 +91,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setHideUserNotFoundExceptions(false); // 是否隐藏用户不存在异常，默认:true-隐藏；false-抛出异常；
         return provider;
     }
+
+
     /**
      * 手机验证码认证授权提供者
      */
-//    @Bean
-//    public SmsCodeAuthenticationProvider smsCodeAuthenticationProvider() {
-//        SmsCodeAuthenticationProvider provider = new SmsCodeAuthenticationProvider();
-//        provider.setUserDetailsService(memberUserDetailsService);
-//        provider.setRedisTemplate(redisTemplate);
-//        return provider;
-//    }
+    @Bean
+    public SmsCodeAuthenticationProvider smsCodeAuthenticationProvider() {
+        SmsCodeAuthenticationProvider provider = new SmsCodeAuthenticationProvider();
+        provider.setUserDetailsService(sysUserDetailsService);
+        provider.setCache(cache);
+        return provider;
+    }
 
     /**
      * 微信认证授权提供者
      */
-//    @Bean
-//    public WechatAuthenticationProvider wechatAuthenticationProvider() {
-//        WechatAuthenticationProvider provider = new WechatAuthenticationProvider();
-//        provider.setUserDetailsService(memberUserDetailsService);
-//        provider.setWxMaService(wxMaService);
-//        provider.setMemberFeignClient(memberFeignClient);
-//        return provider;
-//    }
+    @Bean
+    public WechatAuthenticationProvider wechatAuthenticationProvider() {
+        WechatAuthenticationProvider provider = new WechatAuthenticationProvider();
+        provider.setUserDetailsService(sysUserDetailsService);
+        provider.setWxMaService(wxMaService);
+        provider.setMemberFeignClient(client);
+        return provider;
+    }
 
 
     /**
