@@ -75,7 +75,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler({UnsupportedGrantTypeException.class})
     public Result handleException(UnsupportedGrantTypeException e) {
         log.error(e.getMessage(), e);
-        return Result.failed("认证类型不支持,参数grant_type值不在允许范围内【password】");
+        return Result.failed("认证类型错误,参数在允许范围内");
     }
 
     /**

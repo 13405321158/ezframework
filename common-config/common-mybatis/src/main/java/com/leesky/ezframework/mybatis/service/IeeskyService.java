@@ -39,7 +39,26 @@ public interface IeeskyService<T> {
      * 依据ship内容做子表查询，并把结果赋值给查询主表
      * <li>注意：filter.select 查询的字段中需要包含 ship指定的属性，否则无法查询子表
      * <li>例如丈夫是主表，wifeId是妻子在丈夫表中的映射值，wife是o2o属性；即使ship含有wife，但select不包含wifeId，妻子相关属性也无法查询</li>
-     *<li>ship.key</li>
+     * 例如：
+     * <p>
+     * private String ext01Id; //扩展表01主键
+     * <li></li>
+     *
+     * @OneToOne
+     * @TableField(exist = false)
+     * @JoinColumn(name = "ext01_id")
+     * @EntityMapper(targetMapper = IuserBaseExt01Mapper.class, entityClass = UserBaseExt01Model.class)
+     * private UserBaseExt01Model ext01;  //如果需要查询ext01，则filter.select 必须含有ext01Id，因为是根据此字段值 去cbm_mag_user_ext01中查询
+     * <li></li>
+     * @ManyToMany
+     * @TableField(exist = false)
+     * @JoinColumn(referencedColumnName = "user_id")
+     * @InverseJoinColumn(referencedColumnName = "role_id")
+     * @EntityMapper(targetMapper = Iuser2roleMapper.class, entityClass = User2RoleModel.class)
+     * private Set<RoleModel> roles;
+     *
+     *
+     * <li></li>
      * @author： 魏来
      * @date: 2021/12/15 下午3:22
      */

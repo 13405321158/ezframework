@@ -1,3 +1,9 @@
+/**
+ * jwt 内容增强
+ *
+ * @author： 魏来
+ * @date： 2021/12/10 上午10:27
+ */
 package com.leesky.ezframework.auth.config;
 
 import com.google.common.collect.ImmutableMap;
@@ -14,12 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-/**
- * jwt 内容增强
- *
- * @author： 魏来
- * @date： 2021/12/10 上午10:27
- */
+
 @Component
 public class JwtEnhancer implements TokenEnhancer {
 
@@ -29,17 +30,22 @@ public class JwtEnhancer implements TokenEnhancer {
         Map<String, Object> extMap = Maps.newHashMap();
         Object principal = authentication.getPrincipal();
 
+        //系统用户登录返回信息
         if (principal instanceof SysUserDetails) {
             SysUserDetails sysUserDetails = (SysUserDetails) principal;
             extMap.put("pubKey", Common.RSA_PUBLIC2048);
             extMap.put(Common.USER_ID, sysUserDetails.getUserId());
             extMap.put(Common.USER_NAME, sysUserDetails.getUsername());
+            extMap.put(Common.DEALER_CODE, sysUserDetails.getCompanyCode());
+            extMap.put(Common.DEALER_NAME, sysUserDetails.getCompanyName());
+
             if (StringUtils.isNotBlank(sysUserDetails.getAuthenticationMethod())) {
                 extMap.put("authenticationMethod", sysUserDetails.getAuthenticationMethod());
             }
 
         }
 
+        //商城会员登录 返回扩展信息
         if (principal instanceof MemberUserDetails) {
             MemberUserDetails memberUserDetails = (MemberUserDetails) principal;
             extMap.put(Common.USER_ID, memberUserDetails.getUserId());

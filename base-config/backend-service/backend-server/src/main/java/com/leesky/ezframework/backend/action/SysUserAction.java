@@ -51,9 +51,9 @@ public class SysUserAction {
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>(ImmutableMap.of("Q_username_EQ", username));
 
-        filter.select("id,username,status,by_time,password");
+        filter.select("id,username,status,by_time,password,ext01Id");//如果不包括ext01Id 则无法查询 ext01
 
-        UserBaseModel user = this.service.findOne(filter, ImmutableMap.of("roles", "code"));
+        UserBaseModel user = this.service.findOne(filter, ImmutableMap.of("roles", "code", "ext01", "company_code,company_name,portrait"));
 
         UserAuthDTO dto = buildUserAuthDTO(user);
 
@@ -181,7 +181,9 @@ public class SysUserAction {
     }
 
     private UserAuthDTO buildUserAuthDTO(UserBaseModel u) {
-        UserAuthDTO dto = new UserAuthDTO(u.getId(), u.getUsername(), u.getPassword(), u.getStatus(), u.getByTime());
+        UserAuthDTO dto = new UserAuthDTO(u.getId(), u.getUsername(), u.getPassword(), u.getStatus(), u.getByTime(),
+                u.getExt01().getCompanyCode(), u.getExt01().getCompanyName(), u.getExt01().getPortrait()
+        );
         u.getRoles().forEach(e -> dto.getRoles().add(e.getCode()));
         return dto;
     }

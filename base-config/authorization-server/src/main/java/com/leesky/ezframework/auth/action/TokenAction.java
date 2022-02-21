@@ -28,11 +28,6 @@ import java.security.Principal;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Map;
 
-/**
- * 类功能说明：
- * <li></li>
- */
-
 
 @RestController
 @RequiredArgsConstructor
@@ -53,15 +48,15 @@ public class TokenAction {
      * @date: 2022/1/21  10:15
      */
     @PostMapping("/token")
-    public Result<OAuth2AccessToken> getToken(Principal principal, @RequestParam Map<String, String> map) throws HttpRequestMethodNotSupportedException {
+    public Result<Map<String, String>> getToken(Principal principal, @RequestParam Map<String, String> map) throws HttpRequestMethodNotSupportedException {
         Assert.isTrue(StringUtils.isNotBlank(map.get("password")), "参数password不允许空值");
         Assert.isTrue(StringUtils.isNotBlank(map.get("grant_type")), "参数grant_type不允许空值");
         Assert.isTrue(StringUtils.isNotBlank(map.get("client_secret")), "参数client_secret不允许空值");
 
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
-        add2Cache(accessToken);
+        Map<String, String> userInfo = add2Cache(accessToken);
 
-        return Result.success(accessToken,false);
+        return Result.success(userInfo,false);
     }
 
 
@@ -85,14 +80,16 @@ public class TokenAction {
      * @author： 魏来
      * @date: 2021/12/14 下午12:25
      */
-    @SuppressWarnings("unchecked")
-    private void add2Cache(OAuth2AccessToken accessToken) {
+
+    private Map<String, String> add2Cache(OAuth2AccessToken accessToken) {
         String token01 = StringUtils.split(accessToken.getValue(), ".")[0];//token的第一部分值
         Long expr = Long.valueOf(accessTokenValiditySeconds);//1、有效期时长
-        Map<String, String> ext = (Map<String, String>) accessToken.getAdditionalInformation().get(Common.LOGIN_USER_EXT_INFO);
+        var ext = (Map<String, String>) accessToken.getAdditionalInformation().get(Common.LOGIN_USER_EXT_INFO);
 
         this.cache.add(Redis.AUTH_TOKEN_ID + ext.get(Common.USER_ID), accessToken.getValue(), expr);//2、登录用户id和token之间关系
         this.cache.add(Common.USER_ID + "_" + token01, ext.get(Common.USER_ID), expr);
         this.cache.add(Common.USER_NAME + "_" + token01, ext.get(Common.USER_NAME), expr);
+
+        return ext;
     }
 }

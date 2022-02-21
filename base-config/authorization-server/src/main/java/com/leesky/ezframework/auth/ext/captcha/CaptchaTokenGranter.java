@@ -35,7 +35,7 @@ public class CaptchaTokenGranter extends AbstractTokenGranter {
 
     private static final String GRANT_TYPE = "captcha";
 
-    private RedisService cache;
+    private final RedisService cache;
     public AuthenticationManager authenticationManager;
 
     public CaptchaTokenGranter(AuthorizationServerTokenServices tokenServices,
@@ -56,16 +56,14 @@ public class CaptchaTokenGranter extends AbstractTokenGranter {
     @Override
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
         {
+            // 1、从请求头部获取 验证码
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            assert servletRequestAttributes != null;
             HttpServletRequest request = servletRequestAttributes.getRequest();
 
-            Map<String, String> parameters = Maps.newHashMap(tokenRequest.getRequestParameters());
-            // 验证码校验逻辑
             String key = request.getHeader("key");
             String value = request.getHeader("code");
-
-
-            Assert.isTrue(StringUtils.isNotBlank(value), "验证码不能为空");
+            Assert.isTrue(StringUtils.isNotBlank(value), "请输入验证码");
 
             // 从缓存取出正确的验证码和用户输入的验证码比对，然后删除
             String validateCodeKey = Redis.LOGIN_IMG_CODE + key;
@@ -73,24 +71,15 @@ public class CaptchaTokenGranter extends AbstractTokenGranter {
             Assert.isTrue(StringUtils.equals(correctValidateCode, value), "验证码错误");
             this.cache.del(validateCodeKey);
 
-
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-
-            // 移除后续无用参数
-            parameters.remove("password");
-
-
             // 和密码模式一样的逻辑
-            Authentication userAuth = new UsernamePasswordAuthenticationToken(username, password);
+            Map<String, String> parameters = Maps.newHashMap(tokenRequest.getRequestParameters());
+            Authentication userAuth = new UsernamePasswordAuthenticationToken(parameters.get("username"), parameters.get("password"));
             ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
 
             try {
                 userAuth = this.authenticationManager.authenticate(userAuth);
-            } catch (AccountStatusException e0) {
-                throw new InvalidGrantException(e0.getMessage());
-            } catch (BadCredentialsException e1) {
-                throw new InvalidGrantException(e1.getMessage());
+            } catch (AccountStatusException | BadCredentialsException e) {
+                throw new InvalidGrantException(e.getMessage());
             }
 
 
@@ -98,7 +87,7 @@ public class CaptchaTokenGranter extends AbstractTokenGranter {
                 OAuth2Request storedOAuth2Request = this.getRequestFactory().createOAuth2Request(client, tokenRequest);
                 return new OAuth2Authentication(storedOAuth2Request, userAuth);
             } else {
-                throw new InvalidGrantException("Could not authenticate user: " + username);
+                throw new InvalidGrantException("Could not authenticate user: " + parameters.get("username"));
             }
         }
 

@@ -39,9 +39,13 @@ public class SysUserDetails implements UserDetails {
     /**
      * 默认字段
      */
+    private String portrait;
     private String username;
     private String password;
     private Boolean enabled;
+    private String companyCode;
+    private String companyName;
+
     private Collection<SimpleGrantedAuthority> authorities;
 
     /**
@@ -50,6 +54,9 @@ public class SysUserDetails implements UserDetails {
     public SysUserDetails(UserAuthDTO user) {
         this.setUserId(user.getId());
         this.setUsername(user.getUsername());
+        this.setPortrait(user.getPortrait());
+        this.setCompanyCode(user.getCompanyCode());
+        this.setCompanyName(user.getCompanyName());
         this.setEnabled(StringUtils.equals(user.getStatus(), StatusEnum.ENABLE.getKey()));
         this.setPassword(PasswordEncoderTypeEnum.BCRYPT.getPrefix() + user.getPassword());
         this.setByTime(user.getByTime().getTime() > System.currentTimeMillis() ? true : false);
@@ -71,7 +78,6 @@ public class SysUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-
         return this.username;
     }
 

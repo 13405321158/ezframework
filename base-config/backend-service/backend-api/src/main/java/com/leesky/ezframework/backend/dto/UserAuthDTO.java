@@ -46,17 +46,33 @@ public class UserAuthDTO {
      * 有效期至
      */
     private Date byTime;
+    /*
+     * 公司编码
+     */
+    private String companyCode;
+    /*
+     * 公司名称
+     */
+    private String companyName;
+    /*
+     * 头像
+     */
+    private String portrait;
 
     /**
      * 用户角色编码集合 ["ROOT","ADMIN"]
      */
     private Set<String> roles = Sets.newHashSet();
 
-    public UserAuthDTO(String id, String username, String password, String status, Date byTime) {
+    public UserAuthDTO(String id, String username, String password, String status, Date byTime,String companyCode,String companyName,String portrait) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.status = status;
         this.byTime = byTime;
+
+        this.companyCode=companyCode;
+        this.companyName=companyName;
+        this.portrait=portrait;
     }
 }
