@@ -68,7 +68,7 @@ public class CaptchaTokenGranter extends AbstractTokenGranter {
             // 从缓存取出正确的验证码和用户输入的验证码比对，然后删除
             String validateCodeKey = Redis.LOGIN_IMG_CODE + key;
             String correctValidateCode = (String) this.cache.get(validateCodeKey);
-            Assert.isTrue(StringUtils.equals(correctValidateCode, value), "验证码错误");
+            Assert.isTrue(StringUtils.equals(correctValidateCode, value), "验证码不匹配");
             this.cache.del(validateCodeKey);
 
             // 和密码模式一样的逻辑

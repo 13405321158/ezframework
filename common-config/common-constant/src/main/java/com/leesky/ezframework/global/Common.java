@@ -9,6 +9,7 @@ package com.leesky.ezframework.global;
 public class Common {
 
     public final static String USER_ID = "userId";//系统用户id
+    public final static String ID_NAME = "idName";//中文名称
     public final static String USER_NAME = "userName";//系统用户登录名称
     public final static String LOGIN_USER_EXT_INFO = "userInfo";//登录用户经常使用的扩展信息
 

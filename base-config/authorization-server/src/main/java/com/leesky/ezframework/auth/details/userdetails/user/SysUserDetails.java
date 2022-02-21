@@ -40,6 +40,7 @@ public class SysUserDetails implements UserDetails {
      * 默认字段
      */
     private String portrait;
+    private String idName;
     private String username;
     private String password;
     private Boolean enabled;
@@ -53,6 +54,7 @@ public class SysUserDetails implements UserDetails {
      */
     public SysUserDetails(UserAuthDTO user) {
         this.setUserId(user.getId());
+        this.setIdName(user.getIdName());
         this.setUsername(user.getUsername());
         this.setPortrait(user.getPortrait());
         this.setCompanyCode(user.getCompanyCode());

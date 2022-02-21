@@ -29,10 +29,13 @@ public class UserAuthDTO {
     private String id;
 
     /**
-     * 用户名
+     * 登录名
      */
     private String username;
-
+    /**
+     * 中文名
+     */
+    private String idName;
     /**
      * 用户密码
      */
@@ -64,15 +67,16 @@ public class UserAuthDTO {
      */
     private Set<String> roles = Sets.newHashSet();
 
-    public UserAuthDTO(String id, String username, String password, String status, Date byTime,String companyCode,String companyName,String portrait) {
+    public UserAuthDTO(String id, String username,String idName, String password, String status, Date byTime, String companyCode, String companyName, String portrait) {
         this.id = id;
+        this.idName= idName;
         this.username = username;
         this.password = password;
         this.status = status;
         this.byTime = byTime;
 
-        this.companyCode=companyCode;
-        this.companyName=companyName;
-        this.portrait=portrait;
+        this.companyCode = companyCode;
+        this.companyName = companyName;
+        this.portrait = portrait;
     }
 }

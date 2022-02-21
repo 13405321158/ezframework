@@ -1,6 +1,13 @@
+/**
+ * 查询子表，并把查询结果赋值给主表entity
+ *
+ * @author： 魏来
+ * @date： 2021/12/16 上午8:29
+ */
 package com.leesky.ezframework.mybatis.query;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.condition.FieldCondition;
@@ -19,16 +26,12 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * 查询子表，并把查询结果赋值给主表entity
- *
- * @author： 魏来
- * @date： 2021/12/16 上午8:29
- */
+
 
 @Component
 @RequiredArgsConstructor
@@ -111,7 +114,7 @@ public class QueryItem<T> {
 
     private QueryFilter<?> common(String v, Field f, Object entityShipValue) {
         QueryFilter<?> filter = new QueryFilter<>();
-        filter.select(v).eq(f.getAnnotation(JoinColumn.class).referencedColumnName(), entityShipValue);
+        filter.select(hump2underline(v)).eq(f.getAnnotation(JoinColumn.class).referencedColumnName(), entityShipValue);
         return filter;
     }
 
@@ -126,6 +129,13 @@ public class QueryItem<T> {
 
         String rid = JoinUtil.getTableKeyName(fc.getFieldClass());//结果表主键
 
-        return new M2mParam(v, mainName, middleName, resultName, shipId, mainKey, joinColumn, inverseColumn, rid);
+        return new M2mParam(hump2underline(v), mainName, middleName, resultName, shipId, mainKey, joinColumn, inverseColumn, rid);
+    }
+
+    private String hump2underline(String v) {
+        List<String> list = Lists.newArrayList();
+        String[] array = StringUtils.split(v, ",");
+        Arrays.stream(array).forEach(e -> list.add(Hump2underline.build(e)));
+        return StringUtils.join(list, ",");
     }
 }

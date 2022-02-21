@@ -35,6 +35,7 @@ public class JwtEnhancer implements TokenEnhancer {
             SysUserDetails sysUserDetails = (SysUserDetails) principal;
             extMap.put("pubKey", Common.RSA_PUBLIC2048);
             extMap.put(Common.USER_ID, sysUserDetails.getUserId());
+            extMap.put(Common.ID_NAME,sysUserDetails.getIdName());
             extMap.put(Common.USER_NAME, sysUserDetails.getUsername());
             extMap.put(Common.DEALER_CODE, sysUserDetails.getCompanyCode());
             extMap.put(Common.DEALER_NAME, sysUserDetails.getCompanyName());
