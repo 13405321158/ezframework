@@ -1,7 +1,7 @@
 package com.leesky.ezframework.auth.ext.sms;
 
 
-import com.leesky.ezframework.auth.details.userdetails.menber.MemberUserDetailsServiceImpl;
+import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetailsService;
 import com.leesky.ezframework.redis.service.RedisService;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +44,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
             // 比对成功删除缓存的验证码
             this.cache.del(codeKey);
         }
-        UserDetails userDetails = ((MemberUserDetailsServiceImpl) userDetailsService).loadUserByMobile(mobile);
+        UserDetails userDetails = ((BuyerDetailsService) userDetailsService).loadUserByMobile(mobile);
         SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(userDetails, authentication.getCredentials(), new HashSet<>());
         result.setDetails(authentication.getDetails());
         return result;

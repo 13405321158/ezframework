@@ -5,7 +5,7 @@
  * @部门: 国内市场替换部IT组
  * @描述:  
  */
-package com.leesky.ezframework.auth.details.userdetails.menber;
+package com.leesky.ezframework.auth.details.userdetails.buyer;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class MemberUserDetailsServiceImpl implements UserDetailsService {
+public class BuyerDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

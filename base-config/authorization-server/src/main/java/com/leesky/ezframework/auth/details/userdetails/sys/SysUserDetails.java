@@ -5,7 +5,7 @@
  * @部门: 国内市场替换部IT组
  * @描述:
  */
-package com.leesky.ezframework.auth.details.userdetails.user;
+package com.leesky.ezframework.auth.details.userdetails.sys;
 
 import com.leesky.ezframework.auth.enums.PasswordEncoderTypeEnum;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
@@ -34,7 +34,7 @@ public class SysUserDetails implements UserDetails {
      */
     private String userId;
     private Boolean byTime;//有效期至
-    private String authenticationMethod;
+    private String authenticationMethod;//认证方式
 
     /**
      * 默认字段

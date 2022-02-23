@@ -2,7 +2,7 @@ package com.leesky.ezframework.auth.ext.webchat;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import com.leesky.ezframework.auth.details.userdetails.menber.MemberUserDetailsServiceImpl;
+import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetailsService;
 import com.leesky.ezframework.backend.api.IbackendServerClient;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -61,7 +61,7 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
 //            member.setStatus(GlobalConstants.STATUS_YES);
 //            memberFeignClient.add(member);
 //        }
-        UserDetails userDetails = ((MemberUserDetailsServiceImpl) userDetailsService).loadUserByOpenId(openid);
+        UserDetails userDetails = ((BuyerDetailsService) userDetailsService).loadUserByOpenId(openid);
         WechatAuthenticationToken result = new WechatAuthenticationToken(userDetails, new HashSet<>());
         result.setDetails(authentication.getDetails());
         return result;

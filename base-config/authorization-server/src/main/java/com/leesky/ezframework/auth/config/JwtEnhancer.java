@@ -8,8 +8,8 @@ package com.leesky.ezframework.auth.config;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.leesky.ezframework.auth.details.userdetails.menber.MemberUserDetails;
-import com.leesky.ezframework.auth.details.userdetails.user.SysUserDetails;
+import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetails;
+import com.leesky.ezframework.auth.details.userdetails.sys.SysUserDetails;
 import com.leesky.ezframework.global.Common;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
@@ -47,12 +47,12 @@ public class JwtEnhancer implements TokenEnhancer {
         }
 
         //商城会员登录 返回扩展信息
-        if (principal instanceof MemberUserDetails) {
-            MemberUserDetails memberUserDetails = (MemberUserDetails) principal;
-            extMap.put(Common.USER_ID, memberUserDetails.getUserId());
-            extMap.put(Common.USER_NAME, memberUserDetails.getUsername());
-            if (StringUtils.isNotBlank(memberUserDetails.getAuthenticationMethod())) {
-                extMap.put("authenticationMethod", memberUserDetails.getAuthenticationMethod());
+        if (principal instanceof BuyerDetails) {
+            BuyerDetails buyerDetails = (BuyerDetails) principal;
+            extMap.put(Common.USER_ID, buyerDetails.getUserId());
+            extMap.put(Common.USER_NAME, buyerDetails.getUsername());
+            if (StringUtils.isNotBlank(buyerDetails.getAuthenticationMethod())) {
+                extMap.put("authenticationMethod", buyerDetails.getAuthenticationMethod());
             }
 
         }

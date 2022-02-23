@@ -5,7 +5,7 @@
  * @部门: 国内市场替换部IT组
  * @描述:
  */
-package com.leesky.ezframework.auth.details.userdetails.user;
+package com.leesky.ezframework.auth.details.userdetails.sys;
 
 import com.leesky.ezframework.backend.api.IbackendServerClient;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class SysUserDetailsServiceImpl implements UserDetailsService {
+public class SysUserDetailsService implements UserDetailsService {
 
     private final IbackendServerClient client;
 

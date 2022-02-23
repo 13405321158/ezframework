@@ -1,7 +1,7 @@
 package com.leesky.ezframework.auth.config;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
-import com.leesky.ezframework.auth.details.userdetails.user.SysUserDetailsServiceImpl;
+import com.leesky.ezframework.auth.details.userdetails.sys.SysUserDetailsService;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeAuthenticationProvider;
 import com.leesky.ezframework.auth.ext.webchat.WechatAuthenticationProvider;
 import com.leesky.ezframework.backend.api.IbackendServerClient;
@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final WxMaService wxMaService;
     private final IbackendServerClient client;
 
-    private final SysUserDetailsServiceImpl sysUserDetailsService;
+    private final SysUserDetailsService sysUserDetailsService;
 
     /**
      * 授权控制器访问控制设置
