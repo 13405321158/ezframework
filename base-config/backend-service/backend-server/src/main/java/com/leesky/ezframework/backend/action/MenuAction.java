@@ -36,17 +36,28 @@ public class MenuAction {
 
 
         MenuMetaDTO meta01 = new MenuMetaDTO("User", "用户管理");
-        MenuDTO dto01 = new MenuDTO("user", "/system/user/index",  meta01);
+        MenuDTO dto01 = new MenuDTO("user", "/system/user/index", meta01);
 
 
         MenuMetaDTO meta02 = new MenuMetaDTO("Setting", "角色管理");
-        MenuDTO dto02 = new MenuDTO("dict", "/system/dict/index",  meta02);
+        MenuDTO dto02 = new MenuDTO("dict", "/system/dict/index", meta02);
 
 
         dto.setChildren(Lists.newArrayList(dto01, dto02));
         menu.add(dto);
-        return Result.success(menu,false);
+        return Result.success(menu, false);
     }
 
+    /**
+     * 返回登录用户 按钮操作权限
+     *
+     * @author： 魏来
+     * @date: 2022/2/23  下午3:30
+     */
+    @GetMapping(value = "/r02/public")
+    public Result<?> r02() {
+
+        return Result.success();
+    }
 
 }

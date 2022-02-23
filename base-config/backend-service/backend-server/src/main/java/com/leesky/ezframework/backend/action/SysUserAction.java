@@ -2,7 +2,6 @@ package com.leesky.ezframework.backend.action;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.ImmutableMap;
-import com.leesky.ezframework.backend.dto.UserAuthDTO;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
@@ -47,7 +46,7 @@ public class SysUserAction {
      * @date: 2021年12月3日 上午9:05:39
      */
     @GetMapping("/{username}/public")
-    public Result<UserAuthDTO> getUserByUsername(@PathVariable String username) {
+    public Result<UserBaseDTO> getUserByUsername(@PathVariable String username) {
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>(ImmutableMap.of("Q_username_EQ", username));
 
@@ -55,7 +54,7 @@ public class SysUserAction {
 
         UserBaseModel user = this.service.findOne(filter, ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,portrait"));
 
-        UserAuthDTO dto = buildUserAuthDTO(user);
+        UserBaseDTO dto = Po2DtoUtil.convertor(user, UserBaseDTO.class);
 
         return success(dto, false);
     }
@@ -178,14 +177,6 @@ public class SysUserAction {
         this.service.delUser(list);
 
         return success();
-    }
-
-    private UserAuthDTO buildUserAuthDTO(UserBaseModel u) {
-        UserAuthDTO dto = new UserAuthDTO(u.getId(), u.getUsername(), u.getExt01().getIdName(), u.getPassword(), u.getStatus(), u.getByTime(),
-                u.getExt01().getCompanyCode(), u.getExt01().getCompanyName(), u.getExt01().getPortrait()
-        );
-        u.getRoles().forEach(e -> dto.getRoles().add(e.getCode()));
-        return dto;
     }
 
 }

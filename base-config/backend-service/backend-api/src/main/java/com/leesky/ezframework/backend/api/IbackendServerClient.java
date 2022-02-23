@@ -9,7 +9,7 @@ package com.leesky.ezframework.backend.api;
 
 import com.leesky.ezframework.backend.api.callback.BackendFeignFallback;
 import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
-import com.leesky.ezframework.backend.dto.UserAuthDTO;
+import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.feign.FeignErrorDecoder;
 import com.leesky.ezframework.json.Result;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -41,5 +41,5 @@ public interface IbackendServerClient {
      * @date: 2021/12/1 下午6:46
      */
     @GetMapping("/user/{username}/public")
-    public Result<UserAuthDTO> getUserByUsername(@PathVariable String username);
+    Result<UserBaseDTO> getUserByUsername(@PathVariable String username);
 }

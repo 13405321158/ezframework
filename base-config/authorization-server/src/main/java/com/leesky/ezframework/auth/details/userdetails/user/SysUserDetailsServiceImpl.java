@@ -8,7 +8,7 @@
 package com.leesky.ezframework.auth.details.userdetails.user;
 
 import com.leesky.ezframework.backend.api.IbackendServerClient;
-import com.leesky.ezframework.backend.dto.UserAuthDTO;
+import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.json.Result;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
@@ -33,13 +33,13 @@ public class SysUserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUserDetails userDetails = null;
-        Result<UserAuthDTO> ret = this.client.getUserByUsername(username);
+        Result<UserBaseDTO> ret = this.client.getUserByUsername(username);
 
         if (!ret.isSuccess()) {
             throw new UsernameNotFoundException("该账户不存在：" + username);
         }
 
-        UserAuthDTO data = ret.getData();
+        UserBaseDTO data = ret.getData();
         if (ObjectUtils.isNotEmpty(data)) {
             userDetails = new SysUserDetails(data);
 

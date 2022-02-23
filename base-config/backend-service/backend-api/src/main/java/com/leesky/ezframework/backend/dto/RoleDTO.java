@@ -25,5 +25,5 @@ public class RoleDTO {
 
     private String type;//角色类型：系统用户使用=sys001,会员用户使用=member001,经销商使用=经销商编码
 
-    private Set<UserAuthDTO> users;
+    private Set<UserBaseDTO> users;
 }

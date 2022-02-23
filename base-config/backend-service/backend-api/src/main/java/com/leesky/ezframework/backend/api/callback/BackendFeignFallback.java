@@ -8,15 +8,13 @@
 package com.leesky.ezframework.backend.api.callback;
 
 import com.alibaba.fastjson.JSON;
-import org.springframework.cloud.openfeign.FallbackFactory;
-import org.springframework.stereotype.Component;
-
 import com.leesky.ezframework.backend.api.IbackendServerClient;
 import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
-import com.leesky.ezframework.backend.dto.UserAuthDTO;
+import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.json.Result;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * 类功能说明：
@@ -40,7 +38,7 @@ public class BackendFeignFallback implements FallbackFactory<IbackendServerClien
             }
 
             @Override
-            public Result<UserAuthDTO> getUserByUsername(String username) {
+            public Result<UserBaseDTO> getUserByUsername(String username) {
                 log.error(ret.getMsg());
                 return Result.failed("backend-server服务降级,获取username异常：" + ret.getMsg());
             }

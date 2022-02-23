@@ -8,7 +8,7 @@
 package com.leesky.ezframework.auth.details.userdetails.user;
 
 import com.leesky.ezframework.auth.enums.PasswordEncoderTypeEnum;
-import com.leesky.ezframework.backend.dto.UserAuthDTO;
+import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.enums.StatusEnum;
 import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
@@ -52,19 +52,19 @@ public class SysUserDetails implements UserDetails {
     /**
      * 系统管理用户
      */
-    public SysUserDetails(UserAuthDTO user) {
+    public SysUserDetails(UserBaseDTO user) {
         this.setUserId(user.getId());
-        this.setIdName(user.getIdName());
+        this.setIdName(user.getExt01().getIdName());
         this.setUsername(user.getUsername());
-        this.setPortrait(user.getPortrait());
-        this.setCompanyCode(user.getCompanyCode());
-        this.setCompanyName(user.getCompanyName());
+        this.setPortrait(user.getExt01().getPortrait());
+        this.setCompanyCode(user.getExt01().getCompanyCode());
+        this.setCompanyName(user.getExt01().getCompanyName());
         this.setEnabled(StringUtils.equals(user.getStatus(), StatusEnum.ENABLE.getKey()));
         this.setPassword(PasswordEncoderTypeEnum.BCRYPT.getPrefix() + user.getPassword());
         this.setByTime(user.getByTime().getTime() > System.currentTimeMillis() ? true : false);
         if (CollectionUtils.isNotEmpty(user.getRoles())) {
             authorities = new ArrayList<>();
-            user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
+            user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getCode())));
         }
     }
 
