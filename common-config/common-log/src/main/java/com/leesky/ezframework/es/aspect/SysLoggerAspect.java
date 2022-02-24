@@ -58,8 +58,13 @@ public class SysLoggerAspect {
 
         SysLogger sysLogger = signature.getMethod().getAnnotation(SysLogger.class);// 注解类
 
-        dto.setUserId(getUserId());
-        dto.setUserName(getUserName());
+        try {
+            dto.setUserId(getUserId());
+            dto.setUserName(getUserName());
+        } catch (Exception e) {
+            dto.setUserName("匿名访问");
+        }
+
         dto.setAction(sysLogger.action());
         dto.setModule(sysLogger.module());
         dto.setIp(HttpUtils.getIpAddress());

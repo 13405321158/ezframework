@@ -68,7 +68,7 @@ public class RoleAction {
         ValidatorUtils.valid(dto);
 
         RoleModel model = Po2DtoUtil.convertor(dto, RoleModel.class);
-        model.setCode("Role_" + RandomStringUtils.randomNumeric(6));
+        model.setCode("ROLE_" + RandomStringUtils.randomNumeric(6));
         this.service.insert(model, false);
         return Result.success();
     }
