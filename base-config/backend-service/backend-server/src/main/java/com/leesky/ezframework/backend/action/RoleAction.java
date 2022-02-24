@@ -124,6 +124,7 @@ public class RoleAction {
      * @author： 魏来
      * @date: 2021/12/10 下午3:01
      */
+    @PostMapping("/c04")
     public Result<?> delRole(@RequestBody RoleDTO dto) {
 
         Assert.isTrue(StringUtils.isNotBlank(dto.getId()), "删除角色信息参数Id不能是空值");
