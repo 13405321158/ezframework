@@ -7,6 +7,7 @@
  */
 package com.leesky.ezframework.auth.details.userdetails.saler;
 
+import com.leesky.ezframework.backend.api.IbackendServerClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,8 +24,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SalerDetailsService implements UserDetailsService {
 
+    private final IbackendServerClient client;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserDetails userDetails = null;
+        this.client.loadSalerUserByUsername(username);
         return null;
     }
 }

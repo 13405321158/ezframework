@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class RefresTokenGranter<T extends Authentication> implements AuthenticationUserDetailsService<T>, InitializingBean {
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet()  {
 		// TODO Auto-generated method stub
 		
 	}

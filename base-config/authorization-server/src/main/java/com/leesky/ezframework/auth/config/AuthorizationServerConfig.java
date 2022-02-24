@@ -221,8 +221,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         AuthorizationServerTokenServices tokenService = point.getTokenServices();
 
         // 添加验证码授权模式授权者
-        list.add(new CaptchaTokenGranter(tokenService, clientDetails, factory, authenticationManager, cache
-        ));
+        list.add(new CaptchaTokenGranter(tokenService, clientDetails, factory, authenticationManager, cache));
         // 添加手机短信验证码授权模式的授权者
         list.add(new SmsCodeTokenGranter(tokenService, clientDetails, factory, authenticationManager));
         // 添加微信授权模式的授权者

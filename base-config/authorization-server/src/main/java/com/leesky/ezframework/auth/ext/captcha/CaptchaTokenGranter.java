@@ -11,6 +11,7 @@ package com.leesky.ezframework.auth.ext.captcha;
 import com.google.common.collect.Maps;
 import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.redis.service.RedisService;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -54,11 +55,12 @@ public class CaptchaTokenGranter extends AbstractTokenGranter {
 
 
     @Override
+    @SneakyThrows(InvalidGrantException.class)
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
         {
             // 1、从请求头部获取 验证码
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            assert servletRequestAttributes != null;
+
             HttpServletRequest request = servletRequestAttributes.getRequest();
 
             String key = request.getHeader("key");
@@ -69,26 +71,23 @@ public class CaptchaTokenGranter extends AbstractTokenGranter {
             String validateCodeKey = Redis.LOGIN_IMG_CODE + key;
             String correctValidateCode = (String) this.cache.get(validateCodeKey);
             Assert.isTrue(StringUtils.equals(correctValidateCode, value), "验证码不匹配");
-            this.cache.del(validateCodeKey);
+            //this.cache.del(validateCodeKey);
 
             // 和密码模式一样的逻辑
             Map<String, String> parameters = Maps.newHashMap(tokenRequest.getRequestParameters());
             Authentication userAuth = new UsernamePasswordAuthenticationToken(parameters.get("username"), parameters.get("password"));
             ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
 
-            try {
-                userAuth = this.authenticationManager.authenticate(userAuth);
-            } catch (AccountStatusException | BadCredentialsException e) {
-                throw new InvalidGrantException(e.getMessage());
-            }
+            OAuth2Request storedOAuth2Request = null;
+
+            userAuth = this.authenticationManager.authenticate(userAuth);
 
 
-            if (userAuth != null && userAuth.isAuthenticated()) {
-                OAuth2Request storedOAuth2Request = this.getRequestFactory().createOAuth2Request(client, tokenRequest);
-                return new OAuth2Authentication(storedOAuth2Request, userAuth);
-            } else {
-                throw new InvalidGrantException("Could not authenticate user: " + parameters.get("username"));
-            }
+            if (userAuth.isAuthenticated())
+                storedOAuth2Request = this.getRequestFactory().createOAuth2Request(client, tokenRequest);
+
+
+            return new OAuth2Authentication(storedOAuth2Request, userAuth);
         }
 
 

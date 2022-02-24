@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * 类功能说明：
- * <li>平台用户
+ * <li>系统管理(平台)用户
  */
 @Service
 @RequiredArgsConstructor
@@ -32,30 +32,49 @@ public class SysUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUserDetails userDetails = null;
-        Result<UserBaseDTO> ret = this.client.getUserByUsername(username);
+        UserDetails userDetails = null;
 
-        if (!ret.isSuccess()) {
-            throw new UsernameNotFoundException("该账户不存在：" + username);
+        //1、首先查询 系统用户
+        Result<UserBaseDTO> ret = this.client.loadSystemUserByUsername(username);
+        if (ret.isSuccess()) {
+            UserBaseDTO data = ret.getData();
+            if (ObjectUtils.isNotEmpty(data)) {
+                userDetails = new SysUserDetails(data);
+                throwException(userDetails);
+            }
+            return userDetails;
         }
 
-        UserBaseDTO data = ret.getData();
-        if (ObjectUtils.isNotEmpty(data)) {
-            userDetails = new SysUserDetails(data);
-
-            if (!userDetails.isEnabled()) {
-                throw new DisabledException("该账户已被禁用!");
-            }
-            if (!userDetails.isAccountNonLocked()) {
-                throw new LockedException("该账号已被锁定!");
-            }
-
-            if (!userDetails.isAccountNonExpired()) {
-                throw new AccountExpiredException("该账号已过期!");
-            }
+        //2、然后查询卖家用户
+        ret = this.client.loadSalerUserByUsername(username);
+        if (ret.isSuccess()) {
+             //TODO
+            throwException(userDetails);
+            return userDetails;
         }
 
-        return userDetails;
+        //3、最后查询买家用户
+        ret = this.client.loadBuyerUserByUsername(username);
+        if (ret.isSuccess()) {
+            //TODO
+            throwException(userDetails);
+            return userDetails;
+        }
+
+
+        throw new UsernameNotFoundException("账户不存在：" + username);
     }
 
+    private void throwException(UserDetails userDetails) {
+        if (!userDetails.isEnabled())
+            throw new DisabledException("该账户已被禁用!");
+
+        if (!userDetails.isAccountNonLocked())
+            throw new LockedException("该账号已被锁定!");
+
+
+        if (!userDetails.isAccountNonExpired())
+            throw new AccountExpiredException("该账号已过期!");
+
+    }
 }

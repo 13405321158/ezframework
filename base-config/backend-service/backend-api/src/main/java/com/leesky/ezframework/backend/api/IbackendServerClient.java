@@ -35,11 +35,29 @@ public interface IbackendServerClient {
     Result<OauthClientDetailsDTO> getOAuth2ClientById(@RequestParam String clientId);
 
     /**
-     * 登录时查询用户名
+     * 登录时查询系统用户名
      *
      * @author： 魏来
      * @date: 2021/12/1 下午6:46
      */
-    @GetMapping("/user/{username}/public")
-    Result<UserBaseDTO> getUserByUsername(@PathVariable String username);
+    @GetMapping("/sys-user/{username}/public")
+    Result<UserBaseDTO> loadSystemUserByUsername(@PathVariable String username);
+
+    /**
+     * 查询买家用户
+     *
+     * @author: 魏来
+     * @date: 2022/2/24 上午9:40
+     */
+    @GetMapping("/buyer-user/{username}/public")
+    Result<UserBaseDTO> loadBuyerUserByUsername(@PathVariable String username);
+
+    /**
+     * 查询买家用户
+     *
+     * @author: 魏来
+     * @date: 2022/2/24 上午9:41
+     */
+    @GetMapping("/sale-user/{username}/public")
+    Result<UserBaseDTO> loadSalerUserByUsername(@PathVariable String username);
 }

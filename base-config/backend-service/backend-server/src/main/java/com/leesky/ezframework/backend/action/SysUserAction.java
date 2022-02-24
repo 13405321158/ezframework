@@ -7,16 +7,13 @@ import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.backend.vo.UserBaseVO;
 import com.leesky.ezframework.es.annotation.SysLogger;
-import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.query.CommonDTO;
 import com.leesky.ezframework.query.ParamModel;
-import com.leesky.ezframework.redis.service.RedisService;
 import com.leesky.ezframework.utils.I18nUtil;
 import com.leesky.ezframework.utils.Po2DtoUtil;
 import com.leesky.ezframework.utils.ValidatorUtils;
-import com.wf.captcha.ArithmeticCaptcha;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -25,18 +22,16 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import static com.leesky.ezframework.json.Result.success;
 
 @RestController
-@RequestMapping("/user")
 @RequiredArgsConstructor
+@RequestMapping("/sys-user")
 public class SysUserAction {
 
     private final I18nUtil i18n;
-    private final RedisService cache;
+
     private final IuserBaseService service;
 
     /**
@@ -46,40 +41,23 @@ public class SysUserAction {
      * @date: 2021年12月3日 上午9:05:39
      */
     @GetMapping("/{username}/public")
-    public Result<UserBaseDTO> getUserByUsername(@PathVariable String username) {
+    @SysLogger(module = "系统用户控制器", action = "系统用户登录")
+    public Result<UserBaseDTO> loadUserByUsername(@PathVariable String username) {
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>(ImmutableMap.of("Q_username_EQ", username));
 
         filter.select("id,username,status,by_time,password,ext01Id");//如果不包括ext01Id 则无法查询 ext01
 
-        UserBaseModel user = this.service.findOne(filter, ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,portrait"));
+        ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,portrait");
+        UserBaseModel user = this.service.findOne(filter, map);
+
+        Assert.isTrue(ObjectUtils.isNotEmpty(user), this.i18n.getMsg("username.not.registered", username));
 
         UserBaseDTO dto = Po2DtoUtil.convertor(user, UserBaseDTO.class);
 
         return success(dto, false);
     }
 
-    /**
-     * 图片登录验证码
-     *
-     * @author： 魏来
-     * @date: 2022/2/16  下午4:14
-     */
-    @GetMapping(value = "/img/code/public")
-    public Result<Map<String, String>> ValidateCode() {
-
-        String uuid = UUID.randomUUID().toString().replace("-", "");
-        ArithmeticCaptcha captcha = new ArithmeticCaptcha(120, 40);//图片size
-
-        captcha.getArithmeticString();  // 获取运算的公式：3+2=?
-        String text = captcha.text();// 获取运算的结果：5
-
-        this.cache.add(Redis.LOGIN_IMG_CODE + uuid, text, 130L);
-
-        ImmutableMap<String, String> data = ImmutableMap.of("key", uuid, "codeUrl", captcha.toBase64());
-
-        return Result.success(data, false);
-    }
 
     /**
      * 系统用户列表
@@ -87,8 +65,8 @@ public class SysUserAction {
      * @author： 魏来
      * @date: 2022/1/7 下午3:31
      */
-    @SysLogger(module = "用户管理", action = "系统用户列表")
     @PostMapping(value = "/r01")
+    @SysLogger(module = "系统用户控制器", action = "系统用户列表")
     public Result<List<UserBaseVO>> r01(@RequestBody ParamModel param) {
         QueryFilter<UserBaseModel> filter = new QueryFilter<>(param);
 //        filter.select("id,username,status,ext01.idCard");

@@ -14,9 +14,10 @@ import java.util.Collection;
  */
 public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 
-    private static final long serialVersionUID = 550L;
-    private final Object principal;
+    private static final long serialVersionUID = 7869145909948215123L;
+
     private Object credentials;
+    private final Object principal;
 
     public SmsCodeAuthenticationToken(Object principal, Object credentials) {
         super((Collection) null);
