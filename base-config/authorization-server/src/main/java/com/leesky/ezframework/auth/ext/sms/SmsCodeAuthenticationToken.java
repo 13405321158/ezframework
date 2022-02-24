@@ -20,7 +20,7 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
     private final Object principal;
 
     public SmsCodeAuthenticationToken(Object principal, Object credentials) {
-        super((Collection) null);
+        super(null);
         this.principal = principal;
         this.credentials = credentials;
         this.setAuthenticated(false);

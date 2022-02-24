@@ -14,7 +14,6 @@ public class BaseDTO {
 
     protected LocalDateTime modifyDate;
 
-    protected LocalDateTime modifyDate02;
 
     public LocalDateTime getCreateDate() {
         if (StringUtils.isBlank(this.id))
@@ -24,10 +23,9 @@ public class BaseDTO {
     }
 
     public LocalDateTime getModifyDate() {
-        return LocalDateTime.now();
-    }
-
-    public LocalDateTime getModifyDate02() {
-        return modifyDate;
+        if (StringUtils.isBlank(this.id))
+            return LocalDateTime.now();
+        else
+            return modifyDate;
     }
 }

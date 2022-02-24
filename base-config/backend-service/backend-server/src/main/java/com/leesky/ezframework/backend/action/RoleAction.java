@@ -1,3 +1,9 @@
+/**
+ * 角色操作控制器
+ *
+ * @author： 魏来
+ * @date： 2021/12/10 下午1:45
+ */
 package com.leesky.ezframework.backend.action;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -12,21 +18,19 @@ import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.query.CommonDTO;
 import com.leesky.ezframework.query.ParamModel;
 import com.leesky.ezframework.utils.Po2DtoUtil;
+import com.leesky.ezframework.utils.ValidatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * 角色操作控制器
- *
- * @author： 魏来
- * @date： 2021/12/10 下午1:45
- */
+
 @RestController
 @RequestMapping("/role")
 @RequiredArgsConstructor
@@ -45,11 +49,12 @@ public class RoleAction {
     public Result<List<RoleDTO>> list(@RequestBody ParamModel model) {
 
         QueryFilter<RoleModel> filter = new QueryFilter<>(model);
+        filter.select("id,name,code,description,sort_no,type");
         Page<RoleModel> data = this.service.page(filter);
 
         List<RoleDTO> ret = Po2DtoUtil.convertor(data.getRecords(), RoleDTO.class);
 
-        return Result.success(ret, data.getTotal(),false);
+        return Result.success(ret, data.getTotal(), false);
     }
 
     /**
@@ -60,8 +65,10 @@ public class RoleAction {
      */
     @PostMapping("/c01")
     public Result<?> addRole01(@RequestBody RoleDTO dto) throws Exception {
+        ValidatorUtils.valid(dto);
 
         RoleModel model = Po2DtoUtil.convertor(dto, RoleModel.class);
+        model.setCode("Role_" + RandomStringUtils.randomNumeric(6));
         this.service.insert(model, false);
         return Result.success();
     }
@@ -83,7 +90,7 @@ public class RoleAction {
     }
 
     /**
-     * 增加角色
+     * 编辑角色
      *
      * @author： 魏来
      * @date: 2021/12/10 下午2:45
@@ -92,19 +99,20 @@ public class RoleAction {
     public Result<RoleModel> editRole(@RequestBody RoleDTO dto) {
 
         Assert.isTrue(StringUtils.isNotBlank(dto.getId()), "修改角色信息参数Id不能是空值");
+
         UpdateWrapper<RoleModel> filter = new UpdateWrapper<>();
         filter.eq("id", dto.getId());
 
-        if (StringUtils.isNotBlank(dto.getName())) {
+        if (StringUtils.isNotBlank(dto.getName()))
             filter.set("name", dto.getName());
-        }
-        if (ObjectUtils.isNotEmpty(dto.getSortNo())) {
-            filter.set("sort_no", dto.getSortNo());
-        }
-        if (StringUtils.isNotBlank(dto.getDescription())) {
-            filter.set("description", dto.getDescription());
-        }
 
+        if (ObjectUtils.isNotEmpty(dto.getSortNo()))
+            filter.set("sort_no", dto.getSortNo());
+
+        if (StringUtils.isNotBlank(dto.getDescription()))
+            filter.set("description", dto.getDescription());
+
+        filter.set("modify_date", LocalDateTime.now());
         this.service.update(filter);
 
         return Result.success();
