@@ -7,11 +7,21 @@
  */
 package com.leesky.ezframework.backend.model.buyer;
 
-/**
- * <li></li>
- *
- * @author: 魏来
- * @date: 2022/2/25 下午1:50
- */
-public class BuyerBaseModel {
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.leesky.ezframework.mybatis.model.BaseUuidModel;
+import io.swagger.annotations.ApiModel;
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter
+@Setter
+@TableName("cbm_mag_buy_user")
+@ApiModel(value = "买家(会员)基本信息")
+public class BuyerBaseModel extends BaseUuidModel {
+
+    private static final long serialVersionUID = -2026920241697117408L;
+    private String username;
+
+    private String mobile;
 }

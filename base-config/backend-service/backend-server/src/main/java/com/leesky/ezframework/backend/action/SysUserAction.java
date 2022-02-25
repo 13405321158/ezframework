@@ -3,8 +3,9 @@ package com.leesky.ezframework.backend.action;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
+import com.leesky.ezframework.backend.enums.LoginTypeEnum;
 import com.leesky.ezframework.backend.model.sys.UserBaseModel;
-import com.leesky.ezframework.backend.service.IuserBaseService;
+import com.leesky.ezframework.backend.service.sys.IuserBaseService;
 import com.leesky.ezframework.backend.vo.UserBaseVO;
 import com.leesky.ezframework.es.annotation.SysLogger;
 import com.leesky.ezframework.json.Result;
@@ -40,18 +41,20 @@ public class SysUserAction {
      * @author: 魏来
      * @date: 2021年12月3日 上午9:05:39
      */
-    @GetMapping("/{username}/public")
+    @GetMapping("/{var}/{type}/public")
     @SysLogger(module = "系统用户控制器", action = "系统用户登录")
-    public Result<UserBaseDTO> loadUserByUsername(@PathVariable String username) {
+    public Result<UserBaseDTO> loadUser(@PathVariable String var, @PathVariable String type) {
 
-        QueryFilter<UserBaseModel> filter = new QueryFilter<>(ImmutableMap.of("Q_username_EQ", username));
+        String loginType = LoginTypeEnum.getValue(type);
+
+        QueryFilter<UserBaseModel> filter = new QueryFilter<>(ImmutableMap.of(loginType, var));
 
         filter.select("id,username,status,by_time,password,ext01Id");//如果不包括ext01Id 则无法查询 ext01
 
         ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,portrait");
         UserBaseModel user = this.service.findOne(filter, map);
 
-        Assert.isTrue(ObjectUtils.isNotEmpty(user), this.i18n.getMsg("username.not.registered", username));
+        Assert.isTrue(ObjectUtils.isNotEmpty(user), this.i18n.getMsg("username.not.registered", var));
 
         UserBaseDTO dto = Po2DtoUtil.convertor(user, UserBaseDTO.class);
 

@@ -40,8 +40,8 @@ public interface IbackendServerClient {
      * @author： 魏来
      * @date: 2021/12/1 下午6:46
      */
-    @GetMapping("/sys-user/{username}/public")
-    Result<UserBaseDTO> loadSystemUserByUsername(@PathVariable String username);
+    @GetMapping("/sys-user/{var}/{type}/public")
+    Result<UserBaseDTO> loadSystemUser(@PathVariable String var,@PathVariable String type);
 
     /**
      * 查询买家用户
@@ -49,8 +49,8 @@ public interface IbackendServerClient {
      * @author: 魏来
      * @date: 2022/2/24 上午9:40
      */
-    @GetMapping("/buyer-user/{username}/public")
-    Result<UserBaseDTO> loadBuyerUserByUsername(@PathVariable String username);
+    @GetMapping("/buyer-user/{username}/{type}/public")
+    Result<UserBaseDTO> loadBuyer(@PathVariable String var,@PathVariable String type);
 
     /**
      * 查询买家用户
@@ -58,6 +58,6 @@ public interface IbackendServerClient {
      * @author: 魏来
      * @date: 2022/2/24 上午9:41
      */
-    @GetMapping("/sale-user/{username}/public")
-    Result<UserBaseDTO> loadSalerUserByUsername(@PathVariable String username);
+    @GetMapping("/sale-user/{username}/{type}/public")
+    Result<UserBaseDTO> loadSaler(@PathVariable String var,@PathVariable String type);
 }

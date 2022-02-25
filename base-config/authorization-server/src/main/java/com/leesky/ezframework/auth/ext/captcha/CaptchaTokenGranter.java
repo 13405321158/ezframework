@@ -80,7 +80,7 @@ public class CaptchaTokenGranter extends AbstractTokenGranter {
 
             OAuth2Request storedOAuth2Request = null;
 
-            userAuth = this.authenticationManager.authenticate(userAuth);
+            userAuth = this.authenticationManager.authenticate(userAuth);//系统默认执行SysUserDetailsService
 
 
             if (userAuth.isAuthenticated())

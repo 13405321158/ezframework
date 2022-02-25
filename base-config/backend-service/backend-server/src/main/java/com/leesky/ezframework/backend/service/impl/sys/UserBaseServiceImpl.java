@@ -5,20 +5,20 @@
  * @部门: 国内市场替换部IT组
  * @Desc:
  */
-package com.leesky.ezframework.backend.service.impl;
+package com.leesky.ezframework.backend.service.impl.sys;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.mapper.IoauthClientMapper;
-import com.leesky.ezframework.backend.mapper.IuserBaseExt01Mapper;
-import com.leesky.ezframework.backend.mapper.IuserBaseExt02Mapper;
-import com.leesky.ezframework.backend.mapper.IuserBaseMapper;
+import com.leesky.ezframework.backend.mapper.sys.IuserBaseExt01Mapper;
+import com.leesky.ezframework.backend.mapper.sys.IuserBaseExt02Mapper;
+import com.leesky.ezframework.backend.mapper.sys.IuserBaseMapper;
 import com.leesky.ezframework.backend.model.OauthClientDetailsModel;
 import com.leesky.ezframework.backend.model.sys.UserBaseExt01Model;
 import com.leesky.ezframework.backend.model.sys.UserBaseExt02Model;
 import com.leesky.ezframework.backend.model.sys.UserBaseModel;
-import com.leesky.ezframework.backend.service.IuserBaseService;
+import com.leesky.ezframework.backend.service.sys.IuserBaseService;
 import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
 import com.leesky.ezframework.utils.MD5Util;
 import com.leesky.ezframework.utils.Po2DtoUtil;

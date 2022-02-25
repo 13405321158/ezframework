@@ -5,11 +5,12 @@
  * @部门: 国内市场替换部IT组
  * @描述:
  */
-package com.leesky.ezframework.backend.model.sys;
+package com.leesky.ezframework.backend.model.buyer;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.backend.mapper.sys.IuserBaseMapper;
+import com.leesky.ezframework.backend.model.sys.UserBaseModel;
 import com.leesky.ezframework.mybatis.annotation.EntityMapper;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.OneToOne;
@@ -23,7 +24,7 @@ import lombok.Setter;
 @Setter
 @TableName("cbm_mag_user_ext01")
 @ApiModel(value = "基本用户扩展表01")
-public class UserBaseExt01Model extends BaseUuidModel {
+public class BuyerExt01Model extends BaseUuidModel {
 
 	private static final long serialVersionUID = 4876391008588060464L;
 

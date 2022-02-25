@@ -5,10 +5,11 @@
  * @部门: 国内市场替换部IT组
  * @Desc: 
  */
-package com.leesky.ezframework.backend.mapper;
+package com.leesky.ezframework.backend.mapper.sys;
 
-import com.leesky.ezframework.backend.model.sys.UserBaseModel;
+
+import com.leesky.ezframework.backend.model.sys.UserBaseExt01Model;
 import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
 
-public interface IuserBaseMapper extends IeeskyMapper<UserBaseModel> {
+public interface IuserBaseExt01Mapper extends IeeskyMapper<UserBaseExt01Model> {
 }

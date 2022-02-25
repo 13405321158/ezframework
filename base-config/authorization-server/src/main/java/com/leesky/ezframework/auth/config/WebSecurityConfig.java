@@ -3,6 +3,7 @@ package com.leesky.ezframework.auth.config;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetailsService;
 import com.leesky.ezframework.auth.details.userdetails.saler.SalerDetailsService;
+import com.leesky.ezframework.auth.details.userdetails.sys.SysUserDetailsService;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeAuthenticationProvider;
 import com.leesky.ezframework.auth.ext.webchat.WechatAuthenticationProvider;
 import com.leesky.ezframework.backend.api.IbackendServerClient;
@@ -16,7 +17,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final BuyerDetailsService buyerDetailsService;
     private final SalerDetailsService salerDetailsService;
-    private final UserDetailsService sysUserDetailsService;
+    private final SysUserDetailsService sysUserDetailsService;
 
 
     /**

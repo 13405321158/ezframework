@@ -38,19 +38,19 @@ public class BackendFeignFallback implements FallbackFactory<IbackendServerClien
             }
 
             @Override
-            public Result<UserBaseDTO> loadSystemUserByUsername(String username) {
+            public Result<UserBaseDTO> loadSystemUser(String var, String type) {
                 log.error(ret.getMsg());
                 return Result.failed("backend-server服务降级,获取系统用户异常：" + ret.getMsg());
             }
 
             @Override
-            public Result<UserBaseDTO> loadBuyerUserByUsername(String username) {
+            public Result<UserBaseDTO> loadBuyer(String var, String type) {
                 log.error(ret.getMsg());
                 return Result.failed("backend-server服务降级,获取买家用户异常：" + ret.getMsg());
             }
 
             @Override
-            public Result<UserBaseDTO> loadSalerUserByUsername(String username) {
+            public Result<UserBaseDTO> loadSaler(String var, String type) {
                 log.error(ret.getMsg());
                 return Result.failed("backend-server服务降级,获取卖家用户异常：" + ret.getMsg());
             }

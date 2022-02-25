@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.HashSet;
 
@@ -24,7 +23,7 @@ import java.util.HashSet;
 public class WechatAuthenticationProvider implements AuthenticationProvider {
 
     private WxMaService wxMaService;
-    private UserDetailsService userDetailsService;
+    private BuyerDetailsService userDetailsService;
     private IbackendServerClient memberFeignClient;
 
     /**
@@ -61,7 +60,7 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
 //            member.setStatus(GlobalConstants.STATUS_YES);
 //            memberFeignClient.add(member);
 //        }
-        UserDetails userDetails = ((BuyerDetailsService) userDetailsService).loadUserByOpenId(openid);
+        UserDetails userDetails =  userDetailsService.loadUserByOpenId(openid);
         WechatAuthenticationToken result = new WechatAuthenticationToken(userDetails, new HashSet<>());
         result.setDetails(authentication.getDetails());
         return result;

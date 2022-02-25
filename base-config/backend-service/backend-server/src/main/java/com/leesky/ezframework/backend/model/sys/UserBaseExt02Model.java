@@ -9,7 +9,7 @@ package com.leesky.ezframework.backend.model.sys;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.backend.mapper.IuserBaseMapper;
+import com.leesky.ezframework.backend.mapper.sys.IuserBaseMapper;
 import com.leesky.ezframework.mybatis.annotation.EntityMapper;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.OneToOne;

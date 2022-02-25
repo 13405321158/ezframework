@@ -5,11 +5,11 @@
  * @部门: 国内市场替换部IT组
  * @Desc: 
  */
-package com.leesky.ezframework.backend.service.impl;
+package com.leesky.ezframework.backend.service.impl.sys;
 
-import com.leesky.ezframework.backend.mapper.IuserBaseExt02Mapper;
+import com.leesky.ezframework.backend.mapper.sys.IuserBaseExt02Mapper;
 import com.leesky.ezframework.backend.model.sys.UserBaseExt02Model;
-import com.leesky.ezframework.backend.service.IuserBaseExt02Service;
+import com.leesky.ezframework.backend.service.sys.IuserBaseExt02Service;
 import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
 import org.springframework.stereotype.Service;
 
