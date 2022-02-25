@@ -5,13 +5,16 @@
  * @部门: 国内市场替换部IT组
  * @描述:
  */
-package com.leesky.ezframework.backend.model;
+package com.leesky.ezframework.backend.model.sys;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.backend.mapper.Iuser2roleMapper;
 import com.leesky.ezframework.backend.mapper.IuserBaseExt01Mapper;
 import com.leesky.ezframework.backend.mapper.IuserBaseExt02Mapper;
+import com.leesky.ezframework.backend.model.GroupModel;
+import com.leesky.ezframework.backend.model.RoleModel;
+import com.leesky.ezframework.backend.model.User2RoleModel;
 import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;

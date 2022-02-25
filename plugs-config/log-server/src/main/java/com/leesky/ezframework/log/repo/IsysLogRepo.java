@@ -1,4 +1,4 @@
-package com.leesky.ezframework.log.dao;
+package com.leesky.ezframework.log.repo;
 
 
 import com.leesky.ezframework.log.model.SysLogModel;

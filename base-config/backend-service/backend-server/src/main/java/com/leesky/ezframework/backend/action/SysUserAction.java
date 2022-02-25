@@ -3,7 +3,7 @@ package com.leesky.ezframework.backend.action;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
-import com.leesky.ezframework.backend.model.UserBaseModel;
+import com.leesky.ezframework.backend.model.sys.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.backend.vo.UserBaseVO;
 import com.leesky.ezframework.es.annotation.SysLogger;

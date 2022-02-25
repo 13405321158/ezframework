@@ -14,7 +14,7 @@
 	<!-- 日志最大的历史 30天 -->
 	<property name="maxHistory" value="30" />
 	<!-- 定义日志归宿哪个服务 -->
-	<property name="serverName" value="log-server" />
+	<property name="serverName" value="tools-server" />
 
 	<!-- 彩色日志 -->
 	<!-- 彩色日志依赖的渲染类 -->
@@ -184,6 +184,7 @@
 	<logger name="com.netflix.config" level="error"/>
 	<logger name="org.springframework" level="error"/>
 	<logger name="com.github.dozermapper" level="error"/>
+    
 	<!-- root级别 DEBUG -->
 	<root level="info">
 		<!-- 控制台输出 -->

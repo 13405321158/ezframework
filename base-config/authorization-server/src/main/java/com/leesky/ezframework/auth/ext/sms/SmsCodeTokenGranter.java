@@ -55,7 +55,7 @@ public class SmsCodeTokenGranter extends AbstractTokenGranter {
         ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
 
 
-        userAuth = this.authenticationManager.authenticate(userAuth);
+        userAuth = this.authenticationManager.authenticate(userAuth);//跳转到SmsCodeAuthenticationProvider.authenticate方法中去,验证手机号码和sms
 
 
         if (userAuth.isAuthenticated())

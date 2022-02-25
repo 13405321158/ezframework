@@ -31,13 +31,14 @@ public class SendAction {
 
 
     /**
-     * @Author:weilai
-     * @date: 2021/4/26 上午8:05
-     * @desc: dto.getId = 手机号码,dto.getExt = 短信内容
+     * <li></li>
+     *
+     * @author: 魏来
+     * @date: 2022/2/25 下午12:47
      */
     @SneakyThrows
     @PostMapping("/mb01/{mobile}/public")
-    public Result mb(@PathVariable String mobile) {
+    public Result<?> mb(@PathVariable String mobile) {
         Object obj = this.cache.get(Redis.SMS_KEY + mobile);
         Assert.isTrue(ObjectUtils.isEmpty(obj), "SMS发送频率过于频繁:" + mobile);
 

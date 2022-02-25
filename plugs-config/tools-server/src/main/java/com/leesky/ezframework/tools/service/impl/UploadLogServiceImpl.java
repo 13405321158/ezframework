@@ -9,8 +9,8 @@ package com.leesky.ezframework.tools.service.impl;
 
 
 import com.leesky.ezframework.nosql.service.impl.BaseServiceImpl;
-import com.leesky.ezframework.tools.model.uploadModel;
-import com.leesky.ezframework.tools.service.IuploadService;
+import com.leesky.ezframework.tools.model.UploadLogModel;
+import com.leesky.ezframework.tools.service.IuploadLogService;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +21,5 @@ import org.springframework.stereotype.Service;
  * @date: 2022/2/18 下午1:47
  */
 @Service
-public class UploadServiceImpl extends BaseServiceImpl<uploadModel, ObjectId> implements IuploadService {
+public class UploadLogServiceImpl extends BaseServiceImpl<UploadLogModel, ObjectId> implements IuploadLogService {
 }

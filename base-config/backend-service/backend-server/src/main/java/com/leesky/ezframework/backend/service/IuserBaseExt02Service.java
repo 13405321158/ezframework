@@ -7,7 +7,8 @@
  */
 package com.leesky.ezframework.backend.service;
 
-import com.leesky.ezframework.backend.model.UserBaseExt02Model;
+
+import com.leesky.ezframework.backend.model.sys.UserBaseExt02Model;
 import com.leesky.ezframework.mybatis.service.IeeskyService;
 
 public interface IuserBaseExt02Service extends IeeskyService<UserBaseExt02Model> {

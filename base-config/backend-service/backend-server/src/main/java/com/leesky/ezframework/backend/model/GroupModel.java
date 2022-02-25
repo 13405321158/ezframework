@@ -10,6 +10,7 @@ package com.leesky.ezframework.backend.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.google.common.base.Objects;
+import com.leesky.ezframework.backend.model.sys.UserBaseModel;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

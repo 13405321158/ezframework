@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Document(collection = "cbm_mag_uploadlog")
-public class uploadModel extends BaseModel {
+public class UploadLogModel extends BaseModel {
 
     @Field("url")
     private String url;
@@ -37,7 +37,7 @@ public class uploadModel extends BaseModel {
     @Field("upload_name")
     private String uploadName;
 
-    public uploadModel(String url, String ossType, String uploadName) {
+    public UploadLogModel(String url, String ossType, String uploadName) {
         this.url = url;
         this.ossType = ossType;
         this.uploadName = uploadName;

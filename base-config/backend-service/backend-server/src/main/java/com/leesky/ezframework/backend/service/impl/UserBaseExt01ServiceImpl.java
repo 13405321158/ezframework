@@ -8,11 +8,11 @@
 package com.leesky.ezframework.backend.service.impl;
 
 import com.leesky.ezframework.backend.mapper.IuserBaseExt01Mapper;
-import com.leesky.ezframework.backend.model.UserBaseExt01Model;
+import com.leesky.ezframework.backend.model.sys.UserBaseExt01Model;
 import com.leesky.ezframework.backend.service.IuserBaseExt01Service;
 import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserBaseExt01ServiceImpl extends LeeskyServiceImpl<IuserBaseExt01Mapper,UserBaseExt01Model> implements IuserBaseExt01Service {
+public class UserBaseExt01ServiceImpl extends LeeskyServiceImpl<IuserBaseExt01Mapper, UserBaseExt01Model> implements IuserBaseExt01Service {
 }

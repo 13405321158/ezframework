@@ -1,13 +1,11 @@
 package com.leesky.ezframework.auth.ext.sms;
 
 
-import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetailsService;
 import com.leesky.ezframework.redis.service.RedisService;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.Assert;
@@ -27,27 +25,31 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
     private UserDetailsService userDetailsService;
 
 
-
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) {
         SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
+        //1、接收前端传递手机号码和验证码
         String mobile = (String) authenticationToken.getPrincipal();
-        String code = (String) authenticationToken.getCredentials();
+        String paramCode = (String) authenticationToken.getCredentials();
+        Assert.isTrue(StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(paramCode), "手机号码和验证码不能为空");
 
-        if (!code.equals("666666")) { // 666666 是后门，因为短信收费，正式环境删除这个if分支
-            String codeKey = "SMS_CODE_" + mobile;
-            String correctCode = (String) this.cache.get(codeKey);
-            // 验证码比对
-            if (StringUtils.isBlank(correctCode) || !code.equals(correctCode)) {
-                Assert.isTrue(false,"验证码不正确");
-            }
-            // 比对成功删除缓存的验证码
-            this.cache.del(codeKey);
-        }
-        UserDetails userDetails = ((BuyerDetailsService) userDetailsService).loadUserByMobile(mobile);
-        SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(userDetails, authentication.getCredentials(), new HashSet<>());
-        result.setDetails(authentication.getDetails());
-        return result;
+        //2、从缓存中取出sms验证码 和 传递过来的 做对比
+//        String codeKey = Redis.SMS_KEY + mobile;
+//        String redisCode = (String) this.cache.get(codeKey);
+//        Assert.isTrue(StringUtils.isNotBlank(redisCode), paramCode + "：已过期或伪造的SMS");
+        // 验证码比对
+//        if (redisCode.equals(paramCode)) {
+//            this.cache.del(codeKey); // 比对成功删除缓存的验证码
+
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(mobile);
+            SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(userDetails, authentication.getCredentials(), new HashSet<>());
+            result.setDetails(authentication.getDetails());
+            return result;
+//        }
+
+//        throw new IllegalArgumentException("验证码不匹配");
+
+
     }
 
     @Override

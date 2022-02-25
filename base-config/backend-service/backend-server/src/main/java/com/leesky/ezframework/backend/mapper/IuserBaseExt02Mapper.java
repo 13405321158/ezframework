@@ -7,7 +7,8 @@
  */
 package com.leesky.ezframework.backend.mapper;
 
-import com.leesky.ezframework.backend.model.UserBaseExt02Model;
+
+import com.leesky.ezframework.backend.model.sys.UserBaseExt02Model;
 import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;
 
 public interface IuserBaseExt02Mapper extends IeeskyMapper<UserBaseExt02Model> {

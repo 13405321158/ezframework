@@ -8,7 +8,7 @@
 package com.leesky.ezframework.backend.service;
 
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
-import com.leesky.ezframework.backend.model.UserBaseModel;
+import com.leesky.ezframework.backend.model.sys.UserBaseModel;
 import com.leesky.ezframework.mybatis.service.IeeskyService;
 
 import java.util.List;
@@ -30,7 +30,15 @@ public interface IuserBaseService extends IeeskyService<UserBaseModel> {
      * @date: 2022/1/29  16:17
      */
     void editUser(UserBaseModel dto) throws Exception;
-void editPwd(String uid,String username,String pwd);
+
+    /**
+     * <li>编辑密码</li>
+     *
+     * @author: 魏来
+     * @date: 2022/2/25 下午2:00
+     */
+    void editPwd(String uid, String username, String pwd);
+
     /**
      * 删除用户：cbm_mag_user、cbm_mag_user_ext01、cbm_mag_user_ext02、oauth_client_details
      *

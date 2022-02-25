@@ -12,9 +12,9 @@ import com.aliyun.oss.model.ObjectListing;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.query.ParamModel;
-import com.leesky.ezframework.tools.model.uploadModel;
+import com.leesky.ezframework.tools.model.UploadLogModel;
 import com.leesky.ezframework.tools.service.IaliService;
-import com.leesky.ezframework.tools.service.IuploadService;
+import com.leesky.ezframework.tools.service.IuploadLogService;
 import com.leesky.ezframework.tools.utils.UserContext;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -38,7 +38,7 @@ public class AliossAction {
 
     private final IaliService service;
     private final UserContext userContext;
-    private final IuploadService uploadService;
+    private final IuploadLogService uploadService;
 
     /**
      * <li>上传 图片至阿里云（支持多图）,使用默认目录
@@ -52,8 +52,8 @@ public class AliossAction {
 
         List<String> list = this.service.upload(file, dir);
 
-        List<uploadModel> uploadLog = Lists.newArrayList();
-        list.forEach(e -> uploadLog.add(new uploadModel(e, "ali", this.userContext.getUserName())));
+        List<UploadLogModel> uploadLog = Lists.newArrayList();
+        list.forEach(e -> uploadLog.add(new UploadLogModel(e, "ali", this.userContext.getUserName())));
         this.uploadService.saveBatch(uploadLog);
 
         return Result.success(list, false);

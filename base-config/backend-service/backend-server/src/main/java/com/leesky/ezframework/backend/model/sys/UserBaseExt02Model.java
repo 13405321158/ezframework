@@ -5,7 +5,7 @@
  * @部门: 国内市场替换部IT组
  * @描述:
  */
-package com.leesky.ezframework.backend.model;
+package com.leesky.ezframework.backend.model.sys;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

@@ -12,6 +12,7 @@
     <artifactId>tools-server</artifactId>
 
     <dependencies>
+
         <!-- 1、springcloud 2020.xx.xx 起步依赖,没有它不识别bootstrap.yml配置文件，不读取配置服务器中相关配置 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -24,50 +25,52 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--3、 alibaba seata 分布式事务管理 起步依赖 -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
-        </dependency>
-
-        <!--4、 配置中心：从NACOS配置服务器中读取配置参数 -->
+        <!--3、 配置中心：从NACOS配置服务器中读取配置参数 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
-        <!-- 5、注册中心：被注册中心NACOS发现当前服务存在 -->
+        <!-- 4、注册中心：被注册中心NACOS发现当前服务存在 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
-        <!--6、流量哨兵：阿里Sentinel起步依赖：限流、熔断、流控等 -->
+        <!--5、流量哨兵：阿里Sentinel起步依赖：限流、熔断、流控等 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
-        <!--6.1、流量哨兵：阿里Sentinel图表监控起步依赖 -->
+        <!--5.1、流量哨兵：阿里Sentinel图表监控起步依赖 -->
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-transport-simple-http</artifactId>
         </dependency>
-        <!--7、非关系数据库起步依赖 -->
+        <!--6、 通用安全-->
+        <dependency>
+            <groupId>com.leesky.ezframework</groupId>
+            <artifactId>common-security</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+
+
+        <!--7、 消息通道起步依赖：MQ -->
+        <dependency>
+            <groupId>com.leesky.ezframework</groupId>
+            <artifactId>common-stream</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 8、采用mongodb数据库 -->
+        <!-- 请勿忘记在入口类增加：@EnableMongoRepositories(repositoryBaseClass = BaseDaoImpl.class) -->
         <dependency>
             <groupId>com.leesky.ezframework</groupId>
             <artifactId>common-nosql</artifactId>
             <version>2.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.leesky.ezframework</groupId>
-            <artifactId>common-service</artifactId>
-            <version>2.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.leesky.ezframework</groupId>
-            <artifactId>common-redis</artifactId>
-            <version>2.0-SNAPSHOT</version>
-        </dependency>
+
+
         <!-- 阿里 OSS存储 -->
         <dependency>
             <groupId>com.aliyun.oss</groupId>
