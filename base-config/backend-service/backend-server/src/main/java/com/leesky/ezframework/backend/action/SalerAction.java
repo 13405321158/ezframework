@@ -16,13 +16,11 @@ import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.utils.I18nUtil;
 import com.leesky.ezframework.utils.Po2DtoUtil;
+import com.leesky.ezframework.utils.ValidatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.leesky.ezframework.json.Result.success;
 
@@ -42,7 +40,7 @@ public class SalerAction {
      * @author: 魏来
      * @date: 2021年12月3日 上午9:05:39
      */
-    @GetMapping("/{var}/type/public")
+    @GetMapping("/{var}/{type}/public")
     public Result<UserBaseDTO> loadUserByUsername(@PathVariable String var, @PathVariable String type) {
 
         String loginType = LoginTypeEnum.getValue(type);
@@ -61,5 +59,26 @@ public class SalerAction {
         UserBaseDTO dto = Po2DtoUtil.convertor(user, UserBaseDTO.class);
 
         return success(dto, false);
+    }
+
+
+    /**
+     * 新增商户(卖家)
+     *
+     * @author： 魏来
+     * @date: 2022/2/26  上午10:10
+     */
+    @PostMapping(value = "/c01")
+    public Result<?> addShop(@RequestBody UserBaseDTO dto ) {
+        ValidatorUtils.valid(dto);
+
+        QueryFilter<SalerBaseModel> filter = new QueryFilter<>();
+        filter.select("id").eq("username", dto.getUsername());
+
+        SalerBaseModel user = this.service.findOne(filter);
+        Assert.isTrue(ObjectUtils.isEmpty(user), i18n.getMsg("username.registered", dto.getUsername()));
+
+
+        return success();
     }
 }
