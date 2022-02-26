@@ -36,9 +36,6 @@ public class UserBaseExt01Model extends BaseUuidModel {
 	@ApiModelProperty("身份证上的地址")
 	private String idAddress;
 
-	@ApiModelProperty("公司编码")
-	private String companyCode;
-
 	@ApiModelProperty("公司名称")
 	private String companyName;
 

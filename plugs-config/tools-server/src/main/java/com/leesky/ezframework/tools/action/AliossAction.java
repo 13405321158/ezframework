@@ -53,7 +53,7 @@ public class AliossAction {
         List<String> list = this.service.upload(file, dir);
 
         List<UploadLogModel> uploadLog = Lists.newArrayList();
-        list.forEach(e -> uploadLog.add(new UploadLogModel(e, "ali", this.userContext.getUserName())));
+        list.forEach(e -> uploadLog.add(new UploadLogModel(e, dir, this.userContext.getUserName())));
         this.uploadService.saveBatch(uploadLog);
 
         return Result.success(list, false);

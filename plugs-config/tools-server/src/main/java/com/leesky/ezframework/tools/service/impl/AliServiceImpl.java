@@ -84,7 +84,7 @@ public class AliServiceImpl implements IaliService {
 
             // 生成新的文件名
             String ext = StringUtils.substringAfter(fileName, ".");// 文件后缀
-            fileName = this.rootDir + dir + File.separator + System.currentTimeMillis() + "." + ext;// 新的文件名
+            fileName = this.rootDir + dir + "/" + System.currentTimeMillis() + "." + ext;// 新的文件名
 
             ossClient.putObject(bucketName, fileName, inputStream);
             list.add("https://" + bucketName + "." + endpoint + File.separator + fileName);

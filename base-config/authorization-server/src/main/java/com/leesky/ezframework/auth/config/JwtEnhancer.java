@@ -9,6 +9,7 @@ package com.leesky.ezframework.auth.config;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetails;
+import com.leesky.ezframework.auth.details.userdetails.saler.SalerDetails;
 import com.leesky.ezframework.auth.details.userdetails.sys.SysUserDetails;
 import com.leesky.ezframework.global.Common;
 import org.apache.commons.lang3.StringUtils;
@@ -30,30 +31,45 @@ public class JwtEnhancer implements TokenEnhancer {
         Map<String, Object> extMap = Maps.newHashMap();
         Object principal = authentication.getPrincipal();
 
+        extMap.put("pubKey", Common.RSA_PUBLIC2048);
         //系统用户登录返回信息
         if (principal instanceof SysUserDetails) {
-            SysUserDetails sysUserDetails = (SysUserDetails) principal;
-            extMap.put("pubKey", Common.RSA_PUBLIC2048);
-            extMap.put(Common.USER_ID, sysUserDetails.getUserId());
-            extMap.put(Common.ID_NAME,sysUserDetails.getIdName());
-            extMap.put(Common.USER_NAME, sysUserDetails.getUsername());
-            extMap.put(Common.DEALER_CODE, sysUserDetails.getCompanyCode());
-            extMap.put(Common.DEALER_NAME, sysUserDetails.getCompanyName());
+            SysUserDetails details = (SysUserDetails) principal;
 
-            if (StringUtils.isNotBlank(sysUserDetails.getAuthenticationMethod())) {
-                extMap.put("authenticationMethod", sysUserDetails.getAuthenticationMethod());
-            }
+            extMap.put(Common.USER_ID, details.getUserId());
+            extMap.put(Common.ID_NAME, details.getIdName());
+            extMap.put(Common.USER_NAME, details.getUsername());
+            extMap.put(Common.COMPANY_NAME, details.getCompanyName());
+
+            if (StringUtils.isNotBlank(details.getAuthenticationMethod()))
+                extMap.put("authenticationMethod", details.getAuthenticationMethod());
+
 
         }
 
-        //商城会员登录 返回扩展信息
+        //商城会员登录 返回买家扩展信息
         if (principal instanceof BuyerDetails) {
-            BuyerDetails buyerDetails = (BuyerDetails) principal;
-            extMap.put(Common.USER_ID, buyerDetails.getUserId());
-            extMap.put(Common.USER_NAME, buyerDetails.getUsername());
-            if (StringUtils.isNotBlank(buyerDetails.getAuthenticationMethod())) {
-                extMap.put("authenticationMethod", buyerDetails.getAuthenticationMethod());
-            }
+            BuyerDetails details = (BuyerDetails) principal;
+
+            extMap.put(Common.USER_ID, details.getUserId());
+            extMap.put(Common.ID_NAME, details.getIdName());
+            extMap.put(Common.USER_NAME, details.getUsername());
+            extMap.put(Common.COMPANY_NAME, details.getCompanyName());
+
+            if (StringUtils.isNotBlank(details.getAuthenticationMethod()))
+                extMap.put("authenticationMethod", details.getAuthenticationMethod());
+
+        }
+        //返回卖家扩展信息
+        if (principal instanceof SalerDetails) {
+            SalerDetails details = (SalerDetails) principal;
+            extMap.put(Common.USER_ID, details.getUserId());
+            extMap.put(Common.ID_NAME, details.getIdName());
+            extMap.put(Common.USER_NAME, details.getUsername());
+            extMap.put(Common.DEALER_CODE, details.getDealerCode());
+            extMap.put(Common.DEALER_NAME, details.getDealerName());
+            if (StringUtils.isNotBlank(details.getAuthenticationMethod()))
+                extMap.put("authenticationMethod", details.getAuthenticationMethod());
 
         }
 

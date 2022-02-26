@@ -18,8 +18,12 @@ public class Common {
     public final static String ROLE_LIST = "authorities";//jwt 中用户权限部分
     public final static String URL_HEADER_PARAM = "Authorization";//http请求时头部参数名
 
-    public final static String DEALER_CODE = "CompanyCode";//经销商编码，或者公司编码
-    public final static String DEALER_NAME = "CompanyNaem";//经销商名称，或者经销商名称
+    public final static String COMPANY_CODE = "CompanyCode";//公司编码
+    public final static String COMPANY_NAME = "CompanyName";//公司名称
+
+    public final static String DEALER_CODE = "dealerCode";//经销商编码
+    public final static String DEALER_NAME = "dealerName";//经销商名称
+
     /**
      * 静态资源
      */

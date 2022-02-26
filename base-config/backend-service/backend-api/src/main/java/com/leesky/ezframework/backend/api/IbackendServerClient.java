@@ -49,7 +49,7 @@ public interface IbackendServerClient {
      * @author: 魏来
      * @date: 2022/2/24 上午9:40
      */
-    @GetMapping("/buyer-user/{username}/{type}/public")
+    @GetMapping("/buyer-user/{var}/{type}/public")
     Result<UserBaseDTO> loadBuyer(@PathVariable String var,@PathVariable String type);
 
     /**
@@ -58,6 +58,6 @@ public interface IbackendServerClient {
      * @author: 魏来
      * @date: 2022/2/24 上午9:41
      */
-    @GetMapping("/sale-user/{username}/{type}/public")
+    @GetMapping("/sale-user/{var}/{type}/public")
     Result<UserBaseDTO> loadSaler(@PathVariable String var,@PathVariable String type);
 }

@@ -1,6 +1,7 @@
 package com.leesky.ezframework.auth.ext.sms;
 
 
+import com.google.common.collect.Sets;
 import com.leesky.ezframework.auth.details.userdetails.saler.SalerDetailsService;
 import com.leesky.ezframework.redis.service.RedisService;
 import lombok.Data;
@@ -9,8 +10,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
-
-import java.util.HashSet;
 
 /**
  * 短信验证码认证授权提供者
@@ -40,7 +39,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 //            this.cache.del(codeKey); // 比对成功删除缓存的验证码
 
             UserDetails userDetails = this.userDetailsService.loadUserByMobile(mobile);
-            SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(userDetails, authentication.getCredentials(), new HashSet<>());
+            SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(userDetails, authentication.getCredentials(), Sets.newHashSet());
             result.setDetails(authentication.getDetails());
             return result;
 //        }

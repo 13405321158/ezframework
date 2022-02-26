@@ -7,6 +7,8 @@
  */
 package com.leesky.ezframework.auth.details.userdetails.sys;
 
+import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetails;
+import com.leesky.ezframework.auth.details.userdetails.saler.SalerDetails;
 import com.leesky.ezframework.auth.exception.CommonEx;
 import com.leesky.ezframework.backend.api.IbackendServerClient;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
@@ -44,16 +46,22 @@ public class SysUserDetailsService implements UserDetailsService {
         //2、然后查询卖家用户
         ret = this.client.loadSaler(username, LoginTypeEnum.password.getKey());
         if (ret.isSuccess()) {
-            //TODO
-            CommonEx.throwException(userDetails);
+            UserBaseDTO data = ret.getData();
+            if (ObjectUtils.isNotEmpty(data)) {
+                userDetails = new SalerDetails(data);
+                CommonEx.throwException(userDetails);
+            }
             return userDetails;
         }
 
         //3、最后查询买家用户
         ret = this.client.loadBuyer(username, LoginTypeEnum.password.getKey());
         if (ret.isSuccess()) {
-            //TODO
-            CommonEx.throwException(userDetails);
+            UserBaseDTO data = ret.getData();
+            if (ObjectUtils.isNotEmpty(data)) {
+                userDetails = new BuyerDetails(data);
+                CommonEx.throwException(userDetails);
+            }
             return userDetails;
         }
 

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.leesky.ezframework.json.Result.failed;
 import static com.leesky.ezframework.json.Result.success;
 
 @RestController
@@ -54,7 +55,8 @@ public class SysUserAction {
         ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,portrait");
         UserBaseModel user = this.service.findOne(filter, map);
 
-        Assert.isTrue(ObjectUtils.isNotEmpty(user), this.i18n.getMsg("username.not.registered", var));
+        if (ObjectUtils.isEmpty(user))
+            return failed(this.i18n.getMsg("username.not.registered", var));
 
         UserBaseDTO dto = Po2DtoUtil.convertor(user, UserBaseDTO.class);
 

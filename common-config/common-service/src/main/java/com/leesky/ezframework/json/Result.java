@@ -39,8 +39,8 @@ public class Result<T> {
         this.count = count;
     }
 
-    private Result(String msg) {
-        rsa = false;
+    private Result(String msg, boolean b) {
+        this.success = b;
         this.msg = StringUtils.isBlank(msg) ? "操作失败!" : msg;
     }
 
@@ -71,7 +71,7 @@ public class Result<T> {
 
 
     public static <T> Result<T> failed(String msg) {
-        return new Result<>(msg);
+        return new Result<>(msg, false);
     }
 
 

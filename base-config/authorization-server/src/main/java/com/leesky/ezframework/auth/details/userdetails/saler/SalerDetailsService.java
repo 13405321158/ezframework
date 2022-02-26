@@ -7,6 +7,7 @@
  */
 package com.leesky.ezframework.auth.details.userdetails.saler;
 
+import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetails;
 import com.leesky.ezframework.auth.details.userdetails.sys.SysUserDetails;
 import com.leesky.ezframework.auth.exception.CommonEx;
 import com.leesky.ezframework.backend.api.IbackendServerClient;
@@ -32,11 +33,30 @@ public class SalerDetailsService implements UserDetailsService {
         return null;
     }
 
+    /**
+     * <li>sms登录方式 默认进入这个方法，这是在WebSecurityConfig中配置了</li>
+     *
+     * @author: 魏来
+     * @date: 2022/2/26 上午11:04
+     */
     public UserDetails loadUserByMobile(String mobile) throws UsernameNotFoundException {
 
         UserDetails userDetails = null;
+        //1、默认查询 买家(商户)
         Result<UserBaseDTO> ret = this.client.loadSaler(mobile, LoginTypeEnum.sms.getKey());
 
+        if (ret.isSuccess()) {
+            UserBaseDTO data = ret.getData();
+            if (ObjectUtils.isNotEmpty(data)) {
+                userDetails = new SalerDetails(data);
+                CommonEx.throwException(userDetails);
+            }
+            return userDetails;
+        }
+
+
+        //2、然后查询系统用户
+        ret = this.client.loadSystemUser(mobile, LoginTypeEnum.sms.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {
@@ -46,20 +66,14 @@ public class SalerDetailsService implements UserDetailsService {
             return userDetails;
         }
 
-
-        //2、然后查询卖家用户
-        ret = this.client.loadSaler(mobile, LoginTypeEnum.sms.getKey());
-        if (ret.isSuccess()) {
-            //TODO
-            CommonEx.throwException(userDetails);
-            return userDetails;
-        }
-
         //3、最后查询买家用户
         ret = this.client.loadBuyer(mobile, LoginTypeEnum.sms.getKey());
         if (ret.isSuccess()) {
-            //TODO
-            CommonEx.throwException(userDetails);
+            UserBaseDTO data = ret.getData();
+            if (ObjectUtils.isNotEmpty(data)) {
+                userDetails = new BuyerDetails(data);
+                CommonEx.throwException(userDetails);
+            }
             return userDetails;
         }
 

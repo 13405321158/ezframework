@@ -7,11 +7,18 @@
  */
 package com.leesky.ezframework.auth.details.userdetails.saler;
 
+import com.leesky.ezframework.auth.enums.PasswordEncoderTypeEnum;
+import com.leesky.ezframework.backend.dto.UserBaseDTO;
+import com.leesky.ezframework.enums.StatusEnum;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -20,15 +27,47 @@ import java.util.Collection;
 public class SalerDetails implements UserDetails {
     private static final long serialVersionUID = 7955415202015070247L;
 
+    /**
+     * 扩展字段
+     */
     private String userId;
-    private String username;
+    private Boolean byTime;//有效期至
     private String authenticationMethod;//认证方式
 
+    /**
+     * 默认字段
+     */
+    private String portrait;
+    private String idName;
+    private String username;
+    private String password;
+    private Boolean enabled;
+    private String dealerCode;
+    private String dealerName;
 
+    private Collection<SimpleGrantedAuthority> authorities;
 
+    /**
+     * 卖家用户
+     */
+    public SalerDetails(UserBaseDTO user) {
+        this.setUserId(user.getId());
+        this.setIdName(user.getExt01().getIdName());
+        this.setUsername(user.getUsername());
+        this.setPortrait(user.getExt01().getPortrait());
+        this.setDealerCode(user.getExt01().getCompanyCode());
+        this.setDealerName(user.getExt01().getCompanyName());
+        this.setEnabled(StringUtils.equals(user.getStatus(), StatusEnum.ENABLE.getKey()));
+        this.setPassword(PasswordEncoderTypeEnum.BCRYPT.getPrefix() + user.getPassword());
+        this.setByTime(user.getByTime().getTime() > System.currentTimeMillis() ? true : false);
+        if (CollectionUtils.isNotEmpty(user.getRoles())) {
+            authorities = new ArrayList<>();
+            user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getCode())));
+        }
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
@@ -43,21 +82,21 @@ public class SalerDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return byTime;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return enabled;
     }
 }
