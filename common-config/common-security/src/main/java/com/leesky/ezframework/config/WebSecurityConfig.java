@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomAccessDeineHandler accessHandler;
     private final CustomAuthenticationEntryPoint entryPoint;
 
-    private final String[] WHITE_URL = new String[]{"/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
+    private final String[] WHITE_URL = new String[]{"/login/**", "/**/public", "/stomp/**", "/v3/api-docs", "/swagger-resources", "/error"};
 
     /**
      * 以下内容已经经过测试，配置正确，请勿随意修改

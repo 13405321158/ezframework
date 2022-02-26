@@ -53,7 +53,7 @@ public class BuyerDetailsService implements UserDetailsService {
             return userDetails;
         }
         //2、然后查询卖家(商户)用户
-        ret = this.client.loadSaler(openId, LoginTypeEnum.wx.getKey());
+        ret = this.client.loadSale(openId, LoginTypeEnum.wx.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {
@@ -63,7 +63,7 @@ public class BuyerDetailsService implements UserDetailsService {
             return userDetails;
         }
         //3、然后查询系统用户
-        ret = this.client.loadSystemUser(openId, LoginTypeEnum.wx.getKey());
+        ret = this.client.getSystem(openId, LoginTypeEnum.wx.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {

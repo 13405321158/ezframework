@@ -9,7 +9,7 @@ package com.leesky.ezframework.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.leesky.ezframework.auth.details.clientdetails.ClientDetailsServiceImpl;
+import com.leesky.ezframework.auth.details.clientdetails.ClientDetailService;
 import com.leesky.ezframework.auth.exception.TokenEndpointFilter;
 import com.leesky.ezframework.auth.ext.captcha.CaptchaTokenGranter;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeTokenGranter;
@@ -31,7 +31,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.TokenGranter;
@@ -66,7 +65,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     private final AuthenticationManager authenticationManager;// 在WebSecurityConfig中定义了
 
-    private final ClientDetailsServiceImpl clientDetailsService;// 查找client服务接口
+    private final ClientDetailService clientDetailsService;// 查找client服务接口
 
     private final LettuceConnectionFactory redisConnectionFactory;// token 存储在redis中
 
@@ -217,7 +216,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         List<TokenGranter> list = Lists.newArrayList(point.getTokenGranter());
 
         OAuth2RequestFactory factory = point.getOAuth2RequestFactory();
-        ClientDetailsService clientDetails = point.getClientDetailsService();
+        org.springframework.security.oauth2.provider.ClientDetailsService clientDetails = point.getClientDetailsService();
         AuthorizationServerTokenServices tokenService = point.getTokenServices();
 
         // 添加验证码授权模式授权者

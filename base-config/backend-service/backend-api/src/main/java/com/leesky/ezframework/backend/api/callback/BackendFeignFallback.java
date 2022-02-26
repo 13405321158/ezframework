@@ -32,13 +32,13 @@ public class BackendFeignFallback implements FallbackFactory<IbackendServerClien
 
         return new IbackendServerClient() {
             @Override
-            public Result<OauthClientDetailsDTO> getOAuth2ClientById(String clientId) {
+            public Result<OauthClientDetailsDTO> getClient(String clientId) {
                 log.error(ret.getMsg());
                 return Result.failed("backend-server服务降级,获取oauthClient异常：" + ret.getMsg());
             }
 
             @Override
-            public Result<UserBaseDTO> loadSystemUser(String var, String type) {
+            public Result<UserBaseDTO> getSystem(String var, String type) {
                 log.error(ret.getMsg());
                 return Result.failed("backend-server服务降级,获取系统用户异常：" + ret.getMsg());
             }
@@ -50,7 +50,7 @@ public class BackendFeignFallback implements FallbackFactory<IbackendServerClien
             }
 
             @Override
-            public Result<UserBaseDTO> loadSaler(String var, String type) {
+            public Result<UserBaseDTO> loadSale(String var, String type) {
                 log.error(ret.getMsg());
                 return Result.failed("backend-server服务降级,获取卖家用户异常：" + ret.getMsg());
             }

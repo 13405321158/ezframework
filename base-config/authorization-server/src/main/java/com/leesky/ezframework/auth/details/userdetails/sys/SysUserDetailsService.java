@@ -33,7 +33,7 @@ public class SysUserDetailsService implements UserDetailsService {
         UserDetails userDetails = null;
 
         //1、首先查询 系统用户
-        Result<UserBaseDTO> ret = this.client.loadSystemUser(username, LoginTypeEnum.password.getKey());
+        Result<UserBaseDTO> ret = this.client.getSystem(username, LoginTypeEnum.password.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {
@@ -44,7 +44,7 @@ public class SysUserDetailsService implements UserDetailsService {
         }
 
         //2、然后查询卖家用户
-        ret = this.client.loadSaler(username, LoginTypeEnum.password.getKey());
+        ret = this.client.loadSale(username, LoginTypeEnum.password.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {

@@ -3,7 +3,6 @@ package com.leesky.ezframework.backend.action;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
-import com.leesky.ezframework.backend.enums.LoginTypeEnum;
 import com.leesky.ezframework.backend.model.sys.UserBaseModel;
 import com.leesky.ezframework.backend.service.sys.IuserBaseService;
 import com.leesky.ezframework.backend.vo.UserBaseVO;
@@ -20,11 +19,13 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.leesky.ezframework.json.Result.failed;
 import static com.leesky.ezframework.json.Result.success;
 
 @RestController
@@ -36,32 +37,6 @@ public class SysUserAction {
 
     private final IuserBaseService service;
 
-    /**
-     * <li>登录获取token时使用</li>
-     *
-     * @author: 魏来
-     * @date: 2021年12月3日 上午9:05:39
-     */
-    @GetMapping("/{var}/{type}/public")
-    @SysLogger(module = "系统用户控制器", action = "系统用户登录")
-    public Result<UserBaseDTO> loadUser(@PathVariable String var, @PathVariable String type) {
-
-        String loginType = LoginTypeEnum.getValue(type);
-
-        QueryFilter<UserBaseModel> filter = new QueryFilter<>(ImmutableMap.of(loginType, var));
-
-        filter.select("id,username,status,by_time,password,ext01Id");//如果不包括ext01Id 则无法查询 ext01
-
-        ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,portrait");
-        UserBaseModel user = this.service.findOne(filter, map);
-
-        if (ObjectUtils.isEmpty(user))
-            return failed(this.i18n.getMsg("username.not.registered", var));
-
-        UserBaseDTO dto = Po2DtoUtil.convertor(user, UserBaseDTO.class);
-
-        return success(dto, false);
-    }
 
 
     /**

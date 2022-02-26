@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class ClientDetailsServiceImpl implements ClientDetailsService {
+public class ClientDetailService implements ClientDetailsService {
 
     private final IbackendServerClient client;
 
@@ -34,7 +34,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Cacheable(cacheNames = "auth-token", key = "'oauth-client:'+#clientId")
     public ClientDetails loadClientByClientId(String clientId) {
 
-        Result<OauthClientDetailsDTO> ret = this.client.getOAuth2ClientById(clientId);
+        Result<OauthClientDetailsDTO> ret = this.client.getClient(clientId);
 
         if (!ret.isSuccess()) {
             throw new BadCredentialsException(ret.getMsg());

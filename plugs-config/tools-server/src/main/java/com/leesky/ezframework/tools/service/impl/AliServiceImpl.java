@@ -11,9 +11,11 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ListObjectsRequest;
 import com.aliyun.oss.model.ObjectListing;
+import com.aliyun.oss.model.ObjectMetadata;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.query.ParamModel;
 import com.leesky.ezframework.tools.service.IaliService;
+import com.leesky.ezframework.tools.utils.DoctypeEnmu;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -78,6 +80,11 @@ public class AliServiceImpl implements IaliService {
         List<String> list = Lists.newArrayList();
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 
+        //设置浏览器可以直接打开，而不是下载
+        var metadata = new ObjectMetadata();
+        metadata.setHeader("Pragma", "no-cache");
+
+
         for (MultipartFile uploadFile : file) {
             inputStream = uploadFile.getInputStream();
             fileName = uploadFile.getOriginalFilename();
@@ -86,7 +93,8 @@ public class AliServiceImpl implements IaliService {
             String ext = StringUtils.substringAfter(fileName, ".");// 文件后缀
             fileName = this.rootDir + dir + "/" + System.currentTimeMillis() + "." + ext;// 新的文件名
 
-            ossClient.putObject(bucketName, fileName, inputStream);
+            metadata.setContentType(DoctypeEnmu.getKey(ext));
+            ossClient.putObject(bucketName, fileName, inputStream, metadata);
             list.add("https://" + bucketName + "." + endpoint + File.separator + fileName);
 
         }

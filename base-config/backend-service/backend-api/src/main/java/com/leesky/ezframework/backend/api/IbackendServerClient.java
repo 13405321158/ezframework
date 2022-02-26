@@ -31,8 +31,8 @@ public interface IbackendServerClient {
      * @author： 魏来
      * @date: 2021/12/1 下午6:18
      */
-    @GetMapping("/client/r01/public")
-    Result<OauthClientDetailsDTO> getOAuth2ClientById(@RequestParam String clientId);
+    @GetMapping("/login/client")
+    Result<OauthClientDetailsDTO> getClient(@RequestParam String clientId);
 
     /**
      * 登录时查询系统用户名
@@ -40,8 +40,8 @@ public interface IbackendServerClient {
      * @author： 魏来
      * @date: 2021/12/1 下午6:46
      */
-    @GetMapping("/sys-user/{var}/{type}/public")
-    Result<UserBaseDTO> loadSystemUser(@PathVariable String var,@PathVariable String type);
+    @GetMapping("/login/sys/{var}/{type}")
+    Result<UserBaseDTO> getSystem(@PathVariable String var,@PathVariable String type);
 
     /**
      * 查询买家用户
@@ -49,7 +49,7 @@ public interface IbackendServerClient {
      * @author: 魏来
      * @date: 2022/2/24 上午9:40
      */
-    @GetMapping("/buyer-user/{var}/{type}/public")
+    @GetMapping("/login/buy/{var}/{type}")
     Result<UserBaseDTO> loadBuyer(@PathVariable String var,@PathVariable String type);
 
     /**
@@ -58,6 +58,6 @@ public interface IbackendServerClient {
      * @author: 魏来
      * @date: 2022/2/24 上午9:41
      */
-    @GetMapping("/sale-user/{var}/{type}/public")
-    Result<UserBaseDTO> loadSaler(@PathVariable String var,@PathVariable String type);
+    @GetMapping("/login/sale/{var}/{type}")
+    Result<UserBaseDTO> loadSale(@PathVariable String var, @PathVariable String type);
 }

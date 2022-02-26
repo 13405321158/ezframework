@@ -43,7 +43,7 @@ public class SalerDetailsService implements UserDetailsService {
 
         UserDetails userDetails = null;
         //1、默认查询 买家(商户)
-        Result<UserBaseDTO> ret = this.client.loadSaler(mobile, LoginTypeEnum.sms.getKey());
+        Result<UserBaseDTO> ret = this.client.loadSale(mobile, LoginTypeEnum.sms.getKey());
 
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
@@ -56,7 +56,7 @@ public class SalerDetailsService implements UserDetailsService {
 
 
         //2、然后查询系统用户
-        ret = this.client.loadSystemUser(mobile, LoginTypeEnum.sms.getKey());
+        ret = this.client.getSystem(mobile, LoginTypeEnum.sms.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {

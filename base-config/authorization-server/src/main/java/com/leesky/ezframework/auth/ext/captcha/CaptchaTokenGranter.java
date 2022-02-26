@@ -60,7 +60,7 @@ public class CaptchaTokenGranter extends AbstractTokenGranter {
         {
             // 1、从请求头部获取 验证码
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-
+            assert servletRequestAttributes != null;
             HttpServletRequest request = servletRequestAttributes.getRequest();
 
             String key = request.getHeader("key");

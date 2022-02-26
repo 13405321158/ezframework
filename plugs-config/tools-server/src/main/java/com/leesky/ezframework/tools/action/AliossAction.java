@@ -61,7 +61,7 @@ public class AliossAction {
 
 
     /**
-     * <li>parm.getExt = label,parm.limit =每次加载数量：1～1000是有效值
+     * <li>param.getExt = label,param.limit =每次加载数量：1～1000是有效值
      *
      * @author: 魏来
      * @date: 2022/2/18 下午1:12
@@ -76,7 +76,7 @@ public class AliossAction {
         List<OSSObjectSummary> data = objectListing.getObjectSummaries();
         int size = objectListing.getObjectSummaries().size();
 
-        return Result.success(data, Long.valueOf(size), false);
+        return Result.success(data, (long) size, false);
     }
 
     /**
@@ -86,7 +86,7 @@ public class AliossAction {
      * @date: 2022/2/18 下午1:12
      */
     @RequestMapping("/del")
-    public Result del(String key) {
+    public Result<?> del(String key) {
         this.service.delObje(key);
         return Result.success();
     }
