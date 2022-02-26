@@ -2,8 +2,8 @@ package com.leesky.ezframework.backend.model;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Getter;
-import lombok.Setter;
+import com.leesky.ezframework.mybatis.ddl.annotation.ExcludeDDL;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -15,14 +15,14 @@ import java.io.Serializable;
  *       <li>客户端详情表
  */
 
-@Getter
-@Setter
+@Data
+@ExcludeDDL
 @TableName("oauth_client_details")
 public class OauthClientDetailsModel implements Serializable {
 
 	private static final long serialVersionUID = -6399970297950884142L;
 
-	@TableId
+	@TableId(value = "client_id")
 	private String clientId;// 用于唯一标识每一个客户端(client)；
 
 	private String resourceIds;// 客户端能访问的资源id集合，注册客户端时，根据实际需要可选择资源id，也可以根据不同的额注册流程，赋予对应的额资源id

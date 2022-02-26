@@ -9,8 +9,7 @@ package com.leesky.ezframework.backend.model.saler;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.backend.mapper.sys.IuserBaseMapper;
-import com.leesky.ezframework.backend.model.sys.UserBaseModel;
+import com.leesky.ezframework.backend.mapper.saler.IsalerBaseMapper;
 import com.leesky.ezframework.mybatis.annotation.EntityMapper;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.OneToOne;
@@ -55,14 +54,6 @@ public class SalerExt01Model extends BaseUuidModel {
 	@ApiModelProperty("身份证反面")
 	private String idCardImg02;
 
-	@ApiModelProperty("紧急联系人")
-	private String contact;
-
-	@ApiModelProperty("紧急联系人电话")
-	private String contactTel;
-
-	@ApiModelProperty("当前居住地址")
-	private String curAddress;
 
 	@ApiModelProperty("用户id")
 	private String userId;
@@ -70,7 +61,7 @@ public class SalerExt01Model extends BaseUuidModel {
 	@OneToOne
 	@TableField(exist = false)
 	@JoinColumn(name = "user_id")
-	@EntityMapper(targetMapper = IuserBaseMapper.class, entityClass = UserBaseModel.class)
-	private UserBaseModel userBaseModel;
+	@EntityMapper(targetMapper = IsalerBaseMapper.class, entityClass = SalerBaseModel.class)
+	private SalerBaseModel userBaseModel;
 
 }

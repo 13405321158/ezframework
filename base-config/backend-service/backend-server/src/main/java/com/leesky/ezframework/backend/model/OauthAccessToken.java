@@ -1,12 +1,3 @@
-package com.leesky.ezframework.backend.model;
-
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-
-import java.io.Serializable;
-import java.sql.Blob;
-
 /**
  * @author: weilai
  * @Data:下午9:43:06,2019年11月23日
@@ -15,14 +6,27 @@ import java.sql.Blob;
  * @Desc:
  *        <li>
  */
+package com.leesky.ezframework.backend.model;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.leesky.ezframework.mybatis.ddl.annotation.ExcludeDDL;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.sql.Blob;
+
+
 @Data
+@ExcludeDDL
 @TableName("oauth_access_token")
 public class OauthAccessToken implements Serializable {
 
 	private static final long serialVersionUID = 8342640841584747295L;
 
-	@TableId
+	@TableId(value = "token_id")
 	private String tokenId;
+
 
 	private Blob token;
 

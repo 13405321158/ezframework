@@ -7,17 +7,26 @@
  */
 package com.leesky.ezframework.mybatis.ddl.service.impl;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.leesky.ezframework.mybatis.ddl.annotation.ExcludeDDL;
+import com.leesky.ezframework.mybatis.ddl.annotation.LengthCount;
+import com.leesky.ezframework.mybatis.ddl.command.CreateTableParam;
+import com.leesky.ezframework.mybatis.ddl.command.SysMysqlColumns;
+import com.leesky.ezframework.mybatis.ddl.constants.Constants;
+import com.leesky.ezframework.mybatis.ddl.constants.MySqlTypeConstant;
+import com.leesky.ezframework.mybatis.ddl.service.ImysqlCreateTableService;
+import com.leesky.ezframework.mybatis.ddl.utils.ClassTools;
+import com.leesky.ezframework.mybatis.mapper.CreateTablesMapper;
+import com.leesky.ezframework.utils.Hump2underline;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -28,26 +37,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.leesky.ezframework.mybatis.ddl.annotation.LengthCount;
-import com.leesky.ezframework.mybatis.ddl.command.CreateTableParam;
-import com.leesky.ezframework.mybatis.ddl.command.SysMysqlColumns;
-import com.leesky.ezframework.mybatis.ddl.constants.Constants;
-import com.leesky.ezframework.mybatis.ddl.constants.MySqlTypeConstant;
-import com.leesky.ezframework.mybatis.ddl.service.ImysqlCreateTableService;
-import com.leesky.ezframework.mybatis.ddl.utils.ClassTools;
-import com.leesky.ezframework.mybatis.mapper.CreateTablesMapper;
-import com.leesky.ezframework.utils.Hump2underline;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.RequiredArgsConstructor;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.Map.Entry;
 
 
 @Transactional
@@ -69,10 +61,10 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
 
 
     /**
-     * 读取配置文件的三种状态（创建表、更新表、不做任何事情）
+     * 便利全部数据表： 必须带有TableName注解(如果还带有ExcludeDDL注解，则排除在外)
      */
     @Override
-	public void createMysqlTable(String packName) {
+    public void createMysqlTable(String packName) {
         try {
 
             // 从包package中获取所有的Class
@@ -82,13 +74,11 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
 
             // 循环全部的model
             for (Class<?> clas : classes) {
-
+                TableName tablename = clas.getAnnotation(TableName.class);
+                ExcludeDDL exclude = clas.getAnnotation(ExcludeDDL.class);
                 // 没有打注解不需要创建表
-                if (null == clas.getAnnotation(TableName.class)) {
-                    continue;
-                }
-                // 构建出全部表的增删改的map
-                buildTableMapConstruct(clas, baseTableMap);
+                if (ObjectUtils.isNotEmpty(tablename) && ObjectUtils.isEmpty(exclude))
+                    buildTableMapConstruct(clas, baseTableMap); // 构建出全部表的增删改的map
             }
 
             // 根据传入的map，分别去创建或修改表结构
@@ -106,21 +96,21 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
     private Map<String, Map<String, List<Object>>> initTableMap() {
         Map<String, Map<String, List<Object>>> baseTableMap = new HashMap<String, Map<String, List<Object>>>();
         // 1.用于存需要创建的表名+结构
-        baseTableMap.put(Constants.NEW_TABLE_MAP, new HashMap<String, List<Object>>());
+        baseTableMap.put(Constants.NEW_TABLE_MAP, Maps.newHashMap());
         // 2.用于存需要更新字段类型等的表名+结构
-        baseTableMap.put(Constants.MODIFY_TABLE_MAP, new HashMap<String, List<Object>>());
+        baseTableMap.put(Constants.MODIFY_TABLE_MAP, Maps.newHashMap());
         // 3.用于存需要增加字段的表名+结构
-        baseTableMap.put(Constants.ADD_TABLE_MAP, new HashMap<String, List<Object>>());
+        baseTableMap.put(Constants.ADD_TABLE_MAP, Maps.newHashMap());
         // 4.用于存需要删除字段的表名+结构
-        baseTableMap.put(Constants.REMOVE_TABLE_MAP, new HashMap<String, List<Object>>());
+        baseTableMap.put(Constants.REMOVE_TABLE_MAP, Maps.newHashMap());
         // 5.用于存需要删除主键的表名+结构
-        baseTableMap.put(Constants.DROPKEY_TABLE_MAP, new HashMap<String, List<Object>>());
+        baseTableMap.put(Constants.DROPKEY_TABLE_MAP, Maps.newHashMap());
         // 6.用于存需要删除唯一约束的表名+结构
-        baseTableMap.put(Constants.DROPINDEXANDUNIQUE_TABLE_MAP, new HashMap<String, List<Object>>());
+        baseTableMap.put(Constants.DROPINDEXANDUNIQUE_TABLE_MAP, Maps.newHashMap());
         // 7.用于存需要增加的索引
-        baseTableMap.put(Constants.ADDINDEX_TABLE_MAP, new HashMap<String, List<Object>>());
+        baseTableMap.put(Constants.ADDINDEX_TABLE_MAP, Maps.newHashMap());
         // 8.用于存需要增加的唯一约束
-        baseTableMap.put(Constants.ADDUNIQUE_TABLE_MAP, new HashMap<String, List<Object>>());
+        baseTableMap.put(Constants.ADDUNIQUE_TABLE_MAP, Maps.newHashMap());
         return baseTableMap;
     }
 
@@ -140,7 +130,7 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
         if (ObjectUtils.isNotEmpty(comment) && StringUtils.isNotBlank(comment.value()))
             CommentMap.put(table.value(), comment.value());
         // 1. 用于存表的全部字段
-        List<Object> allFieldList = getAllFields(mySqlTypeAndLengthMap, clas);
+        List<Object> allFieldList = getAllFields(clas);
         if (allFieldList.size() == 0) {
             log.warn("扫描model发现" + clas.getName() + "没有建表字段请检查！");
             return;
@@ -318,15 +308,13 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
     /**
      * 根据数据库中表的结构和model中表的结构对比找出修改类型默认值等属性的字段
      *
-     * @param table           表
-     * @param columnNames     数据库中的结构
      * @param tableColumnList 表结构
      * @param allFieldList    model中的所有字段
      * @return 需要修改的字段
      */
     private List<Object> getModifyFieldList(TableName table, List<String> columnNames, List<SysMysqlColumns> tableColumnList, List<Object> allFieldList) {
         Map<String, CreateTableParam> fieldMap = getAllFieldMap(allFieldList);
-        List<Object> modifyFieldList = new ArrayList<Object>();
+        List<Object> modifyFieldList = Lists.newArrayList();
         for (SysMysqlColumns sysColumn : tableColumnList) {
             // 数据库中有该字段时，验证是否有更新
             CreateTableParam createTableParam = fieldMap.get(sysColumn.getColumn_name());
@@ -455,12 +443,11 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
     /**
      * 迭代出所有model的所有fields
      *
-     * @param mySqlTypeAndLengthMap mysql数据类型和对应几个长度的map
-     * @param clas                  准备做为创建表依据的class
+     * @param clas 准备做为创建表依据的class
      * @return 表的全部字段
      */
-    private List<Object> getAllFields(Map<String, Object> mySqlTypeAndLengthMap, Class<?> clas) {
-        List<Object> fieldList = new ArrayList<Object>();
+    private List<Object> getAllFields(Class<?> clas) {
+        List<Object> fieldList = Lists.newArrayList();
         Field[] fields = clas.getDeclaredFields();
 
         // 判断是否有父类，如果有拉取父类的field，这里只支持多层继承
@@ -536,6 +523,7 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
                         break;
 
                     case "java.util.Date":
+                    case "java.time.LocalDateTime":
                         param.setFieldType(MySqlTypeConstant.DATETIME);
                         break;
                     case "java.math.BigDecimal":
@@ -544,7 +532,9 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
                         param.setFieldDecimalLength(2);
                         param.setFieldType(MySqlTypeConstant.DECIMAL);
                         break;
-
+                    case "java.sql.Blob":
+                        param.setFieldType(MySqlTypeConstant.LONGBLOB);
+                        break;
                     default: // 默认是String，枚举、自定义实体
                         param.setFieldLength(255);
                         param.setFieldType(MySqlTypeConstant.VARCHAR);
@@ -629,9 +619,15 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
                 for (Object obj : entry.getValue()) {
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put(entry.getKey(), obj);
+                    log.info("---------------------------------------------------------------------------------------");
                     log.info("开始删除表" + entry.getKey() + "中的索引" + obj);
-                    createMysqlTablesMapper.dorpTabelIndex(map);
+                    try {
+                        createMysqlTablesMapper.dorpTabelIndex(map);
+                    } catch (Exception e) {
+                        System.err.printf("删除索引时出错：" + e.getMessage());
+                    }
                     log.info("完成删除表" + entry.getKey() + "中的索引" + obj);
+                    log.info("---------------------------------------------------------------------------------------");
                 }
             }
         }
@@ -687,19 +683,25 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
      * @param modifyTableMap 用于存需要更新字段类型等的表名+结构
      */
     private void modifyFieldsByMap(Map<String, List<Object>> modifyTableMap) {
-        // 做修改字段操作
-        if (modifyTableMap.size() > 0) {
-            for (Entry<String, List<Object>> entry : modifyTableMap.entrySet()) {
-                for (Object obj : entry.getValue()) {
-                    Map<String, Object> map = new HashMap<String, Object>();
-                    map.put(entry.getKey(), obj);
-                    CreateTableParam fieldProperties = (CreateTableParam) obj;
-                    log.info("开始修改表" + entry.getKey() + "中的字段" + fieldProperties.getFieldName());
+
+        for (Entry<String, List<Object>> entry : modifyTableMap.entrySet()) {
+            for (Object obj : entry.getValue()) {
+                Map<String, Object> map = Maps.newHashMap();
+                map.put(entry.getKey(), obj);
+                CreateTableParam fieldProperties = (CreateTableParam) obj;
+                log.info("---------------------------------------------------------------------------------------");
+                log.info("开始修改表" + entry.getKey() + "中的字段" + fieldProperties.getFieldName());
+                try {
                     createMysqlTablesMapper.modifyTableField(map);
-                    log.info("完成修改表" + entry.getKey() + "中的字段" + fieldProperties.getFieldName());
+                } catch (Exception e) {
+                    System.err.printf("修改字段出错：" + e.getMessage());
                 }
+
+                log.info("完成修改表" + entry.getKey() + "中的字段" + fieldProperties.getFieldName());
+                log.info("---------------------------------------------------------------------------------------");
             }
         }
+
     }
 
     /**
@@ -715,9 +717,16 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put(entry.getKey(), obj);
                     String fieldName = (String) obj;
+                    log.info("---------------------------------------------------------------------------------------");
                     log.info("开始删除表" + entry.getKey() + "中的字段" + fieldName);
-                    createMysqlTablesMapper.removeTableField(map);
+                    try {
+                        createMysqlTablesMapper.removeTableField(map);
+                    }catch (Exception e){
+                        System.err.printf("删除表出错：" + e.getMessage());
+                    }
+
                     log.info("完成删除表" + entry.getKey() + "中的字段" + fieldName);
+                    log.info("---------------------------------------------------------------------------------------");
                 }
             }
         }
@@ -736,9 +745,16 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put(entry.getKey(), obj);
                     CreateTableParam fieldProperties = (CreateTableParam) obj;
+                    log.info("---------------------------------------------------------------------------------------");
                     log.info("开始为表" + entry.getKey() + "增加字段" + fieldProperties.getFieldName());
-                    createMysqlTablesMapper.addTableField(map);
+                    try {
+                        createMysqlTablesMapper.addTableField(map);
+                    }catch (Exception e){
+                        System.err.printf("增加字段出错：" + e.getMessage());
+                    }
+
                     log.info("完成为表" + entry.getKey() + "增加字段" + fieldProperties.getFieldName());
+                    log.info("---------------------------------------------------------------------------------------");
                 }
             }
         }
@@ -757,9 +773,16 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put(entry.getKey(), obj);
                     CreateTableParam fieldProperties = (CreateTableParam) obj;
+                    log.info("---------------------------------------------------------------------------------------");
                     log.info("开始为表" + entry.getKey() + "删除主键" + fieldProperties.getFieldName());
-                    createMysqlTablesMapper.dropKeyTableField(map);
+                    try {
+                        createMysqlTablesMapper.dropKeyTableField(map);
+                    }catch (Exception e){
+                        System.err.printf("删除主键出错：" + e.getMessage());
+                    }
+
                     log.info("完成为表" + entry.getKey() + "删除主键" + fieldProperties.getFieldName());
+                    log.info("---------------------------------------------------------------------------------------");
                 }
             }
         }
@@ -777,8 +800,15 @@ public class MysqlCreateTableServiceImpl implements ImysqlCreateTableService {
                 String tableName = entry.getKey();
                 Map<String, List<Object>> map = Maps.newHashMap();
                 map.put(tableName, entry.getValue());
-                createMysqlTablesMapper.createTable(map, CommentMap.get(tableName));
+                log.info("---------------------------------------------------------------------------------------");
+                try {
+                    createMysqlTablesMapper.createTable(map, CommentMap.get(tableName));
+                }catch (Exception e){
+                    System.err.printf("创建表出错：" + e.getMessage());
+                }
+
                 log.info("完成创建表：" + entry.getKey());
+                log.info("---------------------------------------------------------------------------------------");
             }
         }
     }

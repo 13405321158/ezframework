@@ -10,11 +10,10 @@ package com.leesky.ezframework.backend.model.saler;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.backend.mapper.Iuser2roleMapper;
-import com.leesky.ezframework.backend.mapper.sys.IuserBaseExt01Mapper;
+import com.leesky.ezframework.backend.mapper.saler.IsalereExt01Mapper;
 import com.leesky.ezframework.backend.model.GroupModel;
 import com.leesky.ezframework.backend.model.RoleModel;
 import com.leesky.ezframework.backend.model.User2RoleModel;
-import com.leesky.ezframework.backend.model.sys.UserBaseExt01Model;
 import com.leesky.ezframework.mybatis.annotation.*;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
@@ -67,8 +66,8 @@ public class SalerBaseModel extends BaseUuidModel {
     @OneToOne
     @TableField(exist = false)
     @JoinColumn(name = "ext01_id")
-    @EntityMapper(targetMapper = IuserBaseExt01Mapper.class, entityClass = UserBaseExt01Model.class)
-    private UserBaseExt01Model ext01;
+    @EntityMapper(targetMapper = IsalereExt01Mapper.class, entityClass = SalerExt01Model.class)
+    private SalerExt01Model ext01;
 
 
 

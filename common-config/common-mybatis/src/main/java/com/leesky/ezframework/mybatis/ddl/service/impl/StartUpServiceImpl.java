@@ -8,11 +8,14 @@
 
 package com.leesky.ezframework.mybatis.ddl.service.impl;
 
-import java.io.IOException;
-import java.util.HashSet;
-
-import javax.annotation.PostConstruct;
-
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.google.common.collect.Sets;
+import com.leesky.ezframework.mybatis.ddl.constants.Constants;
+import com.leesky.ezframework.mybatis.ddl.service.ImysqlCreateTableService;
+import com.leesky.ezframework.mybatis.ddl.service.IstartUpService;
+import com.leesky.ezframework.mybatis.ddl.utils.ConfigurationUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -24,14 +27,9 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.google.common.collect.Sets;
-import com.leesky.ezframework.mybatis.ddl.constants.Constants;
-import com.leesky.ezframework.mybatis.ddl.service.ImysqlCreateTableService;
-import com.leesky.ezframework.mybatis.ddl.service.IstartUpService;
-import com.leesky.ezframework.mybatis.ddl.utils.ConfigurationUtil;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.util.HashSet;
 
 
 @Slf4j
@@ -58,7 +56,7 @@ public class StartUpServiceImpl implements IstartUpService {
 
 
     @Override
-	@PostConstruct
+    @PostConstruct
     public void startHandler() {
         String tableAuto = springContextUtil.getConfig(Constants.TABLE_AUTO_KEY);
 
@@ -92,7 +90,8 @@ public class StartUpServiceImpl implements IstartUpService {
                     String className = reader.getClassMetadata().getClassName();
                     Class<?> clazz = Class.forName(className);
                     TableName annotation = clazz.getAnnotation(TableName.class);
-                    if (annotation != null)
+
+                    if (ObjectUtils.isNotEmpty(annotation))
                         packName.add(clazz.getPackage().getName());
                 }
             }

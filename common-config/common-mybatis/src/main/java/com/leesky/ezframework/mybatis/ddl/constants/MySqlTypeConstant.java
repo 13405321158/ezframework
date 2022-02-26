@@ -48,4 +48,7 @@ public class MySqlTypeConstant {
 	
 	@LengthCount(Length=0)
 	public static final  String FLOAT = "float";
+
+	@LengthCount(Length=0)
+	public static final String LONGBLOB="longblob";
 }

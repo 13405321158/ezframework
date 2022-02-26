@@ -31,6 +31,6 @@ public @interface LengthCount{
 	 * @return 默认是1，0表示不需要设置，1表示需要设置一个，2表示需要设置两个
 	 */
 	
-	public int Length() default 1;
+	 int Length() default 1;
 	
 }

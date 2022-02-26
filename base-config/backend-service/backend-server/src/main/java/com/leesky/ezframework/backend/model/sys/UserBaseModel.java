@@ -16,6 +16,7 @@ import com.leesky.ezframework.backend.model.GroupModel;
 import com.leesky.ezframework.backend.model.RoleModel;
 import com.leesky.ezframework.backend.model.User2RoleModel;
 import com.leesky.ezframework.mybatis.annotation.*;
+import com.leesky.ezframework.mybatis.ddl.annotation.ExcludeEdit;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -54,9 +55,11 @@ public class UserBaseModel extends BaseUuidModel {
     @ApiModelProperty("修改密码时间")
     private Date editPwdDate;
 
+    @ExcludeEdit
     @ApiModelProperty("扩展表01主键")
     private String ext01Id;
 
+    @ExcludeEdit
     @ApiModelProperty("扩展表02主键")
     private String ext02Id;
 

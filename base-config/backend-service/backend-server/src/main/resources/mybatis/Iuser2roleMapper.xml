@@ -3,7 +3,7 @@
 <mapper namespace="com.leesky.ezframework.backend.mapper.Iuser2roleMapper">
 
     <resultMap type="com.leesky.ezframework.backend.model.RoleModel" id="roleResult"/>
-    <resultMap type="com.leesky.ezframework.backend.model.UserBaseModel" id="userResult"/>
+    <resultMap type="com.leesky.ezframework.backend.model.sys.UserBaseModel" id="userResult"/>
 
     <select id="getRoleCodes" parameterType="String" resultMap="roleResult">
         SELECT b.id,b.name,b.code
