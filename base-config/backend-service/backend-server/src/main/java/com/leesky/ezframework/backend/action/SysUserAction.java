@@ -61,7 +61,7 @@ public class SysUserAction {
      * @author： 魏来
      * @date: 2021年12月3日 上午9:26:01
      */
-    @PostMapping("/c01")
+    @PostMapping("/c01/public")
     public Result<UserBaseDTO> add(@RequestBody UserBaseDTO dto) throws Exception {
         ValidatorUtils.valid(dto);
 

@@ -2,7 +2,7 @@ package com.leesky.ezframework.backend.model;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.mybatis.ddl.annotation.ExcludeDDL;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 
 @Data
-@ExcludeDDL
+@ApiModel(value = "Client信息表")
 @TableName("oauth_client_details")
 public class OauthClientDetailsModel implements Serializable {
 

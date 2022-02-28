@@ -7,12 +7,16 @@
  */
 package com.leesky.ezframework.auth.details.clientdetails;
 
+import com.alibaba.fastjson.JSON;
 import com.leesky.ezframework.auth.enums.PasswordEncoderTypeEnum;
+import com.leesky.ezframework.auth.utils.RequestUtils;
 import com.leesky.ezframework.backend.api.IbackendServerClient;
 import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
+import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.json.Result;
+import com.leesky.ezframework.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
@@ -26,19 +30,24 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ClientDetailService implements ClientDetailsService {
-
+    private final RedisService cache;
     private final IbackendServerClient client;
 
 
     @Override
-    @Cacheable(cacheNames = "auth-token", key = "'oauth-client:'+#clientId")
+//    @Cacheable(cacheNames = "auth-token", key = "'oauth-client:'+#clientId")
     public ClientDetails loadClientByClientId(String clientId) {
+        String cid = RequestUtils.getOAuth2ClientId();
 
-        Result<OauthClientDetailsDTO> ret = this.client.getClient(clientId);
+        Object obj = this.cache.get(Redis.CLIENT + cid);
+        if (ObjectUtils.isNotEmpty(obj))
+            return JSON.parseObject(JSON.toJSONString(obj), BaseClientDetails.class);
 
-        if (!ret.isSuccess()) {
+
+        Result<OauthClientDetailsDTO> ret = this.client.getClient(cid);
+
+        if (!ret.isSuccess())
             throw new BadCredentialsException(ret.getMsg());
-        }
 
 
         OauthClientDetailsDTO client = ret.getData();
@@ -54,6 +63,7 @@ public class ClientDetailService implements ClientDetailsService {
         clientDetails.setAccessTokenValiditySeconds(client.getAccessTokenValidity());
         clientDetails.setRefreshTokenValiditySeconds(client.getRefreshTokenValidity());
 
+        this.cache.add(Redis.CLIENT + cid, clientDetails);
         return clientDetails;
 
 

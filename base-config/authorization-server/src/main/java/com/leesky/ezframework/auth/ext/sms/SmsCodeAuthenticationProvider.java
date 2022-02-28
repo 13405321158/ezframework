@@ -3,6 +3,8 @@ package com.leesky.ezframework.auth.ext.sms;
 
 import com.google.common.collect.Sets;
 import com.leesky.ezframework.auth.details.userdetails.saler.SalerDetailsService;
+import com.leesky.ezframework.auth.utils.RequestUtils;
+import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.redis.service.RedisService;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +15,6 @@ import org.springframework.util.Assert;
 
 /**
  * 短信验证码认证授权提供者
- *
  */
 @Data
 public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
@@ -27,24 +28,24 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
         SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
         //1、接收前端传递手机号码和验证码
         String mobile = (String) authenticationToken.getPrincipal();
-        String paramCode = (String) authenticationToken.getCredentials();
-        Assert.isTrue(StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(paramCode), "手机号码和验证码不能为空");
+        String paramCode = RequestUtils.getCode();
+        Assert.isTrue(StringUtils.isNotBlank(mobile), "手机号码和验证码不能为空");
 
         //2、从缓存中取出sms验证码 和 传递过来的 做对比
-//        String codeKey = Redis.SMS_KEY + mobile;
-//        String redisCode = (String) this.cache.get(codeKey);
-//        Assert.isTrue(StringUtils.isNotBlank(redisCode), paramCode + "：已过期或伪造的SMS");
+        String codeKey = Redis.SMS_KEY + mobile;
+        String redisCode = (String) this.cache.get(codeKey);
+        Assert.isTrue(StringUtils.isNotBlank(redisCode), paramCode + "：已过期或伪造的SMS");
         // 验证码比对
-//        if (redisCode.equals(paramCode)) {
-//            this.cache.del(codeKey); // 比对成功删除缓存的验证码
+        if (redisCode.equals(paramCode)) {
+            this.cache.del(codeKey); // 比对成功删除缓存的验证码
 
             UserDetails userDetails = this.userDetailsService.loadUserByMobile(mobile);
             SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(userDetails, authentication.getCredentials(), Sets.newHashSet());
             result.setDetails(authentication.getDetails());
             return result;
-//        }
+        }
 
-//        throw new IllegalArgumentException("验证码不匹配");
+        throw new IllegalArgumentException("验证码不匹配");
 
 
     }

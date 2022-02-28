@@ -27,7 +27,12 @@ public class Base64codeUtil {
 
     }
 
-    // 解码
+    /**
+     * <li>解码</li>
+     *
+     * @author: 魏来
+     * @date: 2022/2/28 下午4:32
+     */
     public static String Base642String(String str) {
 
         byte[] bytes = str.getBytes(StandardCharsets.UTF_8);

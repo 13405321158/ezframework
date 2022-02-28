@@ -59,11 +59,15 @@ public class StartUpServiceImpl implements IstartUpService {
     @PostConstruct
     public void startHandler() {
         String tableAuto = springContextUtil.getConfig(Constants.TABLE_AUTO_KEY);
-
+        String packName = findAll();
         if (StringUtils.equals("update", tableAuto)) {
             log.info("mybatis-plus.leesky.ddl-auto=update[新建或更新表结构]");
-            String packName = findAll();
+
             this.service.createMysqlTable(packName);
+        }
+        if(StringUtils.equals("create",tableAuto)) {
+            log.info("mybatis-plus.leesky.ddl-auto=create[重新建立表结构]");
+            this.service.delTable(packName);
         }
     }
 

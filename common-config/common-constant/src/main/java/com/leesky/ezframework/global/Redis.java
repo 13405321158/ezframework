@@ -14,6 +14,7 @@ public class Redis {
 
     public static final String AUTH_TOKEN_ID = "auth-token-id_";//登录用户id和token对应关系
 
+    public static final String CLIENT = "oauth-client_";//client 存放key
 
     public static final String URL_ROLES_KEY = "system:roles_rule:url:";
 

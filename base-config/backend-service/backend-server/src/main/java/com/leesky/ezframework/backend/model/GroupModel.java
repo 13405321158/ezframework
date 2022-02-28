@@ -22,8 +22,8 @@ import java.util.Set;
 @Getter
 @Setter
 
-@TableName(value = "cbm_mag_group",autoResultMap = true)
 @ApiModel(value = "群组信息表")
+@TableName(value = "cbm_mag_group",autoResultMap = true)
 public class GroupModel extends BaseUuidModel {
 
 	private static final long serialVersionUID = 682190171806572223L;

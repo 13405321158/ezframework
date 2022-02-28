@@ -39,16 +39,10 @@
 			${fields.fieldType}(${fields.fieldLength},${fields.fieldDecimalLength})
 		</if>
 
-<!--		<if test="fields.addPrama">-->
-<!--			 UNSIGNED ZEROFILL-->
-<!--		</if>-->
 		<if test="fields.fieldIsNull">
 			NULL
 		</if>
-<!--		<if test="!fields.fieldIsNull">-->
-<!--		 <if test="fields.isKey">UNSIGNED ZEROFILL </if>-->
-<!--			NOT NULL-->
-<!--		</if>-->
+
 		<if test="fields.fieldIsAutoIncrement">
 			AUTO_INCREMENT
 		</if>
@@ -211,6 +205,9 @@
 		alter table ${tableName} comment '${common}';
 	</select>
 
-
+	<!-- 设置表主键在第一位 -->
+	<select id="setIdFirst" >
+		ALTER TABLE ${tableName} CHANGE ${tableKey} ${tableKey} ${type}(${length}) COMMENT '数据表主键' FIRST;
+	</select>
 
 </mapper>

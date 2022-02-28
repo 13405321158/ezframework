@@ -14,6 +14,10 @@ public class Common {
     public final static String LOGIN_USER_EXT_INFO = "userInfo";//登录用户经常使用的扩展信息
 
 
+    public final static String CODE = "code";//sms\captcha 方式登录是 请求头部的图片验证码或短信验证码
+    public final static String BASIC = "Basic";
+    public final static String CLIENT_ID_KEY = "client_id";
+    public final static String GRANT_TYPE_KEY = "grant_type";
     public final static String TOKEN_TYPE = "bearer ";//接口认证方式
     public final static String ROLE_LIST = "authorities";//jwt 中用户权限部分
     public final static String URL_HEADER_PARAM = "Authorization";//http请求时头部参数名
