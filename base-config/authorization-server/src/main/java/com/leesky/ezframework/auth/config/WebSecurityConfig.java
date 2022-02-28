@@ -1,13 +1,8 @@
 package com.leesky.ezframework.auth.config;
 
-import cn.binarywang.wx.miniapp.api.WxMaService;
-import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetailsService;
-import com.leesky.ezframework.auth.details.userdetails.saler.SalerDetailsService;
 import com.leesky.ezframework.auth.details.userdetails.sys.SysUserDetailsService;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeAuthenticationProvider;
 import com.leesky.ezframework.auth.ext.webchat.WechatAuthenticationProvider;
-import com.leesky.ezframework.backend.api.IbackendServerClient;
-import com.leesky.ezframework.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,16 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final String white_name = "/oauth/**";
-
-    private final RedisService cache;
-    private final WxMaService wxMaService;
-    private final IbackendServerClient client;
-
-    private final BuyerDetailsService buyerDetailsService;
-    private final SalerDetailsService salerDetailsService;
+    private final SmsCodeAuthenticationProvider smsProvider;
+    private final WechatAuthenticationProvider wxProvider;
     private final SysUserDetailsService sysUserDetailsService;
-
 
     /**
      * 授权控制器访问控制设置
@@ -46,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        String white_name = "/oauth/**";
         http
                 .authorizeRequests().antMatchers(white_name).permitAll()
                 .anyRequest().authenticated()
@@ -76,14 +65,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(this.wxProvider);//微信认证授权提供者: 默认使用buyerDetailsService查询用户
+        auth.authenticationProvider(this.smsProvider);//手机验证码认证授权提供者: 默认使用salerDetailsService查询用户
         auth.authenticationProvider(daoAuthenticationProvider());
-        auth.authenticationProvider(wechatAuthenticationProvider());
-        auth.authenticationProvider(smsCodeAuthenticationProvider());
     }
 
 
     /**
-     * 用户名密码认证授权提供者
+     * 默认：用户名密码认证授权提供者
      */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
@@ -91,34 +80,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(sysUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         provider.setHideUserNotFoundExceptions(false); // 是否隐藏用户不存在异常，默认:true-隐藏；false-抛出异常；
-        return provider;
-    }
-
-
-    /**
-     * 手机验证码认证授权提供者: 默认使用salerDetailsService查询用户
-     */
-    @Bean
-    public SmsCodeAuthenticationProvider smsCodeAuthenticationProvider() {
-        SmsCodeAuthenticationProvider provider = new SmsCodeAuthenticationProvider();
-        provider.setUserDetailsService(salerDetailsService);
-        provider.setCache(cache);
-        return provider;
-    }
-
-    /**
-     * <li>微信认证授权提供者: 默认使用buyerDetailsService查询用户</li>
-     * <li>如果salerDetailsService和sysUserDetailsService也想使用微信登录，有两种方案：
-     * <p>
-     * A、登录用户传递一个标识位，区分卖家、买家和系统用户，则在buyerDetailsService.loadUserByUsername 内根据标识位 使用不同UserDetailsService查询
-     * B、不传递标识位，先使用buyerDetailsService.loadUserByUsername查询，然后在使用salerDetailsService和sysUserDetailsService查询
-     */
-    @Bean
-    public WechatAuthenticationProvider wechatAuthenticationProvider() {
-        WechatAuthenticationProvider provider = new WechatAuthenticationProvider();
-        provider.setUserDetailsService(buyerDetailsService);
-        provider.setWxMaService(wxMaService);
-        provider.setMemberFeignClient(client);
         return provider;
     }
 

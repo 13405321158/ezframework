@@ -1,11 +1,8 @@
 package com.leesky.ezframework.check;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.leesky.ezframework.global.Common;
+import com.leesky.ezframework.global.Redis;
+import com.leesky.ezframework.redis.service.RedisService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -16,15 +13,16 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.Assert;
 import org.springframework.util.PathMatcher;
 
-import com.leesky.ezframework.global.Common;
-import com.leesky.ezframework.global.Redis;
-import com.leesky.ezframework.redis.service.RedisService;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
- * 基于角色的权限控制器
+ * <li>基于角色的权限控制器</li>
  *
- * @author： 魏来
- * @date： 2021/12/14 下午4:48
+ * @author: 魏来
+ * @date: 2022/2/28 下午7:10
  */
 @Component("roleChecker")
 public class UrlRoleChecker implements RoleChecker {
@@ -33,7 +31,7 @@ public class UrlRoleChecker implements RoleChecker {
     private RedisService redisService;
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public boolean check(Authentication authentication, HttpServletRequest request) {
         // 1、预检请求放行
         if (request.getMethod().toUpperCase().equals(HttpMethod.OPTIONS.name()))

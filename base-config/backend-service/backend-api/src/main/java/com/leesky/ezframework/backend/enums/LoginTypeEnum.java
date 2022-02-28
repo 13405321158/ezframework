@@ -10,8 +10,8 @@ package com.leesky.ezframework.backend.enums;
 public enum LoginTypeEnum {
     password("u", "Q_username_EQ"), sms("s", "Q_mobile_EQ"), wx("w", "Q_openid_EQ");
 
-    private String key;
-    private String value;
+    private final String key;
+    private  String value;
 
     LoginTypeEnum(String key, String value) {
         this.key = key;
@@ -20,10 +20,6 @@ public enum LoginTypeEnum {
 
     public String getKey() {
         return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getValue() {
@@ -35,11 +31,11 @@ public enum LoginTypeEnum {
     }
 
     public static String getValue(String key) {
-        String str = null;
+
         for (LoginTypeEnum e : LoginTypeEnum.values()) {
             if (e.key.equals(key))
                 return e.getValue();
         }
-        return str;
+        return null;
     }
 }

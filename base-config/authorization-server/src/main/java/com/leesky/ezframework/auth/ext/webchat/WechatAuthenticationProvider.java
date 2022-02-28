@@ -5,11 +5,13 @@ import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetailsService;
 import com.leesky.ezframework.backend.api.IbackendServerClient;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 
@@ -20,11 +22,13 @@ import java.util.HashSet;
  * @date 2021/9/25
  */
 @Data
+@Component
+@RequiredArgsConstructor
 public class WechatAuthenticationProvider implements AuthenticationProvider {
 
-    private WxMaService wxMaService;
-    private BuyerDetailsService userDetailsService;
-    private IbackendServerClient memberFeignClient;
+    private final WxMaService wxMaService;
+    private final BuyerDetailsService userDetailsService;
+    private final IbackendServerClient memberFeignClient;
 
     /**
      * 微信认证

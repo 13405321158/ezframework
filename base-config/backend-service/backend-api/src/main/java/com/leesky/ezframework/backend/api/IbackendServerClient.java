@@ -17,10 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- * 类功能说明：
- * <li></li>
- */
 
 @FeignClient(value = "backend-server", fallbackFactory = BackendFeignFallback.class, configuration = {FeignErrorDecoder.class})
 public interface IbackendServerClient {
