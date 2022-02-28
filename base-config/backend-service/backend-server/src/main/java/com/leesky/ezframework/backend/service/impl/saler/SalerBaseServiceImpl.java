@@ -7,6 +7,7 @@
  */
 package com.leesky.ezframework.backend.service.impl.saler;
 
+import com.google.common.collect.Lists;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.mapper.IoauthClientMapper;
 import com.leesky.ezframework.backend.mapper.saler.IsalerBaseMapper;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * <li></li>
@@ -65,7 +67,9 @@ public class SalerBaseServiceImpl extends LeeskyServiceImpl<IsalerBaseMapper, Sa
         this.insert(model, true);
 
 
-        OauthClientDetailsModel client = new OauthClientDetailsModel(dto.getUsername(), pwd, accessTokenValiditySeconds, refreshTokenValiditySeconds);
-        this.clientMapper.insert(client);
+        List<OauthClientDetailsModel> list = Lists.newArrayList();
+        list.add(new OauthClientDetailsModel(dto.getMobile(), this.passwordEncoder.encode(dto.getMobile()), accessTokenValiditySeconds, refreshTokenValiditySeconds));
+        list.add(new OauthClientDetailsModel(dto.getUsername(), this.passwordEncoder.encode(dto.getUsername()), accessTokenValiditySeconds, refreshTokenValiditySeconds));
+        this.clientMapper.insertBatch(list);
     }
 }
