@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 import com.leesky.ezframework.auth.details.clientdetails.ClientDetailService;
 import com.leesky.ezframework.global.Common;
 import com.leesky.ezframework.utils.Base64codeUtil;
+import com.leesky.ezframework.utils.I18nUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +47,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BasicAuthenticationFilter extends OncePerRequestFilter {
 
+    private final I18nUtil i18nUtil;
     private final ClientDetailService clientDetailsService;
 
     /**
@@ -76,8 +78,8 @@ public class BasicAuthenticationFilter extends OncePerRequestFilter {
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        String msg = "client_id 和client_secret 不匹配";
         Map<String, Object> map = commonCode(request, response);
+        String msg = this.i18nUtil.getMsg("login.client.clientId.clientSecret");
         try {
             ClientDetails details = this.clientDetailsService.loadClientByClientId(clientDetails[0]);
 
@@ -105,8 +107,8 @@ public class BasicAuthenticationFilter extends OncePerRequestFilter {
      * 获取client_id和client_secret
      */
     private String[] getClientIdAndSecret(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String msg00 = "/oauth/token请求参数缺失";
-        String msg01 = "/oauth/token的请求头Authorization参数错误：BASE64(client_id:client_secret)";
+        String msg00 = this.i18nUtil.getMsg("login.client.param.null");
+        String msg01 = this.i18nUtil.getMsg("login.client.authorization.error");
 
         ObjectMapper mapper = new ObjectMapper();
         String basic = request.getHeader(Common.URL_HEADER_PARAM);
