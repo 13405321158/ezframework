@@ -37,7 +37,16 @@ public interface IuserBaseService extends IeeskyService<UserBaseModel> {
      * @author: 魏来
      * @date: 2022/2/25 下午2:00
      */
-    void editPwd(String uid, String username, String pwd);
+    void editPwd(String uid,  String pwd);
+
+    /**
+     * <li>批量禁用账户，删除token</li>
+     *
+     * @author: 魏来
+     * @date: 2022/3/1 上午8:13
+     */
+
+    void disable(List<String> ids);
 
     /**
      * 删除用户：cbm_mag_user、cbm_mag_user_ext01、cbm_mag_user_ext02、oauth_client_details

@@ -10,7 +10,7 @@ package com.leesky.ezframework.auth.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.auth.details.clientdetails.ClientDetailService;
-import com.leesky.ezframework.auth.exception.TokenEndpointFilter;
+import com.leesky.ezframework.auth.exception.BasicAuthenticationFilter;
 import com.leesky.ezframework.auth.ext.captcha.CaptchaTokenGranter;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeTokenGranter;
 import com.leesky.ezframework.auth.ext.webchat.WebchatTokenGranter;
@@ -70,22 +70,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final LettuceConnectionFactory redisConnectionFactory;// token 存储在redis中
 
 
+    private final BasicAuthenticationFilter basicAuthenticationFilter;
+
     /**
-     * <li>配置1=security.allowFormAuthenticationForClients();spring自带
-     * <li>配置2=ClientCredentialsTokenEndpointFilter;自定义错误返回格式
-     * <li>因为使用了【配置2】，所以注释了【配置1】
-     * <li>【配置1】实际是启用【配置2】，所以来这两个配置如果同时使用，则【配置1】覆盖【配置2】
+     * 配置认证异常返回信息
      *
      * @author: 魏来
      * @date: 2022/2/21 上午10:28
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
-        TokenEndpointFilter endpointFilter = new TokenEndpointFilter(security);
-        endpointFilter.afterPropertiesSet();
-        endpointFilter.setAuthenticationEntryPoint(authenticationEntryPoint());
-        security.addTokenEndpointAuthenticationFilter(endpointFilter);
-
+        //1、适用于 username\password\client_secret\client_id\grant_type 以form方式提交
+//        TokenEndpointFilter endpointFilter = new TokenEndpointFilter(security);
+//        endpointFilter.afterPropertiesSet();
+//        endpointFilter.setAuthenticationEntryPoint(authenticationEntryPoint());
+//        security.addTokenEndpointAuthenticationFilter(endpointFilter);
+        //2、适用于 请求头Authorization=Basic+" "+BASE64方式加密(client_id:client_secret) 方式
+        security.addTokenEndpointAuthenticationFilter(basicAuthenticationFilter);
 //        security.checkTokenAccess("permitAll()");//允许/oauth/check_token,测试环境开启，线上环境禁用
     }
 
@@ -185,9 +186,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     /**
+     * 适用于 form方式提交认证参数
      * 自定义认证异常响应数据: 1、client_id 不存在; 2、client_secret 错误 都走下面的方法
      */
-    @Bean
+//    @Bean
+    @Deprecated
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, e) -> {
             String msg;

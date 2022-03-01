@@ -20,7 +20,11 @@ import com.leesky.ezframework.backend.model.sys.UserBaseExt01Model;
 import com.leesky.ezframework.backend.model.sys.UserBaseExt02Model;
 import com.leesky.ezframework.backend.model.sys.UserBaseModel;
 import com.leesky.ezframework.backend.service.sys.IuserBaseService;
+import com.leesky.ezframework.enums.StatusEnum;
+import com.leesky.ezframework.global.Common;
+import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
+import com.leesky.ezframework.redis.service.RedisService;
 import com.leesky.ezframework.utils.MD5Util;
 import com.leesky.ezframework.utils.Po2DtoUtil;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +44,14 @@ import java.util.stream.Collectors;
 public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, UserBaseModel> implements IuserBaseService {
 
     @Value("${access.token.validity:360}") // 默认值过期时间60*60s 一小时
-    private int accessTokenValiditySeconds;
+    private int access;
 
     @Value("${access.refresh.validity:360}")
-    private int refreshTokenValiditySeconds;
+    private int refresh;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final RedisService cache;
 
     private final IuserBaseMapper repo;
     private final IoauthClientMapper clientMapper;
@@ -73,8 +79,8 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
         this.insert(model, true);
 
         List<OauthClientDetailsModel> list = Lists.newArrayList();
-        list.add(new OauthClientDetailsModel(dto.getMobile(), this.passwordEncoder.encode(dto.getMobile()), accessTokenValiditySeconds, refreshTokenValiditySeconds));
-        list.add(new OauthClientDetailsModel(dto.getUsername(), this.passwordEncoder.encode(dto.getUsername()), accessTokenValiditySeconds, refreshTokenValiditySeconds));
+        list.add(new OauthClientDetailsModel(dto.getMobile(), this.passwordEncoder.encode(dto.getMobile() + Common.CLIENT_PWD_JOIN), access, refresh));
+        list.add(new OauthClientDetailsModel(dto.getUsername(), this.passwordEncoder.encode(dto.getUsername() + Common.CLIENT_PWD_JOIN), access, refresh));
         this.clientMapper.insertBatch(list);
 
     }
@@ -92,6 +98,8 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
         UpdateWrapper<UserBaseModel> filter = new UpdateWrapper<>();
         filter.eq("id", model.getId());
         this.repo.update(model, filter);
+        if (model.getStatus().equals(StatusEnum.DISABLE.getKey()))
+            this.cache.del(Redis.AUTH_TOKEN_ID + model.getId());
 
         UpdateWrapper<UserBaseExt01Model> filter01 = new UpdateWrapper<>();
         filter01.eq("id", model.getExt01Id());
@@ -116,17 +124,32 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
      */
     @Override
     @Transactional
-    public void editPwd(String uid, String username, String pwd) {
+    public void editPwd(String uid, String pwd) {
         pwd = this.passwordEncoder.encode(pwd);
-        //1、更新client
-        UpdateWrapper<OauthClientDetailsModel> filter01 = new UpdateWrapper<>();
-        filter01.eq("client_id", username).set("client_secret", pwd);
-        this.clientMapper.update(new OauthClientDetailsModel(), filter01);
 
-        //2、更新用户密码
         UpdateWrapper<UserBaseModel> filter = new UpdateWrapper<>();
         filter.eq("id", uid).set("password", pwd).set("modify_date", LocalDateTime.now());
         this.repo.update(new UserBaseModel(), filter);
+    }
+
+    /**
+     * <li>批量禁用账户，删除token</li>
+     *
+     * @author: 魏来
+     * @date: 2022/3/1 上午8:13
+     */
+
+    @Override
+    @Transactional
+    public void disable(List<String> ids) {
+        //1、设置状态
+        UpdateWrapper<UserBaseModel> filter = new UpdateWrapper<>();
+        filter.set("status", StatusEnum.DISABLE.getKey()).in("id", ids);
+        this.repo.update(new UserBaseModel(), filter);
+
+        //2、删除token
+        ids.forEach(e -> this.cache.del(Redis.AUTH_TOKEN_ID + e));
+
     }
 
     /**
@@ -150,8 +173,10 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
         this.ext02Mapper.delete(e2);
 
 
-        List<String> clients = list.stream().map(UserBaseDTO::getUsername).collect(Collectors.toList());
-        this.clientMapper.deleteBatchIds(clients);
+        List<String> mobile = list.stream().map(UserBaseDTO::getMobile).collect(Collectors.toList());
+        List<String> username = list.stream().map(UserBaseDTO::getUsername).collect(Collectors.toList());
+        mobile.addAll(username);
+        this.clientMapper.deleteBatchIds(mobile);
     }
 
 }

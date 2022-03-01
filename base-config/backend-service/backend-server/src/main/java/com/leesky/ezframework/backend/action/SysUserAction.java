@@ -16,6 +16,7 @@ import com.leesky.ezframework.utils.Po2DtoUtil;
 import com.leesky.ezframework.utils.ValidatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
@@ -36,7 +37,6 @@ public class SysUserAction {
     private final I18nUtil i18n;
 
     private final IuserBaseService service;
-
 
 
     /**
@@ -100,7 +100,7 @@ public class SysUserAction {
     }
 
     /**
-     * 用户修改密码
+     * 用户修改密码: 前端html对pwd明文使用md5(32位小写)加密，所以这里接到的是 md5字符串
      *
      * @author： 魏来
      * @date: 2022/2/9  下午5:48
@@ -109,10 +109,26 @@ public class SysUserAction {
     public Result<?> editPwd(@RequestBody CommonDTO dto) {
         Object pwd = dto.getObj().get("pwd");
         Object userId = dto.getObj().get("uid");
-        Object client = dto.getObj().get("client");
 
-        Assert.isTrue(ObjectUtils.isNotEmpty(pwd) && ObjectUtils.isNotEmpty(userId) && ObjectUtils.isNotEmpty(client), "修改密码时参数：用户Id、用户名和新密码不允许空");
-        this.service.editPwd((String) userId, (String) client, (String) pwd);
+
+        Assert.isTrue(ObjectUtils.isNotEmpty(pwd) && ObjectUtils.isNotEmpty(userId), this.i18n.getMsg("user.edit.param.null"));
+        this.service.editPwd((String) userId, (String) pwd);
+
+        return success();
+    }
+
+    /**
+     * 账户禁用（支持批量操作）
+     *
+     * @author： 魏来
+     * @date: 2022/3/1  上午8:00
+     */
+    @PostMapping(value = "/c01")
+    public Result<?> disable(@RequestBody CommonDTO dto) {
+
+        List<String> uids = dto.getCid();
+        Assert.isTrue(CollectionUtils.isNotEmpty(uids), this.i18n.getMsg("user.status.disable.null"));
+
 
         return success();
     }

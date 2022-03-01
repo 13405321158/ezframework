@@ -49,7 +49,6 @@ public class TokenAction {
     @PostMapping("/token")
     public Result<Map<String, String>> getToken(Principal principal, @RequestParam Map<String, String> map) throws HttpRequestMethodNotSupportedException {
 
-
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
         Map<String, String> userInfo = add2Cache(accessToken);
 
@@ -84,8 +83,8 @@ public class TokenAction {
         var ext = (Map<String, String>) accessToken.getAdditionalInformation().get(Common.LOGIN_USER_EXT_INFO);
 
         this.cache.add(Redis.AUTH_TOKEN_ID + ext.get(Common.USER_ID), accessToken.getValue(), expr);//2、登录用户id和token之间关系
-        this.cache.add(Common.USER_ID + "_" + token01, ext.get(Common.USER_ID), expr);
-        this.cache.add(Common.USER_NAME + "_" + token01, ext.get(Common.USER_NAME), expr);
+//        this.cache.add(Common.USER_ID + "_" + token01, ext.get(Common.USER_ID), expr);
+//        this.cache.add(Common.USER_NAME + "_" + token01, ext.get(Common.USER_NAME), expr);
 
         return ext;
     }

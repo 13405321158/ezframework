@@ -5,12 +5,12 @@ import org.apache.commons.lang3.StringUtils;
 public enum StatusEnum {
 
 
-    ENABLE("0", "启用"), DISENABLE("1", "停用");
+    ENABLE("0", "启用"), DISABLE("1", "停用");
 
     private String key;
     private String value;
 
-    private StatusEnum(String key, String value) {
+    StatusEnum(String key, String value) {
         this.key = key;
         this.value = value;
     }
@@ -32,14 +32,10 @@ public enum StatusEnum {
     }
 
     public static String getValue(String key) {
-        String ret = null;
-
         for (StatusEnum e : StatusEnum.values()) {
-
             if (StringUtils.equals(key, e.getKey()))
-                ret = e.getValue();
+                return e.getValue();
         }
-
-        return ret;
+        return null;
     }
 }

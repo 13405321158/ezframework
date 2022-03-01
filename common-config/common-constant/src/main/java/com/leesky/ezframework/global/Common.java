@@ -8,6 +8,7 @@ package com.leesky.ezframework.global;
  */
 public class Common {
 
+
     public final static String USER_ID = "userId";//系统用户id
     public final static String ID_NAME = "idName";//中文名称
     public final static String USER_NAME = "userName";//系统用户登录名称
@@ -27,6 +28,9 @@ public class Common {
 
     public final static String DEALER_CODE = "dealerCode";//经销商编码
     public final static String DEALER_NAME = "dealerName";//经销商名称
+
+
+    public final static String CLIENT_PWD_JOIN = "_pwD@?123";//client密码混淆字符(client明文密码是： 用户名+pwD@?123+用户名 或者 mobile+pwD@?123+mobile)
 
     /**
      * 静态资源

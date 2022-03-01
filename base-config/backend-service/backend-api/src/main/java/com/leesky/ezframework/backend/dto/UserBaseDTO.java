@@ -13,12 +13,13 @@ import com.leesky.ezframework.valid.ChinaStr;
 import com.leesky.ezframework.valid.EnglishStr;
 import com.leesky.ezframework.valid.Mobile;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.Set;
-
 @Data
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserBaseDTO extends BaseDTO {
 

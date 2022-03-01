@@ -7,6 +7,7 @@
  */
 package com.leesky.ezframework.auth.exception;
 
+import com.leesky.ezframework.json.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -17,8 +18,6 @@ import org.springframework.security.oauth2.common.exceptions.UnsupportedGrantTyp
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.leesky.ezframework.json.Result;
 
 /**
  * 类功能说明：
@@ -87,4 +86,8 @@ public class AuthExceptionHandler {
         log.error(e.getMessage(), e);
         return Result.failed(e.getMessage());
     }
+
+
+
+
 }

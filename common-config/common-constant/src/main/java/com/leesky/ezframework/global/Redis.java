@@ -10,9 +10,9 @@ public class Redis {
 
     public static final String LOGIN_IMG_CODE = "validate_img_code_";//登录时图片验证码
 
-    public static final String AUTH_TOKEN = "auth-token:";//登录成功后 获取的token存储在这个地方
+    public static final String AUTH_TOKEN = "oauth-token:";//登录成功后 获取的token存储在这个地方
 
-    public static final String AUTH_TOKEN_ID = "auth-token-id_";//登录用户id和token对应关系
+    public static final String AUTH_TOKEN_ID = "oauth-token-userid_";//登录用户id和token对应关系
 
     public static final String CLIENT = "oauth-client_";//client 存放key
 
