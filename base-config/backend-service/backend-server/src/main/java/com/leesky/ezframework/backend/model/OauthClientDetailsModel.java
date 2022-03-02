@@ -31,7 +31,7 @@ public class OauthClientDetailsModel implements Serializable {
 
 	private String scope;// 指定client的权限范围，比如读写权限，比如移动端还是web端权限
 
-	private String authorizedGrantTypes;// 可选值 授权码模式
+	private String authorizedGrantTypes;// 可选值 授权码模式:password,refresh_token,sms_code,wechat,captcha
 
 	private String webServerRedirectUri;// 客户端重定向uri，authorization_code和implicit需要该值进行校验，注册时填写，
 
@@ -50,13 +50,14 @@ public class OauthClientDetailsModel implements Serializable {
 
 	}
 
-	public OauthClientDetailsModel(String clientId, String clientSecret,Integer accessTokenValidity,Integer refreshTokenValidity) {
+	public OauthClientDetailsModel(String clientId, String clientSecret,String grantTypes,Integer accessTokenValidity,Integer refreshTokenValidity) {
 		this.scope = "all";
 		this.clientId = clientId;
 		this.clientSecret = clientSecret;
+		this.authorizedGrantTypes = grantTypes;
 		this.accessTokenValidity = accessTokenValidity;
 		this.refreshTokenValidity = refreshTokenValidity;
-		this.authorizedGrantTypes = "password,refresh_token,sms_code,wechat,captcha";
+
 	}
 
 }

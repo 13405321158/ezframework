@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -39,10 +40,10 @@ import java.util.List;
 public class BuyerBaseServiceImpl extends LeeskyServiceImpl<IbuyerBaseMapper, BuyerBaseModel> implements IbuyerBaseService {
 
     @Value("${access.token.validity:360}") // 默认值过期时间60*60s 一小时
-    private int accessTokenValiditySeconds;
+    private int access;
 
     @Value("${access.refresh.validity:360}")
-    private int refreshTokenValiditySeconds;
+    private int refresh;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -62,8 +63,9 @@ public class BuyerBaseServiceImpl extends LeeskyServiceImpl<IbuyerBaseMapper, Bu
 
 
         List<OauthClientDetailsModel> list = Lists.newArrayList();
-        list.add(new OauthClientDetailsModel(dto.getMobile(), this.passwordEncoder.encode(dto.getMobile()), accessTokenValiditySeconds, refreshTokenValiditySeconds));
-        list.add(new OauthClientDetailsModel(dto.getUsername(), this.passwordEncoder.encode(dto.getUsername()), accessTokenValiditySeconds, refreshTokenValiditySeconds));
+        list.add(new OauthClientDetailsModel(dto.getUsername(), pwd, "password,refresh_token,captcha", access, refresh));
+        list.add(new OauthClientDetailsModel(dto.getMobile(), this.passwordEncoder.encode(MD5Util.encrypt(dto.getMobile() + LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))), "sms_code", access, refresh));
+
         this.clientMapper.insertBatch(list);
     }
 }

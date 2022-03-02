@@ -21,7 +21,6 @@ import com.leesky.ezframework.backend.model.sys.UserBaseExt02Model;
 import com.leesky.ezframework.backend.model.sys.UserBaseModel;
 import com.leesky.ezframework.backend.service.sys.IuserBaseService;
 import com.leesky.ezframework.enums.StatusEnum;
-import com.leesky.ezframework.global.Common;
 import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
 import com.leesky.ezframework.redis.service.RedisService;
@@ -34,6 +33,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -79,8 +79,9 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
         this.insert(model, true);
 
         List<OauthClientDetailsModel> list = Lists.newArrayList();
-        list.add(new OauthClientDetailsModel(dto.getMobile(), this.passwordEncoder.encode(dto.getMobile() + Common.CLIENT_PWD_JOIN), access, refresh));
-        list.add(new OauthClientDetailsModel(dto.getUsername(), this.passwordEncoder.encode(dto.getUsername() + Common.CLIENT_PWD_JOIN), access, refresh));
+        list.add(new OauthClientDetailsModel(dto.getUsername(), pwd, "password,refresh_token,captcha", access, refresh));
+        list.add(new OauthClientDetailsModel(dto.getMobile(), this.passwordEncoder.encode(MD5Util.encrypt(dto.getMobile() + LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))), "sms_code", access, refresh));
+
         this.clientMapper.insertBatch(list);
 
     }

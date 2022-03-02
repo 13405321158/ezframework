@@ -30,20 +30,18 @@ public class Common {
     public final static String DEALER_NAME = "dealerName";//经销商名称
 
 
-    public final static String CLIENT_PWD_JOIN = "_pwD@?123";//client密码混淆字符(client明文密码是： 用户名+pwD@?123+用户名 或者 mobile+pwD@?123+mobile)
-
     /**
      * 静态资源
      */
-    public static final String[] STATIC_RESOURCES = new String[]{
-            "/**/*.ico",
-            "/**/*.html",
-            "/**/*.png",
-            "/**/*.jpg",
-            "/**/*.gif",
-            "/**/*.css",
-            "/**/*.js"
-    };
+//    public static final String[] STATIC_RESOURCES = new String[]{
+//            "/**/*.ico",
+//            "/**/*.html",
+//            "/**/*.png",
+//            "/**/*.jpg",
+//            "/**/*.gif",
+//            "/**/*.css",
+//            "/**/*.js"
+//    };
     /**
      * 不需要token访问路径
      */
