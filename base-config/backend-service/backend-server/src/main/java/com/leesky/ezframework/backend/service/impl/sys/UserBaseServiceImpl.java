@@ -87,7 +87,7 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
     }
 
     /**
-     * 编辑用户
+     * 编辑用户： 不更新密码. 更新密码有单独接口
      *
      * @author： 魏来
      * @date: 2022/1/29  16:17
@@ -97,7 +97,7 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
     public void editUser(UserBaseModel model) {
 
         UpdateWrapper<UserBaseModel> filter = new UpdateWrapper<>();
-        filter.eq("id", model.getId());
+        filter.eq("id", model.getId()).set("password", null);//MybatisPlus的update默认机制是更新字段时判断是否为null,设值为null,则不更新该字段
         this.repo.update(model, filter);
         if (model.getStatus().equals(StatusEnum.DISABLE.getKey()))
             this.cache.del(Redis.AUTH_TOKEN_ID + model.getId());
@@ -110,11 +110,6 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
         UpdateWrapper<UserBaseExt02Model> filter02 = new UpdateWrapper<>();
         filter02.eq("id", model.getExt02Id());
         this.ext02Mapper.update(model.getExt02(), filter02);
-
-
-        UpdateWrapper<OauthClientDetailsModel> filter04 = new UpdateWrapper<>();
-        filter04.eq("client_id", model.getUsername()).set("client_secret", model.getPassword());
-        this.clientMapper.update(new OauthClientDetailsModel(), filter04);
     }
 
     /**
