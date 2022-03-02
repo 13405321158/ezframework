@@ -18,21 +18,19 @@ AuthenticationEntryPoint提供了一些内置实现：
  */
 package com.leesky.ezframework.config;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * desc：TODO
@@ -49,6 +47,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         log.info("AuthenticationEntryPoint状态异常拦截：{}", request.getRequestURI());
 
+
         Map<String, Object> map = new HashMap<>();
         map.put("code", HttpServletResponse.SC_UNAUTHORIZED);//
         map.put("success", false);
@@ -56,8 +55,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         map.put("path", request.getServletPath());
         map.put("timestamp", LocalDateTime.now().toString());
 
+        if (StringUtils.contains(authException.getMessage(), "Invalid signature"))
+            map.put("msg", "Token被篡改");
+
         response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpServletResponse.SC_OK);//设置网络状态是正常200，返回信息标注状态是401(未授权)
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), map);

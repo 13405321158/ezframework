@@ -3,6 +3,7 @@ package com.leesky.ezframework.gateway.filter;
 import com.alibaba.nacos.shaded.com.google.gson.Gson;
 import com.google.common.collect.Maps;
 import com.leesky.ezframework.gateway.utils.SHAUtil;
+import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.redis.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -77,7 +78,7 @@ public class HeaderParamFilter implements GlobalFilter {
             Assert.isTrue(StringUtils.isBlank(value), "url已使用,系统判定：重放攻击" + uid);
 
             //5、获取token并增加到head参数中
-            Object token = this.cache.get("auth-token-id_" + uid);
+            Object token = this.cache.get(Redis.AUTH_TOKEN_ID + uid);
             Assert.isTrue(ObjectUtils.isNotEmpty(token), "令牌已失效或用户未登录,请登录重试，登录Id：" + uid);
 
             //6、url头部增加参数 Authorization
