@@ -90,7 +90,6 @@ public class tokenAuthenticationFilter extends OncePerRequestFilter {
         try {
             ClientDetails details = this.clientDetailsService.loadClientByClientId(clientDetails[0]);
 
-            //这里判断只是 防止 数据表中的client_secret 被篡改
             boolean matches = this.passwordEncoder.matches(clientDetails[1], details.getClientSecret());
             if (matches) {//如果client_secret 密码不匹配，则直接输出错误信息
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details.getClientId(), clientDetails[1], details.getAuthorities());
