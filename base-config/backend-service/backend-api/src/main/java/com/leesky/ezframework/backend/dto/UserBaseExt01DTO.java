@@ -39,7 +39,7 @@ public class UserBaseExt01DTO extends BaseDTO {
     @Email
     private String email;//邮箱
 
-    private String portrait;//头像
+    private String avatar;//头像图标
 
     private String idCardImg01;//身份证正面
 

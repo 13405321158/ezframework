@@ -7,10 +7,7 @@
  */
 package com.leesky.ezframework.utils;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Date;
 
 
@@ -55,4 +52,26 @@ public class LocalDateUtil {
     public static LocalDateTime asLocalDateTime(Date date) {
         return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
+
+    /**
+     * LocalDateTime 转时间戳（毫秒）
+     *
+     * @author: 魏来
+     * @date: 2022/3/2 下午4:36
+     */
+    public static Long asEpochSecond(LocalDateTime time) {
+        return time.toInstant(ZoneOffset.of("+8")).toEpochMilli();
+    }
+
+    /**
+     * 时间戳 转 LocalDateTime
+     *
+     * @author: 魏来
+     * @date: 2022/3/2 下午4:42
+     */
+    public static LocalDateTime asEpochSecond(Long time) {
+        return LocalDateTime.ofEpochSecond(time / 1000, 0, ZoneOffset.ofHours(8));
+    }
+
+
 }

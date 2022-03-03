@@ -40,6 +40,9 @@ public class UserBaseModel extends BaseUuidModel {
     @ApiModelProperty("昵称")
     private String nickName;
 
+    @ApiModelProperty("性别")
+    private String gender;
+
     @ApiModelProperty("手机号")
     private String mobile;
 

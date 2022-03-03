@@ -16,8 +16,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.Valid;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -35,11 +36,13 @@ public class UserBaseDTO extends BaseDTO {
     @Mobile
     private String mobile;//手机号
 
+    private String gender;//性别
+
     private String status;//账号状态
 
-    private Date byTime; //账户有效期至
+    private LocalDateTime byTime; //账户有效期至
 
-    private Date editPwdDate;//修改密码时间
+    private LocalDateTime editPwdDate;//修改密码时间
 
     private String ext01Id;//扩展表01主键
 

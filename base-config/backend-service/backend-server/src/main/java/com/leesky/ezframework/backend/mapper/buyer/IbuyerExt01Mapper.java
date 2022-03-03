@@ -1,4 +1,4 @@
-package com.leesky.ezframework.backend.mapper.buy;
+package com.leesky.ezframework.backend.mapper.buyer;
 
 import com.leesky.ezframework.backend.model.buyer.BuyerExt01Model;
 import com.leesky.ezframework.mybatis.mapper.IeeskyMapper;

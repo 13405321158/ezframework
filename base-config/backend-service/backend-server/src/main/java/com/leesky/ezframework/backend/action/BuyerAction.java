@@ -9,7 +9,7 @@ package com.leesky.ezframework.backend.action;
 
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.model.buyer.BuyerBaseModel;
-import com.leesky.ezframework.backend.service.buy.IbuyerBaseService;
+import com.leesky.ezframework.backend.service.buyer.IbuyerBaseService;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.utils.I18nUtil;

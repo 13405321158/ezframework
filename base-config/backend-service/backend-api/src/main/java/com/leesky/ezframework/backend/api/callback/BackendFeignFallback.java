@@ -54,6 +54,12 @@ public class BackendFeignFallback implements FallbackFactory<IbackendServerClien
                 log.error(ret.getMsg());
                 return Result.failed("backend-server服务降级,获取卖家用户异常：" + ret.getMsg());
             }
+
+            @Override
+            public Result<UserBaseDTO> addWxUser(UserBaseDTO dto) {
+                log.error(ret.getMsg());
+                return Result.failed("backend-server服务降级,增加微信用户异常：" + ret.getMsg());
+            }
         };
     }
 

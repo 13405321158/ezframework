@@ -13,11 +13,11 @@ import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.enums.LoginTypeEnum;
 import com.leesky.ezframework.backend.model.OauthClientDetailsModel;
 import com.leesky.ezframework.backend.model.buyer.BuyerBaseModel;
-import com.leesky.ezframework.backend.model.saler.SalerBaseModel;
+import com.leesky.ezframework.backend.model.dealer.DealerBaseModel;
 import com.leesky.ezframework.backend.model.sys.UserBaseModel;
 import com.leesky.ezframework.backend.service.IoauthCientService;
-import com.leesky.ezframework.backend.service.buy.IbuyerBaseService;
-import com.leesky.ezframework.backend.service.saler.IsalerBaseService;
+import com.leesky.ezframework.backend.service.buyer.IbuyerBaseService;
+import com.leesky.ezframework.backend.service.dealer.IdealerBaseService;
 import com.leesky.ezframework.backend.service.sys.IuserBaseService;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
@@ -39,7 +39,7 @@ public class LoginAction {
     private final I18nUtil i18n;
     private final IuserBaseService sysService;
     private final IbuyerBaseService buyService;
-    private final IsalerBaseService saleService;
+    private final IdealerBaseService saleService;
 
     private final IoauthCientService clientService;
     /**
@@ -109,12 +109,12 @@ public class LoginAction {
 
         String loginType = LoginTypeEnum.getValue(type);
 
-        QueryFilter<SalerBaseModel> filter = new QueryFilter<>(ImmutableMap.of(loginType, var));
+        QueryFilter<DealerBaseModel> filter = new QueryFilter<>(ImmutableMap.of(loginType, var));
 
         filter.select("id,username,status,by_time,password,ext01Id");
 
         ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,portrait");
-        SalerBaseModel user = this.saleService.findOne(filter, map);
+        DealerBaseModel user = this.saleService.findOne(filter, map);
 
         if (ObjectUtils.isEmpty(user))
             return failed(this.i18n.getMsg("username.not.registered", var));

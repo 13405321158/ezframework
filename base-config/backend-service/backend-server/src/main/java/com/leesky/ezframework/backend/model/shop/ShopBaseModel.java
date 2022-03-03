@@ -1,16 +1,16 @@
 /*
  * @作者: 魏来
- * @日期: 2022/2/25 下午1:50
+ * @日期: 2022/3/2 下午5:02
  * @组织: 森麒麟轮胎股份有限公司.
  * @部门: 国内市场替换部IT组
  * @描述:
  */
-package com.leesky.ezframework.backend.model.buyer;
+package com.leesky.ezframework.backend.model.shop;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.backend.mapper.Iuser2roleMapper;
-import com.leesky.ezframework.backend.mapper.buyer.IbuyerExt01Mapper;
+import com.leesky.ezframework.backend.mapper.dealer.IdealerExt01Mapper;
 import com.leesky.ezframework.backend.model.GroupModel;
 import com.leesky.ezframework.backend.model.RoleModel;
 import com.leesky.ezframework.backend.model.User2RoleModel;
@@ -24,29 +24,34 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.Set;
 
-
+/**
+ * <li></li>
+ *
+ * @author: 魏来
+ * @date: 2022/3/2 下午5:02
+ */
 @Getter
 @Setter
-@TableName("cbm_mag_buy_user")
-@ApiModel(value = "C端用户基本信息")
-public class BuyerBaseModel extends BaseUuidModel {
+@TableName("cbm_mag_member")
+@ApiModel(value = "小B类用户基本信息：既是买家也是卖家")
+public class ShopBaseModel extends BaseUuidModel {
+    private static final long serialVersionUID = -7296725719916650044L;
 
-    private static final long serialVersionUID = -2026920241697117408L;
+    @ApiModelProperty("会员id")
+    private Long memberId;
 
     @ApiModelProperty("登录名")
-    private String username;
+    private String uname;
 
-    @ApiModelProperty("昵称")
-    private String nickName;
+    @ApiModelProperty("微信openid")
+    private String openId;
 
-    @ApiModelProperty("性别")
-    private String gender;
+    @ApiModelProperty("登录密码")
+    private String password;
+
 
     @ApiModelProperty("手机号")
     private String mobile;
-
-    @ApiModelProperty("密码")
-    private String password;
 
     @ApiModelProperty("账户状态")
     private String status;
@@ -60,7 +65,6 @@ public class BuyerBaseModel extends BaseUuidModel {
     @ApiModelProperty("扩展表01主键")
     private String ext01Id;
 
-
     @ApiModelProperty("备注")
     private String remake;
 
@@ -70,8 +74,8 @@ public class BuyerBaseModel extends BaseUuidModel {
     @OneToOne
     @TableField(exist = false)
     @JoinColumn(name = "ext01_id")
-    @EntityMapper(targetMapper = IbuyerExt01Mapper.class, entityClass = BuyerExt01Model.class)
-    private BuyerExt01Model ext01;
+    @EntityMapper(targetMapper = IdealerExt01Mapper.class, entityClass = ShopExt01Model.class)
+    private ShopExt01Model ext01;
 
 
 

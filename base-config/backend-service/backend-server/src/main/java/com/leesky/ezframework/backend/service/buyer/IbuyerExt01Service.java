@@ -1,4 +1,4 @@
-package com.leesky.ezframework.backend.service.buy;
+package com.leesky.ezframework.backend.service.buyer;
 
 import com.leesky.ezframework.backend.model.buyer.BuyerExt01Model;
 import com.leesky.ezframework.mybatis.service.IeeskyService;

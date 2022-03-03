@@ -43,7 +43,7 @@ public class UserBaseExt01Model extends BaseUuidModel {
 	private String email;
 
 	@ApiModelProperty("头像")
-	private String portrait;
+	private String avatar;
 
 	@ApiModelProperty("身份证正面")
 	private String idCardImg01;

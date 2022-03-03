@@ -3,31 +3,40 @@ package com.leesky.ezframework.auth.ext.webchat;
 import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.provider.TokenRequest;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
 
 /**
- * @author <a href="mailto:xianrui0365@163.com">xianrui</a>
- * @date 2021/9/25
+ * 声明授权者 CaptchaTokenGranter 支持授权模式 wechat
+ * 根据接口传值 grant_type = wechat 的值匹配到此授权者
+ * 匹配逻辑详见下面的两个方法
+ *
+ * @see org.springframework.security.oauth2.provider.CompositeTokenGranter#grant(String, TokenRequest)
+ * @see org.springframework.security.oauth2.provider.token.AbstractTokenGranter#grant(String, TokenRequest)
  */
+
 public class WechatAuthenticationToken extends AbstractAuthenticationToken {
-    private static final long serialVersionUID = 550L;
-    private final Object principal;
-    @Getter
-    private String encryptedData;
+
+    private static final long serialVersionUID = 7331980402741476816L;
+
     @Getter
     private String iv;
+    @Getter
+    private String encryptedData;
+    private final Object principal;
+
     /**
      * 账号校验之前的token构建
      *
      * @param principal
      */
-    public WechatAuthenticationToken(Object principal, String encryptedData,String iv) {
+    public WechatAuthenticationToken(Object principal, String encryptedData, String iv) {
         super(null);
         this.principal = principal;
         this.encryptedData = encryptedData;
-        this.iv=iv;
+        this.iv = iv;
         setAuthenticated(false);
     }
 

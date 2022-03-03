@@ -63,6 +63,7 @@
             <artifactId>sentinel-transport-simple-http</artifactId>
         </dependency>
 
+        <!--微信小程序登录-->
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-miniapp</artifactId>

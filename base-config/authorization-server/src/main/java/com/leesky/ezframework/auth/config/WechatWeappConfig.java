@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 微信小程序配置
+ * 微信小程序类应用配置，使用weixin-java-miniapp 开源jar
+ * appid、secret 是在微信开放平台注册开发者帐号，并拥有一个已审核通过的【移动应用】获取的
  */
 @Configuration
 public class WechatWeappConfig {

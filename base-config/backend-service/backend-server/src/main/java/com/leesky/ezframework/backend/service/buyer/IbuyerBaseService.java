@@ -1,4 +1,4 @@
-package com.leesky.ezframework.backend.service.buy;
+package com.leesky.ezframework.backend.service.buyer;
 
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.model.buyer.BuyerBaseModel;

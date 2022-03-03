@@ -5,11 +5,11 @@
  * @部门: 国内市场替换部IT组
  * @描述:
  */
-package com.leesky.ezframework.backend.model.saler;
+package com.leesky.ezframework.backend.model.dealer;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.backend.mapper.saler.IsalerBaseMapper;
+import com.leesky.ezframework.backend.mapper.dealer.IdealerBaseMapper;
 import com.leesky.ezframework.mybatis.annotation.EntityMapper;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.OneToOne;
@@ -22,8 +22,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("cbm_mag_sale_user_ext01")
-@ApiModel(value = "卖家(商户)用户扩展表01")
-public class SalerExt01Model extends BaseUuidModel {
+@ApiModel(value = "经销商用户扩展表01")
+public class DealerExt01Model extends BaseUuidModel {
 
 	private static final long serialVersionUID = 4876391008588060464L;
 
@@ -46,7 +46,7 @@ public class SalerExt01Model extends BaseUuidModel {
 	private String email;
 
 	@ApiModelProperty("头像")
-	private String portrait;
+	private String avatar;
 
 	@ApiModelProperty("身份证正面")
 	private String idCardImg01;
@@ -61,7 +61,7 @@ public class SalerExt01Model extends BaseUuidModel {
 	@OneToOne
 	@TableField(exist = false)
 	@JoinColumn(name = "user_id")
-	@EntityMapper(targetMapper = IsalerBaseMapper.class, entityClass = SalerBaseModel.class)
-	private SalerBaseModel userBaseModel;
+	@EntityMapper(targetMapper = IdealerBaseMapper.class, entityClass = DealerBaseModel.class)
+	private DealerBaseModel userBaseModel;
 
 }

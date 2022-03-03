@@ -15,6 +15,7 @@ import com.leesky.ezframework.json.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -37,23 +38,32 @@ public interface IbackendServerClient {
      * @date: 2021/12/1 下午6:46
      */
     @GetMapping("/login/sys/{var}/{type}")
-    Result<UserBaseDTO> getSystem(@PathVariable String var,@PathVariable String type);
+    Result<UserBaseDTO> getSystem(@PathVariable String var, @PathVariable String type);
 
     /**
-     * 查询买家用户
-     *
-     * @author: 魏来
-     * @date: 2022/2/24 上午9:40
-     */
-    @GetMapping("/login/buy/{var}/{type}")
-    Result<UserBaseDTO> loadBuyer(@PathVariable String var,@PathVariable String type);
-
-    /**
-     * 查询买家用户
+     * 查询卖家(商城)用户
      *
      * @author: 魏来
      * @date: 2022/2/24 上午9:41
      */
     @GetMapping("/login/sale/{var}/{type}")
     Result<UserBaseDTO> loadSale(@PathVariable String var, @PathVariable String type);
+
+    /**
+     * 查询买家（会员）用户
+     *
+     * @author: 魏来
+     * @date: 2022/2/24 上午9:40
+     */
+    @GetMapping("/login/buy/{var}/{type}")
+    Result<UserBaseDTO> loadBuyer(@PathVariable String var, @PathVariable String type);
+
+    /**
+     * <li>增加微信小程序类用户</li>
+     *
+     * @author: 魏来
+     * @date: 2022/3/2 下午4:19
+     */
+    @GetMapping("/buyer-user/c01")
+    Result<UserBaseDTO> addWxUser(@RequestBody UserBaseDTO dto);
 }

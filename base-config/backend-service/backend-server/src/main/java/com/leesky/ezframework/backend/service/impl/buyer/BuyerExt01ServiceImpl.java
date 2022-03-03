@@ -5,11 +5,11 @@
  * @部门: 国内市场替换部IT组
  * @描述:
  */
-package com.leesky.ezframework.backend.service.impl.buy;
+package com.leesky.ezframework.backend.service.impl.buyer;
 
-import com.leesky.ezframework.backend.mapper.buy.IbuyerExt01Mapper;
+import com.leesky.ezframework.backend.mapper.buyer.IbuyerExt01Mapper;
 import com.leesky.ezframework.backend.model.buyer.BuyerExt01Model;
-import com.leesky.ezframework.backend.service.buy.IbuyerExt01Service;
+import com.leesky.ezframework.backend.service.buyer.IbuyerExt01Service;
 import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
 import org.springframework.stereotype.Service;
 

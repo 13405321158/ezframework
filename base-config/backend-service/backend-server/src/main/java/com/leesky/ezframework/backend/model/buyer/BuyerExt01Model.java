@@ -9,7 +9,7 @@ package com.leesky.ezframework.backend.model.buyer;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.leesky.ezframework.backend.mapper.buy.IbuyerBaseMapper;
+import com.leesky.ezframework.backend.mapper.buyer.IbuyerBaseMapper;
 import com.leesky.ezframework.mybatis.annotation.EntityMapper;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
 import com.leesky.ezframework.mybatis.annotation.OneToOne;
@@ -22,7 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("cbm_mag_buy_user_ext01")
-@ApiModel(value = "基本用户扩展表01")
+@ApiModel(value = "C端用户基本信息扩展表01")
 public class BuyerExt01Model extends BaseUuidModel {
 
 	private static final long serialVersionUID = 4876391008588060464L;
@@ -46,7 +46,7 @@ public class BuyerExt01Model extends BaseUuidModel {
 	private String email;
 
 	@ApiModelProperty("头像")
-	private String portrait;
+	private String avatar;
 
 	@ApiModelProperty("身份证正面")
 	private String idCardImg01;

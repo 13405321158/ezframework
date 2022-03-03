@@ -1,7 +1,7 @@
-package com.leesky.ezframework.backend.service.saler;
+package com.leesky.ezframework.backend.service.dealer;
 
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
-import com.leesky.ezframework.backend.model.saler.SalerBaseModel;
+import com.leesky.ezframework.backend.model.dealer.DealerBaseModel;
 import com.leesky.ezframework.mybatis.service.IeeskyService;
 
 /**
@@ -10,7 +10,7 @@ import com.leesky.ezframework.mybatis.service.IeeskyService;
  * @author: 魏来
  * @date: 2022/2/25 下午2:33
  */
-public interface IsalerBaseService extends IeeskyService<SalerBaseModel> {
+public interface IdealerBaseService extends IeeskyService<DealerBaseModel> {
 
     /**
      * <li>新增账户，同时新增对应client</li>

@@ -10,6 +10,7 @@ package com.leesky.ezframework.auth.details.userdetails.saler;
 import com.leesky.ezframework.auth.enums.PasswordEncoderTypeEnum;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.enums.StatusEnum;
+import com.leesky.ezframework.utils.LocalDateUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
@@ -54,12 +55,12 @@ public class SalerDetails implements UserDetails {
         this.setUserId(user.getId());
         this.setIdName(user.getExt01().getIdName());
         this.setUsername(user.getUsername());
-        this.setPortrait(user.getExt01().getPortrait());
+        this.setPortrait(user.getExt01().getAvatar());
         this.setDealerCode(user.getExt01().getCompanyCode());
         this.setDealerName(user.getExt01().getCompanyName());
         this.setEnabled(StringUtils.equals(user.getStatus(), StatusEnum.ENABLE.getKey()));
         this.setPassword(PasswordEncoderTypeEnum.BCRYPT.getPrefix() + user.getPassword());
-        this.setByTime(user.getByTime().getTime() > System.currentTimeMillis() ? true : false);
+        this.setByTime(LocalDateUtil.asEpochSecond(user.getByTime()) > System.currentTimeMillis());
         if (CollectionUtils.isNotEmpty(user.getRoles())) {
             authorities = new ArrayList<>();
             user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getCode())));
