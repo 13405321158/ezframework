@@ -3,7 +3,6 @@ package com.leesky.ezframework.backend.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leesky.ezframework.backend.mapper.Iuser2roleMapper;
-import com.leesky.ezframework.backend.model.sys.UserBaseModel;
 import com.leesky.ezframework.mybatis.annotation.EntityMapper;
 import com.leesky.ezframework.mybatis.annotation.InverseJoinColumn;
 import com.leesky.ezframework.mybatis.annotation.JoinColumn;
@@ -24,7 +23,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-@TableName("cbm_mag_role")
+@TableName("cbm_role")
 @ApiModel(value = "角色信息表")
 public class RoleModel extends BaseUuidModel {
 

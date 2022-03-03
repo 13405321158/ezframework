@@ -216,7 +216,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         org.springframework.security.oauth2.provider.ClientDetailsService clientDetails = point.getClientDetailsService();
         AuthorizationServerTokenServices tokenService = point.getTokenServices();
 
-        // 添加验证码授权模式授权者
+        // 添加图片验证码授权模式授权者
         list.add(new CaptchaTokenGranter(tokenService, clientDetails, factory, authManager, cache));
         // 添加手机短信验证码授权模式的授权者
         list.add(new SmsCodeTokenGranter(tokenService, clientDetails, factory, authManager));

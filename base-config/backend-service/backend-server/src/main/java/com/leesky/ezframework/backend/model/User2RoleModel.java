@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @ApiModel(value = "用户角色关系表")
-@TableName("cbm_mag_l_user_role")
+@TableName("cbm_l_user_role")
 public class User2RoleModel implements Serializable {
 
     private static final long serialVersionUID = -6662565190423185310L;

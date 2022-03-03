@@ -4,7 +4,8 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetailsService;
-import com.leesky.ezframework.backend.api.IbackendServerClient;
+import com.leesky.ezframework.backend.api.LoginClient;
+import com.leesky.ezframework.backend.api.UserClient;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.dto.UserBaseExt01DTO;
 import com.leesky.ezframework.backend.enums.LoginTypeEnum;
@@ -31,7 +32,8 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
 
     private final WxMaService wxMaService;
 
-    private final IbackendServerClient client;
+    private final LoginClient client;
+    private final UserClient userClient;
     private final BuyerDetailsService userDetailsService;
 
 
@@ -70,7 +72,7 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
             ext01DTO.setAvatar(userInfo.getAvatarUrl());
 
             dto.setByTime(LocalDateTime.of(2099, 12, 30, 12, 0, 0));
-            this.client.addWxUser(dto);
+            this.userClient.addWxUser(dto);
         }
         UserDetails userDetails = userDetailsService.loadUserByOpenId(openid);
         WechatAuthenticationToken result = new WechatAuthenticationToken(userDetails, new HashSet<>());

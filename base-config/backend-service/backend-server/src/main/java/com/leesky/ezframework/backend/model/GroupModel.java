@@ -10,7 +10,6 @@ package com.leesky.ezframework.backend.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.google.common.base.Objects;
-import com.leesky.ezframework.backend.model.sys.UserBaseModel;
 import com.leesky.ezframework.mybatis.model.BaseUuidModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,7 +22,7 @@ import java.util.Set;
 @Setter
 
 @ApiModel(value = "群组信息表")
-@TableName(value = "cbm_mag_group",autoResultMap = true)
+@TableName(value = "cbm_group",autoResultMap = true)
 public class GroupModel extends BaseUuidModel {
 
 	private static final long serialVersionUID = 682190171806572223L;

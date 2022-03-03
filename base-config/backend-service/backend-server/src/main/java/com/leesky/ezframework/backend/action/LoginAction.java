@@ -12,13 +12,15 @@ import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.enums.LoginTypeEnum;
 import com.leesky.ezframework.backend.model.OauthClientDetailsModel;
-import com.leesky.ezframework.backend.model.buyer.BuyerBaseModel;
-import com.leesky.ezframework.backend.model.dealer.DealerBaseModel;
-import com.leesky.ezframework.backend.model.sys.UserBaseModel;
+import com.leesky.ezframework.backend.model.BuyerBaseModel;
+import com.leesky.ezframework.backend.model.DealerBaseModel;
+import com.leesky.ezframework.backend.model.SalerBaseModel;
+import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IoauthCientService;
-import com.leesky.ezframework.backend.service.buyer.IbuyerBaseService;
-import com.leesky.ezframework.backend.service.dealer.IdealerBaseService;
-import com.leesky.ezframework.backend.service.sys.IuserBaseService;
+import com.leesky.ezframework.backend.service.IbuyerBaseService;
+import com.leesky.ezframework.backend.service.IdealerBaseService;
+import com.leesky.ezframework.backend.service.IsalerBaseService;
+import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
 import com.leesky.ezframework.utils.I18nUtil;
@@ -39,11 +41,15 @@ public class LoginAction {
     private final I18nUtil i18n;
     private final IuserBaseService sysService;
     private final IbuyerBaseService buyService;
-    private final IdealerBaseService saleService;
+    private final IsalerBaseService shopService;
+    private final IdealerBaseService dealerService;
 
     private final IoauthCientService clientService;
+
     /**
      * <li>平台用户登录</li>
+     * type=登录类型：密码、 短信、 微信？根据 登录类型
+     * var=查询条件： username，mobile，openid？根据type决定
      *
      * @author: 魏来
      * @date: 2021年12月3日 上午9:05:39
@@ -70,7 +76,9 @@ public class LoginAction {
 
 
     /**
-     * <li>买家(商城会员)登录</li>
+     * <li>终端买家登录</li>
+     * type=登录类型：密码、 短信、 微信？根据 登录类型
+     * var=查询条件： username，mobile，openid？根据type决定
      *
      * @author: 魏来
      * @date: 2021年12月3日 上午9:05:39
@@ -84,7 +92,7 @@ public class LoginAction {
 
         filter.select("id,username,status,by_time,password,ext01Id");
 
-        ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,portrait");
+        ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,avatar");
         BuyerBaseModel user = this.buyService.findOne(filter, map);
 
 
@@ -97,9 +105,10 @@ public class LoginAction {
         return success(dto, false);
     }
 
-
     /**
-     * <li>卖家登录(shop)</li>
+     * <li>卖家(shop)登录</li>
+     * type=登录类型：密码、 短信、 微信？根据 登录类型
+     * var=查询条件： username，mobile，openid？根据type决定
      *
      * @author: 魏来
      * @date: 2021年12月3日 上午9:05:39
@@ -109,12 +118,40 @@ public class LoginAction {
 
         String loginType = LoginTypeEnum.getValue(type);
 
+        QueryFilter<SalerBaseModel> filter = new QueryFilter<>(ImmutableMap.of(loginType, var));
+
+        filter.select("id,username,status,by_time,password,ext01Id");
+
+        ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_name,avatar");
+        SalerBaseModel user = this.shopService.findOne(filter, map);
+
+        if (ObjectUtils.isEmpty(user))
+            return failed(this.i18n.getMsg("username.not.registered", var));
+
+        UserBaseDTO dto = Po2DtoUtil.convertor(user, UserBaseDTO.class);
+
+        return success(dto, false);
+    }
+
+    /**
+     * <li>代理商登录</li>
+     * type=登录类型：密码、 短信、 微信？根据 登录类型
+     * var=查询条件： username，mobile，openid？根据type决定
+     *
+     * @author: 魏来
+     * @date: 2021年12月3日 上午9:05:39
+     */
+    @GetMapping("/dealer/{var}/{type}")
+    public Result<UserBaseDTO> getDealer(@PathVariable String var, @PathVariable String type) {
+
+        String loginType = LoginTypeEnum.getValue(type);
+
         QueryFilter<DealerBaseModel> filter = new QueryFilter<>(ImmutableMap.of(loginType, var));
 
         filter.select("id,username,status,by_time,password,ext01Id");
 
-        ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,portrait");
-        DealerBaseModel user = this.saleService.findOne(filter, map);
+        ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_code,company_name,avatar");
+        DealerBaseModel user = this.dealerService.findOne(filter, map);
 
         if (ObjectUtils.isEmpty(user))
             return failed(this.i18n.getMsg("username.not.registered", var));
@@ -138,6 +175,6 @@ public class LoginAction {
         Assert.isTrue(client != null, clientId + "暂未注册😉");
         OauthClientDetailsDTO dto = Po2DtoUtil.convertor(client, OauthClientDetailsDTO.class);
 
-        return Result.success(dto,false);
+        return Result.success(dto, false);
     }
 }

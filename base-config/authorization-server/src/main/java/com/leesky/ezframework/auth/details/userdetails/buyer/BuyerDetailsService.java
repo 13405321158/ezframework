@@ -10,7 +10,7 @@ package com.leesky.ezframework.auth.details.userdetails.buyer;
 import com.leesky.ezframework.auth.details.userdetails.saler.SalerDetails;
 import com.leesky.ezframework.auth.details.userdetails.sys.SysUserDetails;
 import com.leesky.ezframework.auth.exception.CommonEx;
-import com.leesky.ezframework.backend.api.IbackendServerClient;
+import com.leesky.ezframework.backend.api.LoginClient;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.enums.LoginTypeEnum;
 import com.leesky.ezframework.json.Result;
@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BuyerDetailsService implements UserDetailsService {
 
-    private final IbackendServerClient client;
+    private final LoginClient client;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -53,7 +53,7 @@ public class BuyerDetailsService implements UserDetailsService {
             return userDetails;
         }
         //2、然后查询卖家(商户)用户
-        ret = this.client.loadSale(openId, LoginTypeEnum.wx.getKey());
+        ret = this.client.loadDealer(openId, LoginTypeEnum.wx.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {
@@ -63,7 +63,7 @@ public class BuyerDetailsService implements UserDetailsService {
             return userDetails;
         }
         //3、然后查询系统用户
-        ret = this.client.getSystem(openId, LoginTypeEnum.wx.getKey());
+        ret = this.client.loadSys(openId, LoginTypeEnum.wx.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {

@@ -40,7 +40,7 @@ public class SysUserDetails implements UserDetails {
     /**
      * 默认字段
      */
-    private String portrait;
+    private String avatar;
     private String idName;
     private String username;
     private String password;
@@ -57,7 +57,7 @@ public class SysUserDetails implements UserDetails {
         this.setUserId(user.getId());
         this.setIdName(user.getExt01().getIdName());
         this.setUsername(user.getUsername());
-        this.setPortrait(user.getExt01().getAvatar());
+        this.setAvatar(user.getExt01().getAvatar());
         this.setCompanyCode(user.getExt01().getCompanyCode());
         this.setCompanyName(user.getExt01().getCompanyName());
         this.setEnabled(StringUtils.equals(user.getStatus(), StatusEnum.ENABLE.getKey()));

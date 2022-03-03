@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@TableName("cbm_mag_l_group_user")
+@TableName("cbm_l_group_user")
 @ApiModel(value = "用户与群组 中间表")
 public class User2groupModel implements Serializable{
 

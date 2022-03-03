@@ -41,7 +41,7 @@ public class BuyerDetails implements UserDetails {
 	/**
 	 * 默认字段
 	 */
-	private String portrait;
+	private String avatar;
 	private String idName;
 	private String username;
 	private String password;
@@ -52,14 +52,13 @@ public class BuyerDetails implements UserDetails {
 
 
 	/**
-	 * 买家(商城会员)用户
+	 * 买家用户
 	 */
 	public BuyerDetails(UserBaseDTO user) {
 		this.setUserId(user.getId());
 		this.setIdName(user.getExt01().getIdName());
 		this.setUsername(user.getUsername());
-		this.setPortrait(user.getExt01().getAvatar());
-		this.setCompanyName(user.getExt01().getCompanyName());
+		this.setAvatar(user.getExt01().getAvatar());
 		this.setEnabled(StringUtils.equals(user.getStatus(), StatusEnum.ENABLE.getKey()));
 		this.setPassword(PasswordEncoderTypeEnum.BCRYPT.getPrefix() + user.getPassword());
 		this.setByTime(LocalDateUtil.asEpochSecond(user.getByTime()) > System.currentTimeMillis());

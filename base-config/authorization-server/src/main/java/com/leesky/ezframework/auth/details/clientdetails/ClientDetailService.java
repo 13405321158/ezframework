@@ -10,7 +10,7 @@ package com.leesky.ezframework.auth.details.clientdetails;
 import com.alibaba.fastjson.JSON;
 import com.leesky.ezframework.auth.enums.PasswordEncoderTypeEnum;
 import com.leesky.ezframework.auth.utils.RequestUtils;
-import com.leesky.ezframework.backend.api.IbackendServerClient;
+import com.leesky.ezframework.backend.api.LoginClient;
 import com.leesky.ezframework.backend.dto.OauthClientDetailsDTO;
 import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.json.Result;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ClientDetailService implements ClientDetailsService {
     private final RedisService cache;
-    private final IbackendServerClient client;
+    private final LoginClient client;
 
 
     @Override
