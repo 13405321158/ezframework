@@ -44,7 +44,7 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class BasicAuthenticationFilter extends OncePerRequestFilter {
+public class tokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final I18nUtil i18nUtil;
     private final PasswordEncoder passwordEncoder;

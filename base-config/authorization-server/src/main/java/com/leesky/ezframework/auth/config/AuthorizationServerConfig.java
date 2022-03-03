@@ -10,7 +10,7 @@ package com.leesky.ezframework.auth.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.auth.details.clientdetails.ClientDetailService;
-import com.leesky.ezframework.auth.exception.BasicAuthenticationFilter;
+import com.leesky.ezframework.auth.exception.tokenAuthenticationFilter;
 import com.leesky.ezframework.auth.ext.captcha.CaptchaTokenGranter;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeTokenGranter;
 import com.leesky.ezframework.auth.ext.webchat.WebchatTokenGranter;
@@ -60,17 +60,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private int refreshTokenValiditySeconds;
 
     private final RedisService cache;
-
     private final JwtEnhancer jwtEnhancer;
-
-    private final AuthenticationManager authenticationManager;// 在WebSecurityConfig中定义了
-
+    private final AuthenticationManager authManager;// 在WebSecurityConfig中定义了
+    private final LettuceConnectionFactory cacheFactory;// token 存储在redis中
     private final ClientDetailService clientDetailsService;// 查找client服务接口
-
-    private final LettuceConnectionFactory redisConnectionFactory;// token 存储在redis中
-
-
-    private final BasicAuthenticationFilter basicAuthenticationFilter;
+    private final tokenAuthenticationFilter clientDetailFilter;//client认证过滤器
 
     /**
      * 配置认证异常返回信息
@@ -86,7 +80,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 //        endpointFilter.setAuthenticationEntryPoint(authenticationEntryPoint());
 //        security.addTokenEndpointAuthenticationFilter(endpointFilter);
         //2、适用于 请求头Authorization=Basic+" "+BASE64方式加密(client_id:client_secret) 方式
-        security.addTokenEndpointAuthenticationFilter(basicAuthenticationFilter);
+        security.addTokenEndpointAuthenticationFilter(clientDetailFilter);
 //        security.checkTokenAccess("permitAll()");//允许/oauth/check_token,测试环境开启，线上环境禁用
     }
 
@@ -113,7 +107,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         CompositeTokenGranter granters = compositeTokenGranter(endpoints);
         endpoints
-                .authenticationManager(authenticationManager)// 用户名和密码验证方式、自定义验证方式(sms、微信等)
+                .authenticationManager(authManager)// 用户名和密码验证方式、自定义验证方式(sms、微信等)
 
                 .tokenGranter(granters)// 授权方式结合点. 如果不扩展授权方式,使用系统默认,则此处可以不加
 
@@ -180,7 +174,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Bean
     public RedisTokenStore tokenStore() {
-        RedisTokenStore redisStore = new RedisTokenStore(redisConnectionFactory);
+        RedisTokenStore redisStore = new RedisTokenStore(this.cacheFactory);
         redisStore.setPrefix(Redis.AUTH_TOKEN);
         return redisStore;
     }
@@ -223,11 +217,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         AuthorizationServerTokenServices tokenService = point.getTokenServices();
 
         // 添加验证码授权模式授权者
-        list.add(new CaptchaTokenGranter(tokenService, clientDetails, factory, authenticationManager, cache));
+        list.add(new CaptchaTokenGranter(tokenService, clientDetails, factory, authManager, cache));
         // 添加手机短信验证码授权模式的授权者
-        list.add(new SmsCodeTokenGranter(tokenService, clientDetails, factory, authenticationManager));
+        list.add(new SmsCodeTokenGranter(tokenService, clientDetails, factory, authManager));
         // 添加微信授权模式的授权者
-        list.add(new WebchatTokenGranter(tokenService, clientDetails, factory, authenticationManager));
+        list.add(new WebchatTokenGranter(tokenService, clientDetails, factory, authManager));
 
         return new CompositeTokenGranter(list);
     }
