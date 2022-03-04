@@ -26,14 +26,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SysUserDetailsService implements UserDetailsService {
 
-    private final LoginClient client;
+    private final LoginClient loginClient;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDetails userDetails = null;
 
         //1、查询 系统用户
-        Result<UserBaseDTO> ret = this.client.loadSys(username, LoginTypeEnum.password.getKey());
+        Result<UserBaseDTO> ret = this.loginClient.loadSys(username, LoginTypeEnum.password.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {
@@ -44,7 +44,7 @@ public class SysUserDetailsService implements UserDetailsService {
         }
 
         //2、查询卖家用户
-        ret = this.client.loadSaler(username, LoginTypeEnum.password.getKey());
+        ret = this.loginClient.loadSaler(username, LoginTypeEnum.password.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {
@@ -55,7 +55,7 @@ public class SysUserDetailsService implements UserDetailsService {
         }
 
         //3、查询买家用户
-        ret = this.client.loadBuyer(username, LoginTypeEnum.password.getKey());
+        ret = this.loginClient.loadBuyer(username, LoginTypeEnum.password.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {
@@ -66,7 +66,7 @@ public class SysUserDetailsService implements UserDetailsService {
         }
 
         //4、查询经销商
-        ret = this.client.loadDealer(username, LoginTypeEnum.password.getKey());
+        ret = this.loginClient.loadDealer(username, LoginTypeEnum.password.getKey());
         if (ret.isSuccess()) {
             UserBaseDTO data = ret.getData();
             if (ObjectUtils.isNotEmpty(data)) {

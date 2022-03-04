@@ -43,7 +43,7 @@ public class SalerAction {
      */
     @PostMapping(value = "/c01")
     public Result<?> add(@RequestBody UserBaseDTO dto) throws Exception {
-        ValidatorUtils.valid(dto);
+        ValidatorUtils.all(dto);
 
         QueryFilter<SalerBaseModel> filter = new QueryFilter<>();
         filter.select("id").eq("username", dto.getUsername());

@@ -13,6 +13,7 @@ import com.leesky.ezframework.enums.StatusEnum;
 import com.leesky.ezframework.utils.LocalDateUtil;
 import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -62,7 +63,10 @@ public class SysUserDetails implements UserDetails {
         this.setCompanyName(user.getExt01().getCompanyName());
         this.setEnabled(StringUtils.equals(user.getStatus(), StatusEnum.ENABLE.getKey()));
         this.setPassword(PasswordEncoderTypeEnum.BCRYPT.getPrefix() + user.getPassword());
-        this.setByTime(LocalDateUtil.asEpochSecond(user.getByTime()) > System.currentTimeMillis());
+        if (ObjectUtils.isEmpty(user.getByTime()))
+            this.setByTime(false);
+        else
+            this.setByTime(LocalDateUtil.asEpochSecond(user.getByTime()) > System.currentTimeMillis());
         if (CollectionUtils.isNotEmpty(user.getRoles())) {
             authorities = new ArrayList<>();
             user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getCode())));

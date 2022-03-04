@@ -10,6 +10,7 @@ package com.leesky.ezframework.mybatis.utils;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
@@ -18,34 +19,26 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 public class JoinUtil {
 
     /**
-     * @作者: 魏来
-     * @日期: 2021年8月24日 上午8:27:22
-     * @描述: 根据model实体名称 构造对应到ixxxMapper名称
+     * 根据model实体名称 构造对应到ixxxMapper名称
+     *
+     * @author: 魏来
+     * @date: 2022/3/4 上午10:39
      */
     public static String buildMapperBeanName(String entityName) {
         String modelName = StringUtils.substringAfterLast(entityName, ".").replace("Model", "");
         return "i" + StringUtils.uncapitalize(modelName) + "Mapper";
     }
 
-    /**
-     * <li>:根据mapper名字 返回 model名字
-     *
-     * @作者: 魏来
-     * @日期: 2021/10/8  上午10:42
-     **/
-    public static String buildModelBeanName(String name) {
-        String modelName = StringUtils.replace(name, "Mapper", "");
-        modelName = StringUtils.substring(modelName, 1);
-        return StringUtils.capitalize(modelName) + "Model";
-    }
 
     /**
-     * @author: weilai
-     * @Data:2021年1月30日下午3:15:20
-     * @Desc:获取类所有属性，包括父类，爷爷等类
+     * 获取类所有属性，包括父类，爷爷等类
+     *
+     * @author: 魏来
+     * @date: 2022/3/4 上午10:39
      */
     public static List<Field> getAllField(Object model) {
         Class<?> clazz = model.getClass();
@@ -65,13 +58,13 @@ public class JoinUtil {
      * @author： 魏来
      * @date: 2021/12/16 下午6:16
      */
-    public static Field getField(Object model, String fieldName) {
+    public static Field getField(Object model, String fieldName) throws NoSuchFieldException {
         List<Field> fs = getAllField(model);
         for (Field f : fs) {
             if (f.getName().equals(fieldName))
                 return f;
         }
-        return null;
+        throw new NoSuchFieldException();
     }
 
     /**
@@ -105,9 +98,10 @@ public class JoinUtil {
 
 
     /**
-     * @author: weilai
-     * @Data:2021年1月30日下午3:15:20
-     * @Desc:获取类所有属性，包括父类，爷爷等类
+     * <li>获取类所有属性，包括父类，爷爷等类</li>
+     *
+     * @author: 魏来
+     * @date: 2022/3/4 上午10:40
      */
     public static List<Field> getAllField(Class<?> clazz) {
 
@@ -120,4 +114,6 @@ public class JoinUtil {
         }
         return fields;
     }
+
+
 }

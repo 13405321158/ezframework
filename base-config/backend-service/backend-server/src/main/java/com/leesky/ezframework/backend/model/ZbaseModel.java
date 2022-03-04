@@ -79,12 +79,12 @@ public class ZbaseModel extends BaseUuidModel {
     @JoinColumn(referencedColumnName = "user_id")
     @InverseJoinColumn(referencedColumnName = "group_id")
     @EntityMapper(targetMapper = Iuser2groupMapper.class, entityClass = User2groupModel.class)
-    private Set<GroupModel> groupSet;
+    protected Set<GroupModel> groupSet;
 
     @ManyToMany
     @TableField(exist = false)
     @JoinColumn(referencedColumnName = "user_id")
     @InverseJoinColumn(referencedColumnName = "role_id")
     @EntityMapper(targetMapper = Iuser2roleMapper.class, entityClass = User2RoleModel.class)
-    private Set<RoleModel> roles;
+    protected Set<RoleModel> roles;
 }

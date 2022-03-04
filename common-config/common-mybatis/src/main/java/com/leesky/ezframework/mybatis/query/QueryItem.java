@@ -53,7 +53,7 @@ public class QueryItem<T> {
             String v = StringUtils.isBlank(entry.getValue()) ? "*" : entry.getValue();
             try {
                 //1、获取 k对应的字段，即o2o、o2m、m2o、m2m注解所在的字段
-                Field f = entity.getClass().getDeclaredField(k);
+                Field f = JoinUtil.getField(entity,k);
                 OneToOne o2o = f.getAnnotation(OneToOne.class);
                 ManyToOne m2o = f.getAnnotation(ManyToOne.class);
                 OneToMany o2m = f.getAnnotation(OneToMany.class);
@@ -103,7 +103,7 @@ public class QueryItem<T> {
                     }
                 }
 
-            } catch (NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
                 e.printStackTrace();
             }
 

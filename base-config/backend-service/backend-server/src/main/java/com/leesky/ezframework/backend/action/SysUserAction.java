@@ -1,5 +1,6 @@
 package com.leesky.ezframework.backend.action;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.ImmutableMap;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.leesky.ezframework.json.Result.success;
@@ -63,7 +65,7 @@ public class SysUserAction {
      */
     @PostMapping("/c01/public")
     public Result<UserBaseDTO> add(@RequestBody UserBaseDTO dto) throws Exception {
-        ValidatorUtils.valid(dto);
+        ValidatorUtils.all(dto);
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
         filter.select("id").eq("username", dto.getUsername());
@@ -84,7 +86,7 @@ public class SysUserAction {
      */
     @PostMapping(value = "/c02")
     public Result<?> edit(@RequestBody UserBaseDTO dto) throws Exception {
-        ValidatorUtils.valid(dto);
+        ValidatorUtils.all(dto);
 
         QueryFilter<UserBaseModel> filter = new QueryFilter<>();
         filter.eq("id", dto.getId());
@@ -123,13 +125,31 @@ public class SysUserAction {
      * @author： 魏来
      * @date: 2022/3/1  上午8:00
      */
-    @PostMapping(value = "/c01")
+    @PostMapping(value = "/c04")
     public Result<?> disable(@RequestBody CommonDTO dto) {
 
         List<String> uids = dto.getCid();
         Assert.isTrue(CollectionUtils.isNotEmpty(uids), this.i18n.getMsg("user.status.disable.null"));
 
 
+        return success();
+    }
+
+    /**
+     * 新增账户 审核开通
+     *
+     * @author： 魏来
+     * @date: 2022/3/4  上午9:34
+     */
+    @PostMapping(value = "/c05")
+    public Result<?> audit(@RequestBody UserBaseDTO dto) {
+        Assert.isTrue(StringUtils.equals(dto.getStatus(), "0") || StringUtils.equals(dto.getStatus(), "1"), "账户状态参数错误");
+        Assert.isTrue(ObjectUtils.isNotEmpty(dto.getByTime()) && dto.getByTime().isAfter(LocalDateTime.now()), "账户有效期必须大于当前时间");
+
+
+        UpdateWrapper<UserBaseModel> filter = new UpdateWrapper<>();
+        filter.set("status", dto.getStatus()).set("by_time", dto.getByTime()).set("modify_date", LocalDateTime.now()).eq("id", dto.getId());
+        this.service.update(filter);
         return success();
     }
 

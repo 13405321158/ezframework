@@ -65,7 +65,7 @@ public class RoleAction {
      */
     @PostMapping("/c01")
     public Result<?> addRole01(@RequestBody RoleDTO dto) throws Exception {
-        ValidatorUtils.valid(dto);
+        ValidatorUtils.all(dto);
 
         RoleModel model = Po2DtoUtil.convertor(dto, RoleModel.class);
         model.setCode("ROLE_" + RandomStringUtils.randomNumeric(6));

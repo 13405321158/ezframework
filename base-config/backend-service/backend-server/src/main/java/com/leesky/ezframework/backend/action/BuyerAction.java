@@ -44,7 +44,7 @@ public class BuyerAction {
      */
     @PostMapping(value = "/c01")
     public Result<?> addBuyer(@RequestBody UserBaseDTO dto) throws Exception {
-        ValidatorUtils.valid(dto);
+        ValidatorUtils.all(dto);
 
         QueryFilter<BuyerBaseModel> filter = new QueryFilter<>();
         filter.select("id").eq("username", dto.getUsername());

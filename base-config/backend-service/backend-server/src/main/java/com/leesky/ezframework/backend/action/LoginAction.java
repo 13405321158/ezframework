@@ -63,7 +63,7 @@ public class LoginAction {
 
         filter.select("id,username,status,by_time,password,ext01Id");//如果不包括ext01Id 则无法查询 ext01
 
-        ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_name,portrait");
+        ImmutableMap<String, String> map = ImmutableMap.of("roles", "code", "ext01", "idName,company_name,avatar");
         UserBaseModel user = this.sysService.findOne(filter, map);
 
         if (ObjectUtils.isEmpty(user))
