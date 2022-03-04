@@ -4,6 +4,7 @@ package com.leesky.ezframework.es.aspect;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.dto.SysLogDTO;
+import com.leesky.ezframework.es.annotation.SysLogAction;
 import com.leesky.ezframework.es.annotation.SysLogger;
 import com.leesky.ezframework.es.mq.Loginfo2MQService;
 import com.leesky.ezframework.global.Common;
@@ -19,6 +20,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -52,11 +54,19 @@ public class SysLoggerAspect {
     public void saveSysLog(JoinPoint joinPoint) {
         SysLogDTO dto = new SysLogDTO();
 
+        String module;
         String className = joinPoint.getTarget().getClass().getName();// 注解所在类名称
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String methodName = signature.getName();// 请求的方法名
 
         SysLogger sysLogger = signature.getMethod().getAnnotation(SysLogger.class);// 注解类
+
+        SysLogAction action = joinPoint.getTarget().getClass().getAnnotation(SysLogAction.class);
+        RequestMapping rm = joinPoint.getTarget().getClass().getAnnotation(RequestMapping.class);
+        if (ObjectUtils.isEmpty(action))
+            module = StringUtils.replace(rm.name(), "/", "");
+        else
+            module = action.name();
 
         try {
             dto.setUserId(getUserId());
@@ -65,8 +75,8 @@ public class SysLoggerAspect {
             dto.setUserName("匿名访问");
         }
 
+        dto.setModule(module);
         dto.setAction(sysLogger.action());
-        dto.setModule(sysLogger.module());
         dto.setIp(HttpUtils.getIpAddress());
         dto.setMethod(className + "." + methodName + "()");
 

@@ -7,6 +7,7 @@ import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.model.UserBaseModel;
 import com.leesky.ezframework.backend.service.IuserBaseService;
 import com.leesky.ezframework.backend.vo.UserBaseVO;
+import com.leesky.ezframework.es.annotation.SysLogAction;
 import com.leesky.ezframework.es.annotation.SysLogger;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.mybatis.query.QueryFilter;
@@ -32,8 +33,10 @@ import java.util.List;
 import static com.leesky.ezframework.json.Result.success;
 
 @RestController
+
 @RequiredArgsConstructor
 @RequestMapping("/sys-user")
+@SysLogAction(name = "系统用户")
 public class SysUserAction {
 
     private final I18nUtil i18n;
@@ -48,7 +51,7 @@ public class SysUserAction {
      * @date: 2022/1/7 下午3:31
      */
     @PostMapping(value = "/r01")
-    @SysLogger(module = "系统用户控制器", action = "系统用户列表")
+    @SysLogger(action = "系统用户列表")
     public Result<List<UserBaseVO>> r01(@RequestBody ParamModel param) {
         QueryFilter<UserBaseModel> filter = new QueryFilter<>(param);
 //        filter.select("id,username,status,ext01.idCard");
@@ -64,6 +67,7 @@ public class SysUserAction {
      * @date: 2021年12月3日 上午9:26:01
      */
     @PostMapping("/c01/public")
+    @SysLogger(action = "注册用户")
     public Result<UserBaseDTO> add(@RequestBody UserBaseDTO dto) throws Exception {
         ValidatorUtils.all(dto);
 
@@ -85,6 +89,7 @@ public class SysUserAction {
      * @date: 2022/1/29  16:06
      */
     @PostMapping(value = "/c02")
+    @SysLogger(action = "编辑用户信息")
     public Result<?> edit(@RequestBody UserBaseDTO dto) throws Exception {
         ValidatorUtils.all(dto);
 
@@ -108,6 +113,7 @@ public class SysUserAction {
      * @date: 2022/2/9  下午5:48
      */
     @PostMapping(value = "/c03")
+    @SysLogger(action = "修改密码")
     public Result<?> editPwd(@RequestBody CommonDTO dto) {
         Object pwd = dto.getObj().get("pwd");
         Object userId = dto.getObj().get("uid");
@@ -126,6 +132,7 @@ public class SysUserAction {
      * @date: 2022/3/1  上午8:00
      */
     @PostMapping(value = "/c04")
+    @SysLogger(action = "账户禁用")
     public Result<?> disable(@RequestBody CommonDTO dto) {
 
         List<String> uids = dto.getCid();
@@ -142,6 +149,7 @@ public class SysUserAction {
      * @date: 2022/3/4  上午9:34
      */
     @PostMapping(value = "/c05")
+    @SysLogger(action = "新增账户 审核开通")
     public Result<?> audit(@RequestBody UserBaseDTO dto) {
         Assert.isTrue(StringUtils.equals(dto.getStatus(), "0") || StringUtils.equals(dto.getStatus(), "1"), "账户状态参数错误");
         Assert.isTrue(ObjectUtils.isNotEmpty(dto.getByTime()) && dto.getByTime().isAfter(LocalDateTime.now()), "账户有效期必须大于当前时间");
@@ -160,6 +168,7 @@ public class SysUserAction {
      * @date: 2022/1/25  17:05
      */
     @PostMapping(value = "/d01")
+    @SysLogger(action = "删除用户")
     public Result<?> d01(@RequestBody List<UserBaseDTO> list) {
 
         list.forEach(e -> {

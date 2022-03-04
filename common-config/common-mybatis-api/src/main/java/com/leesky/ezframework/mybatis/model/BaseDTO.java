@@ -15,17 +15,17 @@ public class BaseDTO {
     protected LocalDateTime modifyDate;
 
 
-    public LocalDateTime getCreateDate() {
+    /**
+     * <li>新增记录时 这两个字段就能获取初始值了，不用手工赋值</li>
+     *
+     * @author: 魏来
+     * @date: 2022/3/4 下午12:39
+     */
+    public BaseDTO() {
         if (StringUtils.isBlank(this.id))
-            return LocalDateTime.now();
-        else
-            return createDate;
+            this.modifyDate = this.createDate = LocalDateTime.now();
+
     }
 
-    public LocalDateTime getModifyDate() {
-        if (StringUtils.isBlank(this.id))
-            return LocalDateTime.now();
-        else
-            return modifyDate;
-    }
+
 }
