@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
- * 短信验证码认证授权提供者
+ * 短信验证码认证授权提供者： grant_type = sms_code 走这个方法
  */
 @Data
 @Component

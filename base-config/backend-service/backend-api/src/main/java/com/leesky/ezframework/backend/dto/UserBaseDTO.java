@@ -40,7 +40,9 @@ public class UserBaseDTO extends BaseDTO {
 
     private String status;//账号状态
 
+
     private LocalDateTime byTime; //账户有效期至
+
 
     private LocalDateTime editPwdDate;//修改密码时间
 
@@ -58,6 +60,5 @@ public class UserBaseDTO extends BaseDTO {
     private UserBaseExt01DTO ext01;
 
     private UserBaseExt02DTO ext02;
-
 
 }

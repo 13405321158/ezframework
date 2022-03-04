@@ -7,21 +7,24 @@
  */
 package com.leesky.ezframework.auth.details.userdetails.sys;
 
-import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetails;
-import com.leesky.ezframework.auth.details.userdetails.saler.SalerDetails;
-import com.leesky.ezframework.auth.exception.CommonEx;
+import com.leesky.ezframework.auth.details.userdetails.CommonCode;
 import com.leesky.ezframework.backend.api.LoginClient;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.enums.LoginTypeEnum;
 import com.leesky.ezframework.json.Result;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * <li>用户名+密码、用户名+密码+图片验证码 方式默认走这个方法</li>
+ * <li>grant_type = password 走这个方法</li>
+ *
+ * @author: 魏来
+ * @date: 2022/3/4 下午5:53
+ */
 @Service
 @RequiredArgsConstructor
 public class SysUserDetailsService implements UserDetailsService {
@@ -30,53 +33,31 @@ public class SysUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails userDetails = null;
+
 
         //1、查询 系统用户
         Result<UserBaseDTO> ret = this.loginClient.loadSys(username, LoginTypeEnum.password.getKey());
-        if (ret.isSuccess()) {
-            UserBaseDTO data = ret.getData();
-            if (ObjectUtils.isNotEmpty(data)) {
-                userDetails = new SysUserDetails(data);
-                CommonEx.throwException(userDetails);
-            }
-            return userDetails;
-        }
+        if (ret.isSuccess())
+            return CommonCode.loadUser(ret);
+
 
         //2、查询卖家用户
         ret = this.loginClient.loadSaler(username, LoginTypeEnum.password.getKey());
-        if (ret.isSuccess()) {
-            UserBaseDTO data = ret.getData();
-            if (ObjectUtils.isNotEmpty(data)) {
-                userDetails = new SalerDetails(data);
-                CommonEx.throwException(userDetails);
-            }
-            return userDetails;
-        }
+        if (ret.isSuccess())
+            return CommonCode.loadSaler(ret);
+
 
         //3、查询买家用户
         ret = this.loginClient.loadBuyer(username, LoginTypeEnum.password.getKey());
-        if (ret.isSuccess()) {
-            UserBaseDTO data = ret.getData();
-            if (ObjectUtils.isNotEmpty(data)) {
-                userDetails = new BuyerDetails(data);
-                CommonEx.throwException(userDetails);
-            }
-            return userDetails;
-        }
+        if (ret.isSuccess())
+            return CommonCode.loadBuyer(ret);
 
         //4、查询经销商
         ret = this.loginClient.loadDealer(username, LoginTypeEnum.password.getKey());
-        if (ret.isSuccess()) {
-            UserBaseDTO data = ret.getData();
-            if (ObjectUtils.isNotEmpty(data)) {
-                userDetails = new SysUserDetails(data);
-                CommonEx.throwException(userDetails);
-            }
-            return userDetails;
-        }
+        if (ret.isSuccess())
+            return CommonCode.loadUser(ret);
 
-        throw new UsernameNotFoundException("账户不存在：" + username);
+        throw new UsernameNotFoundException(username+":账户未注册");
     }
 
 

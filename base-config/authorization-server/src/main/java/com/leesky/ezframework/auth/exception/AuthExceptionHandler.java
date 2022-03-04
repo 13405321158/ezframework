@@ -10,6 +10,7 @@ package com.leesky.ezframework.auth.exception;
 import com.leesky.ezframework.json.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
@@ -30,7 +31,7 @@ public class AuthExceptionHandler {
     /**
      * 用户不存在
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(UsernameNotFoundException.class)
     public Result handleUsernameNotFoundException(UsernameNotFoundException e) {
         log.error(e.getMessage(), e);
@@ -38,19 +39,27 @@ public class AuthExceptionHandler {
     }
 
     /**
-     * 用户名和密码异常
+     * 用户名和密码不匹配
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(InvalidGrantException.class)
     public Result handleInvalidGrantException(InvalidGrantException e) {
         log.error(e.getMessage(), e);
         return Result.failed("密码错误");
     }
-
+    /**
+     * 用户名和密码不匹配
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(BadCredentialsException.class)
+    public Result handleInvalidGrantException(BadCredentialsException e) {
+        log.error(e.getMessage(), e);
+        return Result.failed("密码错误");
+    }
     /**
      * 账户异常(禁用、锁定、过期)
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({InternalAuthenticationServiceException.class})
     public Result handleInternalAuthenticationServiceException(InternalAuthenticationServiceException e) {
         log.error(e.getMessage(), e);
@@ -60,7 +69,7 @@ public class AuthExceptionHandler {
     /**
      * token 无效或已过期
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({InvalidTokenException.class})
     public Result handleInvalidTokenException(InvalidTokenException e) {
         log.error(e.getMessage(), e);
@@ -70,7 +79,7 @@ public class AuthExceptionHandler {
     /**
      * 不支持的认证类型
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({UnsupportedGrantTypeException.class})
     public Result handleException(UnsupportedGrantTypeException e) {
         log.error(e.getMessage(), e);
@@ -80,7 +89,7 @@ public class AuthExceptionHandler {
     /**
      * Exception 类异常信息
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler({Exception.class})
     public Result handleException(Exception e) {
         log.error(e.getMessage(), e);

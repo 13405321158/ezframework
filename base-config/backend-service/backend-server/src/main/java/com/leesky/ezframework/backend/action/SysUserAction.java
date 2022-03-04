@@ -150,9 +150,9 @@ public class SysUserAction {
     @PostMapping(value = "/c05")
     @SysLogger(action = "新增账户 审核开通")
     public Result<?> audit(@RequestBody UserBaseDTO dto) {
-        Assert.isTrue(StringUtils.equals(dto.getStatus(), "0") || StringUtils.equals(dto.getStatus(), "1"), "账户状态参数错误");
-        Assert.isTrue(ObjectUtils.isNotEmpty(dto.getByTime()) && dto.getByTime().isAfter(LocalDateTime.now()), "账户有效期必须大于当前时间");
-
+        Assert.isTrue(StringUtils.isNotBlank(dto.getId()), i18n.getMsg("param.value.error", "id", dto.getId()));
+        Assert.isTrue(StringUtils.equals(dto.getStatus(), "0") || StringUtils.equals(dto.getStatus(), "1"), i18n.getMsg("param.value.error", "status", dto.getStatus()));
+        Assert.isTrue(ObjectUtils.isNotEmpty(dto.getByTime()) && dto.getByTime().isAfter(LocalDateTime.now()), i18n.getMsg("param.value.error", "byTime"));
 
         UpdateWrapper<UserBaseModel> filter = new UpdateWrapper<>();
         filter.set("status", dto.getStatus()).set("by_time", dto.getByTime()).set("modify_date", LocalDateTime.now()).eq("id", dto.getId());

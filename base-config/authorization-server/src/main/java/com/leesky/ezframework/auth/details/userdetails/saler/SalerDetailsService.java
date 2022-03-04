@@ -7,15 +7,12 @@
  */
 package com.leesky.ezframework.auth.details.userdetails.saler;
 
-import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetails;
-import com.leesky.ezframework.auth.details.userdetails.sys.SysUserDetails;
-import com.leesky.ezframework.auth.exception.CommonEx;
+import com.leesky.ezframework.auth.details.userdetails.CommonCode;
 import com.leesky.ezframework.backend.api.LoginClient;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.enums.LoginTypeEnum;
 import com.leesky.ezframework.json.Result;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,12 +23,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SalerDetailsService implements UserDetailsService {
 
-    private final LoginClient client;
+    private final LoginClient loginClient;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
-    }
 
     /**
      * <li>sms登录方式 默认进入这个方法，这是在WebSecurityConfig中配置了</li>
@@ -41,45 +34,36 @@ public class SalerDetailsService implements UserDetailsService {
      */
     public UserDetails loadUserByMobile(String mobile) throws UsernameNotFoundException {
 
-        UserDetails userDetails = null;
-        //1、默认查询 买家(商户)
-        Result<UserBaseDTO> ret = this.client.loadDealer(mobile, LoginTypeEnum.sms.getKey());
 
-        if (ret.isSuccess()) {
-            UserBaseDTO data = ret.getData();
-            if (ObjectUtils.isNotEmpty(data)) {
-                userDetails = new SalerDetails(data);
-                CommonEx.throwException(userDetails);
-            }
-            return userDetails;
-        }
+        //1、然后查询系统用户
+        Result<UserBaseDTO> ret = this.loginClient.loadSys(mobile, LoginTypeEnum.sms.getKey());
 
+        if (ret.isSuccess())
+            return CommonCode.loadUser(ret);
 
-        //2、然后查询系统用户
-        ret = this.client.loadSys(mobile, LoginTypeEnum.sms.getKey());
-        if (ret.isSuccess()) {
-            UserBaseDTO data = ret.getData();
-            if (ObjectUtils.isNotEmpty(data)) {
-                userDetails = new SysUserDetails(data);
-                CommonEx.throwException(userDetails);
-            }
-            return userDetails;
-        }
-
-        //3、最后查询买家用户
-        ret = this.client.loadBuyer(mobile, LoginTypeEnum.sms.getKey());
-        if (ret.isSuccess()) {
-            UserBaseDTO data = ret.getData();
-            if (ObjectUtils.isNotEmpty(data)) {
-                userDetails = new BuyerDetails(data);
-                CommonEx.throwException(userDetails);
-            }
-            return userDetails;
-        }
+        //2、卖家
+        ret = this.loginClient.loadSaler(mobile, LoginTypeEnum.sms.getKey());
+        if (ret.isSuccess())
+            return CommonCode.loadSaler(ret);
 
 
-        throw new UsernameNotFoundException("账户不存在：" + mobile);
+        //3、买家
+        ret = this.loginClient.loadBuyer(mobile, LoginTypeEnum.sms.getKey());
+        if (ret.isSuccess())
+            return CommonCode.loadBuyer(ret);
+
+        //4、查询经销商
+        ret = this.loginClient.loadDealer(mobile, LoginTypeEnum.password.getKey());
+        if (ret.isSuccess())
+            return CommonCode.loadUser(ret);
+
+        throw new UsernameNotFoundException(mobile + ":账户未注册");
     }
 
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
 
 }
