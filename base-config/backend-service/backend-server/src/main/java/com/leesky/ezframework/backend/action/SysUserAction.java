@@ -54,7 +54,6 @@ public class SysUserAction {
     @SysLogger(action = "系统用户列表")
     public Result<List<UserBaseVO>> r01(@RequestBody ParamModel param) {
         QueryFilter<UserBaseModel> filter = new QueryFilter<>(param);
-//        filter.select("id,username,status,ext01.idCard");
         Page<UserBaseVO> data = this.service.page(filter, UserBaseVO.class);
 
         return success(data.getRecords(), data.getTotal(), false);

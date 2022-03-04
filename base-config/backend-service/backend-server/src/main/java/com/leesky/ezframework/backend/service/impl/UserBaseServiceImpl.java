@@ -10,6 +10,7 @@ package com.leesky.ezframework.backend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.google.common.collect.Lists;
+import com.leesky.ezframework.backend.config.NicknameEnum;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.mapper.IoauthClientMapper;
 import com.leesky.ezframework.backend.mapper.IuserBaseExt01Mapper;
@@ -37,6 +38,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,7 +76,7 @@ public class UserBaseServiceImpl extends LeeskyServiceImpl<IuserBaseMapper, User
 
         UserBaseModel model = Po2DtoUtil.convertor(dto, UserBaseModel.class);
         model.setPassword(pwd);
-
+        model.setNickName(NicknameEnum.getValue(new Random().nextInt(316)));
 
         this.insert(model, true);
 
