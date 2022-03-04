@@ -71,7 +71,7 @@ public class CaptchaTokenGranter extends AbstractTokenGranter {
             String validateCodeKey = Redis.LOGIN_IMG_CODE + key;
             String correctValidateCode = (String) this.cache.get(validateCodeKey);
             Assert.isTrue(StringUtils.equals(correctValidateCode, value), "验证码不匹配");
-            //this.cache.del(validateCodeKey);
+            this.cache.del(validateCodeKey);
 
             // 和密码模式一样的逻辑
             Map<String, String> parameters = Maps.newHashMap(tokenRequest.getRequestParameters());
