@@ -7,7 +7,6 @@
  */
 package com.leesky.ezframework.auth.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.auth.details.clientdetails.ClientDetailService;
 import com.leesky.ezframework.auth.exception.tokenAuthenticationFilter;
@@ -15,11 +14,9 @@ import com.leesky.ezframework.auth.ext.captcha.CaptchaTokenGranter;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeTokenGranter;
 import com.leesky.ezframework.auth.ext.webchat.WebchatTokenGranter;
 import com.leesky.ezframework.global.Redis;
-import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,9 +37,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
-import org.springframework.security.web.AuthenticationEntryPoint;
 
-import javax.servlet.http.HttpServletResponse;
 import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.List;
@@ -179,27 +174,26 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return redisStore;
     }
 
-    /**
-     * 适用于 form方式提交认证参数
-     * 自定义认证异常响应数据: 1、client_id 不存在; 2、client_secret 错误 都走下面的方法
-     */
+//    /**
+//     * 适用于 form方式提交认证参数
+//     * 自定义认证异常响应数据: 1、client_id 不存在; 2、client_secret 错误 都走下面的方法
+//     */
 //    @Bean
-    @Deprecated
-    public AuthenticationEntryPoint authenticationEntryPoint() {
-        return (request, response, e) -> {
-            String msg;
-            response.setContentType("application/json");
-            response.setStatus(HttpServletResponse.SC_OK);// 固定返回200(网络层正常[response.getStatus()实际状态])
-
-            ObjectMapper mapper = new ObjectMapper();
-            //这里处理一下，目的是让错误信息更加具体
-            if (StringUtils.startsWith(e.getMessage(), "backend-server服务降级,获取oauthClient异常"))
-                msg = e.getMessage();
-            else
-                msg = "client密码错误";
-            mapper.writeValue(response.getOutputStream(), Result.failed(msg));
-        };
-    }
+//    public AuthenticationEntryPoint authenticationEntryPoint() {
+//        return (request, response, e) -> {
+//            String msg;
+//            response.setContentType("application/json");
+//            response.setStatus(HttpServletResponse.SC_OK);// 固定返回200(网络层正常[response.getStatus()实际状态])
+//
+//            ObjectMapper mapper = new ObjectMapper();
+//            //这里处理一下，目的是让错误信息更加具体
+//            if (StringUtils.startsWith(e.getMessage(), "backend-server服务降级,获取oauthClient异常"))
+//                msg = e.getMessage();
+//            else
+//                msg = "client密码错误";
+//            mapper.writeValue(response.getOutputStream(), Result.failed(msg));
+//        };
+//    }
 
     /**
      * 扩展授权方式,比如增加:动态图片\微信登录\SMS登录\QQ登录|自定义的二维码登录等
