@@ -1,0 +1,30 @@
+
+操作步骤：
+
+1、用户点击扫码登录，程序访问：
+   https://open.weixin.qq.com/connect/qrconnect?appid=微信颁发的appid
+                                               &redirect_uri=开发平台中填写的访问地址
+                                               &response_type=code
+                                               &scope=snsapi_login(代表微信扫描获取用户信息)
+   显示给用户一个二维码
+
+2、用户使用微信扫描 上面的二维码后，在微信中弹出确认授权按钮，用户点击同意后，程序跳转到redirect_uri。(这携带code)
+   [redirect_url 如果携带自己的参数，则需要用 urlencode方式编码]
+3、用户接收code，通过下面地址获取token
+   https://api.weixin.qq.com/sns/oauth2/access_token?appid=微信颁发的APPID
+                                                    &secret=微信颁发的SECRET
+                                                    &code=用户接收的code
+                                                    &grant_type=authorization_code
+
+4、获取到token后，通过下面url 获取用户信息
+   https://api.weixin.qq.com/sns/userinfo？access_token= 第三步获取的token
+                                         &openid= 微信颁发的appid
+                                         &lang=zh_CN
+
+ps：公众号api 无法获取手机号，只有小程序api开发才可以获取手机号
+
+参考：
+官方文档
+https://github.com/Wechat-Group/WxJava
+示例参考：
+https://www.cnblogs.com/haha12/p/11428209.html

@@ -2,7 +2,7 @@ package com.leesky.ezframework.auth.config;
 
 import com.leesky.ezframework.auth.details.userdetails.sys.SysUserDetailsService;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeAuthenticationProvider;
-import com.leesky.ezframework.auth.ext.webchat.WechatAuthenticationProvider;
+import com.leesky.ezframework.auth.ext.wx_miniapp.WechatAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

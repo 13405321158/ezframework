@@ -1,20 +1,18 @@
-package com.leesky.ezframework.auth.ext.webchat;
+package com.leesky.ezframework.auth.ext.wx_miniapp;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
+import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetails;
 import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetailsService;
 import com.leesky.ezframework.backend.api.LoginClient;
 import com.leesky.ezframework.backend.api.UserClient;
 import com.leesky.ezframework.backend.dto.UserBaseDTO;
 import com.leesky.ezframework.backend.dto.UserBaseExt01DTO;
-import com.leesky.ezframework.backend.enums.LoginTypeEnum;
 import com.leesky.ezframework.enums.StatusEnum;
-import com.leesky.ezframework.json.Result;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -48,22 +46,24 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
 
         String openid = sessionInfo.getOpenid();
 
-        // 微信用户不存在，注册成为新会员
-        Result<UserBaseDTO> data = this.client.loadBuyer(openid, LoginTypeEnum.wx.getKey());
+        UserDetails userDetails;
+        try {
+            userDetails = userDetailsService.loadUserByOpenId(openid);
 
-        if (ObjectUtils.isEmpty(data.getData())) {
-
+        } catch (Exception e) {        // 微信用户不存在，注册成为新会员
             String sessionKey = sessionInfo.getSessionKey();
             String encryptedData = authenticationToken.getEncryptedData();
             String iv = authenticationToken.getIv();
             // 解密 encryptedData 获取用户信息
+            String phone = this.wxMaService.getUserService().getNewPhoneNoInfo(code).getPhoneNumber();
             WxMaUserInfo userInfo = wxMaService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
 
             UserBaseDTO dto = new UserBaseDTO();
             UserBaseExt01DTO ext01DTO = new UserBaseExt01DTO();
             dto.setExt01(ext01DTO);
 
-            dto.setRemake("wxUser");
+            dto.setMobile(phone);
+            dto.setRemake("wx_mini");
             dto.setStatus(StatusEnum.ENABLE.getKey());
             dto.setNickName(userInfo.getNickName());
             dto.setUsername(userInfo.getOpenId());
@@ -73,8 +73,11 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
 
             dto.setByTime(LocalDateTime.of(2099, 12, 30, 12, 0, 0));
             this.userClient.addWxUser(dto);
+
+            userDetails = new BuyerDetails(dto);
         }
-        UserDetails userDetails = userDetailsService.loadUserByOpenId(openid);
+
+
         WechatAuthenticationToken result = new WechatAuthenticationToken(userDetails, new HashSet<>());
         result.setDetails(authentication.getDetails());
         return result;

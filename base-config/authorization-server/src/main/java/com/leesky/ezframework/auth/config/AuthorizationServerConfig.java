@@ -12,7 +12,7 @@ import com.leesky.ezframework.auth.details.clientdetails.ClientDetailService;
 import com.leesky.ezframework.auth.exception.tokenAuthenticationFilter;
 import com.leesky.ezframework.auth.ext.captcha.CaptchaTokenGranter;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeTokenGranter;
-import com.leesky.ezframework.auth.ext.webchat.WebchatTokenGranter;
+import com.leesky.ezframework.auth.ext.wx_miniapp.WebchatTokenGranter;
 import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;

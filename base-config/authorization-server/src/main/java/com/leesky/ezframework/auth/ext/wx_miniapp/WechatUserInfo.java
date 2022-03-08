@@ -1,4 +1,4 @@
-package com.leesky.ezframework.auth.ext.webchat;
+package com.leesky.ezframework.auth.ext.wx_miniapp;
 
 import lombok.Data;
 

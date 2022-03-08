@@ -10,7 +10,7 @@
  * @see org.springframework.security.oauth2.provider.CompositeTokenGranter#grant(String, TokenRequest)
  * @see org.springframework.security.oauth2.provider.token.AbstractTokenGranter#grant(String, TokenRequest)
  */
-package com.leesky.ezframework.auth.ext.webchat;
+package com.leesky.ezframework.auth.ext.wx_miniapp;
 
 import com.google.common.collect.Maps;
 import lombok.SneakyThrows;
@@ -28,8 +28,9 @@ import java.util.Map;
  * <li>各类微信小程序登录，比如 麒麟保、小程序商城</li>
  * <li>步骤：</li>
  * 1、小程序 通过js 访问微信 ，返回 iv、code、encryptedData、rawData、signature
- * 2、小程序 访问我方登录接口，其中grant_type=webchat(其它三个form表单参数是 iv、code、encryptedData)则会进入当前类getOAuth2Authentication()方法中
+ * 2、小程序 访问我方登录接口，其中grant_type=webchat?client_secret=xxxxxx&client_id=wxlogin(其它三个form表单参数是 iv、code、encryptedData)则会进入当前类getOAuth2Authentication()方法中
  * 3、本认证过程 是根据 iv、code、encryptedData 获取微信用户的 各类信息如：昵称，手机号码等
+ * （系统内置一个cleint，id=wxlogin，client_secret=xxxxx,所有小程序藏登录都用这个clientid）
  *
  * @author: 魏来
  * @date: 2022/3/2 下午3:08
@@ -48,6 +49,12 @@ public class WebchatTokenGranter extends AbstractTokenGranter {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * 小程序 访问我方登录接口，除了携带iv,code,encryptedData 三个参数为，还携带grant_type=wxscan&client_secret=xxxx&client_id=xxxx
+     *
+     * @author: 魏来
+     * @date: 2022/3/7 下午6:49
+     */
     @Override
     @SneakyThrows(InvalidGrantException.class)
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
