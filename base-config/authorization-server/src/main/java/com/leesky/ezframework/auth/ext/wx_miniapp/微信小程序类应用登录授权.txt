@@ -6,3 +6,6 @@
 
 
 参考：https://github.com/Wechat-Group/WxJava
+
+
+ps： 系统内置一个cleint，id=wxlogin，client_secret=xxxxx,所有微信扫描登录都用这个clientid

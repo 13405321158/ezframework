@@ -21,8 +21,8 @@
                                          &openid= 微信颁发的appid
                                          &lang=zh_CN
 
-ps：公众号api 无法获取手机号，只有小程序api开发才可以获取手机号
-
+ps： 公众号api 无法获取手机号，只有小程序api开发才可以获取手机号
+ps： 系统内置一个cleint，id=wxlogin，client_secret=xxxxx,所有微信扫描登录都用这个clientid
 参考：
 官方文档
 https://github.com/Wechat-Group/WxJava
