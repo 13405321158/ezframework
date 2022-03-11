@@ -1,0 +1,415 @@
+[
+  {
+    "id": "2064",
+    "name": "工作台",
+    "path": "/dashboard",
+    "parentId": -1,
+    "icon": "ant-design:windows-outlined",
+    "type": "0",
+    "sort": 0,
+    "meta": {
+      "title": "工作台",
+      "icon": "ant-design:windows-outlined",
+      "breadcrumb": true
+    },
+    "component": "Layout",
+    "hidden": false,
+    "redirect": "noRedirect",
+    "alwaysShow": true,
+    "typeName": "目录",
+    "children": [
+      {
+        "id": "2065",
+        "name": "分析页",
+        "path": "/dashboard",
+        "parentId": 2064,
+        "icon": "ant-design:rise-outlined",
+        "type": "1",
+        "sort": 0,
+        "meta": {
+          "title": "分析页",
+          "icon": "ant-design:rise-outlined",
+          "breadcrumb": true
+        },
+        "component": "/dashboard/analysis/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "2068",
+        "name": "工作台",
+        "path": "/dashboard/workbench",
+        "parentId": 2064,
+        "icon": "ant-design:block-outlined",
+        "type": "1",
+        "sort": 2,
+        "meta": {
+          "title": "工作台",
+          "icon": "ant-design:block-outlined",
+          "breadcrumb": true
+        },
+        "component": "/dashboard/workbench/index",
+        "hidden": false,
+        "typeName": "菜单"
+      }
+    ]
+  },
+  {
+    "id": "1000",
+    "name": "系统管理",
+    "path": "/system",
+    "parentId": -1,
+    "icon": "ant-design:appstore-outlined",
+    "type": "0",
+    "sort": 1,
+    "meta": {
+      "title": "系统管理",
+      "icon": "ant-design:appstore-outlined",
+      "breadcrumb": true
+    },
+    "component": "Layout",
+    "hidden": false,
+    "redirect": "noRedirect",
+    "alwaysShow": true,
+    "typeName": "目录",
+
+    "children": [
+      {
+        "id": "1300",
+        "name": "菜单管理",
+        "path": "/system/menu",
+        "parentId": 1000,
+        "icon": "ant-design:menu-unfold-outlined",
+        "type": "1",
+        "sort": 1,
+        "meta": {
+          "title": "菜单管理",
+          "icon": "ant-design:menu-unfold-outlined",
+          "breadcrumb": true
+        },
+        "component": "/system/menu/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "1100",
+        "name": "用户管理",
+        "path": "/system/user",
+        "parentId": 1000,
+        "icon": "ant-design:user-outlined",
+        "type": "1",
+        "sort": 2,
+        "meta": {
+          "title": "用户管理",
+          "icon": "ant-design:user-outlined",
+          "breadcrumb": true
+        },
+        "component": "/system/user/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "1400",
+        "name": "部门管理",
+        "path": "/system/depart",
+        "parentId": 1000,
+        "icon": "ant-design:apartment-outlined",
+        "type": "1",
+        "sort": 3,
+        "meta": {
+          "title": "部门管理",
+          "icon": "ant-design:apartment-outlined",
+          "breadcrumb": true
+        },
+        "component": "/system/depart/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "1200",
+        "name": "角色管理",
+        "path": "/system/role",
+        "parentId": 1000,
+        "icon": "ant-design:team-outlined",
+        "type": "1",
+        "sort": 4,
+        "meta": {
+          "title": "角色管理",
+          "icon": "ant-design:team-outlined",
+          "breadcrumb": true
+        },
+        "component": "/system/role/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "2035",
+        "name": "字典管理",
+        "path": "/system/dict",
+        "parentId": 1000,
+        "icon": "ant-design:read-outlined",
+        "type": "1",
+        "sort": 6,
+        "meta": {
+          "title": "字典管理",
+          "icon": "ant-design:read-outlined",
+          "breadcrumb": true
+        },
+        "component": "/system/dict/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "2026",
+        "name": "客户端管理",
+        "path": "/system/client",
+        "parentId": 1000,
+        "icon": "ant-design:mobile-outlined",
+        "type": "1",
+        "sort": 7,
+        "meta": {
+          "title": "客户端管理",
+          "icon": "ant-design:mobile-outlined",
+          "breadcrumb": true
+        },
+        "component": "/system/client/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "2032",
+        "name": "操作日志",
+        "path": "/system/log",
+        "parentId": 1000,
+        "icon": "ant-design:ordered-list-outlined",
+        "type": "1",
+        "sort": 8,
+        "meta": {
+          "title": "操作日志",
+          "icon": "ant-design:ordered-list-outlined",
+          "breadcrumb": true
+        },
+        "component": "/system/log/index",
+        "hidden": false,
+        "typeName": "菜单"
+      }
+    ]
+  },
+  {
+    "id": "2045",
+    "name": "网关中心",
+    "path": "/gateway",
+    "parentId": -1,
+    "icon": "ant-design:instagram-outlined",
+    "type": "0",
+    "sort": 2,
+    "meta": {
+      "title": "网关中心",
+      "icon": "ant-design:instagram-outlined",
+      "breadcrumb": true
+    },
+    "component": "Layout",
+    "hidden": false,
+    "redirect": "noRedirect",
+    "alwaysShow": true,
+    "typeName": "目录",
+    "children": [
+      {
+        "id": "2056",
+        "name": "微服务管理",
+        "path": "/gateway/route",
+        "parentId": 2045,
+        "icon": "ant-design:ungroup-outlined",
+        "type": "1",
+        "sort": 1,
+        "meta": {
+          "title": "微服务管理",
+          "icon": "ant-design:ungroup-outlined",
+          "breadcrumb": true
+        },
+        "component": "/gateway/route/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "2055",
+        "name": "API管理",
+        "path": "/gateway/api",
+        "parentId": 2045,
+        "icon": "ant-design:sliders-outlined",
+        "type": "1",
+        "sort": 2,
+        "meta": {
+          "title": "API管理",
+          "icon": "ant-design:sliders-outlined",
+          "breadcrumb": true
+        },
+        "component": "/gateway/api/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "2047",
+        "name": "黑名单管理",
+        "path": "/gateway/blacklist",
+        "parentId": 2045,
+        "icon": "ant-design:codepen-square-filled",
+        "type": "1",
+        "sort": 3,
+        "meta": {
+          "title": "黑名单管理",
+          "icon": "ant-design:codepen-square-filled",
+          "breadcrumb": true
+        },
+        "component": "/gateway/blacklist/index",
+        "hidden": false,
+        "typeName": "菜单"
+      }
+    ]
+  },
+  {
+    "id": "2015",
+    "name": "开发运维",
+    "path": "/devops",
+    "parentId": -1,
+    "icon": "ant-design:tool-outlined",
+    "type": "0",
+    "sort": 3,
+    "meta": {
+      "title": "开发运维",
+      "icon": "ant-design:tool-outlined",
+      "breadcrumb": true
+    },
+    "component": "Layout",
+    "hidden": false,
+    "redirect": "noRedirect",
+    "alwaysShow": true,
+    "typeName": "目录",
+    "children": [
+      {
+        "id": "2016",
+        "name": "数据源管理",
+        "permission": "",
+        "path": "/devops/datasource",
+        "parentId": 2015,
+        "icon": "ant-design:database-outlined",
+        "type": "1",
+        "sort": 1,
+        "meta": {
+          "title": "数据源管理",
+          "icon": "ant-design:database-outlined",
+          "breadcrumb": true
+        },
+        "component": "/devops/datasource/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "2021",
+        "name": "代码生成",
+        "path": "/devops/generator",
+        "parentId": 2015,
+        "icon": "ant-design:experiment-outlined",
+        "type": "1",
+        "sort": 2,
+        "meta": {
+          "title": "代码生成",
+          "icon": "ant-design:experiment-outlined",
+          "breadcrumb": true
+        },
+        "component": "/devops/generator/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "2023",
+        "name": "监控配置中心",
+        "path": "/devops/monitor",
+        "parentId": 2015,
+        "icon": "ant-design:desktop-outlined",
+        "type": "1",
+        "sort": 3,
+        "meta": {
+          "title": "监控配置中心",
+          "icon": "ant-design:desktop-outlined",
+          "breadcrumb": true
+        },
+        "component": "/devops/monitor/index",
+        "hidden": false,
+        "typeName": "菜单"
+      }
+    ]
+  },
+  {
+    "id": "2040",
+    "name": "内容管理",
+    "path": "/content",
+    "parentId": -1,
+    "icon": "ant-design:dribbble-outlined",
+    "type": "0",
+    "sort": 4,
+    "meta": {
+      "title": "内容管理",
+      "icon": "ant-design:dribbble-outlined",
+      "breadcrumb": true
+    },
+    "component": "Layout",
+    "hidden": false,
+    "redirect": "noRedirect",
+    "alwaysShow": true,
+    "typeName": "目录",
+    "children": [
+      {
+        "id": "2039",
+        "name": "组件管理",
+        "path": "/content/component",
+        "parentId": 2040,
+        "icon": "ant-design:usb-outlined",
+        "type": "1",
+        "sort": 1,
+        "meta": {
+          "title": "组件管理",
+          "icon": "ant-design:usb-outlined",
+          "breadcrumb": true
+        },
+        "component": "/content/component/index",
+        "hidden": false,
+        "typeName": "菜单"
+      },
+      {
+        "id": "2041",
+        "name": "文件管理",
+        "path": "/content/attachment",
+        "parentId": 2040,
+        "icon": "ant-design:folder-open-twotone",
+        "type": "1",
+        "sort": 2,
+        "meta": {
+          "title": "文件管理",
+          "icon": "ant-design:folder-open-twotone",
+          "breadcrumb": true
+        },
+        "component": "/content/attachment/index",
+        "hidden": false,
+        "typeName": "菜单"
+      }
+    ]
+  },
+  {
+    "id": "2069",
+    "name": "关于Artemis",
+    "path": "/about/index",
+    "parentId": -1,
+    "icon": "ant-design:info-circle-outlined",
+    "type": "1",
+    "sort": 100,
+    "meta": {
+      "title": "关于Artemis",
+      "icon": "ant-design:info-circle-outlined",
+      "breadcrumb": true
+    },
+    "component": "/sys/about/index",
+    "hidden": false,
+    "typeName": "菜单"
+  }
+]

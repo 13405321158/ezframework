@@ -89,7 +89,7 @@ public class AuthExceptionHandler {
     /**
      * Exception 类异常信息
      */
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({Exception.class})
     public Result handleException(Exception e) {
         log.error(e.getMessage(), e);

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,30 +17,34 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MenuDTO {
+public class MenuDTO implements Serializable {
 
+    private static final long serialVersionUID = -301839688881914976L;
+
+    private String id;
     private String name;
-
     private String path;
-
+    private int parentId;
+    private String icon;
+    private String type;
+    private int sort;
+    private MetaBean meta;
+    private String component;
+    private boolean hidden;
     private String redirect;
-
-    private MenuMetaDTO meta;
-
+    private boolean alwaysShow;
+    private String typeName;
+    private String createTime;
     private List<MenuDTO> children;
 
-    public MenuDTO(String name, String path, String redirect, MenuMetaDTO meta) {
-        this.path = path;
-        this.name = name;
-        this.redirect = redirect;
+    @Data
+    public static class MetaBean implements Serializable {
 
-        this.meta = meta;
+        private static final long serialVersionUID = -8106972197895351290L;
+        private String title;
+        private String icon;
+        private boolean breadcrumb;
     }
 
-    public MenuDTO(String name, String path, MenuMetaDTO meta) {
-        this.path = path;
-        this.name = name;
 
-        this.meta = meta;
-    }
 }

@@ -15,7 +15,6 @@ import com.leesky.ezframework.redis.service.RedisService;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
@@ -52,7 +51,7 @@ public class TokenAction {
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
         Map<String, String> userInfo = add2Cache(accessToken);
 
-        return Result.success(userInfo,false);
+        return Result.success(userInfo, false);
     }
 
 
@@ -78,14 +77,33 @@ public class TokenAction {
      */
 
     private Map<String, String> add2Cache(OAuth2AccessToken accessToken) {
-        String token01 = StringUtils.split(accessToken.getValue(), ".")[0];//token的第一部分值
         Long expr = Long.valueOf(accessTokenValiditySeconds);//1、有效期时长
         var ext = (Map<String, String>) accessToken.getAdditionalInformation().get(Common.LOGIN_USER_EXT_INFO);
 
         this.cache.add(Redis.AUTH_TOKEN_ID + ext.get(Common.USER_ID), accessToken.getValue(), expr);//2、登录用户id和token之间关系
-//        this.cache.add(Common.USER_ID + "_" + token01, ext.get(Common.USER_ID), expr);
-//        this.cache.add(Common.USER_NAME + "_" + token01, ext.get(Common.USER_NAME), expr);
 
         return ext;
     }
+
+
+//    @GetMapping("/weilai")
+//    public void bindWechat(HttpServletResponse response, HttpServletRequest request) throws Exception {
+//        String id = request.getParameter("id");
+//        String callback = "http://leesky.natapp1.cc/author/oauth/weilai01?userid="+id;
+//        // 获取code的url
+//        String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxb57d46e4f60cd731&redirect_uri=" +
+//                //回调地址，即用户扫码授权后跳转到的页面  会自动带上code、state参数
+//                URLEncoder.encode(callback, "UTF-8") +
+//                "&response_type=code" +
+//                "&scope=snsapi_login";
+//
+//        response.sendRedirect(url);
+//    }
+//
+//    @GetMapping("/weilai01")
+//    public String getid(HttpServletRequest request) throws Exception {
+//        String id = request.getParameter("userid");
+//        System.out.println("id=" + id);
+//        return "账户绑定微信成功：您可以使用微信扫码登录了";
+//    }
 }

@@ -1,13 +1,16 @@
 package com.leesky.ezframework.backend.action;
 
-import com.google.common.collect.Lists;
+import com.alibaba.fastjson.JSON;
 import com.leesky.ezframework.backend.dto.MenuDTO;
-import com.leesky.ezframework.backend.dto.MenuMetaDTO;
 import com.leesky.ezframework.json.Result;
+import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 /**
@@ -29,35 +32,33 @@ public class MenuAction {
      */
     @GetMapping(value = "/r01")
     public Result<List<MenuDTO>> r01() {
-        List<MenuDTO> menu = Lists.newArrayList();
 
-        MenuMetaDTO meta = new MenuMetaDTO("Setting", "平台管理");
-        MenuDTO dto = new MenuDTO("system", "/system", "/system/user/index", meta);
+        StringBuffer menuJson = readJsonFile("menu.json");
 
+        List<MenuDTO> data = JSON.parseArray(menuJson.toString(), MenuDTO.class);
 
-        MenuMetaDTO meta01 = new MenuMetaDTO("User", "用户管理");
-        MenuDTO dto01 = new MenuDTO("user", "/system/user/index", meta01);
-
-
-        MenuMetaDTO meta02 = new MenuMetaDTO("Setting", "角色管理");
-        MenuDTO dto02 = new MenuDTO("dict", "/system/dict/index", meta02);
-
-
-        dto.setChildren(Lists.newArrayList(dto01, dto02));
-        menu.add(dto);
-        return Result.success(menu, false);
+        return Result.success(data, false);
     }
 
-    /**
-     * 返回登录用户 按钮操作权限
-     *
-     * @author： 魏来
-     * @date: 2022/2/23  下午3:30
-     */
-    @GetMapping(value = "/r02/public")
-    public Result<?> r02() {
 
-        return Result.success();
+
+    @SneakyThrows
+    private StringBuffer readJsonFile(String fileName) {
+        StringBuffer buf = new StringBuffer();
+        String line;
+
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+        assert in != null;
+        InputStreamReader stream = new InputStreamReader(in);
+        BufferedReader read = new BufferedReader(stream);
+        while ((line = read.readLine()) != null)
+            buf.append(line);
+
+        read.close();
+        stream.close();
+        in.close();
+
+        return buf;
     }
 
 }

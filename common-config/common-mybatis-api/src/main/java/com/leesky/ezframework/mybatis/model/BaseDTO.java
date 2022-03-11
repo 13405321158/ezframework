@@ -3,10 +3,13 @@ package com.leesky.ezframework.mybatis.model;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class BaseDTO {
+public class BaseDTO implements Serializable {
+
+    private static final long serialVersionUID = -6053115515437350525L;
 
     protected String id;
 

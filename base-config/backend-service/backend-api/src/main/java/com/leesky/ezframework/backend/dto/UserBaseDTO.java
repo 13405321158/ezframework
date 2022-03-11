@@ -25,6 +25,7 @@ import java.util.Set;
 public class UserBaseDTO extends BaseDTO {
 
 
+    private static final long serialVersionUID = -188032583333317594L;
     @EnglishStr
     private String username;
 
