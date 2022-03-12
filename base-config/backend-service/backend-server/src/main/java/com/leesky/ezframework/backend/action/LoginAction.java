@@ -16,7 +16,7 @@ import com.leesky.ezframework.backend.model.BuyerBaseModel;
 import com.leesky.ezframework.backend.model.DealerBaseModel;
 import com.leesky.ezframework.backend.model.SalerBaseModel;
 import com.leesky.ezframework.backend.model.UserBaseModel;
-import com.leesky.ezframework.backend.service.IoauthCientService;
+import com.leesky.ezframework.backend.service.IoauthClientService;
 import com.leesky.ezframework.backend.service.IbuyerBaseService;
 import com.leesky.ezframework.backend.service.IdealerBaseService;
 import com.leesky.ezframework.backend.service.IsalerBaseService;
@@ -44,7 +44,7 @@ public class LoginAction {
     private final IsalerBaseService shopService;
     private final IdealerBaseService dealerService;
 
-    private final IoauthCientService clientService;
+    private final IoauthClientService clientService;
 
     /**
      * <li>平台用户登录</li>

@@ -47,7 +47,7 @@ import java.util.Map;
  */
 public class ScanQrTokenGranter extends AbstractTokenGranter {
 
-    private static final String GRANT_TYPE = "wxscan";
+    private static final String GRANT_TYPE = "wx_scan";
     public final AuthenticationManager authenticationManager;
 
 

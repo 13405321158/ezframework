@@ -9,12 +9,12 @@ package com.leesky.ezframework.backend.service.impl;
 
 import com.leesky.ezframework.backend.mapper.IoauthClientMapper;
 import com.leesky.ezframework.backend.model.OauthClientDetailsModel;
-import com.leesky.ezframework.backend.service.IoauthCientService;
+import com.leesky.ezframework.backend.service.IoauthClientService;
 import com.leesky.ezframework.mybatis.service.impl.LeeskyServiceImpl;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OauthClientServiceImpl extends LeeskyServiceImpl<IoauthClientMapper, OauthClientDetailsModel> implements IoauthCientService {
+public class OauthClientServiceImpl extends LeeskyServiceImpl<IoauthClientMapper, OauthClientDetailsModel> implements IoauthClientService {
 
 
 }

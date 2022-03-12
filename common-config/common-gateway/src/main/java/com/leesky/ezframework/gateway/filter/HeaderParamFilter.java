@@ -108,7 +108,7 @@ public class HeaderParamFilter implements GlobalFilter {
         map.put("msg", ex);
         map.put("path", path);
         map.put("success", false);
-        map.put("timestamp", LocalDateTime.now());
+        map.put("timestamp", LocalDateTime.now().toString());
         map.put("statusCode", exchange.getResponse().getStatusCode());
 
         response.setStatusCode(HttpStatus.OK);

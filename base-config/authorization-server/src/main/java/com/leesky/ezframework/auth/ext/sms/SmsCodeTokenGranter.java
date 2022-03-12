@@ -20,8 +20,12 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
 import java.util.Map;
 
 /**
- * 类功能说明：
- * <li>sms方式授权
+ * 手机验证码登录
+ * 注册当天 client_secret = md5(mobile  + 年-月-日)； 每天零点 定时任务更新 client=手机号码的 的 记录.
+ * 所以前端登录时 Authorization 参数= Basic + md5(mobile + 年-月-日)
+ *
+ * @author: 魏来
+ * @date: 2022/3/12 上午10:23
  */
 public class SmsCodeTokenGranter extends AbstractTokenGranter {
 

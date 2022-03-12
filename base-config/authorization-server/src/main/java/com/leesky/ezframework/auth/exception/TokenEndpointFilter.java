@@ -23,43 +23,44 @@ import java.io.IOException;
 
 /**
  * 类功能说明：
- * <li>自定义过滤器</li>
+ * <li>自定义过滤器，使用tokenAuthenticationFilter了，这个废弃</li>
  */
+@Deprecated
 public class TokenEndpointFilter extends ClientCredentialsTokenEndpointFilter {
 
-	private AuthorizationServerSecurityConfigurer configurer;
-	private AuthenticationEntryPoint authenticationEntryPoint;
+    private AuthorizationServerSecurityConfigurer configurer;
+    private AuthenticationEntryPoint authenticationEntryPoint;
 
-	public TokenEndpointFilter(AuthorizationServerSecurityConfigurer configurer) {
-		this.configurer = configurer;
-	}
+    public TokenEndpointFilter(AuthorizationServerSecurityConfigurer configurer) {
+        this.configurer = configurer;
+    }
 
-	@Override
-	public void setAuthenticationEntryPoint(AuthenticationEntryPoint authenticationEntryPoint) {
-		// 把父类的干掉
-		super.setAuthenticationEntryPoint(null);
-		this.authenticationEntryPoint = authenticationEntryPoint;
-	}
+    @Override
+    public void setAuthenticationEntryPoint(AuthenticationEntryPoint authenticationEntryPoint) {
+        // 把父类的干掉
+        super.setAuthenticationEntryPoint(null);
+        this.authenticationEntryPoint = authenticationEntryPoint;
+    }
 
-	@Override
-	protected AuthenticationManager getAuthenticationManager() {
-		return configurer.and().getSharedObject(AuthenticationManager.class);
-	}
+    @Override
+    protected AuthenticationManager getAuthenticationManager() {
+        return configurer.and().getSharedObject(AuthenticationManager.class);
+    }
 
-	@Override
-	public void afterPropertiesSet() {
-		setAuthenticationFailureHandler(new AuthenticationFailureHandler() {
-			@Override
-			public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-				authenticationEntryPoint.commence(httpServletRequest, httpServletResponse, e);
-			}
-		});
-		setAuthenticationSuccessHandler(new AuthenticationSuccessHandler() {
-			@Override
-			public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication)  {
+    @Override
+    public void afterPropertiesSet() {
+        setAuthenticationFailureHandler(new AuthenticationFailureHandler() {
+            @Override
+            public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+                authenticationEntryPoint.commence(httpServletRequest, httpServletResponse, e);
+            }
+        });
+        setAuthenticationSuccessHandler(new AuthenticationSuccessHandler() {
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) {
 
-			}
-		});
-	}
+            }
+        });
+    }
 
 }

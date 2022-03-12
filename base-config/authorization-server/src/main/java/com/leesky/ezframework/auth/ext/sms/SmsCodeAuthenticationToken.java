@@ -8,9 +8,11 @@ import java.util.Collection;
 
 /**
  * 手机验证码登录
+ * 注册当天 client_secret = md5(mobile  + 年-月-日)； 每天零点 定时任务更新 client=手机号码的 的 记录.
+ * 所以前端登录时 Authorization 参数= Basic + md5(mobile + 年-月-日)
  *
- * @author <a href="mailto:xianrui0365@163.com">xianrui</a>
- * @date 2021/10/5
+ * @author: 魏来
+ * @date: 2022/3/12 上午10:23
  */
 public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 

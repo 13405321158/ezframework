@@ -72,7 +72,8 @@ public class tokenAuthenticationFilter extends OncePerRequestFilter {
 
     /**
      * 当前系统一个username 有两个clientId：1、client_id=username; 2、client_id= mobile;
-     * 对应client_secret分别为： username+_pwD@?123；mobile+_pwD@?123，目的适应使用用户名 和 手机号登录方式
+     * 对应client_secret分别为： username+_pwD@?123；md5(mobile+y-m-d)，目的适应使用用户名 和 手机号登录方式
+     * 检查错误链： client 是否存在 → 密码是否匹配 → 授权类型grant_type
      *
      * @author: 魏来
      * @date: 2022/3/1 下午4:41
@@ -86,7 +87,7 @@ public class tokenAuthenticationFilter extends OncePerRequestFilter {
 
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = commonCode(request, response);
-        String msg = this.i18nUtil.getMsg("login.client.clientId.clientSecret");
+        String msg = this.i18nUtil.getMsg("login.client.id.secret.error");
         try {
             ClientDetails details = this.clientDetailsService.loadClientByClientId(clientDetails[0]);
 
@@ -94,6 +95,7 @@ public class tokenAuthenticationFilter extends OncePerRequestFilter {
             if (matches) {//如果client_secret 密码不匹配，则直接输出错误信息
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details.getClientId(), clientDetails[1], details.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(token);
+                response.setStatus(HttpServletResponse.SC_OK);
                 filterChain.doFilter(request, response);
                 return;//通过验证直接返回
             }
@@ -150,13 +152,13 @@ public class tokenAuthenticationFilter extends OncePerRequestFilter {
 
     private Map<String, Object> commonCode(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_OK);
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
         Map<String, Object> map = Maps.newHashMap();
         map.put("success", false);
         map.put("code", response.getStatus());
         map.put("path", request.getServletPath());
-        map.put("timestamp", LocalDateTime.now().toString());
+        map.put("timestamp", LocalDateTime.now().toString());// .toString() 去掉虽然不报错，但是千万不要去掉，否则前端就无法提示正常信息了，
 
         return map;
     }

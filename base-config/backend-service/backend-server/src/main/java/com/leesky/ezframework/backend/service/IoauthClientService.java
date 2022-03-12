@@ -10,5 +10,5 @@ package com.leesky.ezframework.backend.service;
 import com.leesky.ezframework.backend.model.OauthClientDetailsModel;
 import com.leesky.ezframework.mybatis.service.IeeskyService;
 
-public interface IoauthCientService extends IeeskyService<OauthClientDetailsModel> {
+public interface IoauthClientService extends IeeskyService<OauthClientDetailsModel> {
 }

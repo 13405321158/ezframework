@@ -32,7 +32,7 @@ public class HandlerException {
     /**
      * Exception 类异常信息
      */
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({Exception.class})
     public Result<?> handleException(Exception e) {
         log.error(e.getMessage(), e);
@@ -41,7 +41,7 @@ public class HandlerException {
     /**
      * Exception 类异常信息
      */
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({RuntimeException.class})
     public Result<?> handleException(RuntimeException e) {
         log.error(e.getMessage(), e);
@@ -50,7 +50,7 @@ public class HandlerException {
     /**
      * BadSqlGrammarException 类异常信息(sql语句异常)
      */
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({BadSqlGrammarException.class})
     public Result<?> handleException(BadSqlGrammarException e) {
         log.error(e.getMessage(), e);
@@ -59,6 +59,7 @@ public class HandlerException {
     /**
      * DuplicateKeyException 类异常信息(sql语句异常)
      */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DuplicateKeyException.class)
     public Result handleDuplicateKeyException(DuplicateKeyException e) {
         log.error(e.getMessage(), e);
