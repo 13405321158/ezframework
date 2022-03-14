@@ -17,6 +17,7 @@ import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
@@ -30,12 +31,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ClientDetailService implements ClientDetailsService {
+    @Value("${access.token.validity:360}") // 默认值过期时间360
+    private int accessTokenValiditySeconds;
+
+
     private final RedisService cache;
     private final LoginClient client;
 
 
     @Override
-//    @Cacheable(cacheNames = "auth-token", key = "'oauth-client:'+#clientId")
     public ClientDetails loadClientByClientId(String clientId) {
         String cid = RequestUtils.getOAuth2ClientId();
 
@@ -63,7 +67,7 @@ public class ClientDetailService implements ClientDetailsService {
         clientDetails.setAccessTokenValiditySeconds(client.getAccessTokenValidity());
         clientDetails.setRefreshTokenValiditySeconds(client.getRefreshTokenValidity());
 
-        this.cache.add(Redis.CLIENT + cid, clientDetails);
+        this.cache.add(Redis.CLIENT + cid, clientDetails, Long.valueOf(accessTokenValiditySeconds));
         return clientDetails;
 
 
