@@ -40,6 +40,7 @@ public class HeaderParamFilter implements GlobalFilter {
 
     private final String URL_SUFFIX = "/**/public";
     private final String OAUTH_PREFIX = "/oauth/*";
+    private final String Qr = "/author/oauth";//微信二维码扫码跳转地址
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
@@ -75,7 +76,7 @@ public class HeaderParamFilter implements GlobalFilter {
             //4、url是否使用过
             String key = "[nonce" + random + "]_" + uid;
             String value = (String) this.cache.get(key);
-            this.cache.add(key, "used",  15L);
+            this.cache.add(key, "used", 15L);
             Assert.isTrue(StringUtils.isBlank(value), "url已使用,系统判定,重放攻击: " + uid);
 
             //5、获取token

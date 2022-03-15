@@ -3,6 +3,7 @@ package com.leesky.ezframework.auth.config;
 import com.leesky.ezframework.auth.details.userdetails.sys.SysUserDetailsService;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeAuthenticationProvider;
 import com.leesky.ezframework.auth.ext.wx_miniapp.WechatAuthenticationProvider;
+import com.leesky.ezframework.auth.ext.wx_mp.ScanQrAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final SmsCodeAuthenticationProvider smsProvider;
+
     private final WechatAuthenticationProvider wxProvider;
+    private final SmsCodeAuthenticationProvider smsProvider;
+    private final ScanQrAuthenticationProvider wxscanProvider;
+
     private final SysUserDetailsService sysUserDetailsService;
 
     /**
@@ -67,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(this.wxProvider);//微信认证授权提供者: 默认使用buyerDetailsService查询用户
         auth.authenticationProvider(this.smsProvider);//手机验证码认证授权提供者: 默认使用salerDetailsService查询用户
+        auth.authenticationProvider(this.wxscanProvider);//微信扫码(pc端网页)
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 

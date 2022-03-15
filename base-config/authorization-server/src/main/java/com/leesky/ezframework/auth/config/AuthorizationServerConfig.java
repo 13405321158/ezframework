@@ -13,6 +13,7 @@ import com.leesky.ezframework.auth.exception.tokenAuthenticationFilter;
 import com.leesky.ezframework.auth.ext.captcha.CaptchaTokenGranter;
 import com.leesky.ezframework.auth.ext.sms.SmsCodeTokenGranter;
 import com.leesky.ezframework.auth.ext.wx_miniapp.WebchatTokenGranter;
+import com.leesky.ezframework.auth.ext.wx_mp.ScanQrTokenGranter;
 import com.leesky.ezframework.global.Redis;
 import com.leesky.ezframework.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -69,14 +70,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
-        //1、适用于 username\password\client_secret\client_id\grant_type 以form方式提交
-//        TokenEndpointFilter endpointFilter = new TokenEndpointFilter(security);
-//        endpointFilter.afterPropertiesSet();
-//        endpointFilter.setAuthenticationEntryPoint(authenticationEntryPoint());
-//        security.addTokenEndpointAuthenticationFilter(endpointFilter);
-        //2、适用于 请求头Authorization=Basic+" "+BASE64方式加密(client_id:client_secret) 方式
         security.addTokenEndpointAuthenticationFilter(clientDetailFilter);
-//        security.checkTokenAccess("permitAll()");//允许/oauth/check_token,测试环境开启，线上环境禁用
     }
 
     /**
@@ -174,27 +168,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return redisStore;
     }
 
-//    /**
-//     * 适用于 form方式提交认证参数
-//     * 自定义认证异常响应数据: 1、client_id 不存在; 2、client_secret 错误 都走下面的方法
-//     */
-//    @Bean
-//    public AuthenticationEntryPoint authenticationEntryPoint() {
-//        return (request, response, e) -> {
-//            String msg;
-//            response.setContentType("application/json");
-//            response.setStatus(HttpServletResponse.SC_OK);// 固定返回200(网络层正常[response.getStatus()实际状态])
-//
-//            ObjectMapper mapper = new ObjectMapper();
-//            //这里处理一下，目的是让错误信息更加具体
-//            if (StringUtils.startsWith(e.getMessage(), "backend-server服务降级,获取oauthClient异常"))
-//                msg = e.getMessage();
-//            else
-//                msg = "client密码错误";
-//            mapper.writeValue(response.getOutputStream(), Result.failed(msg));
-//        };
-//    }
-
     /**
      * 扩展授权方式,比如增加:动态图片\微信登录\SMS登录\QQ登录|自定义的二维码登录等
      *
@@ -214,8 +187,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         list.add(new CaptchaTokenGranter(tokenService, clientDetails, factory, authManager, cache));
         // 添加手机短信验证码授权模式的授权者
         list.add(new SmsCodeTokenGranter(tokenService, clientDetails, factory, authManager));
-        // 添加微信授权模式的授权者
+        // 添加微信小程序登录(一键登录)授权模式的授权者
         list.add(new WebchatTokenGranter(tokenService, clientDetails, factory, authManager));
+        //添加微信扫码登录(pc网页扫码登录)
+        list.add(new ScanQrTokenGranter(tokenService, clientDetails, factory, authManager));
 
         return new CompositeTokenGranter(list);
     }

@@ -21,6 +21,7 @@ import java.util.Collection;
 public class ScanQrAuthenticationToken extends AbstractAuthenticationToken {
 
     private static final long serialVersionUID = 1000505007877883720L;
+    private Object credentials;
     private final Object principal;
 
     public ScanQrAuthenticationToken(Object principal) {
@@ -31,15 +32,21 @@ public class ScanQrAuthenticationToken extends AbstractAuthenticationToken {
     public ScanQrAuthenticationToken(Collection<? extends GrantedAuthority> authorities, Object principal) {
         super(authorities);
         this.principal = principal;
+        super.setAuthenticated(true);
     }
-
+    public ScanQrAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+        super(authorities);
+        this.principal = principal;
+        this.credentials = credentials;
+        super.setAuthenticated(true);
+    }
     @Override
     public Object getCredentials() {
-        return null;
+        return this.credentials;
     }
 
     @Override
     public Object getPrincipal() {
-        return null;
+        return this.principal;
     }
 }

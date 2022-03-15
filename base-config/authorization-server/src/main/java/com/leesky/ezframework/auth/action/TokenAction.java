@@ -21,6 +21,9 @@ import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.security.KeyPair;
 import java.security.Principal;
 import java.security.interfaces.RSAPublicKey;
@@ -39,13 +42,16 @@ public class TokenAction {
     @Value("${access.token.validity:600}") // 默认值10分钟
     private String accessTokenValiditySeconds;
 
+    private final String url = "http://leesky.natapp1.cc";//微服务所在的公网域名，根据实际情况更换此域名即可
+    private final String callback = url + "/oauth/token?grant_type=wx_scan&client_secret=183d3fbf22c4820dae8b73ddddf55d8b&client_id=wxscan";
+
     /**
      * 描述
      *
      * @author： 魏来
      * @date: 2022/1/21  10:15
      */
-    @PostMapping("/token")
+    @RequestMapping("/token")
     public Result<Map<String, String>> getToken(Principal principal, @RequestParam Map<String, String> map) throws HttpRequestMethodNotSupportedException {
 
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, map).getBody();
@@ -68,6 +74,23 @@ public class TokenAction {
         return new JWKSet(key).toJSONObject();
     }
 
+    /**
+     * <li>返回微信二维码(用微信扫码后跳转到 获取token接口 )</li>
+     *
+     * @author: 魏来
+     * @date: 2022/3/14 下午6:50
+     */
+    @GetMapping("/r01")
+    public void getQR(HttpServletResponse response) throws IOException {
+
+        String path = "https://open.weixin.qq.com/connect/qrconnect?appid=wxb57d46e4f60cd731&redirect_uri=" +
+                //回调地址，即用户扫码授权后跳转到的页面  会自动带上code、state参数
+                URLEncoder.encode(callback, "UTF-8") +
+                "&response_type=code" +
+                "&scope=snsapi_login";
+
+        response.sendRedirect(path);
+    }
 
     /**
      * 登录用户id、登录用户username、登录用户token缓存到redis中
