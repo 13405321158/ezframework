@@ -14,11 +14,8 @@ import com.leesky.ezframework.es.model.Demo01Model;
 import com.leesky.ezframework.es.repo.Idem01Repo;
 import com.leesky.ezframework.json.Result;
 import com.leesky.ezframework.query.ParamModel;
-import com.leesky.ezframework.utils.I18nUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -27,13 +24,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * <li>请勿删除此demo。增删改查示例都有</li>
+ *
+ * @author: 魏来
+ * @date: 2022/3/16 下午2:42
+ */
 
 @RestController
 @RequestMapping("/book")
 @RequiredArgsConstructor
 public class DemoAction {
-
-    private final I18nUtil i18n;
 
     private final Idem01Repo bookRepo;
 
@@ -47,7 +48,7 @@ public class DemoAction {
      */
     @PostMapping(value = "/c01")
     public Result<?> addIndex(@RequestBody ParamModel param) throws IOException {
-        Assert.isTrue(StringUtils.isNotBlank(param.getSelect()), i18n.getMsg("doc.indexName.null"));
+
         this.service.addIndex(param.getSelect());
 
         return Result.success();
@@ -60,8 +61,7 @@ public class DemoAction {
      * @date: 2022/3/16 上午11:11
      */
     @GetMapping("/d01")
-    public Result<?> deleteIndex(@RequestBody ParamModel param) {
-        Assert.isTrue(StringUtils.isNotBlank(param.getSelect()), i18n.getMsg("doc.indexName.null"));
+    public Result<?> deleteIndex(@RequestBody ParamModel param) throws IOException {
 
         this.service.delIndex(param.getSelect());
         return Result.success("成功删除索引：" + param.getSelect());
@@ -103,7 +103,6 @@ public class DemoAction {
      */
     @GetMapping("/r01")
     public Result<Object> findAll(@RequestBody ParamModel param) throws IOException {
-        Assert.isTrue(StringUtils.isNotBlank(param.getSelect()), i18n.getMsg("doc.indexName.null"));
 
         QueryResult result = this.service.findAll(param.getSelect());
 
@@ -120,9 +119,9 @@ public class DemoAction {
      */
     @GetMapping("/r02")
     public Result<List<Map<String, Object>>> page(@RequestBody ParamModel param) throws IOException {
-        Assert.isTrue(StringUtils.isNotBlank(param.getSelect()), i18n.getMsg("doc.indexName.null"));
+
         //demo-1  查询结果不含有 tag字段
-        // QueryResult result = this.service.page("book", param, Lists.newArrayList(), Lists.newArrayList("tag"));
+        // QueryResult result = this.service.page(param, Lists.newArrayList(), Lists.newArrayList("tag"));
 
         //demo-2 查询结果只包含title字段
         //QueryResult result = this.service.page(param, Lists.newArrayList("title"), Lists.newArrayList());
@@ -141,7 +140,6 @@ public class DemoAction {
      */
     @PostMapping("/u01")
     public Result<Demo01Model> editDoc(@RequestBody ParamModel param) throws IOException {
-        Assert.isTrue(StringUtils.isNotBlank(param.getSelect()), i18n.getMsg("doc.indexName.null"));
 
         Demo01Model book = new Demo01Model();
         book.setPrice(new BigDecimal("3.48"));//更新内容

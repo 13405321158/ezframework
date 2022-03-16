@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Lists;
 import com.leesky.ezframework.query.ParamModel;
+import com.leesky.ezframework.utils.I18nUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -41,6 +42,7 @@ import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.ScoreSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -53,7 +55,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ElasticsearchService {
-
+    private final I18nUtil i18n;
     private final RestHighLevelClient highLevelClient;
 
 
@@ -64,6 +66,7 @@ public class ElasticsearchService {
      * @date: 2021/5/31 下午1:13
      **/
     public QueryResult findAll(String indexName) throws IOException {
+        Assert.isTrue(StringUtils.isNotBlank(indexName), i18n.getMsg("doc.indexName.null"));
         return query(indexName, null, null, null, null);
     }
 
@@ -85,6 +88,8 @@ public class ElasticsearchService {
      * @date: 2021/5/31 下午1:40
      **/
     public QueryResult page(ParamModel param, Map<String, Boolean> sortFieldsToAsc) throws IOException {
+        Assert.isTrue(StringUtils.isNotBlank(param.getSelect()), i18n.getMsg("ParamModel.select.null"));
+
         return query(param.getSelect(), param, sortFieldsToAsc, null, null);
     }
 
@@ -140,7 +145,7 @@ public class ElasticsearchService {
      * @date: 2021/6/1 下午1:42
      **/
     public void updateByModel(Object javaBean, ParamModel param) throws IOException {
-
+        Assert.isTrue(StringUtils.isNotBlank(param.getSelect()), i18n.getMsg("ParamModel.select.null"));
 
         List<String> script = Lists.newArrayList();
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
@@ -169,6 +174,7 @@ public class ElasticsearchService {
      * @date: 2021/6/2   下午12:12
      */
     public BulkByScrollResponse delete(ParamModel param) throws IOException {
+        Assert.isTrue(StringUtils.isNotBlank(param.getSelect()), i18n.getMsg("ParamModel.select.null"));
 
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(param.getSelect()).setBatchSize(100).setAbortOnVersionConflict(false);
@@ -184,18 +190,16 @@ public class ElasticsearchService {
      * @author: weilai
      * @date: 2021/6/2   下午12:38
      */
-    public void delIndex(String indexName) {
+    public void delIndex(String indexName) throws IOException {
+        Assert.isTrue(StringUtils.isNotBlank(indexName), i18n.getMsg("doc.indexName.null"));
 
-        try {
-            GetIndexRequest re = new GetIndexRequest(indexName);
-            boolean exists = this.highLevelClient.indices().exists(re, RequestOptions.DEFAULT);
-            if (exists) {
-                DeleteIndexRequest request = new DeleteIndexRequest(indexName);
-                this.highLevelClient.indices().delete(request, RequestOptions.DEFAULT);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        GetIndexRequest re = new GetIndexRequest(indexName);
+        boolean exists = this.highLevelClient.indices().exists(re, RequestOptions.DEFAULT);
+        if (exists) {
+            DeleteIndexRequest request = new DeleteIndexRequest(indexName);
+            this.highLevelClient.indices().delete(request, RequestOptions.DEFAULT);
         }
+
     }
 
     /**
@@ -205,6 +209,7 @@ public class ElasticsearchService {
      * @date: 2022/3/15 下午7:09
      */
     public void addIndex(String indexName) throws IOException {
+        Assert.isTrue(StringUtils.isNotBlank(indexName), i18n.getMsg("doc.indexName.null"));
 
         GetIndexRequest re = new GetIndexRequest(indexName);
         boolean exists = this.highLevelClient.indices().exists(re, RequestOptions.DEFAULT);
