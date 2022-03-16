@@ -79,6 +79,7 @@ public class ElasticsearchService {
 
     /**
      * 分页查询, 带排序字段
+     * sortFieldsToAsc 参数是个map，其中value =true代表ASC排序，value=false代表desc排序
      *
      * @author: weilai
      * @date: 2021/5/31 下午1:40
@@ -95,17 +96,17 @@ public class ElasticsearchService {
      * @author: weilai
      * @date: 2021/5/31 下午1:40
      **/
-    public QueryResult page(String indexName, ParamModel param, List<String> includeFields, List<String> excludeFields) throws IOException {
-        if (null == includeFields) {
+    public QueryResult page(ParamModel param, List<String> includeFields, List<String> excludeFields) throws IOException {
+        if (CollectionUtils.isEmpty(includeFields))
             includeFields = Lists.newArrayList();
-        }
-        if (null == excludeFields) {
+
+        if (CollectionUtils.isEmpty(excludeFields)) {
             excludeFields = Lists.newArrayList();
         }
 
         String[] include = includeFields.toArray(new String[0]);
         String[] exclude = excludeFields.toArray(new String[0]);
-        return query(indexName, param, null, include, exclude);
+        return query(param.getSelect(), param, null, include, exclude);
 
     }
 
@@ -138,12 +139,12 @@ public class ElasticsearchService {
      * @author: weilai
      * @date: 2021/6/1 下午1:42
      **/
-    public void updateByModel(String indexName, Object javaBean, ParamModel param) throws IOException {
+    public void updateByModel(Object javaBean, ParamModel param) throws IOException {
 
 
         List<String> script = Lists.newArrayList();
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        UpdateByQueryRequest updateByQueryRequest = new UpdateByQueryRequest(indexName).setBatchSize(100).setAbortOnVersionConflict(false);
+        UpdateByQueryRequest updateByQueryRequest = new UpdateByQueryRequest(param.getSelect()).setBatchSize(100).setAbortOnVersionConflict(false);
         Map<String, Object> params = JSONObject.parseObject(JSON.toJSONString(javaBean),
                 new TypeReference<HashMap<String, Object>>() {
                 });
@@ -167,18 +168,14 @@ public class ElasticsearchService {
      * @author: weilai
      * @date: 2021/6/2   下午12:12
      */
-    public BulkByScrollResponse delete(String indexName, ParamModel param) {
-        BulkByScrollResponse rp = null;
-        try {
-            SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-            DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(indexName).setBatchSize(100).setAbortOnVersionConflict(false);
-            BoolQueryBuilder query = buildQueryParam(param, sourceBuilder);
-            deleteByQueryRequest.setQuery(query);
-            rp = this.highLevelClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return rp;
+    public BulkByScrollResponse delete(ParamModel param) throws IOException {
+
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(param.getSelect()).setBatchSize(100).setAbortOnVersionConflict(false);
+        BoolQueryBuilder query = buildQueryParam(param, sourceBuilder);
+        deleteByQueryRequest.setQuery(query);
+        return this.highLevelClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
+
     }
 
     /**

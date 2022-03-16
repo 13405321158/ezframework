@@ -5,7 +5,7 @@
  * @部门: 国内市场替换部IT组
  * @Desc:
  */
-package com.leesky.ezframework.es.model.backend;
+package com.leesky.ezframework.es.model;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;

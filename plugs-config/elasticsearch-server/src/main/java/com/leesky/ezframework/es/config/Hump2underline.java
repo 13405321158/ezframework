@@ -1,8 +1,3 @@
-package com.leesky.ezframework.es.config;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * @author: weilai
  * @Data:下午4:09:42,2020年2月1日
@@ -12,6 +7,12 @@ import java.util.regex.Pattern;
  *        <li>驼峰命名字符串: 大写字母转小写并用下划线分割
  *        <li>例如：loginName ➡️ login_name
  */
+package com.leesky.ezframework.es.config;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
 public class Hump2underline {
 
 	private static Pattern linePattern = Pattern.compile("_(\\w)");

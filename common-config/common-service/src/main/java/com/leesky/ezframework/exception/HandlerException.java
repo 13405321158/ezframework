@@ -26,7 +26,7 @@ public class HandlerException {
     @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
     public Result handleException(HttpRequestMethodNotSupportedException e) {
         log.error(e.getMessage(), e);
-        return Result.failed("不支持' " + e.getMethod() + "'请求");
+        return Result.failed("不支持'" + e.getMethod() + "'请求");
     }
 
     /**
