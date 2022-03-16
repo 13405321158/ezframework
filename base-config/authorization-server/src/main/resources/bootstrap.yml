@@ -17,7 +17,7 @@ spring:
             extension-configs: #配置公共配置列表
             -  dataId: common-config-dev.yaml
                refresh: true
-            -  dataId: common-redis-dev.yaml
+            -  dataId: common-cache-dev.yaml
                refresh: true
    main:
      allow-circular-references: true

@@ -23,6 +23,7 @@
         <module>common-constant</module>
         <module>common-stream</module>
         <module>common-log</module>
+        <module>common-elasticsearch</module>
     </modules>
 
 

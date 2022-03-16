@@ -19,12 +19,13 @@ spring:
                refresh: true
             -  dataId: common-stream-dev.yaml
                refresh: true
-            -  dataId: common-redis-dev.yaml
+            -  dataId: common-cache-dev.yaml
                refresh: true
             -  dataId: common-seata-dev.yaml
                refresh: true
             - dataId: mybatis-dev.yaml
               refresh: true
+
    main:
      allow-circular-references: true
 logging:
