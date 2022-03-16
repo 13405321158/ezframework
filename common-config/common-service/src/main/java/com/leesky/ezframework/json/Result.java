@@ -48,6 +48,11 @@ public class Result<T> {
         return new Result<>().ok();
     }
 
+    public static <T> Result<T> success(String msg) {
+
+        return new Result<>(msg, true);
+    }
+
     public static <T> Result<T> success(T data, Boolean encrypt) {
 
         if (encrypt) {

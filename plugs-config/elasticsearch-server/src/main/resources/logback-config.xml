@@ -169,8 +169,7 @@
     <logger name="io.seata.core" level="error"/>
     <logger name="com.netflix.config" level="error"/>
     <logger name="org.springframework" level="error"/>
-    <logger name="com.alibaba.nacos.client" level="error"/>
-    <logger name="com.github.dozermapper.core" level="error"/>
+    <logger name="com.github.dozermapper" level="error"/>
 
     <!-- root级别 DEBUG -->
     <root level="info">

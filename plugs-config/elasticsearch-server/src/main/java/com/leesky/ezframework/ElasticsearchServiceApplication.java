@@ -25,7 +25,7 @@ public class ElasticsearchServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args)  {
-        System.err.println("********************* Elasticsearch服务(logServer)启动完成！*********************");
+        System.err.println("********************* Elasticsearch服务启动完成！*********************");
     }
 
 }

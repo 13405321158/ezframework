@@ -17,3 +17,12 @@ spring:
             extension-configs: #配置公共配置列表
             -  dataId: common-dev.yaml
                refresh: true
+            - dataId: common-redis-dev.yaml
+              refresh: true
+   main:
+     allow-circular-references: true
+
+logging:
+  level:
+    com.alibaba.*: warn
+    org.reflections.*: warn

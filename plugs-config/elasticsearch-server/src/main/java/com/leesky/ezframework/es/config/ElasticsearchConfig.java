@@ -17,7 +17,7 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-@EnableElasticsearchRepositories
+@EnableElasticsearchRepositories(basePackages="com.leesky.ezframework.es.model")
 public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
 
     @Value("${spring.elasticsearch.rest.uris}")
@@ -28,7 +28,7 @@ public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
     public RestHighLevelClient elasticsearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo(StringUtils.split(es_url,","))
-
+//                .withBasicAuth("username","pwd")
                 .build();
         RestHighLevelClient restHighLevelClient = RestClients.create(clientConfiguration).rest();
 

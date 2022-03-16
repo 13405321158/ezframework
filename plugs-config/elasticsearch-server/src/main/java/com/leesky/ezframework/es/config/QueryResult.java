@@ -8,19 +8,20 @@
 package com.leesky.ezframework.es.config;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
 
 @Data
+@NoArgsConstructor
 public class QueryResult {
 
     private long total;
 
     private List<Map<String, Object>> content;
 
-    public QueryResult() {
-    }
+
 
     public QueryResult(Long total, List<Map<String, Object>> content) {
         this.total = total;

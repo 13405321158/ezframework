@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 @Data
-@Document(indexName = "demo02")
+@Document(indexName = "demo02",createIndex = false)
 public class Demo02Model {
 
     @Id

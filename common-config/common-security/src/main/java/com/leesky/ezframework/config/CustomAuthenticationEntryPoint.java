@@ -59,7 +59,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             map.put("msg", "Token被篡改");
 
         response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_OK);//设置网络状态是正常200，返回信息标注状态是401(未授权)
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//设置网络状态是正常200，返回信息标注状态是401(未授权)
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), map);
