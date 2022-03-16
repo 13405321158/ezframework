@@ -16,7 +16,6 @@
         <module>tools-server</module>
         <module>log-server</module>
         <module>websocket-server</module>
-        <module>elasticsearch-server</module>
     </modules>
 
 
