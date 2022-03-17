@@ -8,6 +8,7 @@
 package com.leesky.ezframework.auth.ext.wx_mp;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
@@ -24,22 +25,23 @@ public class ScanQrAuthenticationToken extends AbstractAuthenticationToken {
     private Object credentials;
     private final Object principal;
 
+    //在ScanQrTokenGranter中被引用，代表未被认证
     public ScanQrAuthenticationToken(Object principal) {
         super(null);
         this.principal = principal;
+        this.setAuthenticated(false);
     }
 
-    public ScanQrAuthenticationToken(Collection<? extends GrantedAuthority> authorities, Object principal) {
+    //在 ScanQrAuthenticationProvider中被引用，代表已经认证成功
+    public ScanQrAuthenticationToken(Collection<? extends GrantedAuthority> authorities, Object principal, Authentication authentication) {
         super(authorities);
         this.principal = principal;
+        this.setDetails(authentication.getDetails());
+        this.credentials = authentication.getCredentials();
         super.setAuthenticated(true);
     }
-    public ScanQrAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
-        super(authorities);
-        this.principal = principal;
-        this.credentials = credentials;
-        super.setAuthenticated(true);
-    }
+
+
     @Override
     public Object getCredentials() {
         return this.credentials;

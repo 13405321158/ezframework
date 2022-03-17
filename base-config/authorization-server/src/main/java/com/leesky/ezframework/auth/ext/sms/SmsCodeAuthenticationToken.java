@@ -1,6 +1,7 @@
 package com.leesky.ezframework.auth.ext.sms;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.Assert;
 
@@ -21,17 +22,19 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
     private Object credentials;
     private final Object principal;
 
-    public SmsCodeAuthenticationToken(Object principal, Object credentials) {
+    //这里代表未认证，此方法用在SmsCodeTokenGranter中被构造
+    public SmsCodeAuthenticationToken(Object principal) {
         super(null);
         this.principal = principal;
-        this.credentials = credentials;
         this.setAuthenticated(false);
     }
 
-    public SmsCodeAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+    //这里代表已认证，此方法用在SmsCodeAuthenticationProvider中被构造
+    public SmsCodeAuthenticationToken(Collection<? extends GrantedAuthority> authorities, Object principal, Authentication authentication) {
         super(authorities);
         this.principal = principal;
-        this.credentials = credentials;
+        this.setDetails(authentication.getDetails());
+        this.credentials = authentication.getCredentials();
         super.setAuthenticated(true);
     }
 

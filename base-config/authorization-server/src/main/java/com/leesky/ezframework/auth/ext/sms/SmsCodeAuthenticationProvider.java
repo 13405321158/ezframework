@@ -28,7 +28,12 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
     private final RedisService cache;
     private final SalerDetailsService userDetailsService;//在WebSecurityConfig中配置了 短信方式登录 默认是SalerDetailsService
 
-
+    /**
+     * 手机验证码 参数名称：code； 位置在url头部,非body中
+     *
+     * @author: 魏来
+     * @date: 2022/3/17 上午11:23
+     */
     @Override
     public Authentication authenticate(Authentication authentication) {
         SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
@@ -47,8 +52,8 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
             this.cache.del(codeKey); // 比对成功删除缓存的验证码
 
             UserDetails userDetails = this.userDetailsService.loadUserByMobile(mobile);
-            SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(userDetails, authentication.getCredentials(), Sets.newHashSet());
-            result.setDetails(authentication.getDetails());
+            SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(Sets.newHashSet(), userDetails, authentication);
+
             return result;
         }
 

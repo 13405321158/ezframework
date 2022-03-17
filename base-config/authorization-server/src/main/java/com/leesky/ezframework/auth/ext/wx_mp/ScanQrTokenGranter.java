@@ -27,7 +27,9 @@
 package com.leesky.ezframework.auth.ext.wx_mp;
 
 import com.google.common.collect.Maps;
+import com.leesky.ezframework.auth.utils.RequestUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -35,6 +37,7 @@ import org.springframework.security.oauth2.common.exceptions.InvalidGrantExcepti
 import org.springframework.security.oauth2.provider.*;
 import org.springframework.security.oauth2.provider.token.AbstractTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 
@@ -70,10 +73,13 @@ public class ScanQrTokenGranter extends AbstractTokenGranter {
     @Override
     @SneakyThrows(InvalidGrantException.class)
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
-        Map<String, String> parameters = Maps.newHashMap(tokenRequest.getRequestParameters());
-        String code = parameters.get("code");//用户登录凭证
+        Map<String, String> parameters = Maps.newHashMap(tokenRequest.getRequestParameters());//这里只接到grant_type=sms_code 一个参数
 
-        Authentication userAuth = new ScanQrAuthenticationToken(code); // 未认证状态
+        String wxCode = RequestUtils.getCode();//微信code，从url头部接到
+
+        Assert.isTrue(StringUtils.isNotBlank(wxCode), "扫码登陆失败：微信code=null");
+
+        Authentication userAuth = new ScanQrAuthenticationToken(wxCode); // 未认证状态
         ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
 
         userAuth = this.authenticationManager.authenticate(userAuth); // 认证中: 跳转到 ScanQrAuthenticationProvider.authenticate 方法中
@@ -83,7 +89,7 @@ public class ScanQrTokenGranter extends AbstractTokenGranter {
             OAuth2Request storedOAuth2Request = this.getRequestFactory().createOAuth2Request(client, tokenRequest);
             return new OAuth2Authentication(storedOAuth2Request, userAuth);
         } else { // 认证失败
-            throw new InvalidGrantException("Could not authenticate code: " + code);
+            throw new InvalidGrantException("Could not authenticate code: " + wxCode);
         }
     }
 }

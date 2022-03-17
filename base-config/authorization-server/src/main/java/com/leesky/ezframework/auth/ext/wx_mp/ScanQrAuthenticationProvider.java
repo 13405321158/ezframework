@@ -7,6 +7,7 @@
  */
 package com.leesky.ezframework.auth.ext.wx_mp;
 
+import com.google.common.collect.Sets;
 import com.leesky.ezframework.auth.details.userdetails.buyer.BuyerDetailsService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
 
 /**
  * <li></li>
@@ -36,6 +35,12 @@ public class ScanQrAuthenticationProvider implements AuthenticationProvider {
     private final WxMpService wxMpService;
     private final BuyerDetailsService buyerDetailsService;
 
+    /**
+     * 微信传递code： 参数名称：code； 位置在url头部,非body中
+     *
+     * @author: 魏来
+     * @date: 2022/3/17 上午11:23
+     */
     @Override
     @SneakyThrows
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -50,8 +55,8 @@ public class ScanQrAuthenticationProvider implements AuthenticationProvider {
 
         try {//使用openId查询各类用户表，如果查询不到，则需要用户扫码绑定微信
             UserDetails userDetails = buyerDetailsService.loadUserByOpenId(openId);
-            ScanQrAuthenticationToken result = new ScanQrAuthenticationToken(new HashSet<>(), userDetails);
-            result.setDetails(authentication.getDetails());
+            ScanQrAuthenticationToken result = new ScanQrAuthenticationToken(Sets.newHashSet(), userDetails, authentication);
+
             return result;
         } catch (Exception e) {
             throw new UsernameNotFoundException("您的微信暂未绑定账户，请使用密码方式登录，然后点击屏幕右上方：绑定微信");

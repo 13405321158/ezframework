@@ -48,14 +48,11 @@ public class SmsCodeTokenGranter extends AbstractTokenGranter {
 
         Map<String, String> parameters = Maps.newHashMap(tokenRequest.getRequestParameters());
 
-        String code = parameters.get("code"); // 短信验证码
         String mobile = parameters.get("mobile"); // 手机号
-
-        parameters.remove("code");
 
         OAuth2Request storedOAuth2Request = null;
 
-        Authentication userAuth = new SmsCodeAuthenticationToken(mobile, code);
+        Authentication userAuth = new SmsCodeAuthenticationToken(mobile);
         ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
 
 
